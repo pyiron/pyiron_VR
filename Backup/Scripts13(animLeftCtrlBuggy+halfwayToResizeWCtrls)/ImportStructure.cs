@@ -64,7 +64,7 @@ public class ImportStructure : MonoBehaviour
 
     public void Update()
     {
-        loadStructure();
+        //loadStructure();
     }
 
     private void loadStructure()
@@ -82,7 +82,8 @@ public class ImportStructure : MonoBehaviour
         {
             // set the length of the Arrays which hold the Data of all Atoms to the amount of atoms in the input file
             SD.atomInfos = new AtomInfos[atomCounter];
-            SD.ctrlTrans = new Transform[atomCounter];
+            SD.atomCtrlPos = new Vector3[atomCounter];
+            //SD.ctrlTrans = new Transform[atomCounter];
         }
         // create the atoms
         readFile("initAtoms");
@@ -97,7 +98,7 @@ public class ImportStructure : MonoBehaviour
             // set the Boundingbox, so that it equals the expansion of the cluster
             SD.updateBoundingbox();
         }
-        // comment 
+
         // loops 4 frames (has to be changed to a flexible length
         currentFrame = (currentFrame + 1) % 4;
     }
@@ -167,12 +168,13 @@ public class ImportStructure : MonoBehaviour
             // Set the new atom position to the pos from the file and adjust it, so that the clusters middle is in the origin
             currentAtom.transform.position = new Vector3(float.Parse(data[0]), float.Parse(data[1]),
                 float.Parse(data[2])) - (maxPositions + minPositions) / 2;
-            SD.ctrlTrans[atomCounter] = new GameObject().transform;
+            SD.atomCtrlPos[atomCounter] = Vector3.zero;
+            //SD.ctrlTrans[atomCounter] = new GameObject().transform;
         }
         else
             currentAtom.transform.position = (new Vector3(float.Parse(data[0]), float.Parse(data[1]),
                 float.Parse(data[2])) - (maxPositions + minPositions) / 2) * programSettings.size
-                + SD.ctrlTrans[atomCounter].position + transform.position;
+                + SD.atomCtrlPos[atomCounter] + transform.position;
         // set the atom colour to the colour this type of atom has
         currentAtom.GetComponent<Renderer>().material.color = LED.getColour(data[3]);
         // set the atoms size to the size this type of atom has 
