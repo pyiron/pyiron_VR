@@ -97,7 +97,7 @@ public class ImportStructure : MonoBehaviour
             // set the Boundingbox, so that it equals the expansion of the cluster
             SD.updateBoundingbox();
         }
-
+        // comment 
         // loops 4 frames (has to be changed to a flexible length
         currentFrame = (currentFrame + 1) % 4;
     }
