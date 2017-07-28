@@ -9,10 +9,18 @@ public class StructureData : MonoBehaviour
     public Vector3 minPositions;
     public Vector3 maxPositions;
     public AtomInfos[] atomInfos;
-    // holds the data, how each atom has been relocated and resized by the player
-    public Transform[] ctrlTrans;
-    // holds the data, how the structure has been relocated and resized by the player
-    public Transform structureCtrlTrans;
+    // the data, how each atom has been relocated and resized by the player
+    //public Transform[] ctrlTrans;
+    // the data, how each atom has been relocated by the player
+    public Vector3[] atomCtrlPos;
+    // the data, how each atom has been relocated by the player
+    public Vector3[] atomCtrlSize;
+    // the data, how the structure has been relocated and resized by the player
+    //public Transform structureCtrlTrans;
+    // the data, how the structure has been relocated
+    public Vector3 structureCtrlPos;
+    // the data, how the structure has been resized
+    public Vector3 structureCtrlSize;
     // the gameobject which holds the global settings for the program
     public GameObject Settings;
     // the script which stores the global settings
@@ -22,8 +30,12 @@ public class StructureData : MonoBehaviour
     {
         // load the settings from the GameObject Settings
         programSettings = Settings.GetComponent<ProgramSettings>();
-        // create a new empty Instance which holds the data, how the structure has been relocated and resized by the player
-        structureCtrlTrans = new GameObject().transform;
+        // create a new empty Instance which holds the data, how the structure has been relocated by the player
+        structureCtrlPos = Vector3.zero;
+        // create a new empty Instance which holds the data, how the structure has been resized by the player
+        structureCtrlSize = Vector3.zero;
+
+        //structureCtrlTrans = new GameObject().transform;
     }
 
     // transform the Boundingbox, so that it encloses the structure

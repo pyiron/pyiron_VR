@@ -1,0 +1,5 @@
+-periodic system, where you can get new atoms from
+-a mode in which you can see of what kind an atom or a structure is
+-send commands to pyiron while playing and updating the change
+-colour the atoms according to their warmth or energy
+-make a GUI

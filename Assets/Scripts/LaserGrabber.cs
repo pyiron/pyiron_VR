@@ -44,6 +44,21 @@ public class LaserGrabber : MonoBehaviour
     // the max distance when the laser still detects an object to attach
     private int laserMaxDistance = 100;
 
+    // the distance of the controllers when the resizeStructure begins
+    private float startCtrlDistance = 0;
+    // a multiplikator to change how drastic the size of the structure reacts to the controllers input
+    private float resizeMultiplikator = 1f;
+    // the size of the structure before it is resized
+    private float oldStructureSize;
+    // the new size the structure should have
+    private float newStrucSize;
+    // the minimum size the structure can be resized too
+    private float minStrucSize = 0.05f;
+    // the maximum size the structure can be resized too
+    private float maxStrucSize = 10;
+
+    public GameObject Tester;
+
     [Header("Controller")]
     // the start touch point from when the player lays his finger on the touchpad
     private Vector2 startTouchPoint;
@@ -56,6 +71,10 @@ public class LaserGrabber : MonoBehaviour
     {
         get { return SteamVR_Controller.Input((int)trackedObj.index); }
     }
+    // the other controller
+    public GameObject otherCtrl;
+    // the state of the other controller, needed to look if both hairtriggers are pressed, so that the structure should be resized
+    public bool readyForResize;
 
     void Awake()
     {
@@ -97,6 +116,16 @@ public class LaserGrabber : MonoBehaviour
         // move the grabbed object
         if (attachedObject)
             moveGrabbedObject();
+
+        if (readyForResize)
+            Tester.SetActive(true);
+        else
+            Tester.SetActive(false);
+       // if (ctrlMaskName == "AtomLayer")
+       //   print("left: " + readyForResize + " and " + otherCtrl.GetComponent<LaserGrabber>().readyForResize);
+       // resize the structure if it has to be resized
+        if (readyForResize && otherCtrl.GetComponent<LaserGrabber>().readyForResize)
+            resizeStructure();
     }
 
     private void checkControllerInput()
@@ -115,19 +144,29 @@ public class LaserGrabber : MonoBehaviour
             // if an object is colliding with the controller, it should be attached
             if (collidingObject)
                 AttachObject(collidingObject);
-            else // send out a raycast to detect objects in front of the controller
+            // test if the other controller is ready for a resize
+            else if (otherCtrl.GetComponent<LaserGrabber>().readyForResize)
+                // init the resize, because now are both controllers ready
+                init_resize();
+            else
+                // send out a raycast to detect objects in front of the controller
                 sendRaycast();
         }
 
         // check if the player released the button
         if (Controller.GetPressUp(SteamVR_Controller.ButtonMask.Trigger))
         {
-            // deactivate the laser
-            if (laser.activeSelf)
-                laser.SetActive(false);
+            // set the state of the controller to not ready for resizeStructure, if it isn't already
+            if (readyForResize)
+                readyForResize = false;
+
             // disattach the attached object
             if (attachedObject)
             {
+                // deactivate the laser
+                if (laser.activeSelf)
+                    laser.SetActive(false);
+
                 // change the boundingbox to the new extension of the structure, if an atom has been attached
                 if (ctrlMaskName == "AtomLayer")
                 {
@@ -201,6 +240,9 @@ public class LaserGrabber : MonoBehaviour
                     ShowLaser(hit);
                     AttachObject(hit.transform.gameObject);
                 }
+                else
+                    if (ctrlMaskName == "AtomLayer")
+                        readyForResize = true;
         }
     }
 
@@ -236,18 +278,16 @@ public class LaserGrabber : MonoBehaviour
         attachedObject.transform.position = newPos;
         if (ctrlMaskName == "AtomLayer")
             // update the data how the atom has been moved by the player 
-            SD.ctrlTrans[attachedObject.GetComponent<AtomID>().ID].position += newPos - oldPos;
+            SD.atomCtrlPos[attachedObject.GetComponent<AtomID>().ID] += newPos - oldPos;
         else if (ctrlMaskName == "BoundingboxLayer")
             // update the data how the structure has been moved by the player 
-            SD.structureCtrlTrans.position += newPos - oldPos;
+            SD.structureCtrlPos += newPos - oldPos;
+            // SD.structureCtrlTrans.position += newPos - oldPos;
     }
 
     // set the colliding object as the collidingObject, if it fulfills these conditions
     private void SetCollidingObject(Collider col)
     {
-        // check, that the colliding object isn't the collider from the other controller
-        //if (col.gameObject.name == "Controller (left)" || col.gameObject.name == "Controller (right)")
-        //    return;
         // check that the colliding object has a rigidbody
         if (collidingObject || !col.GetComponent<Rigidbody>())
             return;
@@ -290,6 +330,30 @@ public class LaserGrabber : MonoBehaviour
         laser.transform.localScale = laserSize;
     }
 
+    private void init_resize()
+    {
+        readyForResize = true;
+        startCtrlDistance = (transform.position - otherCtrl.transform.position).magnitude;
+        oldStructureSize = Settings.size;
+    }
+
+    private void resizeStructure()
+    {
+        // the data how far the distance between the controllers is currently
+        float currentCtrlDistance;
+        currentCtrlDistance = (transform.position - otherCtrl.transform.position).magnitude;
+        // the new size the structure should have
+        newStrucSize = oldStructureSize + (currentCtrlDistance - startCtrlDistance) * resizeMultiplikator;
+        print(newStrucSize);
+        // test if the new size for the structure is allowed
+        if (minStrucSize < newStrucSize && newStrucSize < maxStrucSize)
+        {
+            // set the global size to the new value and update the structure
+            Settings.size = newStrucSize;
+            AtomStructure.transform.localScale = Vector3.one * Settings.size;
+        }
+    }
+
     private void AttachObject(GameObject grabAbleObject)
     {
         // test, which controller is trying to grab the object
@@ -297,9 +361,22 @@ public class LaserGrabber : MonoBehaviour
         {
             // the grabbed object is the boundingbox, it's parent the atomstructure. so this controller grabs the whole structure
             attachedObject = grabAbleObject.transform.root.gameObject;
-            // the laserlength has to be set to the length from the controller to the boundingbox, because it's attached to it's middle point,
-            // and the object should be at the same distance before and after the start of the grab
-            laserLength = (boundingbox.position - transform.position).magnitude;
+            // check, if the controller is grabbing the object or lasering it
+            if (collidingObject)
+                //if (collidingObject.name.Contains("Boundingbox"))
+                // tell the other controller that this controller is in the state where it can resizeStructure the structure
+                if (otherCtrl.GetComponent<LaserGrabber>().readyForResize)
+                    init_resize();
+                else
+                    readyForResize = true;
+                //else
+                    // the laserlength has to be set to the length from the controller to the boundingbox, because it's attached to it's middle point,
+                    // and the object should be at the same distance before and after the start of the grab
+                //    laserLength = (boundingbox.position - transform.position).magnitude;
+            else
+                // the laserlength has to be set to the length from the controller to the boundingbox, because it's attached to it's middle point,
+                // and the object should be at the same distance before and after the start of the grab
+                laserLength = (boundingbox.position - transform.position).magnitude;
         }
         else if (ctrlMaskName == "AtomLayer")
         {
@@ -320,15 +397,9 @@ public class LaserGrabber : MonoBehaviour
 
     private void ReleaseObject()
     {
-        // tests if the attached object is attached via a joint
-        if (GetComponent<FixedJoint>())
-        {
-            // destroys the connection between the attached object and the controller
-            GetComponent<FixedJoint>().connectedBody = null;
-            Destroy(GetComponent<FixedJoint>());
-            //objectInHand.GetComponent<Rigidbody>().velocity = Controller.velocity;
-            //objectInHand.GetComponent<Rigidbody>().angularVelocity = Controller.angularVelocity;
-        }
+        // would allow the object to fly away with the velocity and angularvelocity it has when it gets detached
+        //objectInHand.GetComponent<Rigidbody>().velocity = Controller.velocity;
+        //objectInHand.GetComponent<Rigidbody>().angularVelocity = Controller.angularVelocity;
 
         attachedObject = null;
     }
