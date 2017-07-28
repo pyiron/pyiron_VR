@@ -3,3 +3,8 @@
 -send commands to pyiron while playing and updating the change
 -colour the atoms according to their warmth or energy
 -make a GUI
+
+IMPORTANT:
+- show prints while playing
+- decide when the structure can be moved while grabbed
+- fix bugs when starting and ending the resize
