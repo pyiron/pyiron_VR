@@ -121,8 +121,7 @@ public class LaserGrabber : MonoBehaviour
             resizeableRect.SetActive(true);
         else
             resizeableRect.SetActive(false);
-        // if (ctrlMaskName == "AtomLayer")
-        //   print("left: " + readyForResize + " and " + otherCtrl.GetComponent<LaserGrabber>().readyForResize);
+
         // resize the structure if it has to be resized
         if (ctrlMaskName == "AtomLayer")
             if (readyForResize && otherCtrl.GetComponent<LaserGrabber>().readyForResize)
@@ -223,6 +222,7 @@ public class LaserGrabber : MonoBehaviour
                 {
                     AttachObject(attachedObject);
                     laser.SetActive(false);
+                    readyForResize = true;
                 }
             }
         }
@@ -356,7 +356,6 @@ public class LaserGrabber : MonoBehaviour
         currentCtrlDistance = (transform.position - otherCtrl.transform.position).magnitude;
         // the new size the structure should have
         newStrucSize = oldStructureSize + (currentCtrlDistance - startCtrlDistance) * resizeMultiplikator;
-        print(newStrucSize);
         // test if the new size for the structure is allowed
         if (minStrucSize < newStrucSize && newStrucSize < maxStrucSize)
         {
