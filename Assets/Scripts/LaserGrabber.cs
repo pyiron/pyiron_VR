@@ -56,8 +56,8 @@ public class LaserGrabber : MonoBehaviour
     private float minStrucSize = 0.05f;
     // the maximum size the structure can be resized too
     private float maxStrucSize = 10;
-
-    public GameObject Tester;
+    // shows, which of the controllers currently allows to resize the structure
+    public GameObject resizeableRect;
 
     [Header("Controller")]
     // the start touch point from when the player lays his finger on the touchpad
@@ -118,14 +118,15 @@ public class LaserGrabber : MonoBehaviour
             moveGrabbedObject();
 
         if (readyForResize)
-            Tester.SetActive(true);
+            resizeableRect.SetActive(true);
         else
-            Tester.SetActive(false);
-       // if (ctrlMaskName == "AtomLayer")
-       //   print("left: " + readyForResize + " and " + otherCtrl.GetComponent<LaserGrabber>().readyForResize);
-       // resize the structure if it has to be resized
-        if (readyForResize && otherCtrl.GetComponent<LaserGrabber>().readyForResize)
-            resizeStructure();
+            resizeableRect.SetActive(false);
+        // if (ctrlMaskName == "AtomLayer")
+        //   print("left: " + readyForResize + " and " + otherCtrl.GetComponent<LaserGrabber>().readyForResize);
+        // resize the structure if it has to be resized
+        if (ctrlMaskName == "AtomLayer")
+            if (readyForResize && otherCtrl.GetComponent<LaserGrabber>().readyForResize)
+                resizeStructure();
     }
 
     private void checkControllerInput()
@@ -143,11 +144,20 @@ public class LaserGrabber : MonoBehaviour
         {
             // if an object is colliding with the controller, it should be attached
             if (collidingObject)
-                AttachObject(collidingObject);
+                if (otherCtrl.GetComponent<LaserGrabber>().readyForResize)
+                    init_resize();
+                else
+                {
+                    readyForResize = true;
+                    AttachObject(collidingObject);
+                }
             // test if the other controller is ready for a resize
             else if (otherCtrl.GetComponent<LaserGrabber>().readyForResize)
+            {
+                otherCtrl.GetComponent<LaserGrabber>().ReleaseObject();
                 // init the resize, because now are both controllers ready
                 init_resize();
+            }
             else
                 // send out a raycast to detect objects in front of the controller
                 sendRaycast();
@@ -361,22 +371,10 @@ public class LaserGrabber : MonoBehaviour
         {
             // the grabbed object is the boundingbox, it's parent the atomstructure. so this controller grabs the whole structure
             attachedObject = grabAbleObject.transform.root.gameObject;
-            // check, if the controller is grabbing the object or lasering it
-            if (collidingObject)
-                //if (collidingObject.name.Contains("Boundingbox"))
-                // tell the other controller that this controller is in the state where it can resizeStructure the structure
-                if (otherCtrl.GetComponent<LaserGrabber>().readyForResize)
-                    init_resize();
-                else
-                    readyForResize = true;
-                //else
-                    // the laserlength has to be set to the length from the controller to the boundingbox, because it's attached to it's middle point,
-                    // and the object should be at the same distance before and after the start of the grab
-                //    laserLength = (boundingbox.position - transform.position).magnitude;
-            else
-                // the laserlength has to be set to the length from the controller to the boundingbox, because it's attached to it's middle point,
-                // and the object should be at the same distance before and after the start of the grab
-                laserLength = (boundingbox.position - transform.position).magnitude;
+
+            // the laserlength has to be set to the length from the controller to the boundingbox, because it's attached to it's middle point,
+            // and the object should be at the same distance before and after the start of the grab
+            laserLength = (boundingbox.position - transform.position).magnitude;
         }
         else if (ctrlMaskName == "AtomLayer")
         {
