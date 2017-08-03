@@ -145,10 +145,12 @@ public class LaserGrabber : MonoBehaviour
             if (collidingObject)
             {
                 AttachObject(collidingObject);
-                if (otherCtrl.GetComponent<LaserGrabber>().readyForResize)
-                    init_resize();
-                else
-                    readyForResize = true;
+                // set the controller ready for size, if it grabs the boundingbox
+                if (ctrlMaskName == "BoundingboxLayer")
+                    if (otherCtrl.GetComponent<LaserGrabber>().readyForResize)
+                        init_resize();
+                    else
+                        readyForResize = true;
             }
             // test if the other controller is ready for a resize
             else if (otherCtrl.GetComponent<LaserGrabber>().readyForResize)

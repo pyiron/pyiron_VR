@@ -6,5 +6,6 @@
 
 IMPORTANT:
 - show prints while playing
-- decide when the structure can be moved while grabbed
-- fix bugs when starting and ending the resize
+- check for bugs -> fix error messages if they are still there
+
+- build VirtualAtoms (current build isnt working)
