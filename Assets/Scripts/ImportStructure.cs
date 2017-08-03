@@ -36,8 +36,12 @@ public class ImportStructure : MonoBehaviour
     private bool firstImport = true;
     // holds the data of which frame should be loaded 
     private int currentFrame = 0;
+    // time when the last Update() was called
+    private float lastTime;
 
     [Header("Reading Tools")]
+    // the path to the file which holds the data of the current frame
+    string pathName;
     // stores the data of each read line in a file
     private string line;
     // the individual properties announced in the line
@@ -56,13 +60,32 @@ public class ImportStructure : MonoBehaviour
 
     void Start()
     {
+        pathName = path + strucFileName + ".txt";
         loadStructure();
         firstImport = false;
+        lastTime = Time.time;
     }
 
-    public void Update()
+    void Update()
     {
-        loadStructure();
+        // the old path/way
+        // pathName = path + strucFileName + "/" + currentFrame + ".txt";
+        // the path to the file which holds all the data for the current frome
+        if (Time.time - lastTime + Time.deltaTime > 1 / 90)
+            if (File.Exists(pathName))
+            {
+                try {
+                    loadStructure();
+                }
+                catch{
+                    print("error, probably because both programs want to simultaniously use the file");
+                }
+
+                print(1 / (Time.time - lastTime));
+                lastTime = Time.time;
+                }
+            else
+                 print("python too slow");
     }
 
     private void loadStructure()
@@ -85,7 +108,9 @@ public class ImportStructure : MonoBehaviour
         }
         // create the atoms
         readFile("initAtoms");
-        
+
+        File.Delete(pathName);
+
         if (firstImport)
             // set the size of the cluster to the global scale
             gameObject.transform.localScale = Vector3.one * programSettings.size;
@@ -98,13 +123,13 @@ public class ImportStructure : MonoBehaviour
         }
 
         // loops 4 frames (has to be changed to a flexible length
-        currentFrame = (currentFrame + 1) % 4;
+        //currentFrame = (currentFrame + 1) % 4;
     }
 
     private void readFile(string action)
     {
         //using (sr = new StringReader(structureFile.text)) // reader to read the input data file
-        StreamReader sr = new StreamReader(path + strucFileName + "/" + currentFrame + ".txt", Encoding.Default);
+        StreamReader sr = new StreamReader(pathName, Encoding.Default);
         using (sr)
         {
             // (re)set the counter to 0
