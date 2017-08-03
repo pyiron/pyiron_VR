@@ -24,7 +24,6 @@ public class LaserGrabber : MonoBehaviour
     private Vector3 objToHandPos;
     // the Vector between the controller rotation and the grabbed object rotation
     // private Vector3 objToHandRot; // might be needed to rotate the atom
-    private GameObject grabAbleObject;
     // the vector between the positions of the boundingbox and it's parent
     private Transform boundingbox;
 

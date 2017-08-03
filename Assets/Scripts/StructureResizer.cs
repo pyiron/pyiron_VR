@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StructureResizer : MonoBehaviour {
+public class StructureResizer : MonoBehaviour
+{
     // the global settings of the program
     public ProgramSettings Settings;
     // the scripts of the two ctrls
@@ -21,16 +22,12 @@ public class StructureResizer : MonoBehaviour {
     // the maximum size the structure can be resized too
     private float maxStrucSize = 10;
 
-    // Use this for initialization
-    void Start () {
-        
-    }
-	
-	// Update is called once per frame
-	void Update () {
+
+    void Update()
+    {
         // test if the structure has to be resized
         test_for_resize();
-	}
+    }
 
     public void init_resize()
     {
@@ -66,3 +63,4 @@ public class StructureResizer : MonoBehaviour {
         }
     }
 }
+

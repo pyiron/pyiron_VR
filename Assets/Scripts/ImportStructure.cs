@@ -38,8 +38,6 @@ public class ImportStructure : MonoBehaviour
     private int currentFrame = 0;
 
     [Header("Reading Tools")]
-    // the reader which reads the file
-    private StringReader sr;
     // stores the data of each read line in a file
     private string line;
     // the individual properties announced in the line
@@ -64,7 +62,7 @@ public class ImportStructure : MonoBehaviour
 
     public void Update()
     {
-        //loadStructure();
+        loadStructure();
     }
 
     private void loadStructure()
