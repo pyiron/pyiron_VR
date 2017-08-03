@@ -6,6 +6,5 @@
 
 IMPORTANT:
 - show prints while playing
-- fix bug that moved atoms move when being resized
 
 - build VirtualAtoms (current build isnt working)
