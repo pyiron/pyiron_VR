@@ -10,6 +10,8 @@ public class LaserGrabber : MonoBehaviour
     public ProgramSettings Settings;
     // the data about the structure
     private StructureData SD;
+    // the properties about the resize
+    private StructureResizer SR;
     // the gameobject of the structure
     public GameObject AtomStructure;
 
@@ -44,20 +46,11 @@ public class LaserGrabber : MonoBehaviour
     // the max distance when the laser still detects an object to attach
     private int laserMaxDistance = 100;
 
-    // the distance of the controllers when the resizeStructure begins
-    private float startCtrlDistance = 0;
-    // a multiplikator to change how drastic the size of the structure reacts to the controllers input
-    private float resizeMultiplikator = 1f;
-    // the size of the structure before it is resized
-    private float oldStructureSize;
-    // the new size the structure should have
-    private float newStrucSize;
-    // the minimum size the structure can be resized too
-    private float minStrucSize = 0.05f;
-    // the maximum size the structure can be resized too
-    private float maxStrucSize = 10;
+    [Header("Resize")]
     // shows, which of the controllers currently allows to resize the structure
     public GameObject resizeableRect;
+    // the state of the other controller, needed to look if both hairtriggers are pressed, so that the structure should be resized
+    public bool readyForResize;
 
     [Header("Controller")]
     // the start touch point from when the player lays his finger on the touchpad
@@ -73,8 +66,6 @@ public class LaserGrabber : MonoBehaviour
     }
     // the other controller
     public GameObject otherCtrl;
-    // the state of the other controller, needed to look if both hairtriggers are pressed, so that the structure should be resized
-    public bool readyForResize;
 
     void Awake()
     {
@@ -96,6 +87,8 @@ public class LaserGrabber : MonoBehaviour
         ctrlMaskName = Settings.getLayerName(ctrlMask);
         // get the script StructureData from AtomStructure
         SD = AtomStructure.GetComponent<StructureData>();
+        // get the script StructureResizer from AtomStructure
+        SR = AtomStructure.GetComponent<StructureResizer>();
     }
 
     private void initLaser()
@@ -121,11 +114,6 @@ public class LaserGrabber : MonoBehaviour
             resizeableRect.SetActive(true);
         else
             resizeableRect.SetActive(false);
-
-        // resize the structure if it has to be resized
-        if (ctrlMaskName == "AtomLayer")
-            if (readyForResize && otherCtrl.GetComponent<LaserGrabber>().readyForResize)
-                resizeStructure();
     }
 
     private void checkControllerInput()
@@ -150,7 +138,6 @@ public class LaserGrabber : MonoBehaviour
                     if (otherCtrl.GetComponent<LaserGrabber>().readyForResize)
                     {
                         init_resize();
-                        print("jep its inited");
                     }
                     else
                         readyForResize = true;
@@ -336,6 +323,12 @@ public class LaserGrabber : MonoBehaviour
         collidingObject = null;
     }
 
+    private void init_resize()
+    {
+        readyForResize = true;
+        SR.init_resize();
+    }
+
     private void scaleLaser(float modification = 0)
     {
         Vector3 laserSize = laser.transform.localScale;
@@ -343,29 +336,6 @@ public class LaserGrabber : MonoBehaviour
             (laser.transform.position - transform.position) * (laserLength + modification) / laserSize.z;
         laserSize.z = laserLength + modification;
         laser.transform.localScale = laserSize;
-    }
-
-    private void init_resize()
-    {
-        readyForResize = true;
-        startCtrlDistance = (transform.position - otherCtrl.transform.position).magnitude;
-        oldStructureSize = Settings.size;
-    }
-
-    private void resizeStructure()
-    {
-        // the data how far the distance between the controllers is currently
-        float currentCtrlDistance;
-        currentCtrlDistance = (transform.position - otherCtrl.transform.position).magnitude;
-        // the new size the structure should have
-        newStrucSize = oldStructureSize + (currentCtrlDistance - startCtrlDistance) * resizeMultiplikator;
-        // test if the new size for the structure is allowed
-        if (minStrucSize < newStrucSize && newStrucSize < maxStrucSize)
-        {
-            // set the global size to the new value and update the structure
-            Settings.size = newStrucSize;
-            AtomStructure.transform.localScale = Vector3.one * Settings.size;
-        }
     }
 
     private void AttachObject(GameObject grabAbleObject)

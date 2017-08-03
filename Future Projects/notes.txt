@@ -1,0 +1,1 @@
+the structure should resize itself. therefore, it has to hold the variables for its resize
