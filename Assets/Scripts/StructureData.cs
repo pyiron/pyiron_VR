@@ -9,8 +9,7 @@ public class StructureData : MonoBehaviour
     public Vector3 minPositions;
     public Vector3 maxPositions;
     public AtomInfos[] atomInfos;
-    // the data, how each atom has been relocated and resized by the player
-    //public Transform[] ctrlTrans;
+
     // the data, how each atom has been relocated by the player
     public Vector3[] atomCtrlPos;
     // the data, how each atom has been relocated by the player

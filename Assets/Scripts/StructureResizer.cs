@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// component of AtomStructure
 public class StructureResizer : MonoBehaviour
 {
     // the global settings of the program
     public ProgramSettings Settings;
     // the scripts of the two ctrls
     public GameObject[] Controllers = new GameObject[2];
+    // the data about the structure
+    private StructureData SD;
 
     // the distance of the controllers when the resizeStructure begins
     private float startCtrlDistance;
@@ -18,10 +21,16 @@ public class StructureResizer : MonoBehaviour
     // the new size the structure should have
     private float newStrucSize;
     // the minimum size the structure can be resized too
-    private float minStrucSize = 0.05f;
+    private float minStrucSize = 0.02f;
     // the maximum size the structure can be resized too
     private float maxStrucSize = 10;
 
+
+    public void Awake()
+    {
+        // get the script StructureData from AtomStructure
+        SD = GetComponent<StructureData>();
+    }
 
     void Update()
     {
@@ -57,10 +66,12 @@ public class StructureResizer : MonoBehaviour
         // test if the new size for the structure is allowed
         if (minStrucSize < newStrucSize && newStrucSize < maxStrucSize)
         {
+            // update the values how the player has moved each atom, so that these values depend on the global size
+            for (int i = 0; i < SD.atomCtrlPos.Length; i++)
+                SD.atomCtrlPos[i] *= newStrucSize / Settings.size;
             // set the global size to the new value and update the structure
             Settings.size = newStrucSize;
-            transform.localScale = Vector3.one * Settings.size;
-        }
+            transform.localScale = Vector3.one * Settings.size;        }
     }
 }
 
