@@ -224,7 +224,8 @@ public class LaserGrabber : MonoBehaviour
                 {
                     AttachObject(attachedObject);
                     laser.SetActive(false);
-                    readyForResize = true;
+                    if (ctrlMaskName == "BoundingboxLayer")
+                        readyForResize = true;
                 }
             }
         }
