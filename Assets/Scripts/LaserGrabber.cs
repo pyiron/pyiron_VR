@@ -148,7 +148,10 @@ public class LaserGrabber : MonoBehaviour
                 // set the controller ready for size, if it grabs the boundingbox
                 if (ctrlMaskName == "BoundingboxLayer")
                     if (otherCtrl.GetComponent<LaserGrabber>().readyForResize)
+                    {
                         init_resize();
+                        print("jep its inited");
+                    }
                     else
                         readyForResize = true;
             }
@@ -157,6 +160,7 @@ public class LaserGrabber : MonoBehaviour
                 // init the resize, because now are both controllers ready
                 if (ctrlMaskName == "AtomLayer")
                     init_resize();
+                else;
             else
                 // send out a raycast to detect objects in front of the controller
                 sendRaycast();
