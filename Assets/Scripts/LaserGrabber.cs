@@ -155,11 +155,7 @@ public class LaserGrabber : MonoBehaviour
             // test if the other controller is ready for a resize
             else if (otherCtrl.GetComponent<LaserGrabber>().readyForResize)
                 // init the resize, because now are both controllers ready
-                if (ctrlMaskName == "BoundingboxLayer")
-                    if (collidingObject)
-                        init_resize();
-                    else;
-                else
+                if (ctrlMaskName == "AtomLayer")
                     init_resize();
             else
                 // send out a raycast to detect objects in front of the controller
