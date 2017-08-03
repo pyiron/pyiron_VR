@@ -323,6 +323,7 @@ public class LaserGrabber : MonoBehaviour
         collidingObject = null;
     }
 
+    // init the resize and set the controllers state to ready for resize
     private void init_resize()
     {
         readyForResize = true;
