@@ -6,5 +6,7 @@
 
 IMPORTANT:
 - show prints while playing
+- fix bug atoms get added each frame
+- connection via the text file is too slow. need a new connection
 
 - build VirtualAtoms (current build isnt working)

@@ -76,14 +76,13 @@ public class ImportStructure : MonoBehaviour
             {
                 try {
                     loadStructure();
+                    print(1 / (Time.time - lastTime));
+                    lastTime = Time.time;
                 }
                 catch{
                     print("error, probably because both programs want to simultaniously use the file");
                 }
-
-                print(1 / (Time.time - lastTime));
-                lastTime = Time.time;
-                }
+            }
             else
                  print("python too slow");
     }
