@@ -70,10 +70,6 @@ public class LaserGrabber : MonoBehaviour
     {
         // get the data of the controller
         trackedObj = GetComponent<SteamVR_TrackedObject>();
-        // get the transform of the boundingbox
-        foreach (Transform tr in AtomStructure.GetComponentsInChildren<Transform>())
-            if (tr.name == "Boundingbox(Clone)")
-                boundingbox = tr;
     }
 
     void Start()
@@ -88,6 +84,11 @@ public class LaserGrabber : MonoBehaviour
         SD = AtomStructure.GetComponent<StructureData>();
         // get the script StructureResizer from AtomStructure
         SR = AtomStructure.GetComponent<StructureResizer>();
+
+        // get the transform of the boundingbox
+        foreach (Transform tr in AtomStructure.GetComponentsInChildren<Transform>())
+            if (tr.name == "Boundingbox(Clone)")
+                boundingbox = tr;
     }
 
     private void initLaser()
@@ -257,11 +258,16 @@ public class LaserGrabber : MonoBehaviour
         if (laser.activeSelf)
         {
             if (ctrlMaskName == "BoundingboxLayer")
+            {
                 // sets the position of the structure to the end of the laser plus the Vector between the structure and the boundingbox
+                print(transform.position);
+                print(laser.transform.position);
+                print(AtomStructure.transform.position - boundingbox.position);
                 newPos = transform.position + (laser.transform.position - transform.position) * 2
                     + AtomStructure.transform.position - boundingbox.position;
-            //attachedObject.transform.position = transform.position + (laser.transform.position - transform.position) * 2
-            //        + AtomStructure.transform.position - boundingbox.position;
+                //attachedObject.transform.position = transform.position + (laser.transform.position - transform.position) * 2
+                //        + AtomStructure.transform.position - boundingbox.position;
+            }
             else
                 // sets the position of the grabbed object to the end of the laser
                 newPos = transform.position + (laser.transform.position - transform.position) * 2;
@@ -348,6 +354,8 @@ public class LaserGrabber : MonoBehaviour
 
             // the laserlength has to be set to the length from the controller to the boundingbox, because it's attached to it's middle point,
             // and the object should be at the same distance before and after the start of the grab
+            print(boundingbox.position);
+            print(transform.position);
             laserLength = (boundingbox.position - transform.position).magnitude;
         }
         else if (ctrlMaskName == "AtomLayer")

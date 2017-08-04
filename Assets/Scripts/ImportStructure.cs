@@ -12,8 +12,9 @@ public class ImportStructure : MonoBehaviour
 {
     // name of the data file which contains the information about the atom structure
     public string strucFileName;
+
     // path to the files with the atomstructure data
-    private string path = "ressources/AtomStructures/";
+    private string path;
     // the prefab for the atoms
     public GameObject AtomPrefab;
     // gameobject to hold the new instance of an atom
@@ -52,6 +53,11 @@ public class ImportStructure : MonoBehaviour
 
     private void Awake()
     {
+        if (Application.isEditor)
+            path = "ressources/AtomStructures/";
+        else
+            path = "Ressources/AtomStructures/";
+        pathName = path + strucFileName + ".txt";
         // get the scripts from the gameobjects to get their data
         programSettings = Settings.GetComponent<ProgramSettings>();
         LED = Settings.GetComponent<LocalElementData>();
@@ -60,7 +66,6 @@ public class ImportStructure : MonoBehaviour
 
     void Start()
     {
-        pathName = path + strucFileName + ".txt";
         loadStructure();
         firstImport = false;
         lastTime = Time.time;
@@ -145,8 +150,6 @@ public class ImportStructure : MonoBehaviour
                         getStructureExpansion();
                     else if (action == "initAtoms")
                         initAtoms();
-                    else
-                        print("Error: Unknown action!");
                 }
                 else
                 {
