@@ -38,7 +38,7 @@ public class StructureData : MonoBehaviour
     }
 
     // transform the Boundingbox, so that it encloses the structure
-    public void updateBoundingbox()
+    public void UpdateBoundingbox()
     {
         // set it to the size of the structure
         boundingbox.transform.localScale = maxPositions - minPositions;
@@ -47,7 +47,7 @@ public class StructureData : MonoBehaviour
     }
 
     // search for the min and max position of the atoms in the cluster for each axis
-    public void searchMaxAndMin()
+    public void SearchMaxAndMin()
     {
         // sets the values to the extremes, so that the first atom will change them to it's values
         minPositions = Vector3.one * Mathf.Infinity;

@@ -2,11 +2,11 @@
 -a mode in which you can see of what kind an atom or a structure is
 -send commands to pyiron while playing and updating the change
 -colour the atoms according to their warmth or energy
--make a GUI
+-make a GUI!
+- make a file which tells Unity details about the pyiron structure:
+  -> colordependancy, animation
 
 IMPORTANT:
 - show prints while playing
-- fix bug atoms get added each frame
-- connection via the text file is too slow. need a new connection
-
-- build VirtualAtoms (current build isnt working)
+- fix bug atoms get added each frame (not much known about this bug yet, except that there are many atoms at one place where just one atom should be. might be stretched somehow
+- connection via the text file is too slow. need a new connection or make the connection better

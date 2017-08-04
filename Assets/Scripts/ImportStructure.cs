@@ -35,8 +35,6 @@ public class ImportStructure : MonoBehaviour
     public GameObject BoundingboxPrefab;
     // checks whether all the instances in the scene have to be created or if the scene just has to be updated
     private bool firstImport = true;
-    // holds the data of which frame should be loaded 
-    private int currentFrame = 0;
     // time when the last Update() was called
     private float lastTime;
 
@@ -68,7 +66,7 @@ public class ImportStructure : MonoBehaviour
 
     void Start()
     {
-        loadStructure();
+        LoadStructure();
         firstImport = false;
         lastTime = Time.time;
     }
@@ -82,7 +80,7 @@ public class ImportStructure : MonoBehaviour
             if (File.Exists(pathName))
             {
                 try {
-                    loadStructure();
+                    LoadStructure();
                     print(1 / (Time.time - lastTime));
                     lastTime = Time.time;
                 }
@@ -94,7 +92,7 @@ public class ImportStructure : MonoBehaviour
                  print("python too slow");
     }
 
-    private void loadStructure()
+    private void LoadStructure()
     {
         if (firstImport)
         {
@@ -104,7 +102,7 @@ public class ImportStructure : MonoBehaviour
         }
 
         // check how big the structure is
-        readFile("getStructureExpansion");
+        ReadFile("getStructureExpansion");
         if (firstImport)
         {
             // set the length of the Arrays which hold the Data of all Atoms to the amount of atoms in the input file
@@ -113,7 +111,7 @@ public class ImportStructure : MonoBehaviour
             //SD.ctrlTrans = new Transform[atomCounter];
         }
         // create the atoms
-        readFile("initAtoms");
+        ReadFile("initAtoms");
 
         File.Delete(pathName);
 
@@ -123,16 +121,13 @@ public class ImportStructure : MonoBehaviour
         if (firstImport || programSettings.framesUpdateBoundingbox)
         {
             // check the expansion of the cluster
-            SD.searchMaxAndMin();
+            SD.SearchMaxAndMin();
             // set the Boundingbox, so that it equals the expansion of the cluster
-            SD.updateBoundingbox();
+            SD.UpdateBoundingbox();
         }
-
-        // loops 4 frames (has to be changed to a flexible length
-        //currentFrame = (currentFrame + 1) % 4;
     }
 
-    private void readFile(string action)
+    private void ReadFile(string action)
     {
         //using (sr = new StringReader(structureFile.text)) // reader to read the input data file
         StreamReader sr = new StreamReader(pathName, Encoding.Default);
@@ -149,9 +144,9 @@ public class ImportStructure : MonoBehaviour
                 //if (line != null) // reads line for line, until the end is reached
                 {
                     if (action == "getStructureExpansion")
-                        getStructureExpansion();
+                        GetStructureExpansion();
                     else if (action == "initAtoms")
-                        initAtoms();
+                        InitAtoms();
                 }
                 else
                 {
@@ -165,7 +160,7 @@ public class ImportStructure : MonoBehaviour
         }
     }
 
-    private void getStructureExpansion()
+    private void GetStructureExpansion()
     {
         for (int i = 0; i < 3; i++) // searches for the min and max expansion of the cluster of each axis 
         {
@@ -176,7 +171,7 @@ public class ImportStructure : MonoBehaviour
         }
     }
 
-    private void initAtoms()
+    private void InitAtoms()
     {
         if (firstImport)
         {

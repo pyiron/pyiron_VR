@@ -75,7 +75,7 @@ public class LaserGrabber : MonoBehaviour
     void Start()
     {
         // initialize the laser
-        initLaser();
+        InitLaser();
 
         ctrlMaskName = Settings.getLayerName(ctrlMask);
         // set the variable to the name of the mask
@@ -91,7 +91,7 @@ public class LaserGrabber : MonoBehaviour
                 boundingbox = tr;
     }
 
-    private void initLaser()
+    private void InitLaser()
     {
         // create an instance of the laser
         laser = Instantiate(LaserPrefab);
@@ -104,11 +104,11 @@ public class LaserGrabber : MonoBehaviour
     void Update()
     {
         // check all the input of the controller and fullfill the following actions
-        checkControllerInput();
+        CheckControllerInput();
 
         // move the grabbed object
         if (attachedObject)
-            moveGrabbedObject();
+            MoveGrabbedObject();
 
         if (readyForResize)
             resizeableRect.SetActive(true);
@@ -116,15 +116,15 @@ public class LaserGrabber : MonoBehaviour
             resizeableRect.SetActive(false);
     }
 
-    private void checkControllerInput()
+    private void CheckControllerInput()
     {
         // check the state of the button on the back of the controller and perform following actions
-        checkHairTrigger();
+        CheckHairTrigger();
         // check the state of the touchpad and perform following actions
-        checkTouchpad();
+        CheckTouchpad();
     }
 
-    private void checkHairTrigger()
+    private void CheckHairTrigger()
     {
         // if the controller gets pressed, it should try to attach an object to it
         if (Controller.GetHairTriggerDown())
@@ -137,7 +137,7 @@ public class LaserGrabber : MonoBehaviour
                 if (ctrlMaskName == "BoundingboxLayer")
                     if (otherCtrl.GetComponent<LaserGrabber>().readyForResize)
                     {
-                        init_resize();
+                        InitResize();
                     }
                     else
                         readyForResize = true;
@@ -146,11 +146,11 @@ public class LaserGrabber : MonoBehaviour
             else if (otherCtrl.GetComponent<LaserGrabber>().readyForResize)
                 // init the resize, because now are both controllers ready
                 if (ctrlMaskName == "AtomLayer")
-                    init_resize();
+                    InitResize();
                 else;
             else
                 // send out a raycast to detect objects in front of the controller
-                sendRaycast();
+                SendRaycast();
         }
 
         // check if the player released the button
@@ -171,9 +171,9 @@ public class LaserGrabber : MonoBehaviour
                 if (ctrlMaskName == "AtomLayer")
                 {
                     // check the new extension of the structure
-                    SD.searchMaxAndMin();
+                    SD.SearchMaxAndMin();
                     // set the boundingbox so that it encloses the structure
-                    SD.updateBoundingbox();
+                    SD.UpdateBoundingbox();
                 }
 
                 ReleaseObject();
@@ -181,7 +181,7 @@ public class LaserGrabber : MonoBehaviour
         }
     }
 
-    private void checkTouchpad()
+    private void CheckTouchpad()
     {
         // just do anything if the laser is active, because else the touchpad has no function (yet)
         if (laser.activeSelf)
@@ -196,7 +196,7 @@ public class LaserGrabber : MonoBehaviour
             if (Controller.GetTouch(SteamVR_Controller.ButtonMask.Touchpad))
             {
                 currentTouch = Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0);
-                scaleLaser(currentTouch.y - startTouchPoint.y);
+                ScaleLaser(currentTouch.y - startTouchPoint.y);
 
                 // set the max distance the laser should have to exist and not grab the object
                 float minLaserLength;
@@ -221,12 +221,12 @@ public class LaserGrabber : MonoBehaviour
         if (Controller.GetTouchUp(SteamVR_Controller.ButtonMask.Touchpad))
         {
             laserLength += currentTouch.y - startTouchPoint.y;
-            scaleLaser();
+            ScaleLaser();
         }
     }
 
     // checks if the laser hits an object, which it should hit (an atom or a structure)
-    private void sendRaycast()
+    private void SendRaycast()
     {
         // check that there isn't an object in range to grab
         if (collidingObject == null)
@@ -248,7 +248,7 @@ public class LaserGrabber : MonoBehaviour
         }
     }
 
-    private void moveGrabbedObject()
+    private void MoveGrabbedObject()
     {
         // the location before the object gets moved
         Vector3 oldPos;
@@ -329,13 +329,13 @@ public class LaserGrabber : MonoBehaviour
     }
 
     // init the resize and set the controllers state to ready for resize
-    private void init_resize()
+    private void InitResize()
     {
         readyForResize = true;
-        SR.init_resize();
+        SR.InitResize();
     }
 
-    private void scaleLaser(float modification = 0)
+    private void ScaleLaser(float modification = 0)
     {
         Vector3 laserSize = laser.transform.localScale;
         laser.transform.position = transform.position + 
@@ -368,7 +368,7 @@ public class LaserGrabber : MonoBehaviour
         }
         
         // set the length of the laser to it's new length
-        scaleLaser();
+        ScaleLaser();
         // remembers the position where the object is grabbed, relativ to the objects middle point
         objToHandPos = attachedObject.transform.position - transform.position;
         // would be needed to remember the rotation at the beginning of the grab

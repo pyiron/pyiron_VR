@@ -35,10 +35,10 @@ public class StructureResizer : MonoBehaviour
     void Update()
     {
         // test if the structure has to be resized
-        test_for_resize();
+        TestForResize();
     }
 
-    public void init_resize()
+    public void InitResize()
     {
         // set the distance of the controllers when the resizeStructure begins
         startCtrlDistance = (Controllers[0].transform.position - Controllers[1].transform.position).magnitude;
@@ -46,17 +46,17 @@ public class StructureResizer : MonoBehaviour
         oldStructureSize = Settings.size;
     }
 
-    private void test_for_resize()
+    private void TestForResize()
     {
         // return if one of the controllers isn't ready
         foreach (GameObject ctrl in Controllers)
             if (!ctrl.GetComponent<LaserGrabber>().readyForResize)
                 return;
 
-        resizeStructure();
+        ResizeStructure();
     }
 
-    public void resizeStructure()
+    public void ResizeStructure()
     {
         // the data how far the distance between the controllers is currently
         float currentCtrlDistance;
