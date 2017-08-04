@@ -54,9 +54,20 @@ public class ImportStructure : MonoBehaviour
     private void Awake()
     {
         if (Application.isEditor)
-            path = "ressources/AtomStructures/";
+            path = "AtomStructures/";
         else
-            path = "Ressources/AtomStructures/";
+        {
+            path = "VABuild8_Data/AtomStructures/";
+            try
+            {
+                StreamReader sr = new StreamReader(pathName, Encoding.Default);
+                print("yaaaaaaaaaaaaaaaaaaaaaaaaaay");
+            }
+            catch
+            {
+                print("couldnt open it, sorry:/");
+            }
+        }
         pathName = path + strucFileName + ".txt";
         // get the scripts from the gameobjects to get their data
         programSettings = Settings.GetComponent<ProgramSettings>();
