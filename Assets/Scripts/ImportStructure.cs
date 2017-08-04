@@ -58,15 +58,6 @@ public class ImportStructure : MonoBehaviour
         else
         {
             path = "VABuild8_Data/AtomStructures/";
-            try
-            {
-                StreamReader sr = new StreamReader(pathName, Encoding.Default);
-                print("yaaaaaaaaaaaaaaaaaaaaaaaaaay");
-            }
-            catch
-            {
-                print("couldnt open it, sorry:/");
-            }
         }
         pathName = path + strucFileName + ".txt";
         // get the scripts from the gameobjects to get their data
