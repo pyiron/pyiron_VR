@@ -5,8 +5,10 @@
 -make a GUI!
 - make a file which tells Unity details about the pyiron structure:
   -> colordependancy, animation
+- connection via the text file has sometimes little problems. If possible, a pipe would be better than this way I think
 
 IMPORTANT:
 - show prints while playing
 - fix bug atoms get added each frame (not much known about this bug yet, except that there are many atoms at one place where just one atom should be. might be stretched somehow
-- connection via the text file is too slow. need a new connection or make the connection better
+- if the amount of atoms from the script changes, the atom GameObjects in Unity should in- or decrease
+

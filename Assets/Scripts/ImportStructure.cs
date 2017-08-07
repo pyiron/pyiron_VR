@@ -28,17 +28,6 @@ public class ImportStructure : MonoBehaviour
     // the data of the structure the atoms are in
     private StructureData SD;
 
-    // the display for the fps count
-    public UnityEngine.UI.Text fps_display;
-    // the cumulated fps in the time before the average count is displayed
-    private int cumulated_fps;
-    //the count of how many frames have been cumulated in the time before the average count is displayed
-    private int fps_count;
-    // the time how often the average fps count should be displayed
-    private float time_between_fps_updates = 1;
-    // the timer for when the next average fps count should be displayed
-    private float fps_timer;
-
     // the min expansion of the cluster of each axis
     Vector3 minPositions = Vector3.one * Mathf.Infinity;
     // the max expansion of the atoms of each axis
@@ -49,6 +38,24 @@ public class ImportStructure : MonoBehaviour
     private bool firstImport = true;
     // time when the last Update() was called
     private float lastTime;
+
+    [Header("Show Animation FPS")]
+    // the canvas of this program
+    public Canvas MyCanvas;
+    // the display for the fps count
+    private UnityEngine.UI.Text fps_display;
+    // the cumulated fps in the time before the average count is displayed
+    private UnityEngine.UI.Text min_fps_display;
+    // the cumulated fps in the time before the average count is displayed
+    private int cumulated_fps;
+    //the count of how many frames have been cumulated in the time before the average count is displayed
+    private int fps_count;
+    // the time how often the average fps count should be displayed
+    private float time_between_fps_updates = 1;
+    // the timer for when the next average fps count should be displayed
+    private float fps_timer;
+    // the minimum fps rate in the last frames
+    private int min_fps;
 
     [Header("Reading Tools")]
     // the path to the file which holds the data of the current frame
@@ -76,55 +83,80 @@ public class ImportStructure : MonoBehaviour
         programSettings = Settings.GetComponent<ProgramSettings>();
         LED = Settings.GetComponent<LocalElementData>();
         SD = gameObject.GetComponent<StructureData>();
+        foreach (UnityEngine.UI.Text text in MyCanvas.GetComponentsInChildren<UnityEngine.UI.Text>())
+            if (text.name.Contains("min_fps_display"))
+                min_fps_display = text;
+            else if (text.name.Contains("fps_display"))
+                fps_display = text;
     }
 
     void Start()
     {
         LoadStructure();
         firstImport = false;
-        lastTime = Time.time;
+        lastTime = Time.time - 1;
         fps_timer = time_between_fps_updates;
+        min_fps = 9999;
     }
 
     void Update()
     {
-            // the old path/way
-            // pathName = path + strucFileName + "/" + currentFrame + ".txt";
-            // the path to the file which holds all the data for the current frome
+        // the old path/way
+        // pathName = path + strucFileName + "/" + currentFrame + ".txt";
+        // the path to the file which holds all the data for the current frome
 
-            if (fps_timer <= 0)
-            {
-                if (fps_count > 0)
-                    fps_display.text = "Animation FPS: " + ((int)(cumulated_fps / fps_count)).ToString();
-                else
-                    fps_display.text = "Animation FPS: 0";
-                fps_timer = time_between_fps_updates;
-                cumulated_fps = 0;
-                fps_count = 0;
-            }
+        if (fps_timer <= 0)
+        {
+            if (fps_count > 0)
+                fps_display.text = "Animation FPS: " + ((int)(cumulated_fps / fps_count)).ToString();
             else
-                fps_timer -= Time.deltaTime;
+                fps_display.text = "Animation FPS: 0";
+            min_fps_display.text = "Animation min FPS: " + min_fps.ToString();
+            fps_timer = time_between_fps_updates;
+            cumulated_fps = 0;
+            min_fps = 9999;
+            fps_count = 0;
+        }
+        else
+            fps_timer -= Time.deltaTime;
 
         if (Time.time - lastTime + Time.deltaTime > 1 / 90)
-            while (true)
+        {
+            // the max amount of tries this program has to get the script, else it will just go on
+            int maxTries;
+            maxTries = 1000;
+            while (maxTries > 0)
                 if (File.Exists(pathName))
                 {
-                    while (true)
-                        try {
+                    while (maxTries > 0)
+                        try
+                        {
                             LoadStructure();
-                            print(1 / (Time.time - lastTime));
+                            // print(1 / (Time.time - lastTime));
                             cumulated_fps += (int)(1 / (Time.time - lastTime));
+                            if ((int)(1 / (Time.time - lastTime)) < min_fps)
+                                min_fps = (int)(1 / (Time.time - lastTime));
                             fps_count += 1;
                             lastTime = Time.time;
                             break;
                         }
-                        catch{
-                            print("error, probably because both programs want to simultaniously use the file");
-                    }
+                        catch
+                        {
+                            if (maxTries == 1)
+                                print(" open: " + maxTries);
+                            maxTries -= 1;
+                            // print("error, probably because both programs want to simultaniously use the file");
+                        }
                     break;
                 }
                 else
-                   print("python too slow");
+                {
+                    if (maxTries == 1)
+                        print(" test: " + maxTries);
+                    maxTries -= 1;
+                }
+                //print("python too slow");
+        }
     }
 
     private void LoadStructure()
@@ -155,7 +187,7 @@ public class ImportStructure : MonoBehaviour
         // create the atoms
         ReadFile("initAtoms");
 
-        File.Delete(pathName);
+        try { File.Delete(pathName); } catch { } // print("couldn't delete file");}
 
         if (firstImport)
             // set the size of the cluster to the global scale
