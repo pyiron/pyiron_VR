@@ -58,7 +58,9 @@ public class ImportStructure : MonoBehaviour
     // the individual properties announced in the line
     private string[] data;
     // enumerates the atoms
-    int atomCounter = 0;
+    private int atomCounter = 0;
+    // the input file data as a string
+    private string input_file_data;
 
 
     private void Awake()
@@ -86,36 +88,37 @@ public class ImportStructure : MonoBehaviour
 
     void Update()
     {
-        // the old path/way
-        // pathName = path + strucFileName + "/" + currentFrame + ".txt";
-        // the path to the file which holds all the data for the current frome
+            // the old path/way
+            // pathName = path + strucFileName + "/" + currentFrame + ".txt";
+            // the path to the file which holds all the data for the current frome
 
-        if (fps_timer <= 0)
-        {
-            if (fps_count > 0)
-                fps_display.text = "Animation FPS: " + ((int)(cumulated_fps/fps_count)).ToString();
+            if (fps_timer <= 0)
+            {
+                if (fps_count > 0)
+                    fps_display.text = "Animation FPS: " + ((int)(cumulated_fps / fps_count)).ToString();
+                else
+                    fps_display.text = "Animation FPS: 0";
+                fps_timer = time_between_fps_updates;
+                cumulated_fps = 0;
+                fps_count = 0;
+            }
             else
-                fps_display.text = "Animation FPS: 0";
-            fps_timer = time_between_fps_updates;
-            cumulated_fps = 0;
-            fps_count = 0;
-        }
-        else
-            fps_timer -= Time.deltaTime;
+                fps_timer -= Time.deltaTime;
 
         if (Time.time - lastTime + Time.deltaTime > 1 / 90)
             if (File.Exists(pathName))
             {
-                try {
-                    LoadStructure();
-                    //print(1 / (Time.time - lastTime));
-                    cumulated_fps += (int)(1 / (Time.time - lastTime));
-                    print(cumulated_fps);
-                    fps_count += 1;
-                    lastTime = Time.time;
-                }
-                catch{
-                    print("error, probably because both programs want to simultaniously use the file");
+                while (true)
+                    try {
+                        LoadStructure();
+                        print(1 / (Time.time - lastTime));
+                        cumulated_fps += (int)(1 / (Time.time - lastTime));
+                        fps_count += 1;
+                        lastTime = Time.time;
+                        break;
+                    }
+                    catch{
+                        print("error, probably because both programs want to simultaniously use the file");
                 }
             }
             else
@@ -129,6 +132,13 @@ public class ImportStructure : MonoBehaviour
             // create the instance of the boundingbox
             SD.boundingbox = Instantiate(BoundingboxPrefab);
             SD.boundingbox.transform.parent = gameObject.transform;
+        }
+
+        // save the data of the input file as a string, so that the file is just read as short as possible
+        StreamReader sr = new StreamReader(pathName, Encoding.Default);
+        using (sr)
+        {
+            input_file_data = sr.ReadToEnd();
         }
 
         // check how big the structure is
@@ -160,7 +170,7 @@ public class ImportStructure : MonoBehaviour
     private void ReadFile(string action)
     {
         //using (sr = new StringReader(structureFile.text)) // reader to read the input data file
-        StreamReader sr = new StreamReader(pathName, Encoding.Default);
+        StringReader sr = new StringReader(input_file_data);
         using (sr)
         {
             // (re)set the counter to 0

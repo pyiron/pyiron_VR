@@ -32,9 +32,7 @@ public class StructureData : MonoBehaviour
         // create a new empty Instance which holds the data, how the structure has been relocated by the player
         structureCtrlPos = Vector3.zero;
         // create a new empty Instance which holds the data, how the structure has been resized by the player
-        structureCtrlSize = Vector3.zero;
-
-        //structureCtrlTrans = new GameObject().transform;
+        structureCtrlSize = Vector3.zero; // might be useless!
     }
 
     // transform the Boundingbox, so that it encloses the structure
