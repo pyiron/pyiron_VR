@@ -260,9 +260,6 @@ public class LaserGrabber : MonoBehaviour
             if (ctrlMaskName == "BoundingboxLayer")
             {
                 // sets the position of the structure to the end of the laser plus the Vector between the structure and the boundingbox
-                print(transform.position);
-                print(laser.transform.position);
-                print(AtomStructure.transform.position - boundingbox.position);
                 newPos = transform.position + (laser.transform.position - transform.position) * 2
                     + AtomStructure.transform.position - boundingbox.position;
                 //attachedObject.transform.position = transform.position + (laser.transform.position - transform.position) * 2
