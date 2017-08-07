@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class InGamePrinter : MonoBehaviour {
-    private string printText = "nothing to print";
+    private string printText = "";
     private int currentImportance = 0;
 
 	// Use this for initialization
 	void Start () {
-        ctrl_print(transform.position.ToString());
-        ctrl_print("Im left!", 3, false);
+        
     }
 	
 	// Update is called once per frame
