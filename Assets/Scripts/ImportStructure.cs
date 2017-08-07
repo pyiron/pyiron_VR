@@ -106,23 +106,25 @@ public class ImportStructure : MonoBehaviour
                 fps_timer -= Time.deltaTime;
 
         if (Time.time - lastTime + Time.deltaTime > 1 / 90)
-            if (File.Exists(pathName))
-            {
-                while (true)
-                    try {
-                        LoadStructure();
-                        print(1 / (Time.time - lastTime));
-                        cumulated_fps += (int)(1 / (Time.time - lastTime));
-                        fps_count += 1;
-                        lastTime = Time.time;
-                        break;
+            while (true)
+                if (File.Exists(pathName))
+                {
+                    while (true)
+                        try {
+                            LoadStructure();
+                            print(1 / (Time.time - lastTime));
+                            cumulated_fps += (int)(1 / (Time.time - lastTime));
+                            fps_count += 1;
+                            lastTime = Time.time;
+                            break;
+                        }
+                        catch{
+                            print("error, probably because both programs want to simultaniously use the file");
                     }
-                    catch{
-                        print("error, probably because both programs want to simultaniously use the file");
+                    break;
                 }
-            }
-            else
-                 print("python too slow");
+                else
+                   print("python too slow");
     }
 
     private void LoadStructure()
