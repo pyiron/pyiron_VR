@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class InGamePrinter : MonoBehaviour {
     public GameObject[] printers;
+    public LaserGrabber[] LG;
     private string[] printText = new string[2];
     private int[] currentImportance = new int[2];
 
@@ -11,12 +12,12 @@ public class InGamePrinter : MonoBehaviour {
 	void Start () {
         for (int i = 0; i < 2; i++)
         {
-            
             printText[i] = "";
             currentImportance[i] = 0;
         }
-}
+    }
 	
+    
 	// Update is called once per frame
 	void LateUpdate () {
         for (int i = 0; i < 2; i++)
@@ -26,7 +27,7 @@ public class InGamePrinter : MonoBehaviour {
         }
     }
 
-    public void ctrl_print(string text, int importance=0, bool rightCtrl = true)
+    public void Ctrl_print(string text, int importance=0, bool rightCtrl = true)
     {
         if (!rightCtrl)
             if (importance >= currentImportance[0])

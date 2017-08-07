@@ -115,7 +115,7 @@ public class ImportStructure : MonoBehaviour
                 fps_display.text = "Animation FPS: 0";
             min_fps_display.text = "Animation min FPS: " + min_fps.ToString();
             fps_timer = time_between_fps_updates;
-            printer.ctrl_print("Animation min FPS: " + min_fps.ToString(), 2, false);
+            printer.Ctrl_print("Animation min FPS: " + min_fps.ToString(), 2, false);
             cumulated_fps = 0;
             min_fps = 9999;
             fps_count = 0;
@@ -171,15 +171,30 @@ public class ImportStructure : MonoBehaviour
             SD.boundingbox.transform.parent = gameObject.transform;
         }
 
-        // save the data of the input file as a string, so that the file is just read as short as possible
-        StreamReader sr = new StreamReader(pathName, Encoding.Default);
-        using (sr)
-        {
-            input_file_data = sr.ReadToEnd();
-        }
+        int maxTries;
+        maxTries = 1000;
+        input_file_data = "";
+        while (maxTries > 0)
+            try
+            {
+                // save the data of the input file as a string, so that the file is just read as short as possible
+                StreamReader sr = new StreamReader(pathName, Encoding.Default);
+                using (sr)
+                {
+                    input_file_data = sr.ReadToEnd();
+                    break;
+                }
+            }
+            catch
+            {
+                maxTries -= 1;
+            }
+
+        if (input_file_data == "")
+            return;
 
         // check how big the structure is
-        ReadFile("getStructureExpansion");
+            ReadFile("getStructureExpansion");
         if (firstImport)
         {
             // set the length of the Arrays which hold the Data of all Atoms to the amount of atoms in the input file
