@@ -204,7 +204,7 @@ public class LaserGrabber : MonoBehaviour
                     minLaserLength = 0;
                 else
                     // set the distance to the width of the atom, so that the atom is in front of the controller, and not in it
-                    minLaserLength = attachedObject.transform.localScale.x * Settings.size/2;
+                    minLaserLength = attachedObject.transform.localScale.x * Settings.size / 2;
 
                 // if the laserlength is changed to a value less than the minimum distance, the attached object is going to be grabbed
                 if (laserLength + currentTouch.y - startTouchPoint.y <= minLaserLength)
@@ -215,13 +215,13 @@ public class LaserGrabber : MonoBehaviour
                         readyForResize = true;
                 }
             }
-        }
 
-        // scale the laser to the new laserlength
-        if (Controller.GetTouchUp(SteamVR_Controller.ButtonMask.Touchpad))
-        {
-            laserLength += currentTouch.y - startTouchPoint.y;
-            ScaleLaser();
+            // scale the laser to the new laserlength
+            if (Controller.GetTouchUp(SteamVR_Controller.ButtonMask.Touchpad))
+            {
+                laserLength += currentTouch.y - startTouchPoint.y;
+                ScaleLaser();
+            }
         }
     }
 
@@ -351,8 +351,6 @@ public class LaserGrabber : MonoBehaviour
 
             // the laserlength has to be set to the length from the controller to the boundingbox, because it's attached to it's middle point,
             // and the object should be at the same distance before and after the start of the grab
-            print(boundingbox.position);
-            print(transform.position);
             laserLength = (boundingbox.position - transform.position).magnitude;
         }
         else if (ctrlMaskName == "AtomLayer")

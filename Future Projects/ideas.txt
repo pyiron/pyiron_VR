@@ -5,7 +5,7 @@
 -make a GUI!
 - make a file which tells Unity details about the pyiron structure:
   -> colordependancy, animation
-- connection via the text file has sometimes little problems. If possible, a pipe would be better than this way I think
+- connection via the text file has sometimes little problems. If possible, a pipe would be better than this way I think, it might also allow to have more atoms with animation without low fps
 
 IMPORTANT:
 - show prints while playing
