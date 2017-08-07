@@ -27,6 +27,18 @@ public class ImportStructure : MonoBehaviour
     private LocalElementData LED;
     // the data of the structure the atoms are in
     private StructureData SD;
+
+    // the display for the fps count
+    public UnityEngine.UI.Text fps_display;
+    // the cumulated fps in the time before the average count is displayed
+    private int cumulated_fps;
+    //the count of how many frames have been cumulated in the time before the average count is displayed
+    private int fps_count;
+    // the time how often the average fps count should be displayed
+    private float time_between_fps_updates = 1;
+    // the timer for when the next average fps count should be displayed
+    private float fps_timer;
+
     // the min expansion of the cluster of each axis
     Vector3 minPositions = Vector3.one * Mathf.Infinity;
     // the max expansion of the atoms of each axis
@@ -69,6 +81,7 @@ public class ImportStructure : MonoBehaviour
         LoadStructure();
         firstImport = false;
         lastTime = Time.time;
+        fps_timer = time_between_fps_updates;
     }
 
     void Update()
@@ -76,12 +89,29 @@ public class ImportStructure : MonoBehaviour
         // the old path/way
         // pathName = path + strucFileName + "/" + currentFrame + ".txt";
         // the path to the file which holds all the data for the current frome
+
+        if (fps_timer <= 0)
+        {
+            if (fps_count > 0)
+                fps_display.text = "Animation FPS: " + ((int)(cumulated_fps/fps_count)).ToString();
+            else
+                fps_display.text = "Animation FPS: 0";
+            fps_timer = time_between_fps_updates;
+            cumulated_fps = 0;
+            fps_count = 0;
+        }
+        else
+            fps_timer -= Time.deltaTime;
+
         if (Time.time - lastTime + Time.deltaTime > 1 / 90)
             if (File.Exists(pathName))
             {
                 try {
                     LoadStructure();
-                    print(1 / (Time.time - lastTime));
+                    //print(1 / (Time.time - lastTime));
+                    cumulated_fps += (int)(1 / (Time.time - lastTime));
+                    print(cumulated_fps);
+                    fps_count += 1;
                     lastTime = Time.time;
                 }
                 catch{
