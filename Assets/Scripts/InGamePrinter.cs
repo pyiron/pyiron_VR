@@ -3,24 +3,37 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class InGamePrinter : MonoBehaviour {
-    private string printText = "";
-    private int currentImportance = 0;
+    public GameObject[] printers;
+    private string[] printText = new string[2];
+    private int[] currentImportance = new int[2];
 
 	// Use this for initialization
 	void Start () {
-        
-    }
+        for (int i = 0; i < 2; i++)
+        {
+            
+            printText[i] = "";
+            currentImportance[i] = 0;
+        }
+}
 	
 	// Update is called once per frame
 	void LateUpdate () {
-        GetComponent<TextMesh>().text = printText;
-        currentImportance = 0;
+        for (int i = 0; i < 2; i++)
+        {
+            printers[i].GetComponent<TextMesh>().text = printText[i];
+            currentImportance[i] = 0;
+        }
     }
 
     public void ctrl_print(string text, int importance=0, bool rightCtrl = true)
     {
-        if ((transform.parent.name.Contains("right") && rightCtrl) || (transform.parent.name.Contains("left") && !rightCtrl))
-            if (importance >= currentImportance)
-                printText = text;
+        if (!rightCtrl)
+            if (importance >= currentImportance[0])
+                printText[0] = text;
+            else;
+        else
+            if (importance >= currentImportance[1])
+                printText[1] = text;
     }
 }

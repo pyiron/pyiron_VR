@@ -27,6 +27,8 @@ public class ImportStructure : MonoBehaviour
     private LocalElementData LED;
     // the data of the structure the atoms are in
     private StructureData SD;
+    // the script of the controller printer
+    public InGamePrinter printer;
 
     // the min expansion of the cluster of each axis
     Vector3 minPositions = Vector3.one * Mathf.Infinity;
@@ -113,6 +115,7 @@ public class ImportStructure : MonoBehaviour
                 fps_display.text = "Animation FPS: 0";
             min_fps_display.text = "Animation min FPS: " + min_fps.ToString();
             fps_timer = time_between_fps_updates;
+            printer.ctrl_print("Animation min FPS: " + min_fps.ToString(), 2, false);
             cumulated_fps = 0;
             min_fps = 9999;
             fps_count = 0;
