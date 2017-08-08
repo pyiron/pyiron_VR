@@ -37,6 +37,8 @@ public class ImportStructure : MonoBehaviour
     // the prefab for the boundingbox
     public GameObject BoundingboxPrefab;
     // checks whether all the instances in the scene have to be created or if the scene just has to be updated
+    private bool newImport = true;
+    // shows whether it is the first import or just a new amount of atoms
     private bool firstImport = true;
     // time when the last Update() was called
     private float lastTime;
@@ -97,6 +99,7 @@ public class ImportStructure : MonoBehaviour
     void Start()
     {
         LoadStructure();
+        newImport = false;
         firstImport = false;
         lastTime = Time.time - 1;
         fps_timer = time_between_fps_updates;
@@ -144,6 +147,7 @@ public class ImportStructure : MonoBehaviour
                                 min_fps = (int)(1 / (Time.time - lastTime));
                             fps_count += 1;
                             lastTime = Time.time;
+                            newImport = false;
                             break;
                         }
                         catch
@@ -199,9 +203,14 @@ public class ImportStructure : MonoBehaviour
             return;
 
         // check how big the structure is
-            ReadFile("getStructureExpansion");
-        if (firstImport)
+        ReadFile("getStructureExpansion");
+        if (!isAnim && !newImport)
+            return;
+        if (newImport)
         {
+            if (!firstImport)
+                foreach (AtomInfos oldAtomInfo in SD.atomInfos)
+                    Destroy(oldAtomInfo.m_transform.gameObject);
             // set the length of the Arrays which hold the Data of all Atoms to the amount of atoms in the input file
             SD.atomInfos = new AtomInfos[atomCounter];
             SD.atomCtrlPos = new Vector3[atomCounter];
@@ -213,10 +222,10 @@ public class ImportStructure : MonoBehaviour
         if (isAnim)
             try { File.Delete(pathName); } catch { } // print("couldn't delete file");}
 
-        if (firstImport)
+        if (newImport)
             // set the size of the cluster to the global scale
             gameObject.transform.localScale = Vector3.one * programSettings.size;
-        if (firstImport || programSettings.framesUpdateBoundingbox)
+        if (newImport || programSettings.framesUpdateBoundingbox)
         {
             // check the expansion of the cluster
             SD.SearchMaxAndMin();
@@ -244,7 +253,11 @@ public class ImportStructure : MonoBehaviour
                     if (line.Contains("anim"))
                         isAnim = true;
                     else
+                    {
                         isAnim = false;
+                        if (!firstImport)  // might be newImport!
+                            return;
+                    }
                     firstLine = false;
                 }
                 else
@@ -262,7 +275,7 @@ public class ImportStructure : MonoBehaviour
                     else
                     {
                         //print(data[9]);
-                        //need to get bondary data here
+                        //need to get cell data here
                         break; // breaks the routine if the end of the file is reached
                     }
 
@@ -270,6 +283,13 @@ public class ImportStructure : MonoBehaviour
                 }
             }
         }
+        if (!firstImport)
+            if (atomCounter != SD.atomInfos.Length)
+            {
+                print(atomCounter + " and " + SD.atomInfos.Length);
+                newImport = true;
+                firstImport = false;
+            }
     }
 
     private void GetStructureExpansion()
@@ -285,7 +305,7 @@ public class ImportStructure : MonoBehaviour
 
     private void InitAtoms()
     {
-        if (firstImport)
+        if (newImport)
         {
             // create a new instance of an atom
             currentAtom = Instantiate(AtomPrefab);
@@ -297,7 +317,7 @@ public class ImportStructure : MonoBehaviour
                 if (AI.m_ID == atomCounter)
                     currentAtom = AI.m_transform.gameObject;
 
-        if (firstImport)
+        if (newImport)
         {
             // Set the new atom position to the pos from the file and adjust it, so that the clusters middle is in the origin
             currentAtom.transform.position = new Vector3(float.Parse(data[0]), float.Parse(data[1]),
@@ -313,7 +333,7 @@ public class ImportStructure : MonoBehaviour
         currentAtom.GetComponent<Renderer>().material.color = LED.getColour(data[3]);
         // set the atoms size to the size this type of atom has 
         currentAtom.transform.localScale = Vector3.one * LED.getSize(data[3]);
-        if (firstImport)
+        if (newImport)
         {
             // give the atom an ID
             currentAtom.GetComponent<AtomID>().ID = atomCounter;
