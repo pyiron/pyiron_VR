@@ -8,7 +8,7 @@
 - connection via the text file has sometimes little problems. If possible, a pipe would be better than this way I think, it might also allow to have more atoms with animation without low fps
 
 IMPORTANT:
-- show prints while playing
 - fix bug atoms get added each frame (not much known about this bug yet, except that there are many atoms at one place where just one atom should be. might be stretched somehow
 - if the amount of atoms from the script changes, the atom GameObjects in Unity should in- or decrease
+- fix bug that the fps are low when having no animation. Can be solved by the general information data about the current animation.
 

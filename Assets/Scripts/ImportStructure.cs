@@ -40,6 +40,8 @@ public class ImportStructure : MonoBehaviour
     private bool firstImport = true;
     // time when the last Update() was called
     private float lastTime;
+    // shows whether the input data is an animation at the moment (could be also a static structure)
+    private bool isAnim;
 
     [Header("Show Animation FPS")]
     // the canvas of this program
@@ -78,7 +80,7 @@ public class ImportStructure : MonoBehaviour
             path = "AtomStructures/";
         else
         {
-            path = "VABuild8_Data/AtomStructures/";
+            path = "VABuild9wUI_Data/AtomStructures/";
         }
         pathName = path + strucFileName + ".txt";
         // get the scripts from the gameobjects to get their data
@@ -128,6 +130,7 @@ public class ImportStructure : MonoBehaviour
             // the max amount of tries this program has to get the script, else it will just go on
             int maxTries;
             maxTries = 1000;
+            
             while (maxTries > 0)
                 if (File.Exists(pathName))
                 {
@@ -146,7 +149,7 @@ public class ImportStructure : MonoBehaviour
                         catch
                         {
                             if (maxTries == 1)
-                                print(" open: " + maxTries);
+                                print("No Input!");
                             maxTries -= 1;
                             // print("error, probably because both programs want to simultaniously use the file");
                         }
@@ -154,8 +157,10 @@ public class ImportStructure : MonoBehaviour
                 }
                 else
                 {
+                    if (!isAnim)
+                        break;
                     if (maxTries == 1)
-                        print(" test: " + maxTries);
+                        print("No Input!");
                     maxTries -= 1;
                 }
                 //print("python too slow");
@@ -205,7 +210,8 @@ public class ImportStructure : MonoBehaviour
         // create the atoms
         ReadFile("initAtoms");
 
-        try { File.Delete(pathName); } catch { } // print("couldn't delete file");}
+        if (isAnim)
+            try { File.Delete(pathName); } catch { } // print("couldn't delete file");}
 
         if (firstImport)
             // set the size of the cluster to the global scale
@@ -227,27 +233,41 @@ public class ImportStructure : MonoBehaviour
         {
             // (re)set the counter to 0
             atomCounter = 0;
+            // shows if the current read line is the first line of the file/string
+            bool firstLine;
+            firstLine = true;
             while (true)
             {
                 line = sr.ReadLine();
-                // split the data into the position (data[0 - 2]) and it's type (data[3]) or in the cell data
-                data = line.Split(' ');
-                if (data.Length < 5)
-                //if (line != null) // reads line for line, until the end is reached
+                if (firstLine)
                 {
-                    if (action == "getStructureExpansion")
-                        GetStructureExpansion();
-                    else if (action == "initAtoms")
-                        InitAtoms();
+                    if (line.Contains("anim"))
+                        isAnim = true;
+                    else
+                        isAnim = false;
+                    firstLine = false;
                 }
                 else
                 {
-                    //print(data[9]);
-                    //need to get bondary data here
-                    break; // breaks the routine if the end of the file is reached
-                }
+                    // split the data into the position (data[0 - 2]) and it's type (data[3]) or in the cell data
+                    data = line.Split(' ');
+                    if (data.Length < 5)
+                    //if (line != null) // reads line for line, until the end is reached
+                    {
+                        if (action == "getStructureExpansion")
+                            GetStructureExpansion();
+                        else if (action == "initAtoms")
+                            InitAtoms();
+                    }
+                    else
+                    {
+                        //print(data[9]);
+                        //need to get bondary data here
+                        break; // breaks the routine if the end of the file is reached
+                    }
 
-                atomCounter++;
+                    atomCounter++;
+                }
             }
         }
     }
