@@ -288,7 +288,6 @@ public class ImportStructure : MonoBehaviour
         if (!firstImport)
             if (atomCounter != SD.atomInfos.Length)
             {
-                print(atomCounter + " and " + SD.atomInfos.Length);
                 newImport = true;
                 firstImport = false;
             }

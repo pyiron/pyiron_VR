@@ -14,8 +14,6 @@ public class LaserGrabber : MonoBehaviour
     private StructureResizer SR;
     // the gameobject of the structure
     public GameObject AtomStructure;
-    // the script of the controller printer
-    public InGamePrinter printer;
 
     [Header("Move Objects")]
     // the object the controller is currently colliding with
@@ -61,7 +59,7 @@ public class LaserGrabber : MonoBehaviour
     // the object of the controller
     private SteamVR_TrackedObject trackedObj;
     // get the device of the controller
-    private SteamVR_Controller.Device Controller
+    public SteamVR_Controller.Device Controller
     {
         get { return SteamVR_Controller.Input((int)trackedObj.index); }
     }
@@ -79,7 +77,6 @@ public class LaserGrabber : MonoBehaviour
         // initialize the laser
         InitLaser();
 
-        ctrlMaskName = Settings.getLayerName(ctrlMask);
         // set the variable to the name of the mask
         ctrlMaskName = Settings.getLayerName(ctrlMask);
         // get the script StructureData from AtomStructure
@@ -124,8 +121,6 @@ public class LaserGrabber : MonoBehaviour
         CheckHairTrigger();
         // check the state of the touchpad and perform following actions
         CheckTouchpad();
-        // check if the application menu button is down to print before the controller, this should be done somehow else
-        CheckApplicationMenu();
     }
 
     private void CheckHairTrigger()
@@ -227,21 +222,6 @@ public class LaserGrabber : MonoBehaviour
                 ScaleLaser();
             }
         }
-    }
-
-    private void CheckApplicationMenu()
-    {
-        if (Controller.GetTouchDown(SteamVR_Controller.ButtonMask.ApplicationMenu))
-            if (ctrlMaskName.Contains("Atom"))
-                printer.printers[0].gameObject.SetActive(true);
-            else
-                printer.printers[1].gameObject.SetActive(true);
-
-        if (Controller.GetTouchUp(SteamVR_Controller.ButtonMask.ApplicationMenu))
-            if (ctrlMaskName.Contains("Atom"))
-                printer.printers[0].gameObject.SetActive(false);
-            else
-                printer.printers[1].gameObject.SetActive(false);
     }
 
     // checks if the laser hits an object, which it should hit (an atom or a structure)
