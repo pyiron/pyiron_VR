@@ -32,6 +32,8 @@ public class InputManager : MonoBehaviour {
         LG = gameObject.GetComponent<LaserGrabber>();
         // get the reference of the controller from the LaserGrabber script
         Controller = LG.Controller;
+
+        printer.Ctrl_print(Settings.modeNr.ToString(), 4);
     }
 
     // Update is called once per frame
@@ -41,10 +43,12 @@ public class InputManager : MonoBehaviour {
         // check the state of the touchpad and perform following actions
         LG.CheckTouchpad();
         // check if the application menu button is down to print before the controller
-        CheckApplicationMenu();
+        CheckGripButton();
+        // check if the applicationMenu button is down to switch the mode
+        CheckapplicationMenu();
     }
 
-    private void CheckApplicationMenu()
+    private void CheckGripButton()
     {
         if (Controller.GetTouchDown(SteamVR_Controller.ButtonMask.Grip))
             if (ctrlMaskName.Contains("Atom"))
@@ -57,5 +61,14 @@ public class InputManager : MonoBehaviour {
                 printer.printers[0].gameObject.SetActive(false);
             else
                 printer.printers[1].gameObject.SetActive(false);
+    }
+
+    private void CheckapplicationMenu()
+    {
+        if (Controller.GetTouchDown(SteamVR_Controller.ButtonMask.ApplicationMenu))
+        {
+            Settings.raiseMode();
+            printer.Ctrl_print(Settings.modeNr.ToString(), 4);
+        }
     }
 }

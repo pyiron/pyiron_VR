@@ -14,6 +14,8 @@ public class LaserGrabber : MonoBehaviour
     private StructureResizer SR;
     // the gameobject of the structure
     public GameObject AtomStructure;
+    // the script of the controller printer
+    public InGamePrinter printer;
 
     [Header("Move Objects")]
     // the object the controller is currently colliding with

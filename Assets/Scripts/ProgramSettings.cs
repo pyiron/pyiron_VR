@@ -10,6 +10,17 @@ public class ProgramSettings : MonoBehaviour {
     public bool framesUpdateBoundingbox;
     // determines whether errors should be printed
     public bool showErrors = false;
+    // the amount of modes in the game (because 0 is a mode too)
+    public static int maxModeNr = 3;
+    // the current mode in the game:
+    // 1: move, 2: show infos, 3: edit
+    public int modeNr = 0;
+
+    // raise the mode nr by one, except it reached the highest mode, then set it to 0
+    public void raiseMode()
+    {
+        modeNr = (modeNr + 1) % maxModeNr;
+    }
 
     // a function to get the name of a layer/mask
     public string getLayerName(LayerMask layer)
