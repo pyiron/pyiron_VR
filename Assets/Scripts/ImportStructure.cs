@@ -220,7 +220,7 @@ public class ImportStructure : MonoBehaviour
         if (newImport)
             // set the size of the cluster to the global scale
             gameObject.transform.localScale = Vector3.one * programSettings.size;
-        if (newImport || programSettings.framesUpdateBoundingbox)
+        if (newImport)
         {
             // check the expansion of the cluster
             SD.SearchMaxAndMin();

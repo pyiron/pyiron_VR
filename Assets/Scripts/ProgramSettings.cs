@@ -4,22 +4,23 @@ using UnityEngine;
 
 // component of Settings
 public class ProgramSettings : MonoBehaviour {
-    //
+    // get the references of the controllers
     public GameObject[] controllers = new GameObject[2];
+    // the path to the directory where the transmitter files are stored
+    private string pathToAtomStructure;
+
+    [Header("Settings")]
     // the global size multiplikator
     public float size;
-    // determines, whether the boundingbox should be updated each frame
-    public bool framesUpdateBoundingbox;
     // determines whether errors should be printed
     public bool showErrors = false;
 
+    [Header("Modes")]
     // the amount of modes in the game (because 0 is a mode too)
     public static int maxModeNr = 3;
     // the current mode in the game:
     // 1: move, 2: show infos, 3: edit
     public int modeNr = 0;
-    // the path to the directory where the transmitter files are stored
-    private string pathToAtomStructure;
 
 
     private void Awake()
