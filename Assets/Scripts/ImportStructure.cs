@@ -13,8 +13,6 @@ public class ImportStructure : MonoBehaviour
     // name of the data file which contains the information about the atom structure
     public string strucFileName;
 
-    // path to the files with the atomstructure data
-    private string path;
     // the prefab for the atoms
     public GameObject AtomPrefab;
     // gameobject to hold the new instance of an atom
@@ -65,7 +63,7 @@ public class ImportStructure : MonoBehaviour
 
     [Header("Reading Tools")]
     // the path to the file which holds the data of the current frame
-    string pathName;
+    private string pathName;
     // stores the data of each read line in a file
     private string line;
     // the individual properties announced in the line
@@ -78,15 +76,10 @@ public class ImportStructure : MonoBehaviour
 
     private void Awake()
     {
-        if (Application.isEditor)
-            path = "AtomStructures/";
-        else
-        {
-            path = "VABuild9wUI_Data/AtomStructures/";
-        }
-        pathName = path + strucFileName + ".txt";
         // get the scripts from the gameobjects to get their data
         programSettings = Settings.GetComponent<ProgramSettings>();
+        // get the path to the transmitter file which holds the data pyiron send to unity
+        pathName = programSettings.GetFilePath(strucFileName);
         LED = Settings.GetComponent<LocalElementData>();
         SD = gameObject.GetComponent<StructureData>();
         foreach (UnityEngine.UI.Text text in MyCanvas.GetComponentsInChildren<UnityEngine.UI.Text>())

@@ -12,18 +12,42 @@ public class ProgramSettings : MonoBehaviour {
     public bool framesUpdateBoundingbox;
     // determines whether errors should be printed
     public bool showErrors = false;
+
     // the amount of modes in the game (because 0 is a mode too)
     public static int maxModeNr = 3;
     // the current mode in the game:
     // 1: move, 2: show infos, 3: edit
     public int modeNr = 0;
+    // the path to the directory where the transmitter files are stored
+    private string pathToAtomStructure;
 
-    // raise the mode nr by one, except it reached the highest mode, then set it to 0
+
+    private void Awake()
+    {
+        if (Application.isEditor)
+            pathToAtomStructure = "AtomStructures/";
+        else
+        {
+            pathToAtomStructure = "VABuild9wUI_Data/AtomStructures/";
+        }
+    }
+
+    public string GetFilePath(string fileName)
+    {
+        return pathToAtomStructure + fileName + ".txt";
+    }
+
     public void raiseMode()
     {
+        // raise the mode nr by one, except it reached the highest mode, then set it to 0
         modeNr = (modeNr + 1) % maxModeNr;
+        // detach the currently attached object from the laser and deactivate the laser
         foreach (GameObject controller in controllers)
-            controller.GetComponent<LaserGrabber>().attachedObject = null;
+            if (controller.activeSelf)
+            {
+                controller.GetComponent<LaserGrabber>().attachedObject = null;
+                controller.GetComponent<LaserGrabber>().laser.SetActive(false);
+            }
     }
 
     // a function to get the name of a layer/mask

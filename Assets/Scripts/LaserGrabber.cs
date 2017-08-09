@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 // Component of both controllers
 public class LaserGrabber : MonoBehaviour
@@ -37,7 +38,7 @@ public class LaserGrabber : MonoBehaviour
     // the prefab for the laser
     public GameObject LaserPrefab;
     // the instance of the laser in the game
-    private GameObject laser;
+    public GameObject laser;
     // the transform of the laser gameobject
     private Transform laserTransform;
     // the hitpoint where the laser met an object
@@ -52,6 +53,10 @@ public class LaserGrabber : MonoBehaviour
     public GameObject resizeableRect;
     // the state of the other controller, needed to look if both hairtriggers are pressed, so that the structure should be resized
     public bool readyForResize;
+
+    [Header("Transmittion")]
+    // the filename of the file which will send orders from unity to pyiron
+    private string fileName = "orders";
 
     [Header("Controller")]
     // the start touch point from when the player lays his finger on the touchpad
@@ -116,7 +121,7 @@ public class LaserGrabber : MonoBehaviour
         else
         {
             if (Controller.GetHairTrigger())
-                TryPointAtObject();
+                SendRaycast();
         }
 
         if (readyForResize)
@@ -187,7 +192,8 @@ public class LaserGrabber : MonoBehaviour
                 }
             }
             else
-            {
+            { 
+                // detach the attached object and deactivate the laser when the press on the trigger is up
                 attachedObject = null;
                 laser.SetActive(false);
             }
@@ -239,31 +245,21 @@ public class LaserGrabber : MonoBehaviour
                 }
             }
         }
+        else if (Settings.modeNr == 2)
+            if (ctrlMaskName.Contains("BoundingboxLayer"))
+                if (Controller.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad))
+                    if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).y > 0)
+                        WriteOrder("self.duplicate()");
     }
 
-    private void TryPointAtObject()
+    private void WriteOrder(string order)
     {
-        // check that there isn't an object in range to grab
-        if (collidingObject == null)
+        StreamWriter sw = new StreamWriter(Settings.GetFilePath(fileName:fileName));
+        using (sw)
         {
-            RaycastHit hit;
-
-            // send out a raycast to detect if there is an object in front of the laser 
-            if (Physics.Raycast(trackedObj.transform.position, transform.forward, out hit, laserMaxDistance, ctrlMask))
-            {
-                if (!laser.activeSelf)
-                    laser.SetActive(true);
-                hitPoint = hit.point;
-                ShowLaser(hit);
-                attachedObject = hit.transform.gameObject;
-            }
-            else
-            {
-                if (laser.activeSelf)
-                    laser.SetActive(false);
-                attachedObject = null;
-            }
+            sw.WriteLine(order);
         }
+        printer.Ctrl_print("order", 20);
     }
 
     // checks if the laser hits an object, which it should hit (an atom or a structure)
@@ -274,18 +270,27 @@ public class LaserGrabber : MonoBehaviour
         {
             RaycastHit hit;
 
-            if (!attachedObject)
+            if (!attachedObject || Settings.modeNr != 0)
                 // send out a raycast to detect if there is an object in front of the laser 
                 if (Physics.Raycast(trackedObj.transform.position, transform.forward, out hit, laserMaxDistance, ctrlMask))
                 {
                     laser.SetActive(true);
                     hitPoint = hit.point;
                     ShowLaser(hit);
-                    AttachObject(hit.transform.gameObject);
+                    if (Settings.modeNr == 0)
+                        AttachObject(hit.transform.gameObject);
+                    else
+                        attachedObject = hit.transform.gameObject;
                 }
-                else
+                else if (Settings.modeNr == 0)
                     if (ctrlMaskName == "AtomLayer")
                         readyForResize = true;
+                    else;
+                else
+                {
+                    laser.SetActive(false);
+                    attachedObject = null;
+                }
         }
     }
 
