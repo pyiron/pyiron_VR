@@ -21,7 +21,7 @@ public class LaserGrabber : MonoBehaviour
     // the object the controller is currently colliding with
     private GameObject collidingObject;
     // the object which is currently attached to the controller
-    private GameObject attachedObject;
+    public GameObject attachedObject;
     // the Vector between the controller position and the grabbed object position
     private Vector3 objToHandPos;
     // the Vector between the controller rotation and the grabbed object rotation
@@ -31,7 +31,7 @@ public class LaserGrabber : MonoBehaviour
 
     [Header("Masks")] // the controller mask and it's name
     public LayerMask ctrlMask;
-    private string ctrlMaskName;
+    public string ctrlMaskName;
 
     [Header("Laser")]
     // the prefab for the laser
@@ -107,9 +107,17 @@ public class LaserGrabber : MonoBehaviour
         // check all the input of the controller and fullfill the following actions
         //CheckControllerInput();
 
-        // move the grabbed object
-        if (attachedObject)
-            MoveGrabbedObject();
+        if (Settings.modeNr == 0)
+        {
+            // move the grabbed object
+            if (attachedObject)
+                MoveGrabbedObject();
+        }
+        else
+        {
+            if (Controller.GetHairTrigger())
+                TryPointAtObject();
+        }
 
         if (readyForResize)
             resizeableRect.SetActive(true);
@@ -122,98 +130,138 @@ public class LaserGrabber : MonoBehaviour
         // if the controller gets pressed, it should try to attach an object to it
         if (Controller.GetHairTriggerDown())
         {
-            // if an object is colliding with the controller, it should be attached
-            if (collidingObject)
+            if (Settings.modeNr == 0)
             {
-                AttachObject(collidingObject);
-                // set the controller ready for size, if it grabs the boundingbox
-                if (ctrlMaskName == "BoundingboxLayer")
-                    if (otherCtrl.GetComponent<LaserGrabber>().readyForResize)
-                    {
+                // if an object is colliding with the controller, it should be attached
+                if (collidingObject)
+                {
+                    AttachObject(collidingObject);
+                    // set the controller ready for size, if it grabs the boundingbox
+                    if (ctrlMaskName == "BoundingboxLayer")
+                        if (otherCtrl.GetComponent<LaserGrabber>().readyForResize)
+                        {
+                            InitResize();
+                        }
+                        else
+                            readyForResize = true;
+                }
+                // test if the other controller is ready for a resize
+                else if (otherCtrl.GetComponent<LaserGrabber>().readyForResize)
+                    // init the resize, because now are both controllers ready
+                    if (ctrlMaskName == "AtomLayer")
                         InitResize();
-                    }
-                    else
-                        readyForResize = true;
+                    else;
+                else
+                    // send out a raycast to detect objects in front of the controller
+                    SendRaycast();
             }
-            // test if the other controller is ready for a resize
-            else if (otherCtrl.GetComponent<LaserGrabber>().readyForResize)
-                // init the resize, because now are both controllers ready
-                if (ctrlMaskName == "AtomLayer")
-                    InitResize();
-                else;
-            else
-                // send out a raycast to detect objects in front of the controller
-                SendRaycast();
         }
 
+        
         // check if the player released the button
         if (Controller.GetPressUp(SteamVR_Controller.ButtonMask.Trigger))
         {
-            // set the state of the controller to not ready for resizeStructure, if it isn't already
-            if (readyForResize)
-                readyForResize = false;
-
-            // disattach the attached object
-            if (attachedObject)
+            if (Settings.modeNr == 0)
             {
-                // deactivate the laser
-                if (laser.activeSelf)
-                    laser.SetActive(false);
+                // set the state of the controller to not ready for resizeStructure, if it isn't already
+                if (readyForResize)
+                    readyForResize = false;
 
-                // change the boundingbox to the new extension of the structure, if an atom has been attached
-                if (ctrlMaskName == "AtomLayer")
+                // disattach the attached object
+                if (attachedObject)
                 {
-                    // check the new extension of the structure
-                    SD.SearchMaxAndMin();
-                    // set the boundingbox so that it encloses the structure
-                    SD.UpdateBoundingbox();
-                }
+                    // deactivate the laser
+                    if (laser.activeSelf)
+                        laser.SetActive(false);
 
-                ReleaseObject();
+                    // change the boundingbox to the new extension of the structure, if an atom has been attached
+                    if (ctrlMaskName == "AtomLayer")
+                    {
+                        // check the new extension of the structure
+                        SD.SearchMaxAndMin();
+                        // set the boundingbox so that it encloses the structure
+                        SD.UpdateBoundingbox();
+                    }
+
+                    ReleaseObject();
+                }
+            }
+            else
+            {
+                attachedObject = null;
+                laser.SetActive(false);
             }
         }
     }
 
     public void CheckTouchpad()
     {
-        // just do anything if the laser is active, because else the touchpad has no function (yet)
-        if (laser.activeSelf)
+        if (Settings.modeNr == 0)
         {
-            // mark the start touchpoint
-            if (Controller.GetTouchDown(SteamVR_Controller.ButtonMask.Touchpad))
+            // just do anything if the laser is active, because else the touchpad has no function (yet)
+            if (laser.activeSelf)
             {
-                startTouchPoint = Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0);
-            }
-
-            // scale the laser
-            if (Controller.GetTouch(SteamVR_Controller.ButtonMask.Touchpad))
-            {
-                currentTouch = Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0);
-                ScaleLaser(currentTouch.y - startTouchPoint.y);
-
-                // set the max distance the laser should have to exist and not grab the object
-                float minLaserLength;
-                if (ctrlMaskName == "BoundingboxLayer")
-                    minLaserLength = 0;
-                else
-                    // set the distance to the width of the atom, so that the atom is in front of the controller, and not in it
-                    minLaserLength = attachedObject.transform.localScale.x * Settings.size / 2;
-
-                // if the laserlength is changed to a value less than the minimum distance, the attached object is going to be grabbed
-                if (laserLength + currentTouch.y - startTouchPoint.y <= minLaserLength)
+                // mark the start touchpoint
+                if (Controller.GetTouchDown(SteamVR_Controller.ButtonMask.Touchpad))
                 {
-                    AttachObject(attachedObject);
-                    laser.SetActive(false);
+                    startTouchPoint = Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0);
+                }
+
+                // scale the laser
+                if (Controller.GetTouch(SteamVR_Controller.ButtonMask.Touchpad))
+                {
+                    currentTouch = Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0);
+                    ScaleLaser(currentTouch.y - startTouchPoint.y);
+
+                    // set the max distance the laser should have to exist and not grab the object
+                    float minLaserLength;
                     if (ctrlMaskName == "BoundingboxLayer")
-                        readyForResize = true;
+                        minLaserLength = 0;
+                    else
+                        // set the distance to the width of the atom, so that the atom is in front of the controller, and not in it
+                        minLaserLength = attachedObject.transform.localScale.x * Settings.size / 2;
+
+                    // if the laserlength is changed to a value less than the minimum distance, the attached object is going to be grabbed
+                    if (laserLength + currentTouch.y - startTouchPoint.y <= minLaserLength)
+                    {
+                        AttachObject(attachedObject);
+                        laser.SetActive(false);
+                        if (ctrlMaskName == "BoundingboxLayer")
+                            readyForResize = true;
+                    }
+                }
+
+                // scale the laser to the new laserlength
+                if (Controller.GetTouchUp(SteamVR_Controller.ButtonMask.Touchpad))
+                {
+                    laserLength += currentTouch.y - startTouchPoint.y;
+                    ScaleLaser();
                 }
             }
+        }
+    }
 
-            // scale the laser to the new laserlength
-            if (Controller.GetTouchUp(SteamVR_Controller.ButtonMask.Touchpad))
+    private void TryPointAtObject()
+    {
+        // check that there isn't an object in range to grab
+        if (collidingObject == null)
+        {
+            RaycastHit hit;
+
+            // send out a raycast to detect if there is an object in front of the laser 
+            if (Physics.Raycast(trackedObj.transform.position, transform.forward, out hit, laserMaxDistance, ctrlMask))
             {
-                laserLength += currentTouch.y - startTouchPoint.y;
-                ScaleLaser();
+                if (!laser.activeSelf)
+                    laser.SetActive(true);
+                hitPoint = hit.point;
+                ShowLaser(hit);
+                attachedObject = hit.transform.gameObject;
+            }
+            else
+            {
+                if (laser.activeSelf)
+                    laser.SetActive(false);
+                attachedObject = null;
             }
         }
     }
@@ -372,7 +420,7 @@ public class LaserGrabber : MonoBehaviour
         attachedObject = null;
     }
     
-    private void ShowLaser(RaycastHit hit)
+    private void ShowLaser(RaycastHit hit) 
     {
         // set the laserposition in the middle between the controller and the hitpoint
         laserTransform.position = Vector3.Lerp(trackedObj.transform.position, hitPoint, .5f);

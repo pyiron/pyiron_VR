@@ -120,7 +120,7 @@ public class ImportStructure : MonoBehaviour
                 fps_display.text = "Animation FPS: 0";
             min_fps_display.text = "Animation min FPS: " + min_fps.ToString();
             fps_timer = time_between_fps_updates;
-            printer.Ctrl_print("Animation min FPS: " + min_fps.ToString(), 2, false);
+            // printer.Ctrl_print("Animation min FPS: " + min_fps.ToString(), 2, false);
             cumulated_fps = 0;
             min_fps = 9999;
             fps_count = 0;

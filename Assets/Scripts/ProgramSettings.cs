@@ -4,6 +4,8 @@ using UnityEngine;
 
 // component of Settings
 public class ProgramSettings : MonoBehaviour {
+    //
+    public GameObject[] controllers = new GameObject[2];
     // the global size multiplikator
     public float size;
     // determines, whether the boundingbox should be updated each frame
@@ -20,6 +22,8 @@ public class ProgramSettings : MonoBehaviour {
     public void raiseMode()
     {
         modeNr = (modeNr + 1) % maxModeNr;
+        foreach (GameObject controller in controllers)
+            controller.GetComponent<LaserGrabber>().attachedObject = null;
     }
 
     // a function to get the name of a layer/mask
