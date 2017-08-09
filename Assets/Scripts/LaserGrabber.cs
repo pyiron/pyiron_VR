@@ -249,7 +249,7 @@ public class LaserGrabber : MonoBehaviour
             if (ctrlMaskName.Contains("BoundingboxLayer"))
                 if (Controller.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad))
                     if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).y > 0)
-                        WriteOrder("self.duplicate()");
+                        WriteOrder("self.duplicate(2)");
     }
 
     private void WriteOrder(string order)
