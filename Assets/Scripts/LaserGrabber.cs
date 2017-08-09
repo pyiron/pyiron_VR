@@ -351,8 +351,10 @@ public class LaserGrabber : MonoBehaviour
         // checks if the colliding object is of interrest to the controller
         if (ctrlMaskName == LayerMask.LayerToName(col.gameObject.layer))
         {
+            // set the colliding object
             collidingObject = col.gameObject;
-            if (Settings.modeNr != 0)  // also true for mode 0, but it"s already fine in this mode
+            // disable the laser if the controller is colliding when not in mode 0
+            if (Settings.modeNr != 0)
                 laser.SetActive(false);
         }
     }

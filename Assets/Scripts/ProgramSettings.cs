@@ -47,6 +47,7 @@ public class ProgramSettings : MonoBehaviour {
             {
                 controller.GetComponent<LaserGrabber>().attachedObject = null;
                 controller.GetComponent<LaserGrabber>().laser.SetActive(false);
+                controller.GetComponent<LaserGrabber>().readyForResize = false;
             }
     }
 
