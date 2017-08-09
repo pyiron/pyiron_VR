@@ -12,6 +12,8 @@ public class ProgramSettings : MonoBehaviour {
     [Header("Settings")]
     // the global size multiplikator
     public float size;
+    // determines whether the boundingbox gets just updated if the player changes it or if it gets updated each frame
+    public bool updateBoundingboxEachFrame;
     // determines whether errors should be printed
     public bool showErrors = false;
 

@@ -128,17 +128,21 @@ public class LaserGrabber : MonoBehaviour
                 if (Settings.modeNr == 1)
                     if (laser.activeSelf || collidingObject)
                     {
+                        // set the Infotext to active and edit it 
                         InfoText.SetActive(true);
-                        printer.Ctrl_print(attachedObject.ToString(), 89);
                         if (ctrlMaskName.Contains("AtomLayer"))
                         {
-                            InfoText.transform.position = attachedObject.transform.position + Vector3.up;
+                            // set the info text to the top of the atom
+                            InfoText.transform.position = attachedObject.transform.position
+                                 + Vector3.up * attachedObject.transform.localScale[0] * Settings.size;
                             InfoText.GetComponent<TextMesh>().text = SD.atomInfos[attachedObject.GetComponent<AtomID>().ID].m_type;
                             InfoText.GetComponent<TextMesh>().text += "\nHeat: ";
                         }
                         else
                         {
-                            InfoText.transform.position = boundingbox.transform.position + Vector3.up;
+                            // set the info text to the top of the boundingbox
+                            InfoText.transform.position = boundingbox.transform.position
+                                + Vector3.up * boundingbox.transform.localScale[0] * Settings.size;
                             InfoText.GetComponent<TextMesh>().text = SD.structureName;
                         }
                     }
