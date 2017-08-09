@@ -42,13 +42,13 @@ public class InputManager : MonoBehaviour {
 
     private void CheckApplicationMenu()
     {
-        if (Controller.GetTouchDown(SteamVR_Controller.ButtonMask.ApplicationMenu))
+        if (Controller.GetTouchDown(SteamVR_Controller.ButtonMask.Grip))
             if (ctrlMaskName.Contains("Atom"))
                 printer.printers[0].gameObject.SetActive(true);
             else
                 printer.printers[1].gameObject.SetActive(true);
 
-        if (Controller.GetTouchUp(SteamVR_Controller.ButtonMask.ApplicationMenu))
+        if (Controller.GetTouchUp(SteamVR_Controller.ButtonMask.Grip))
             if (ctrlMaskName.Contains("Atom"))
                 printer.printers[0].gameObject.SetActive(false);
             else
