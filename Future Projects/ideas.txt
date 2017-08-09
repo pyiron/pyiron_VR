@@ -13,3 +13,6 @@ IMPORTANT:
 - found a bug that I couldn't use the laser, after showing the controller printer, until it grabbed the structure
 - check for bugs
 
+- when having something attached to both controllers the atom in the left hand flickers when moving the structure
+- after moving the structure with the laser and the touchpad it sometimes teleports a bit
+

@@ -36,6 +36,10 @@ public class InputManager : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
+        // check the state of the button on the back of the controller and perform following actions
+        LG.CheckHairTrigger();
+        // check the state of the touchpad and perform following actions
+        LG.CheckTouchpad();
         // check if the application menu button is down to print before the controller
         CheckApplicationMenu();
     }

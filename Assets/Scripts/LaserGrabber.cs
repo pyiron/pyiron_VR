@@ -103,7 +103,7 @@ public class LaserGrabber : MonoBehaviour
     void Update()
     {
         // check all the input of the controller and fullfill the following actions
-        CheckControllerInput();
+        //CheckControllerInput();
 
         // move the grabbed object
         if (attachedObject)
@@ -115,15 +115,7 @@ public class LaserGrabber : MonoBehaviour
             resizeableRect.SetActive(false);
     }
 
-    private void CheckControllerInput()
-    {
-        // check the state of the button on the back of the controller and perform following actions
-        CheckHairTrigger();
-        // check the state of the touchpad and perform following actions
-        CheckTouchpad();
-    }
-
-    private void CheckHairTrigger()
+    public void CheckHairTrigger()
     {
         // if the controller gets pressed, it should try to attach an object to it
         if (Controller.GetHairTriggerDown())
@@ -180,7 +172,7 @@ public class LaserGrabber : MonoBehaviour
         }
     }
 
-    private void CheckTouchpad()
+    public void CheckTouchpad()
     {
         // just do anything if the laser is active, because else the touchpad has no function (yet)
         if (laser.activeSelf)
