@@ -137,6 +137,8 @@ public class LaserGrabber : MonoBehaviour
                                  + Vector3.up * attachedObject.transform.localScale[0] * Settings.size;
                             InfoText.GetComponent<TextMesh>().text = SD.atomInfos[attachedObject.GetComponent<AtomID>().ID].m_type;
                             InfoText.GetComponent<TextMesh>().text += "\nHeat: ";
+                            // needed so that the text will stand above the atom
+                            InfoText.GetComponent<TextMesh>().text += "\n";
                         }
                         else
                         {
@@ -144,6 +146,8 @@ public class LaserGrabber : MonoBehaviour
                             InfoText.transform.position = boundingbox.transform.position
                                 + Vector3.up * boundingbox.transform.localScale[0] * Settings.size;
                             InfoText.GetComponent<TextMesh>().text = SD.structureName;
+                            //might be needed so that the text will stand above the boundingbox
+                            //InfoText.GetComponent<TextMesh>().text += "\n";
                         }
                     }
                     else
