@@ -17,6 +17,8 @@ public class LaserGrabber : MonoBehaviour
     public GameObject AtomStructure;
     // the script of the controller printer
     public InGamePrinter printer;
+    // get the reference of the InfoText
+    public GameObject InfoText;
 
     [Header("Move Objects")]
     // the object the controller is currently colliding with
@@ -121,7 +123,30 @@ public class LaserGrabber : MonoBehaviour
         else
         {
             if (Controller.GetHairTrigger())
+            {
                 SendRaycast();
+                if (Settings.modeNr == 1)
+                    if (laser.activeSelf || collidingObject)
+                    {
+                        InfoText.SetActive(true);
+                        printer.Ctrl_print(attachedObject.ToString(), 89);
+                        if (ctrlMaskName.Contains("AtomLayer"))
+                        {
+                            InfoText.transform.position = attachedObject.transform.position + Vector3.up;
+                            InfoText.GetComponent<TextMesh>().text = SD.atomInfos[attachedObject.GetComponent<AtomID>().ID].m_type;
+                            InfoText.GetComponent<TextMesh>().text += "\nHeat: ";
+                        }
+                        else
+                        {
+                            InfoText.transform.position = boundingbox.transform.position + Vector3.up;
+                            InfoText.GetComponent<TextMesh>().text = SD.structureName;
+                        }
+                    }
+                    else
+                        InfoText.SetActive(false);
+            }
+            else
+                InfoText.SetActive(false);  // TODO; when switching the mode the info bar has to be switched off
         }
 
         if (readyForResize)

@@ -9,6 +9,7 @@ public class StructureData : MonoBehaviour
     public Vector3 minPositions;
     public Vector3 maxPositions;
     public AtomInfos[] atomInfos;
+    public string structureName = "Fe-Structure";
 
     // the data, how each atom has been relocated by the player
     public Vector3[] atomCtrlPos;
