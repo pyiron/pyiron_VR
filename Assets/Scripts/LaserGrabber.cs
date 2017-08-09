@@ -247,9 +247,15 @@ public class LaserGrabber : MonoBehaviour
         }
         else if (Settings.modeNr == 2)
             if (ctrlMaskName.Contains("BoundingboxLayer"))
-                if (Controller.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad))
-                    if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).y > 0)
-                        WriteOrder("self.duplicate(2)");
+                if (collidingObject || laser.activeSelf)
+                    if (Controller.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad))
+                    {
+                        printer.Ctrl_print(Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).y.ToString(), 21);
+                        if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).y > 0)
+                            WriteOrder("self.duplicate(4)");
+                        else
+                            WriteOrder("self.duplicate(0.25)");
+                    }
     }
 
     private void WriteOrder(string order)
@@ -344,7 +350,11 @@ public class LaserGrabber : MonoBehaviour
 
         // checks if the colliding object is of interrest to the controller
         if (ctrlMaskName == LayerMask.LayerToName(col.gameObject.layer))
+        {
             collidingObject = col.gameObject;
+            if (Settings.modeNr != 0)  // also true for mode 0, but it"s already fine in this mode
+                laser.SetActive(false);
+        }
     }
 
     // checks, if the controller collider collides with an object
