@@ -153,7 +153,8 @@ public class ImportStructure : MonoBehaviour
                         catch
                         {
                             if (maxTries == 1)
-                                print("No Input!");
+                                if (programSettings.showErrors)
+                                    print("No Input!");
                             maxTries -= 1;
                             // print("error, probably because both programs want to simultaniously use the file");
                         }
@@ -164,7 +165,8 @@ public class ImportStructure : MonoBehaviour
                     if (!isAnim)
                         break;
                     if (maxTries == 1)
-                        print("No Input!");
+                        if (programSettings.showErrors)
+                            print("No Input!");
                     maxTries -= 1;
                 }
                 //print("python too slow");

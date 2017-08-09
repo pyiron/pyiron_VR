@@ -9,6 +9,7 @@
 
 IMPORTANT:
 - fix bug atoms get added each frame (not much known about this bug yet, except that there are many atoms at one place where just one atom should be. might be stretched somehow
-- if the amount of atoms from the script changes, the atom GameObjects in Unity should in- or decrease
-- fix bug that the fps are low when having no animation. Can be solved by the general information data about the current animation.
+- let Unity send a duplicate (the structure) signal to python
+- found a bug that I couldn't use the laser, after showing the controller printer, until it grabbed the structure
+- check for bugs
 

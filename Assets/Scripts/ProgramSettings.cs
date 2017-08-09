@@ -8,6 +8,8 @@ public class ProgramSettings : MonoBehaviour {
     public float size;
     // determines, whether the boundingbox should be updated each frame
     public bool framesUpdateBoundingbox;
+    // determines whether errors should be printed
+    public bool showErrors = false;
 
     // a function to get the name of a layer/mask
     public string getLayerName(LayerMask layer)
