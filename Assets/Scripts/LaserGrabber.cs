@@ -22,6 +22,8 @@ public class LaserGrabber : MonoBehaviour
     // the Transform of the Headset
     public Transform HeadTransform;
 
+    public ModeData MD;
+
     [Header("Move Objects")]
     // the object the controller is currently colliding with
     private GameObject collidingObject;
@@ -116,7 +118,7 @@ public class LaserGrabber : MonoBehaviour
         // check all the input of the controller and fullfill the following actions
         //CheckControllerInput();
 
-        if (Settings.modeNr == 0)
+        if (MD.modeNr == 0)
         {
             // move the grabbed object
             if (attachedObject)
@@ -127,7 +129,7 @@ public class LaserGrabber : MonoBehaviour
             if (Controller.GetHairTrigger())
             {
                 SendRaycast();
-                if (Settings.modeNr == 1)
+                if (MD.modeNr == 1)
                     if (laser.activeSelf || collidingObject)
                     {
                         // set the Infotext to active and edit it 
@@ -181,7 +183,7 @@ public class LaserGrabber : MonoBehaviour
         // if the controller gets pressed, it should try to attach an object to it
         if (Controller.GetHairTriggerDown())
         {
-            if (Settings.modeNr == 0)
+            if (MD.modeNr == 0)
             {
                 // if an object is colliding with the controller, it should be attached
                 if (collidingObject)
@@ -212,7 +214,7 @@ public class LaserGrabber : MonoBehaviour
         // check if the player released the button
         if (Controller.GetPressUp(SteamVR_Controller.ButtonMask.Trigger))
         {
-            if (Settings.modeNr == 0)
+            if (MD.modeNr == 0)
             {
                 // set the state of the controller to not ready for resizeStructure, if it isn't already
                 if (readyForResize)
@@ -248,7 +250,7 @@ public class LaserGrabber : MonoBehaviour
 
     public void CheckTouchpad()
     {
-        if (Settings.modeNr == 0)
+        if (MD.modeNr == 0)
         {
             // just do anything if the laser is active, because else the touchpad has no function (yet)
             if (laser.activeSelf)
@@ -291,7 +293,7 @@ public class LaserGrabber : MonoBehaviour
                 }
             }
         }
-        else if (Settings.modeNr == 2)
+        else if (MD.modeNr == 2)
             if (ctrlMaskName.Contains("BoundingboxLayer"))
                 if (collidingObject || laser.activeSelf)
                     if (Controller.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad))
@@ -322,19 +324,19 @@ public class LaserGrabber : MonoBehaviour
         {
             RaycastHit hit;
 
-            if (!attachedObject || Settings.modeNr != 0)
+            if (!attachedObject || MD.modeNr != 0)
                 // send out a raycast to detect if there is an object in front of the laser 
                 if (Physics.Raycast(trackedObj.transform.position, transform.forward, out hit, laserMaxDistance, ctrlMask))
                 {
                     laser.SetActive(true);
                     hitPoint = hit.point;
                     ShowLaser(hit);
-                    if (Settings.modeNr == 0)
+                    if (MD.modeNr == 0)
                         AttachObject(hit.transform.gameObject);
                     else
                         attachedObject = hit.transform.gameObject;
                 }
-                else if (Settings.modeNr == 0)
+                else if (MD.modeNr == 0)
                     if (ctrlMaskName == "AtomLayer")
                         readyForResize = true;
                     else;
@@ -400,7 +402,7 @@ public class LaserGrabber : MonoBehaviour
             // set the colliding object
             collidingObject = col.gameObject;
             // disable the laser if the controller is colliding when not in mode 0
-            if (Settings.modeNr != 0)
+            if (MD.modeNr != 0)
                 laser.SetActive(false);
         }
     }
