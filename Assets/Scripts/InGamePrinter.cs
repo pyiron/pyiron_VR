@@ -3,17 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class InGamePrinter : MonoBehaviour {
+    [Header("Scene")]
+    public ProgramSettings Settings;
     public GameObject[] printers;
     public LaserGrabber[] LG;
     private string[] printText = new string[2];
     private int[] currentImportance = new int[2];
+    // the size the text should have
+    private float textSize = 0.05f;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         for (int i = 0; i < 2; i++)
         {
             printText[i] = "";
             currentImportance[i] = 0;
+        }
+
+        textSize = textSize / Settings.textResolution * 10;
+        foreach (GameObject printerText in printers)
+        {
+            printerText.transform.localScale = Vector3.one * textSize;
+            printerText.GetComponent<TextMesh>().fontSize = (int)Settings.textResolution;
         }
     }
 	

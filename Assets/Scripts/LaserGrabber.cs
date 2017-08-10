@@ -17,8 +17,6 @@ public class LaserGrabber : MonoBehaviour
     public GameObject AtomStructure;
     // the script of the controller printer
     public InGamePrinter printer;
-    // get the reference of the InfoText
-    public TextMesh InfoText;
     // the Transform of the Headset
     public Transform HeadTransform;
 
@@ -59,6 +57,12 @@ public class LaserGrabber : MonoBehaviour
     public GameObject resizeableRect;
     // the state of the other controller, needed to look if both hairtriggers are pressed, so that the structure should be resized
     public bool readyForResize;
+
+    [Header("ShowInfos")]
+    // get the reference of the InfoText
+    public TextMesh InfoText;
+    // the size the text should have
+    private float textSize = 1f;
 
     [Header("Transmittion")]
     // the filename of the file which will send orders from unity to pyiron
@@ -101,6 +105,10 @@ public class LaserGrabber : MonoBehaviour
         foreach (Transform tr in AtomStructure.GetComponentsInChildren<Transform>())
             if (tr.name == "Boundingbox(Clone)")
                 boundingbox = tr;
+
+        textSize = textSize / Settings.textResolution * 10;
+        InfoText.transform.localScale = Vector3.one * textSize;
+        InfoText.fontSize = (int)Settings.textResolution;
     }
 
     private void InitLaser()
