@@ -19,6 +19,8 @@ public class LaserGrabber : MonoBehaviour
     public InGamePrinter printer;
     // get the reference of the InfoText
     public GameObject InfoText;
+    // the Transform of the Headset
+    public Transform HeadTransform;
 
     [Header("Move Objects")]
     // the object the controller is currently colliding with
@@ -130,21 +132,33 @@ public class LaserGrabber : MonoBehaviour
                     {
                         // set the Infotext to active and edit it 
                         InfoText.SetActive(true);
+                        // let the infotext always look in your direction
+                        InfoText.transform.LookAt(HeadTransform.position);
+                        InfoText.transform.eulerAngles = new Vector3(0, (InfoText.transform.eulerAngles.y + 180) % 360, 0);
+                        //InfoText.transform.eulerAngles = new Vector3(0, HeadTransform.eulerAngles.y, 0);
                         if (ctrlMaskName.Contains("AtomLayer"))
                         {
-                            // set the info text to the top of the atom
-                            InfoText.transform.position = attachedObject.transform.position
-                                 + Vector3.up * attachedObject.transform.localScale[0] * Settings.size;
-                            InfoText.GetComponent<TextMesh>().text = SD.atomInfos[attachedObject.GetComponent<AtomID>().ID].m_type;
-                            InfoText.GetComponent<TextMesh>().text += "\nHeat: ";
-                            // needed so that the text will stand above the atom
-                            InfoText.GetComponent<TextMesh>().text += "\n";
+                            if (attachedObject)
+                            {
+                                // set the info text to the top of the atom
+                                InfoText.transform.position = attachedObject.transform.position // + Vector3.up * 0.1f
+                                     + Vector3.up * attachedObject.transform.localScale[0]/2 * Settings.size;
+                                InfoText.GetComponent<TextMesh>().text = SD.atomInfos[attachedObject.GetComponent<AtomID>().ID].m_type;
+                                InfoText.GetComponent<TextMesh>().text += "\nHeat: ";
+                                // needed so that the text will stand above the atom
+                                //InfoText.GetComponent<TextMesh>().text += "\n";
+                            }
+                            else
+                            {
+                                printer.Ctrl_print("No attached Object!", rightCtrl: false);
+                                print("No attached Object!");
+                            }
                         }
                         else
                         {
                             // set the info text to the top of the boundingbox
-                            InfoText.transform.position = boundingbox.transform.position
-                                + Vector3.up * boundingbox.transform.localScale[0] * Settings.size;
+                            InfoText.transform.position = boundingbox.transform.position + Vector3.up * 0.1f
+                                + Vector3.up * boundingbox.transform.localScale[0]/2 * Settings.size;
                             InfoText.GetComponent<TextMesh>().text = SD.structureName;
                             //might be needed so that the text will stand above the boundingbox
                             //InfoText.GetComponent<TextMesh>().text += "\n";

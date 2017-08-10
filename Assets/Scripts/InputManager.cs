@@ -59,7 +59,7 @@ public class InputManager : MonoBehaviour {
         if (Controller.GetTouchDown(SteamVR_Controller.ButtonMask.ApplicationMenu))
         {
             Settings.raiseMode();
-            printer.Ctrl_print(Settings.modeNr.ToString(), 4);
+            printer.Ctrl_print(Settings.modeNr.ToString(), 40);
         }
     }
 }
