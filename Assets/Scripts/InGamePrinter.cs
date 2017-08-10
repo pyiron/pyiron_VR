@@ -10,7 +10,7 @@ public class InGamePrinter : MonoBehaviour {
     private string[] printText = new string[2];
     private int[] currentImportance = new int[2];
     // the size the text should have
-    private float textSize = 0.05f;
+    private float textSize = 0.2f;
 
     // Use this for initialization
     void Start () {

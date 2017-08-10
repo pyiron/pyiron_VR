@@ -308,9 +308,9 @@ public class LaserGrabber : MonoBehaviour
                     {
                         printer.Ctrl_print(Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).y.ToString(), 21);
                         if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).y > 0)
-                            WriteOrder("self.duplicate(4)");
+                            WriteOrder("self.duplicate(2)");
                         else
-                            WriteOrder("self.duplicate(0.25)");
+                            WriteOrder("self.duplicate(0.5)");
                     }
     }
 
