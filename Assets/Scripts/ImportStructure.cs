@@ -41,7 +41,7 @@ public class ImportStructure : MonoBehaviour
     // time when the last Update() was called
     private float lastTime;
     // shows whether the input data is an animation at the moment (could be also a static structure)
-    private bool isAnim;
+    private string animState;
 
     [Header("Show Animation FPS")]
     // the canvas of this program
@@ -155,7 +155,7 @@ public class ImportStructure : MonoBehaviour
                 }
                 else
                 {
-                    if (!isAnim)
+                    if (animState == "static")
                         break;
                     if (maxTries == 1)
                         if (programSettings.showErrors)
@@ -199,7 +199,7 @@ public class ImportStructure : MonoBehaviour
 
         // check how big the structure is
         ReadFile("getStructureExpansion");
-        if (!isAnim && !newImport)
+        if (animState == "static" && !newImport)
             return;
         if (newImport)
         {
@@ -214,7 +214,7 @@ public class ImportStructure : MonoBehaviour
         // create the atoms
         ReadFile("initAtoms");
 
-        if (isAnim)
+        if (animState == "anim")
             try { File.Delete(pathName); } catch { } // print("couldn't delete file");}
 
         if (newImport)
@@ -245,14 +245,8 @@ public class ImportStructure : MonoBehaviour
                 line = sr.ReadLine();
                 if (firstLine)
                 {
-                    if (line.Contains("anim"))
-                        isAnim = true;
-                    else
-                    {
-                        isAnim = false;
-                        if (!firstImport)  // might be newImport!
-                            return;
-                    }
+                    if (animState == "static" && !firstImport)
+                        return;
                     firstLine = false;
                 }
                 else

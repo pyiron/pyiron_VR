@@ -48,9 +48,11 @@ public class ProgramSettings : MonoBehaviour {
         foreach (GameObject controller in controllers)
             if (controller.activeSelf)
             {
-                controller.GetComponent<LaserGrabber>().attachedObject = null;
-                controller.GetComponent<LaserGrabber>().laser.SetActive(false);
-                controller.GetComponent<LaserGrabber>().readyForResize = false;
+                LaserGrabber LG = controller.GetComponent<LaserGrabber>();
+                LG.attachedObject = null;
+                LG.laser.SetActive(false);
+                LG.readyForResize = false;
+                LG.InfoText.SetActive(false);
             }
     }
 
