@@ -14,13 +14,13 @@ public class StructureData : MonoBehaviour
     // the data, how each atom has been relocated by the player
     public Vector3[] atomCtrlPos;
     // the data, how each atom has been relocated by the player
-    public Vector3[] atomCtrlSize;
+    public Vector3[] atomCtrlSize;  // might be unnecessary
     // the data, how the structure has been relocated and resized by the player
     //public Transform structureCtrlTrans;
     // the data, how the structure has been relocated
     public Vector3 structureCtrlPos;
     // the data, how the structure has been resized
-    public Vector3 structureCtrlSize;
+    public Vector3 structureCtrlSize;  // might be unnecessary
     // the gameobject which holds the global settings for the program
     public GameObject Settings;
     // the script which stores the global settings

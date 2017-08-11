@@ -310,7 +310,8 @@ public class LaserGrabber : MonoBehaviour
                         if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).y > 0)
                             WriteOrder("self.duplicate(2)");
                         else
-                            WriteOrder("self.duplicate(0.5)");
+                            if (SD.atomInfos.Length * 0.5 * 0.5 * 0.5 >= 1)
+                                WriteOrder("self.duplicate(0.5)");
                     }
     }
 
