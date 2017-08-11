@@ -222,7 +222,6 @@ public class ImportStructure : MonoBehaviour
         {
             // set the size of the cluster to the global scale
             gameObject.transform.localScale = Vector3.one * programSettings.size;
-            print("new resized");
         }
         if (newImport || programSettings.updateBoundingboxEachFrame)
         {
@@ -347,7 +346,9 @@ public class ImportStructure : MonoBehaviour
         {
             // Set the new atom position to the pos from the file and adjust it, so that the clusters middle is in the origin
             currentAtom.transform.position = new Vector3(float.Parse(data[0]), float.Parse(data[1]),
-            float.Parse(data[2])) - (maxPositions + minPositions) / 2;
+                float.Parse(data[2])) - (maxPositions + minPositions) / 2;
+            if (animState == "new")
+                currentAtom.transform.position *= programSettings.size;
             SD.atomCtrlPos[atomCounter] = Vector3.zero;
         }
         else
