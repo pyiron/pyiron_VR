@@ -402,7 +402,7 @@ public class LaserGrabber : MonoBehaviour
     private void SetCollidingObject(Collider col)
     {
         // check that the colliding object has a rigidbody
-        if (collidingObject || !col.GetComponent<Rigidbody>())
+        if (collidingObject) // || !col.GetComponent<Rigidbody>())
             return;
 
         // checks if the colliding object is of interrest to the controller
