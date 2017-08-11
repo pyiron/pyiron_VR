@@ -201,6 +201,7 @@ public class ImportStructure : MonoBehaviour
         ReadFile("getStructureExpansion");
         if (animState == "static" && !newImport)
             return;
+        print(animState + " and " + newImport);
         if (newImport)
         {
             if (!firstImport)
@@ -214,12 +215,15 @@ public class ImportStructure : MonoBehaviour
         // create the atoms
         ReadFile("initAtoms");
 
-        if (animState == "anim")
+        if (animState != "static")
             try { File.Delete(pathName); } catch { } // print("couldn't delete file");}
 
         if (newImport)
+        {
             // set the size of the cluster to the global scale
             gameObject.transform.localScale = Vector3.one * programSettings.size;
+            print("new resized");
+        }
         if (newImport || programSettings.updateBoundingboxEachFrame)
         {
             // check the expansion of the cluster
@@ -229,7 +233,37 @@ public class ImportStructure : MonoBehaviour
         }
 
         //if (animState != "anim")
+        //    combineMeshes();
+    }
 
+    private void combineMeshes()
+    {
+        print("start");
+        Destroy(gameObject.GetComponent<MeshFilter>());
+        MeshFilter[] meshFilters = GetComponentsInChildren<MeshFilter>();
+        CombineInstance[] combine = new CombineInstance[meshFilters.Length - 1];
+        print(meshFilters.Length);
+        print(1);
+        int i = 0;
+        while (i < meshFilters.Length)
+        {
+            // exclude the boundingbox
+            if (i != 0)
+            {
+                print(2);
+                combine[i - 1].mesh = meshFilters[i].sharedMesh;
+                combine[i - 1].transform = meshFilters[i].transform.localToWorldMatrix;
+                meshFilters[i].gameObject.active = false;
+                print(3);
+            }
+            i++;
+        }
+        print(4);
+        gameObject.AddComponent<MeshFilter>();
+        transform.GetComponent<MeshFilter>().mesh = new Mesh();
+        transform.GetComponent<MeshFilter>().mesh.CombineMeshes(combine);
+        transform.gameObject.active = true;
+        print(6);
     }
 
     private void ReadFile(string action)
@@ -248,6 +282,7 @@ public class ImportStructure : MonoBehaviour
                 line = sr.ReadLine();
                 if (firstLine)
                 {
+                    animState = line;
                     if (animState == "static" && !firstImport)
                         return;
                     firstLine = false;
@@ -312,14 +347,15 @@ public class ImportStructure : MonoBehaviour
         {
             // Set the new atom position to the pos from the file and adjust it, so that the clusters middle is in the origin
             currentAtom.transform.position = new Vector3(float.Parse(data[0]), float.Parse(data[1]),
-                float.Parse(data[2])) - (maxPositions + minPositions) / 2;
+            float.Parse(data[2])) - (maxPositions + minPositions) / 2;
             SD.atomCtrlPos[atomCounter] = Vector3.zero;
-            //SD.ctrlTrans[atomCounter] = new GameObject().transform;
         }
         else
+        {
             currentAtom.transform.position = (new Vector3(float.Parse(data[0]), float.Parse(data[1]),
-                float.Parse(data[2])) - (maxPositions + minPositions) / 2) * programSettings.size
-                + SD.atomCtrlPos[atomCounter] + transform.position;
+                float.Parse(data[2])) - (maxPositions + minPositions) / 2) * programSettings.size;
+            currentAtom.transform.position += SD.atomCtrlPos[atomCounter] + transform.position;
+        }
         // set the atom colour to the colour this type of atom has
         currentAtom.GetComponent<Renderer>().material.color = LED.getColour(data[3]);
         // set the atoms size to the size this type of atom has 

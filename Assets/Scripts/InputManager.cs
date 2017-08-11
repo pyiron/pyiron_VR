@@ -8,7 +8,7 @@ public class InputManager : MonoBehaviour {
     public ProgramSettings Settings;
     // the script of the controller printer
     public InGamePrinter printer;
-
+    // get the data about the modes
     public ModeData MD;
 
     [Header("Controller")]
