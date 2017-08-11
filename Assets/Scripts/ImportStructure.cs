@@ -233,38 +233,41 @@ public class ImportStructure : MonoBehaviour
         if (animState == "new")
             transform.position += SD.structureCtrlPos;
 
-        //if (animState != "anim")
-        //    combineMeshes();
+        if (animState != "anim")
+            combineMeshes();
     }
 
     private void combineMeshes()
     {
         print("start");
-        Destroy(gameObject.GetComponent<MeshFilter>());
+        //Destroy(gameObject.GetComponent<MeshFilter>());
         MeshFilter[] meshFilters = GetComponentsInChildren<MeshFilter>();
         CombineInstance[] combine = new CombineInstance[meshFilters.Length - 1];
-        print(meshFilters.Length);
-        print(1);
+
         int i = 0;
         while (i < meshFilters.Length)
         {
+            print(meshFilters[i].gameObject.name);
             // exclude the boundingbox
-            if (i != 0)
+            if (i > 1 || (i > 0 && firstImport))
             {
-                print(2);
                 combine[i - 1].mesh = meshFilters[i].sharedMesh;
                 combine[i - 1].transform = meshFilters[i].transform.localToWorldMatrix;
                 meshFilters[i].gameObject.active = false;
-                print(3);
             }
             i++;
         }
-        print(4);
-        gameObject.AddComponent<MeshFilter>();
+        MeshFilter myMeshFilter;
+        myMeshFilter = gameObject.GetComponent<MeshFilter>();
+        if (!myMeshFilter)
+        {
+            gameObject.AddComponent<MeshFilter>();
+            myMeshFilter = gameObject.GetComponent<MeshFilter>();
+        }
+
         transform.GetComponent<MeshFilter>().mesh = new Mesh();
         transform.GetComponent<MeshFilter>().mesh.CombineMeshes(combine);
         transform.gameObject.active = true;
-        print(6);
     }
 
     private void ReadFile(string action)
