@@ -227,9 +227,6 @@ public class ImportStructure : MonoBehaviour
             // set the Boundingbox, so that it equals the expansion of the cluster
             SD.UpdateBoundingbox();
         }
-
-        //if (animState != "anim")
-
     }
 
     private void ReadFile(string action)
