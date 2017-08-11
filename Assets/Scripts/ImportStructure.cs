@@ -264,7 +264,8 @@ public class ImportStructure : MonoBehaviour
             gameObject.AddComponent<MeshFilter>();
             myMeshFilter = gameObject.GetComponent<MeshFilter>();
         }
-
+        gameObject.GetComponent<Renderer>().material.color = 
+            SD.atomInfos[0].m_transform.gameObject.GetComponent<Renderer>().material.color;
         transform.GetComponent<MeshFilter>().mesh = new Mesh();
         transform.GetComponent<MeshFilter>().mesh.CombineMeshes(combine);
         transform.gameObject.active = true;
