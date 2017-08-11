@@ -201,7 +201,7 @@ public class ImportStructure : MonoBehaviour
         ReadFile("getStructureExpansion");
         if (animState == "static" && !newImport)
             return;
-        print(animState + " and " + newImport);
+
         if (newImport)
         {
             if (!firstImport)
@@ -230,6 +230,8 @@ public class ImportStructure : MonoBehaviour
             // set the Boundingbox, so that it equals the expansion of the cluster
             SD.UpdateBoundingbox();
         }
+        if (animState == "new")
+            transform.position += SD.structureCtrlPos;
 
         //if (animState != "anim")
         //    combineMeshes();

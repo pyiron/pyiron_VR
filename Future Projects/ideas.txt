@@ -8,11 +8,12 @@
 - connection via the text file has sometimes little problems. If possible, a pipe would be better than this way I think, it might also allow to have more atoms with animation without low fps
 
 IMPORTANT:
-- fix bug atoms get added each frame (not much known about this bug yet, except that there are many atoms at one place where just one atom should be. might be stretched somehow
-- let Unity send a duplicate (the structure) signal to python
+- fix bug atoms get added each frame (not much known about this bug yet, except that there are many atoms at one place where just one atom should be. might be stretched somehow. Seems solved, didnt had it any more for a long time.
 - found a bug that I couldn't use the laser, after showing the controller printer, until it grabbed the structure
 - check for bugs
+- no duplicationg file should be send if the structure is too little and it should be decreased
+ - bug: false positioning of static structure after duplicating
 
 - when having something attached to both controllers the atom in the left hand flickers when moving the structure
-- after moving the structure with the laser and the touchpad it sometimes teleports a bit
+- after moving the structure with the laser and the touchpad it sometimes teleports a bit. Seems to be gone
 
