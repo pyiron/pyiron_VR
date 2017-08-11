@@ -1,0 +1,5 @@
+The new mode of presenting static structures:
+When duplictaing the atoms and the boundingbox get moved to different places. When having many atoms, first one atom in a corner begins to decay, with 8000 atoms most atoms decay. And it doesn't really show the right amount of atoms, with both 128 and 1000  atoms I think it shows about 500 (8**3). Also, the structure size isn't right, maybe this is just a little bug, which can be fixed by dividing the size of the structure with it's size. You cant grab atoms in the structure anymore, or show their info.
+
+All in all, this might be an efficient way to present large structures with just one kind of element and which has no animation (or maybe it goes also with an animation? I didn't check yet).
+But it has to be switched on and off often, which might take long and be time consuming to programm. So I hope there are better ways!
