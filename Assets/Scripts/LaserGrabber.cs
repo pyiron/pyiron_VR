@@ -152,6 +152,12 @@ public class LaserGrabber : MonoBehaviour
                                 // set the info text to the top of the atom
                                 InfoText.transform.position = attachedObject.transform.position // + Vector3.up * 0.1f
                                      + Vector3.up * attachedObject.transform.localScale[0]/2 * Settings.size;
+                                /*
+                                print(attachedObject);
+                                print(attachedObject.name);
+                                print(attachedObject.GetComponent<AtomID>());
+                                print(attachedObject.GetComponent<AtomID>().ID);
+                                print(SD.atomInfos[attachedObject.GetComponent<AtomID>().ID].m_type);*/
                                 InfoText.text = SD.atomInfos[attachedObject.GetComponent<AtomID>().ID].m_type;
                                 InfoText.text += "\nHeat: ";
                                 // needed so that the text will stand above the atom
@@ -337,9 +343,11 @@ public class LaserGrabber : MonoBehaviour
                 // send out a raycast to detect if there is an object in front of the laser 
                 if (Physics.Raycast(trackedObj.transform.position, transform.forward, out hit, laserMaxDistance, ctrlMask))
                 {
+                    // print(ctrlMaskName);
                     laser.SetActive(true);
                     hitPoint = hit.point;
                     ShowLaser(hit);
+                    print("i: " + hit.transform.gameObject + Settings.getLayerName(ctrlMask));
                     if (MD.modeNr == 0)
                         AttachObject(hit.transform.gameObject);
                     else
@@ -390,8 +398,15 @@ public class LaserGrabber : MonoBehaviour
         // set the position of the attached object to the new position it should have
         attachedObject.transform.position = newPos;
         if (ctrlMaskName == "AtomLayer")
+        {
+            print(attachedObject);
+            print(attachedObject.name);
+            print(attachedObject.GetComponent<AtomID>());
+            print(attachedObject.GetComponent<AtomID>().ID);
+            print(SD.atomInfos[attachedObject.GetComponent<AtomID>().ID].m_type);
             // update the data how the atom has been moved by the player 
             SD.atomCtrlPos[attachedObject.GetComponent<AtomID>().ID] += newPos - oldPos;
+        }
         else if (ctrlMaskName == "BoundingboxLayer")
             // update the data how the structure has been moved by the player 
             SD.structureCtrlPos += newPos - oldPos;
@@ -461,6 +476,7 @@ public class LaserGrabber : MonoBehaviour
         // test, which controller is trying to grab the object
         if (ctrlMaskName == "BoundingboxLayer")
         {
+            print(9999);
             // the grabbed object is the boundingbox, it's parent the atomstructure. so this controller grabs the whole structure
             attachedObject = grabAbleObject.transform.root.gameObject;
 

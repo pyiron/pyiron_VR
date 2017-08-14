@@ -10,7 +10,13 @@
 IMPORTANT:
 - check for bugs
 - bug: false positioning of structure after duplicating and when resizing
-- try to combine all atoms in one mesh
+- try to get better performance when having many atoms
+- bug: both controllers acted as they were "BoundingboxLayer" when in mode 0, but not when in mode 1.
+
+Die ATomstruktur wird als AtomLayer object angesehen...
+- NullReferenceException: Object reference not set to an instance of an object
+LaserGrabber.Update () (at Assets/Scripts/LaserGrabber.cs:155):
+	InfoText.text = SD.atomInfos[attachedObject.GetComponent<AtomID>().ID].m_type;
 
 Seems to be gone:
 - found a bug that I couldn't use the laser, after showing the controller printer, until it grabbed the structure
