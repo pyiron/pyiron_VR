@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Threading;
 using UnityEngine;
-using System.Diagnostics;
 using System;
 using System.Reflection;
 
@@ -44,14 +42,6 @@ public class ImportStructure : MonoBehaviour
     private float lastTime;
     // shows whether the input data is an animation at the moment (could be also a static structure)
     private string animState;
-
-    [Header("Start Python")]
-    // the file to where the python script file is located
-    private string pythonPath = "C:/Users/pneugebauer/PycharmProjects/pyiron/tests";
-    // the name of the python file which creates the structure for Unity
-    private string pythonFileName = "animationTest4";
-    // start a process which executes the commands in the shell to start the python script
-    Process myProcess = new Process();
 
     [Header("Show Animation FPS")]
     // the canvas of this program
@@ -99,39 +89,6 @@ public class ImportStructure : MonoBehaviour
                 fps_display = text;
 
         try { File.Delete(pathName); } catch { } // print("couldn't delete file");}
-        var pyPathThread = new Thread(delegate () {
-            Command("cd " + pythonPath + " && python " + pythonFileName + ".py", myProcess); });
-        pyPathThread.Start();
-        
-    }
-
-    static void Command(string order, Process myProcess)
-    {
-        try
-        {
-            myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            myProcess.StartInfo.CreateNoWindow = true;  // should be true
-            myProcess.StartInfo.UseShellExecute = false;
-            myProcess.StartInfo.RedirectStandardInput = true;
-            myProcess.StartInfo.RedirectStandardOutput = true;
-            myProcess.StartInfo.FileName = "C:\\Windows\\system32\\cmd.exe";
-            myProcess.StartInfo.Arguments = "/c" + order;
-            myProcess.EnableRaisingEvents = true;
-            myProcess.Start();
-            //myProcess.WaitForExit();
-            //int ExitCode = myProcess.ExitCode;
-        } catch (Exception e){
-             print(e);
-}
-    }
-
-    void OnApplicationQuit()
-    {
-        print("Application ending after " + Time.time + " seconds");
-        //myProcess.StartInfo.RedirectStandardOutput = true;
-        myProcess.StandardInput.WriteLine("Stop!");
-        //myProcess.StandardInput.Close();
-        //myProcess.Close();
     }
 
     void Start()
@@ -144,11 +101,9 @@ public class ImportStructure : MonoBehaviour
         min_fps = 9999;
     }
 
+
     void Update()
     {
-        //print(myProcess.StandardOutput.ReadLine());
-        //myProcess.WaitForExit();
-        //print(Time.time);
         // the old path/way
         // pathName = path + strucFileName + "/" + currentFrame + ".txt";
         // the path to the file which holds all the data for the current frome
