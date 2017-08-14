@@ -5,7 +5,7 @@ using UnityEngine;
 using System.Diagnostics;
 using System;
 
-
+// component of Settings
 public class PythonExecuter : MonoBehaviour {
     [Header("Start Python")]
     // the file to where the python script file is located
@@ -53,22 +53,23 @@ public class PythonExecuter : MonoBehaviour {
         if (Time.time == 0)
         {
             print(0);
-            send_order(" self.duplicate(2)");
+            send_order("self.duplicate(2)");
             print(1);
         }
     }
 
     public void send_order(string order)
     {
-        myProcess.StandardInput.WriteLine(order);
+        myProcess.StandardInput.WriteLine(" " + order);
     }
 
-    void OnApplicationQuit()
+    public void OnApplicationQuit()
     {
         print("Application ending after " + Time.time + " seconds");
-        myProcess.StandardInput.WriteLine("Stop!");
+        myProcess.StandardInput.WriteLine(" Stop!");
+        print("stopped");
         myProcess.StandardInput.Close();
-        myProcess.StandardOutput.Close();
+        //myProcess.StandardOutput.Close();
         myProcess.Close();
     }
 }

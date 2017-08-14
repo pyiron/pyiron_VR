@@ -21,6 +21,8 @@ public class LaserGrabber : MonoBehaviour
     public Transform HeadTransform;
 
     public ModeData MD;
+    // get the reference to the programm which handles the execution of python
+    public PythonExecuter PE;
 
     [Header("Move Objects")]
     // the object the controller is currently colliding with
@@ -87,7 +89,9 @@ public class LaserGrabber : MonoBehaviour
     {
         // get the data of the controller
         trackedObj = GetComponent<SteamVR_TrackedObject>();
-    }
+        // get the reference to the programm which handles the execution of python
+        PE = Settings.GetComponent<PythonExecuter>();
+}
 
     void Start()
     {
@@ -314,10 +318,16 @@ public class LaserGrabber : MonoBehaviour
                     {
                         printer.Ctrl_print(Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).y.ToString(), 21);
                         if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).y > 0)
-                            WriteOrder("self.duplicate(2)");
+                            if (Settings.transMode == "file")
+                                WriteOrder("self.duplicate(2)");
+                            else
+                                PE.send_order("self.duplicate(2)");
                         else
                             if (SD.atomInfos.Length * 0.5 * 0.5 * 0.5 >= 1)
-                                WriteOrder("self.duplicate(0.5)");
+                                if (Settings.transMode == "file")
+                                    WriteOrder("self.duplicate(0.5)");
+                                else
+                                    PE.send_order("self.duplicate(0.5)");
                     }
     }
 

@@ -20,6 +20,8 @@ public class ProgramSettings : MonoBehaviour {
     public bool showErrors = false;
     // the resolution each text in the scene should have
     public float textResolution = 100f;
+    // decides how the data should be transmitted between Unity and Python
+    public string transMode = "shell";
 
 
     private void Awake()

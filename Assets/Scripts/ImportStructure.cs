@@ -8,10 +8,12 @@ using System.Reflection;
 
 // component of AtomStructure
 // loads the data from the files to create the structure or to animate the structure
-public class ImportStructure : MonoBehaviour
-{
+public class ImportStructure : MonoBehaviour {
     // name of the data file which contains the information about the atom structure
     public string strucFileName;
+
+    // get the reference to the programm which handles the execution of python
+    public PythonExecuter PE;
 
     // the prefab for the atoms
     public GameObject AtomPrefab;
@@ -76,6 +78,8 @@ public class ImportStructure : MonoBehaviour
 
     private void Awake()
     {
+        // get the reference to the programm which handles the execution of python
+        PE = Settings.GetComponent<PythonExecuter>();
         // get the scripts from the gameobjects to get their data
         programSettings = Settings.GetComponent<ProgramSettings>();
         // get the path to the transmitter file which holds the data pyiron send to unity
@@ -101,8 +105,13 @@ public class ImportStructure : MonoBehaviour
         min_fps = 9999;
     }
 
+    void OnApplicationQuit()
+    {
+        print("quitted");
+        PE.OnApplicationQuit();
+    }
 
-    void Update()
+        void Update()
     {
         // the old path/way
         // pathName = path + strucFileName + "/" + currentFrame + ".txt";
