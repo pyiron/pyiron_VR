@@ -26,6 +26,8 @@ public class ProgramSettings : MonoBehaviour {
 
     private void Awake()
     {
+        // defines where the file is stored which holds the data about the structure 
+        // and sometimes where the orders to python get transmitted by a file
         if (Application.isEditor)
             pathToAtomStructure = "AtomStructures/";
         else
@@ -34,6 +36,7 @@ public class ProgramSettings : MonoBehaviour {
         }
     }
 
+    // just a little function that returns the whole path to a text file from its components
     public string GetFilePath(string fileName)
     {
         return pathToAtomStructure + fileName + ".txt";

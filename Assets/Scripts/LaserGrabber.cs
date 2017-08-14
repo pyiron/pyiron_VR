@@ -232,11 +232,11 @@ public class LaserGrabber : MonoBehaviour
         // check if the player released the button
         if (Controller.GetPressUp(SteamVR_Controller.ButtonMask.Trigger))
         {
+            // check that the move mode is currently active
             if (MD.modeNr == 0)
             {
-                // set the state of the controller to not ready for resizeStructure, if it isn't already
-                if (readyForResize)
-                    readyForResize = false;
+                // set the state of the controller to not ready for resizeStructure
+                readyForResize = false;
 
                 // disattach the attached object
                 if (attachedObject)
