@@ -98,6 +98,7 @@ public class ImportStructure : MonoBehaviour
             else if (text.name.Contains("fps_display"))
                 fps_display = text;
 
+        try { File.Delete(pathName); } catch { } // print("couldn't delete file");}
         var pyPathThread = new Thread(delegate () {
             Command("cd " + pythonPath + " && python " + pythonFileName + ".py", myProcess); });
         pyPathThread.Start();
@@ -109,15 +110,16 @@ public class ImportStructure : MonoBehaviour
         try
         {
             myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            myProcess.StartInfo.CreateNoWindow = false;
+            myProcess.StartInfo.CreateNoWindow = true;  // should be true
             myProcess.StartInfo.UseShellExecute = false;
+            myProcess.StartInfo.RedirectStandardInput = true;
+            myProcess.StartInfo.RedirectStandardOutput = true;
             myProcess.StartInfo.FileName = "C:\\Windows\\system32\\cmd.exe";
-            print(order);
             myProcess.StartInfo.Arguments = "/c" + order;
             myProcess.EnableRaisingEvents = true;
             myProcess.Start();
-            myProcess.WaitForExit();
-            int ExitCode = myProcess.ExitCode;
+            //myProcess.WaitForExit();
+            //int ExitCode = myProcess.ExitCode;
         } catch (Exception e){
              print(e);
 }
@@ -126,11 +128,10 @@ public class ImportStructure : MonoBehaviour
     void OnApplicationQuit()
     {
         print("Application ending after " + Time.time + " seconds");
-        //myProcess.StartInfo.RedirectStandardInput = true;
         //myProcess.StartInfo.RedirectStandardOutput = true;
-        //myProcess.StandardInput.WriteLine("Stop!");
+        myProcess.StandardInput.WriteLine("Stop!");
         //myProcess.StandardInput.Close();
-        myProcess.Close();
+        //myProcess.Close();
     }
 
     void Start()
@@ -145,6 +146,9 @@ public class ImportStructure : MonoBehaviour
 
     void Update()
     {
+        //print(myProcess.StandardOutput.ReadLine());
+        //myProcess.WaitForExit();
+        //print(Time.time);
         // the old path/way
         // pathName = path + strucFileName + "/" + currentFrame + ".txt";
         // the path to the file which holds all the data for the current frome
@@ -222,7 +226,7 @@ public class ImportStructure : MonoBehaviour
         int maxTries;
         maxTries = 1000;
         input_file_data = "";
-        while (maxTries > 0)
+        while (maxTries > 0 || firstImport)
             try
             {
                 // save the data of the input file as a string, so that the file is just read as short as possible

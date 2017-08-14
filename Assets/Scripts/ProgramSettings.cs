@@ -22,13 +22,6 @@ public class ProgramSettings : MonoBehaviour {
     public float textResolution = 100f;
 
 
-    private static readonly Dictionary<int, string> modes = new Dictionary<int, string> {
-        { 0, "Move Mode" },
-        { 1, "Info Mode" },
-        { 2, "Edit Mode" },
-        };
-
-
     private void Awake()
     {
         if (Application.isEditor)
