@@ -14,8 +14,6 @@ public class PythonExecuter : MonoBehaviour {
     private string pythonFileName = "animationTest4";
     // start a process which executes the commands in the shell to start the python script
     Process myProcess = new Process();
-
-    private bool firstTime = true;
     
     private void Awake()
     {
@@ -23,16 +21,6 @@ public class PythonExecuter : MonoBehaviour {
             Command("cd " + pythonPath + " && python " + pythonFileName + ".py", myProcess); });
         pyPathThread.Start();
         //Command("cd " + pythonPath + " && python " + pythonFileName + ".py", myProcess);
-    }
-
-    // Update is not!!! called once per frame
-    void Update()
-    {
-        if (firstTime && Time.time > 5)
-        {
-            firstTime = false;
-            send_order("init");
-        }
     }
 
     static void Command(string order, Process myProcess)
