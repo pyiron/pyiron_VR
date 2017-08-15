@@ -15,7 +15,11 @@ public class PythonExecuter : MonoBehaviour {
     // start a process which executes the commands in the shell to start the python script
     Process myProcess = new Process();
 
-    private float outputTimer = 3;
+    [Header("Receive data from Python")]
+    // get the reference to the ImportStructure script of the atomstructure
+    public ImportStructure IS;
+    // the collected data of what Python sent to Unity for one frame
+    private static string collectedData = "";
 
     private void Awake()
     {
@@ -30,7 +34,7 @@ public class PythonExecuter : MonoBehaviour {
         try
         {
             myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            myProcess.StartInfo.CreateNoWindow = true;  // should be true
+            myProcess.StartInfo.CreateNoWindow = false;  // should be true, just false for debugging purposes
             myProcess.StartInfo.UseShellExecute = false;
             myProcess.StartInfo.RedirectStandardInput = true;
             myProcess.StartInfo.RedirectStandardOutput = true;
@@ -50,8 +54,23 @@ public class PythonExecuter : MonoBehaviour {
 
     private static void readOutput(object sender, DataReceivedEventArgs e) 
     {
-        print(e.Data);
+        if (e.Data.Split().Length == 2)
+        {
+            //if (IS.input_file_data != "")
+            //    print("Unity was too slow");
+            // IS.input_file_data = collectedData;
+            print(collectedData);
+            collectedData = "";
+        }
+        else if (!e.Data.Contains("job"))
+            collectedData += e.Data;
+        // print(e.Data);
     }
+    /*
+    private void setGetOutput(bool getOutput)
+    {
+        getOutput = false;
+    }*/
 
     public void send_order(string order)
     {

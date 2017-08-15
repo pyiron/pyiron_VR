@@ -73,7 +73,7 @@ public class ImportStructure : MonoBehaviour {
     // enumerates the atoms
     private int atomCounter = 0;
     // the input file data as a string
-    private string input_file_data;
+    public string input_file_data;
 
 
     private void Awake()
