@@ -15,12 +15,24 @@ public class PythonExecuter : MonoBehaviour {
     // start a process which executes the commands in the shell to start the python script
     Process myProcess = new Process();
 
+    private bool firstTime = true;
+    
     private void Awake()
     {
-        //var pyPathThread = new Thread(delegate () {
-        //    Command("cd " + pythonPath + " && python " + pythonFileName + ".py", myProcess); });
-        //pyPathThread.Start();
-        Command("cd " + pythonPath + " && python " + pythonFileName + ".py", myProcess);
+        var pyPathThread = new Thread(delegate () {
+            Command("cd " + pythonPath + " && python " + pythonFileName + ".py", myProcess); });
+        pyPathThread.Start();
+        //Command("cd " + pythonPath + " && python " + pythonFileName + ".py", myProcess);
+    }
+
+    // Update is not!!! called once per frame
+    void Update()
+    {
+        if (firstTime && Time.time > 5)
+        {
+            firstTime = false;
+            send_order("init");
+        }
     }
 
     static void Command(string order, Process myProcess)
@@ -38,6 +50,7 @@ public class PythonExecuter : MonoBehaviour {
             myProcess.StartInfo.Arguments = "/c" + order;
             myProcess.EnableRaisingEvents = true;
             myProcess.Start();
+            //send_order("init");
             //myProcess.BeginOutputReadLine();
             //print(myProcess.StandardOutput.ReadLine());
             //myProcess.BeginOutputReadLine();
@@ -48,25 +61,15 @@ public class PythonExecuter : MonoBehaviour {
         catch (Exception e) { print(e); }
     }
 
-    // Update is called once per frame
-    void Update () {
-        if (Time.time == 0)
-        {
-            print(0);
-            send_order("self.duplicate(2)");
-            print(1);
-        }
-    }
-
     public void send_order(string order)
     {
-        myProcess.StandardInput.WriteLine(" " + order);
+        myProcess.StandardInput.WriteLine(order);
     }
 
     public void OnApplicationQuit()
     {
         print("Application ending after " + Time.time + " seconds");
-        myProcess.StandardInput.WriteLine(" Stop!");
+        myProcess.StandardInput.WriteLine("Stop!");
         print("stopped");
         myProcess.StandardInput.Close();
         //myProcess.StandardOutput.Close();

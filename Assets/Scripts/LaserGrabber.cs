@@ -163,7 +163,7 @@ public class LaserGrabber : MonoBehaviour
                                 print(attachedObject.GetComponent<AtomID>().ID);
                                 print(SD.atomInfos[attachedObject.GetComponent<AtomID>().ID].m_type);*/
                                 InfoText.text = SD.atomInfos[attachedObject.GetComponent<AtomID>().ID].m_type;
-                                InfoText.text += "\nHeat: ";
+                                InfoText.text += "\nTemp: ";
                                 // needed so that the text will stand above the atom
                                 //InfoText.GetComponent<TextMesh>().text += "\n";
                             }

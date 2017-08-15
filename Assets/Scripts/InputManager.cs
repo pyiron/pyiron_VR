@@ -5,7 +5,7 @@ using UnityEngine;
 public class InputManager : MonoBehaviour {
     [Header("Scene Data")]
     // the global settings of the program
-    public ProgramSettings Settings;
+    public ProgramSettings Settings;  // not used at the moment
     // the script of the controller printer
     public InGamePrinter printer;
     // get the data about the modes
