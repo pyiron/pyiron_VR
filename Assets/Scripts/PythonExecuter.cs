@@ -14,7 +14,9 @@ public class PythonExecuter : MonoBehaviour {
     private string pythonFileName = "animationTest4";
     // start a process which executes the commands in the shell to start the python script
     Process myProcess = new Process();
-    
+
+    private float outputTimer = 3;
+
     private void Awake()
     {
         var pyPathThread = new Thread(delegate () {
@@ -28,25 +30,27 @@ public class PythonExecuter : MonoBehaviour {
         try
         {
             myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            myProcess.StartInfo.CreateNoWindow = false;  // should be true
+            myProcess.StartInfo.CreateNoWindow = true;  // should be true
             myProcess.StartInfo.UseShellExecute = false;
             myProcess.StartInfo.RedirectStandardInput = true;
-            //myProcess.StartInfo.RedirectStandardOutput = true;
+            myProcess.StartInfo.RedirectStandardOutput = true;
             //myProcess.OutputDataReceived += OutputDataReceived;
-            //myProcess.OutputDataReceived += new DataReceivedEventHandler(myProcess);
+            myProcess.OutputDataReceived += new DataReceivedEventHandler(readOutput);
             myProcess.StartInfo.FileName = "C:\\Windows\\system32\\cmd.exe";
             myProcess.StartInfo.Arguments = "/c" + order;
             myProcess.EnableRaisingEvents = true;
             myProcess.Start();
-            //send_order("init");
-            //myProcess.BeginOutputReadLine();
-            //print(myProcess.StandardOutput.ReadLine());
-            //myProcess.BeginOutputReadLine();
+            myProcess.BeginOutputReadLine();
             //myProcess.WaitForExit();
             //myProcess.OutputDataReceived -= OutputDataReceived;
             //int ExitCode = myProcess.ExitCode;
         }
         catch (Exception e) { print(e); }
+    }
+
+    private static void readOutput(object sender, DataReceivedEventArgs e) 
+    {
+        print(e.Data);
     }
 
     public void send_order(string order)

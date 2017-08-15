@@ -105,12 +105,6 @@ public class ImportStructure : MonoBehaviour {
         min_fps = 9999;
     }
 
-    /*void OnApplicationQuit()
-    {
-        print("quitted");
-        PE.OnApplicationQuit();
-    }*/
-
         void Update()
     {
         // the old path/way
