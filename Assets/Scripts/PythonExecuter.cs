@@ -85,9 +85,9 @@ public class PythonExecuter : MonoBehaviour {
 
     private static void StoreData(string data)
     {
-        print(data);
         if (data.Split().Length == 6)
         {
+            /*
             for (int i = 0; i < 5; i++)
                 if (i < 3)
                     currentData += data.Split()[i] + " ";
@@ -95,12 +95,12 @@ public class PythonExecuter : MonoBehaviour {
                     currentData += data.Split()[i];
                 else
                     currentData += "\n";
+                    */
             currentStructureForce[currentAtomLine] = float.Parse(data.Split()[4]);
             currentAtomLine += 1;
         }
-        else
-            currentData += data;
-        print(currentData);
+        //else
+        currentData += data;
     }
 
     public void send_order(string order)

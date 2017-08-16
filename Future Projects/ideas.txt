@@ -14,6 +14,9 @@ IMPORTANT:
 - try to get better performance when having many atoms
 - try to avoid large iterations
 let the animation be interpolated
+- Fix bug which slows down Unity when the force data arrives
+- ask whether the average force should be the average force in the last 100s or of 50s before and 50s after
+- bring the python program to PEP-8 standard and fix TODOs
 
 Seems to be gone:
 - found a bug that I couldn't use the laser, after showing the controller printer, until it grabbed the structure
