@@ -6,14 +6,14 @@
 - make a file which tells Unity details about the pyiron structure:
   -> colordependancy, animation
 - connection via the text file has sometimes little problems. If possible, a pipe would be better than this way I think, it might also allow to have more atoms with animation without low fps
+- delete the code needed for the slower mode of transfering data between Python and Unity
 
 IMPORTANT:
 (- check for bugs)
 - bug: false positioning of structure after duplicating and when resizing
 - try to get better performance when having many atoms
-- send data received from Python in Unity to ImportStructure
 - try to avoid large iterations
-- reactivate the ImportStructure script after errors have been solved
+let the animation be interpolated
 
 Seems to be gone:
 - found a bug that I couldn't use the laser, after showing the controller printer, until it grabbed the structure

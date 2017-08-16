@@ -119,7 +119,7 @@ public class ImportStructure : MonoBehaviour {
                 fps_display.text = "Animation FPS: 0";
             min_fps_display.text = "Animation min FPS: " + min_fps.ToString();
             fps_timer = time_between_fps_updates;
-            // printer.Ctrl_print("Animation min FPS: " + min_fps.ToString(), 2, false);
+            printer.Ctrl_print("Animation min FPS: " + min_fps.ToString(), 2, false);
             cumulated_fps = 0;
             min_fps = 9999;
             fps_count = 0;
@@ -172,7 +172,15 @@ public class ImportStructure : MonoBehaviour {
                     }
                 //print("python too slow");
             }
-            else LoadStructure();
+            else
+            {
+                LoadStructure();
+                cumulated_fps += (int)(1 / (Time.time - lastTime));
+                if ((int)(1 / (Time.time - lastTime)) < min_fps)
+                    min_fps = (int)(1 / (Time.time - lastTime));
+                fps_count += 1;
+                lastTime = Time.time;
+            }
         }
     }
 
@@ -211,13 +219,13 @@ public class ImportStructure : MonoBehaviour {
             // print(input_file_data);
             PythonExecuter.newData = false;
         }
-        else {
-            //print("something is too slow");
-            return;
-        }
 
         if (input_file_data == "")
+        {
+            if (Time.time > 15)
+                print("something is too slow");
             return;
+        }
 
         // check how big the structure is
         ReadFile("getStructureExpansion");

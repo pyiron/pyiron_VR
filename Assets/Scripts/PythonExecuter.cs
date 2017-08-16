@@ -16,13 +16,15 @@ public class PythonExecuter : MonoBehaviour {
     Process myProcess = new Process();
 
     [Header("Receive data from Python")]
-    // get the reference to the ImportStructure script of the atomstructure
-    //private ImportStructure IS;
+    // the data send from Python before all data of the structure is there.
     private static string currentData = "";
     // the collected data of what Python sent to Unity for one frame
     public static string collectedData = "";
-
+    // shows whether there is some new data about the structure which has to be used in ImportStructure
     public static bool newData;
+    // the force the structure currently posseses
+    public static float structureForce;
+
 
     private void Awake()
     {
@@ -59,16 +61,32 @@ public class PythonExecuter : MonoBehaviour {
     {
         if (e.Data.Split().Length == 2)
         {
-            //if (IS.input_file_data != "")
-            //    print("Unity was too slow");
             collectedData = currentData;
-            //print(collectedData);
-            currentData = e.Data;
+            currentData = "";
+            StoreData(e.Data);
             newData = true;
         }
         else if (!e.Data.Contains("job"))
-            currentData += e.Data;
-        // print(e.Data);
+            StoreData(e.Data);
+    }
+
+    private static void StoreData(string data)
+    {
+        print(data);
+        if (data.Split().Length == 6)
+        {
+            for (int i = 0; i < 5; i++)
+                if (i < 3)
+                    currentData += data.Split()[i] + " ";
+                else if (i == 3)
+                    currentData += data.Split()[i];
+                else
+                    currentData += "\n";
+            structureForce = float.Parse(data.Split()[4]);
+        }
+        else
+            currentData += data;
+        print(currentData);
     }
     /*
     private void setGetOutput(bool getOutput)
