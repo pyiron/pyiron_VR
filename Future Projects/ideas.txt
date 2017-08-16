@@ -8,15 +8,12 @@
 - connection via the text file has sometimes little problems. If possible, a pipe would be better than this way I think, it might also allow to have more atoms with animation without low fps
 
 IMPORTANT:
-- check for bugs
+(- check for bugs)
 - bug: false positioning of structure after duplicating and when resizing
 - try to get better performance when having many atoms
-- bug: both controllers acted as they were "BoundingboxLayer" when in mode 0, but not when in mode 1.
-
-Die ATomstruktur wird als AtomLayer object angesehen...
-- NullReferenceException: Object reference not set to an instance of an object
-LaserGrabber.Update () (at Assets/Scripts/LaserGrabber.cs:155):
-	InfoText.text = SD.atomInfos[attachedObject.GetComponent<AtomID>().ID].m_type;
+- send data received from Python in Unity to ImportStructure
+- try to avoid large iterations
+- reactivate the ImportStructure script after errors have been solved
 
 Seems to be gone:
 - found a bug that I couldn't use the laser, after showing the controller printer, until it grabbed the structure

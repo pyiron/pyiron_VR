@@ -17,12 +17,16 @@ public class PythonExecuter : MonoBehaviour {
 
     [Header("Receive data from Python")]
     // get the reference to the ImportStructure script of the atomstructure
-    public ImportStructure IS;
+    //private ImportStructure IS;
+    private static string currentData = "";
     // the collected data of what Python sent to Unity for one frame
-    private static string collectedData = "";
+    public static string collectedData = "";
+
+    public static bool newData;
 
     private void Awake()
     {
+        //IS = GameObject.Find("AtomStructure").GetComponent<ImportStructure>();
         var pyPathThread = new Thread(delegate () {
             Command("cd " + pythonPath + " && python " + pythonFileName + ".py", myProcess); });
         pyPathThread.Start();
@@ -34,11 +38,10 @@ public class PythonExecuter : MonoBehaviour {
         try
         {
             myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            myProcess.StartInfo.CreateNoWindow = false;  // should be true, just false for debugging purposes
+            myProcess.StartInfo.CreateNoWindow = true;  // should be true, just false for debugging purposes
             myProcess.StartInfo.UseShellExecute = false;
             myProcess.StartInfo.RedirectStandardInput = true;
             myProcess.StartInfo.RedirectStandardOutput = true;
-            //myProcess.OutputDataReceived += OutputDataReceived;
             myProcess.OutputDataReceived += new DataReceivedEventHandler(readOutput);
             myProcess.StartInfo.FileName = "C:\\Windows\\system32\\cmd.exe";
             myProcess.StartInfo.Arguments = "/c" + order;
@@ -58,12 +61,13 @@ public class PythonExecuter : MonoBehaviour {
         {
             //if (IS.input_file_data != "")
             //    print("Unity was too slow");
-            // IS.input_file_data = collectedData;
-            print(collectedData);
-            collectedData = "";
+            collectedData = currentData;
+            //print(collectedData);
+            currentData = e.Data;
+            newData = true;
         }
         else if (!e.Data.Contains("job"))
-            collectedData += e.Data;
+            currentData += e.Data;
         // print(e.Data);
     }
     /*

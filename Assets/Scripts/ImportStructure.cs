@@ -73,7 +73,7 @@ public class ImportStructure : MonoBehaviour {
     // enumerates the atoms
     private int atomCounter = 0;
     // the input file data as a string
-    public string input_file_data;
+    private string input_file_data;
 
 
     private void Awake()
@@ -98,8 +98,8 @@ public class ImportStructure : MonoBehaviour {
     void Start()
     {
         LoadStructure();
-        newImport = false;
-        firstImport = false;
+        //newImport = false;
+        //firstImport = false;
         lastTime = Time.time - 1;
         fps_timer = time_between_fps_updates;
         min_fps = 9999;
@@ -129,52 +129,56 @@ public class ImportStructure : MonoBehaviour {
 
         if (Time.time - lastTime + Time.deltaTime > 1 / 90)
         {
-            // the max amount of tries this program has to get the script, else it will just go on
-            int maxTries;
-            maxTries = 1000;
-            
-            while (maxTries > 0)
-                if (File.Exists(pathName))
-                {
-                    while (maxTries > 0)
-                        try
-                        {
-                            LoadStructure();
-                            // print(1 / (Time.time - lastTime));
-                            cumulated_fps += (int)(1 / (Time.time - lastTime));
-                            if ((int)(1 / (Time.time - lastTime)) < min_fps)
-                                min_fps = (int)(1 / (Time.time - lastTime));
-                            fps_count += 1;
-                            lastTime = Time.time;
-                            newImport = false;
-                            break;
-                        }
-                        catch
-                        {
-                            if (maxTries == 1)
-                                if (programSettings.showErrors)
-                                    print("No Input!");
-                            maxTries -= 1;
-                            // print("error, probably because both programs want to simultaniously use the file");
-                        }
-                    break;
-                }
-                else
-                {
-                    if (animState == "static")
+            if (programSettings.transMode == "file")
+            {
+                // the max amount of tries this program has to get the script, else it will just go on
+                int maxTries;
+                maxTries = 1000;
+
+                while (maxTries > 0)
+                    if (File.Exists(pathName))
+                    {
+                        while (maxTries > 0)
+                            try
+                            {
+                                LoadStructure();
+                                // print(1 / (Time.time - lastTime));
+                                cumulated_fps += (int)(1 / (Time.time - lastTime));
+                                if ((int)(1 / (Time.time - lastTime)) < min_fps)
+                                    min_fps = (int)(1 / (Time.time - lastTime));
+                                fps_count += 1;
+                                lastTime = Time.time;
+                                newImport = false;
+                                break;
+                            }
+                            catch
+                            {
+                                if (maxTries == 1)
+                                    if (programSettings.showErrors)
+                                        print("No Input!");
+                                maxTries -= 1;
+                                // print("error, probably because both programs want to simultaniously use the file");
+                            }
                         break;
-                    if (maxTries == 1)
-                        if (programSettings.showErrors)
-                            print("No Input!");
-                    maxTries -= 1;
-                }
+                    }
+                    else
+                    {
+                        if (animState == "static")
+                            break;
+                        if (maxTries == 1)
+                            if (programSettings.showErrors)
+                                print("No Input!");
+                        maxTries -= 1;
+                    }
                 //print("python too slow");
+            }
+            else LoadStructure();
         }
     }
 
     private void LoadStructure()
     {
-        if (firstImport)
+        if (!SD.boundingbox)
         {
             // create the instance of the boundingbox
             SD.boundingbox = Instantiate(BoundingboxPrefab);
@@ -184,21 +188,33 @@ public class ImportStructure : MonoBehaviour {
         int maxTries;
         maxTries = 1000;
         input_file_data = "";
-        while (maxTries > 0 || firstImport)
-            try
-            {
-                // save the data of the input file as a string, so that the file is just read as short as possible
-                StreamReader sr = new StreamReader(pathName, Encoding.Default);
-                using (sr)
+        // print("yay");
+        if (programSettings.transMode == "file")
+            while (maxTries > 0 || firstImport)
+                try
                 {
-                    input_file_data = sr.ReadToEnd();
-                    break;
+                    // save the data of the input file as a string, so that the file is just read as short as possible
+                    StreamReader sr = new StreamReader(pathName, Encoding.Default);
+                    using (sr)
+                    {
+                        input_file_data = sr.ReadToEnd();
+                        break;
+                    }
                 }
-            }
-            catch
-            {
-                maxTries -= 1;
-            }
+                catch
+                {
+                    maxTries -= 1;
+                }
+        else if (PythonExecuter.newData)
+        {
+            input_file_data = PythonExecuter.collectedData;
+            // print(input_file_data);
+            PythonExecuter.newData = false;
+        }
+        else {
+            //print("something is too slow");
+            return;
+        }
 
         if (input_file_data == "")
             return;
@@ -238,6 +254,9 @@ public class ImportStructure : MonoBehaviour {
         }
         if (animState == "new")
             transform.position += SD.structureCtrlPos;
+
+        firstImport = false;
+        newImport = false;
     }
 
     private void ReadFile(string action)
