@@ -22,8 +22,14 @@ public class PythonExecuter : MonoBehaviour {
     public static string collectedData = "";
     // shows whether there is some new data about the structure which has to be used in ImportStructure
     public static bool newData;
+    // the force the structure currently posseses, but when the data is incomplete
+    private static float[] currentStructureForce;
     // the force the structure currently posseses
-    public static float structureForce;
+    public static float[] structureForce;
+    // the amount of atoms the new structure posseses
+    private static int structureSize;
+    // shows for which atom the data is currently transmitted from Python
+    private static int currentAtomLine;
 
 
     private void Awake()
@@ -59,12 +65,19 @@ public class PythonExecuter : MonoBehaviour {
 
     private static void readOutput(object sender, DataReceivedEventArgs e) 
     {
-        if (e.Data.Split().Length == 2)
+        if (e.Data.Split().Length == 3)
         {
             collectedData = currentData;
             currentData = "";
-            StoreData(e.Data);
+            structureForce = currentStructureForce;
+            if (int.Parse(e.Data.Split()[1]) != structureSize)
+            {
+                structureSize = int.Parse(e.Data.Split()[1]);
+                currentStructureForce = new float[structureSize];
+            }
+            StoreData(e.Data.Split()[0] + "\n");
             newData = true;
+            currentAtomLine = 0;
         }
         else if (!e.Data.Contains("job"))
             StoreData(e.Data);
@@ -82,17 +95,13 @@ public class PythonExecuter : MonoBehaviour {
                     currentData += data.Split()[i];
                 else
                     currentData += "\n";
-            structureForce = float.Parse(data.Split()[4]);
+            currentStructureForce[currentAtomLine] = float.Parse(data.Split()[4]);
+            currentAtomLine += 1;
         }
         else
             currentData += data;
         print(currentData);
     }
-    /*
-    private void setGetOutput(bool getOutput)
-    {
-        getOutput = false;
-    }*/
 
     public void send_order(string order)
     {

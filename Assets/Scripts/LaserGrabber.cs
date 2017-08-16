@@ -157,7 +157,8 @@ public class LaserGrabber : MonoBehaviour
                                 InfoText.transform.position = attachedObject.transform.position // + Vector3.up * 0.1f
                                      + Vector3.up * attachedObject.transform.localScale[0]/2 * Settings.size;
                                 InfoText.text = SD.atomInfos[attachedObject.GetComponent<AtomID>().ID].m_type;
-                                //InfoText.text += "\nTemp: ";
+                                InfoText.text += "\nForce: "
+                                    + PythonExecuter.structureForce[attachedObject.GetComponent<AtomID>().ID];
                                 // might be needed so that the text will stand above the atom
                                 //InfoText.GetComponent<TextMesh>().text += "\n";
                             }
@@ -173,7 +174,7 @@ public class LaserGrabber : MonoBehaviour
                             InfoText.transform.position = boundingbox.transform.position + Vector3.up * 0.1f
                                 + Vector3.up * boundingbox.transform.localScale[0]/2 * Settings.size;
                             InfoText.text = SD.structureName;
-                            InfoText.text += "\nForce: " + PythonExecuter.structureForce;
+                            // InfoText.text += "\nForce: " + PythonExecuter.structureForce;
                             //might be needed so that the text will stand above the boundingbox
                             //InfoText.GetComponent<TextMesh>().text += "\n";
                         }
