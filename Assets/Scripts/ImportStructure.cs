@@ -193,8 +193,8 @@ public class ImportStructure : MonoBehaviour {
             SD.boundingbox.transform.parent = gameObject.transform;
         }
 
-        if (programSettings.transMode == "shell")
-            newImport = true;
+        //if (programSettings.transMode == "shell")
+        //    newImport = true;
 
         int maxTries;
         maxTries = 1000;
