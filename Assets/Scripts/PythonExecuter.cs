@@ -65,7 +65,9 @@ public class PythonExecuter : MonoBehaviour {
 
     private static void readOutput(object sender, DataReceivedEventArgs e) 
     {
-        if (e.Data.Split().Length == 3)
+        if (e.Data.Contains("print"))
+            print(e.Data);
+        else if (e.Data.Split().Length == 3)
         {
             collectedData = currentData;
             currentData = "";
