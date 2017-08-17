@@ -222,8 +222,8 @@ public class ImportStructure : MonoBehaviour {
 
         if (input_file_data == "")
         {
-            if (Time.time > 15)
-                print("something is too slow");
+            //if (Time.time > 15)
+            //    print("something is too slow");
             return;
         }
 

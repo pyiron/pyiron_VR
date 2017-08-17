@@ -13,10 +13,14 @@ IMPORTANT:
 - bug: false positioning of structure after duplicating and when resizing
 - try to get better performance when having many atoms
 - try to avoid large iterations
-let the animation be interpolated
-- Fix bug which slows down Unity when the force data arrives
+- let the animation be interpolated
+- Think of a fast way to get the average forces for each atom in Python. Most likely, this should be done when a new ham_lammps is given and not when the force should be send. or maybe it should be done when switching to info mode 
 - ask whether the average force should be the average force in the last 100s or of 50s before and 50s after
 - bring the python program to PEP-8 standard and fix TODOs
+- just send the size of the structure if the program begins or if the size changes
+- just write something new in the atom/structure info if there is a new text to write (might be faster)
+- find bug in Python why it's not possible to do self.duplicate(0.5) (the data doesn't arrive in Unity)
+- change the program, so that it can show a static structure again (error in forces, just show forces when it has a lammps/anim) 
 
 Seems to be gone:
 - found a bug that I couldn't use the laser, after showing the controller printer, until it grabbed the structure
