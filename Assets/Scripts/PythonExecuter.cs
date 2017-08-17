@@ -22,12 +22,14 @@ public class PythonExecuter : MonoBehaviour {
     public static string collectedData = "";
     // shows whether there is some new data about the structure which has to be used in ImportStructure
     public static bool newData;
+    // shows whether python has send some data about the force/temperature/etc. already or not
+    public static bool extendedData;
     // the force the structure currently posseses, but when the data is incomplete
     private static float[] currentStructureForce;
     // the force the structure currently posseses
     public static float[] structureForce;
     // the amount of atoms the new structure posseses
-    private static int structureSize;
+    private static int structureSize = 99999;
     // shows for which atom the data is currently transmitted from Python
     private static int currentAtomLine;
 
@@ -65,22 +67,30 @@ public class PythonExecuter : MonoBehaviour {
 
     private static void readOutput(object sender, DataReceivedEventArgs e) 
     {
+        // print(e.Data);
         if (e.Data.Contains("print"))
             print(e.Data);
-        else if (e.Data.Split().Length == 3)
+        else if (currentAtomLine == structureSize + 1)  // e.Data.Split().Length == 3 || 
         {
+            StoreData(e.Data);
             collectedData = currentData;
+            print(collectedData);
             currentData = "";
             structureForce = currentStructureForce;
-            if (int.Parse(e.Data.Split()[1]) != structureSize)
-            {
-                structureSize = int.Parse(e.Data.Split()[1]);
-                currentStructureForce = new float[structureSize];
-            }
-            StoreData(e.Data.Split()[0] + "\n");
             newData = true;
             currentAtomLine = 0;
         }
+        else if (currentAtomLine == 0)
+            if (e.Data.Split().Length == 3)
+            {
+                if (int.Parse(e.Data.Split()[1]) != structureSize)
+                {
+                    print(int.Parse(e.Data.Split()[1]));
+                    structureSize = int.Parse(e.Data.Split()[1]);
+                    currentStructureForce = new float[structureSize];
+                }
+                StoreData(e.Data.Split()[0]);
+            } else ;
         else if (!e.Data.Contains("job"))
             StoreData(e.Data);
     }
@@ -89,20 +99,11 @@ public class PythonExecuter : MonoBehaviour {
     {
         if (data.Split().Length == 6)
         {
-            /*
-            for (int i = 0; i < 5; i++)
-                if (i < 3)
-                    currentData += data.Split()[i] + " ";
-                else if (i == 3)
-                    currentData += data.Split()[i];
-                else
-                    currentData += "\n";
-                    */
-            currentStructureForce[currentAtomLine] = float.Parse(data.Split()[4]);
-            currentAtomLine += 1;
+            currentStructureForce[currentAtomLine - 1] = float.Parse(data.Split()[4]);
+            extendedData = true;
         }
-        //else
-        currentData += data;
+        currentData += data + "\n";
+        currentAtomLine += 1;
     }
 
     public void send_order(string order)
