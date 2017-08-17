@@ -29,7 +29,7 @@ public class PythonExecuter : MonoBehaviour {
     // the force the structure currently posseses
     public static float[] structureForce;
     // the amount of atoms the new structure posseses
-    private static int structureSize = 99999;
+    public static int structureSize = 99999;
     // shows for which atom the data is currently transmitted from Python
     private static int currentAtomLine;
 
@@ -67,14 +67,12 @@ public class PythonExecuter : MonoBehaviour {
 
     private static void readOutput(object sender, DataReceivedEventArgs e) 
     {
-        // print(e.Data);
         if (e.Data.Contains("print"))
             print(e.Data);
         else if (currentAtomLine == structureSize + 1)  // e.Data.Split().Length == 3 || 
         {
             StoreData(e.Data);
             collectedData = currentData;
-            print(collectedData);
             currentData = "";
             structureForce = currentStructureForce;
             newData = true;
@@ -85,7 +83,6 @@ public class PythonExecuter : MonoBehaviour {
             {
                 if (int.Parse(e.Data.Split()[1]) != structureSize)
                 {
-                    print(int.Parse(e.Data.Split()[1]));
                     structureSize = int.Parse(e.Data.Split()[1]);
                     currentStructureForce = new float[structureSize];
                 }

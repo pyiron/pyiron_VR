@@ -193,6 +193,9 @@ public class ImportStructure : MonoBehaviour {
             SD.boundingbox.transform.parent = gameObject.transform;
         }
 
+        if (programSettings.transMode == "shell")
+            newImport = true;
+
         int maxTries;
         maxTries = 1000;
         input_file_data = "";
@@ -283,7 +286,10 @@ public class ImportStructure : MonoBehaviour {
                 line = sr.ReadLine();
                 if (firstLine)
                 {
-                    animState = line;
+                    if (programSettings.transMode == "file")
+                        animState = line;
+                    else
+                        animState = "anim";
                     if (animState == "static" && !firstImport)
                         return;
                     firstLine = false;
@@ -349,7 +355,7 @@ public class ImportStructure : MonoBehaviour {
             // Set the new atom position to the pos from the file and adjust it, so that the clusters middle is in the origin
             currentAtom.transform.position = new Vector3(float.Parse(data[0]), float.Parse(data[1]),
                 float.Parse(data[2])) - (maxPositions + minPositions) / 2;
-            if (animState == "new")
+            if (animState == "new" || (!firstImport && programSettings.transMode == "shell"))
                 currentAtom.transform.position *= programSettings.size;
             SD.atomCtrlPos[atomCounter] = Vector3.zero;
         }
