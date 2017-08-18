@@ -18,7 +18,11 @@ IMPORTANT:
 (- ask whether the average force should be the average force in the last 100s or of 50s before and 50s after)
 - bring the python program to PEP-8 standard and fix TODOs
 - just write something new in the atom/structure info if there is a new text to write (might be faster)
-- try to set the position of the atoms to 0 when they are at pos 0,0000000001 in Python
+- try to set the position of the atoms to 0 when they are at pos 0,0000000001 in Python (or give them in numpy units)
+- set the size of MyObjects to 0.3, not the size of the atomStructure
+- fix bug that the distances between the atoms are getting changed for the transfer to Unity but not getting changed back!
+- Let the Trashcan spawn at another location
+
 
 Seems to be gone:
 - found a bug that I couldn't use the laser, after showing the controller printer, until it grabbed the structure
