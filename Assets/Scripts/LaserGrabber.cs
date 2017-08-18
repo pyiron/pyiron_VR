@@ -25,7 +25,7 @@ public class LaserGrabber : MonoBehaviour
     public PythonExecuter PE;
 
     // the trashbin in which atoms can be thrown
-    private GameObject Trashbin;
+    public GameObject TrashCan;
 
     [Header("Move Objects")]
     // the object the controller is currently colliding with
@@ -94,8 +94,6 @@ public class LaserGrabber : MonoBehaviour
         trackedObj = GetComponent<SteamVR_TrackedObject>();
         // get the reference to the programm which handles the execution of python
         PE = Settings.GetComponent<PythonExecuter>();
-        // the trashbin in which atoms can be thrown
-        Trashbin = GameObject.Find("Trashbin");
 }
 
     void Start()
@@ -491,6 +489,10 @@ public class LaserGrabber : MonoBehaviour
             // the laserlength has to be set to the length from the controller to the atom, because it's attached to it's middle point, 
             //and the object should be at the same distance before and after the start of the grab
             laserLength = (attachedObject.transform.position - transform.position).magnitude;
+            // show the trashbin when holding a single atom
+            TrashCan.SetActive(true);
+            // move the trashbin to the place it should be
+            TrashCan.transform.position = HeadTransform.position + new Vector3(-1, -1, 0.2f);
         }
         
         // set the length of the laser to it's new length
@@ -508,6 +510,7 @@ public class LaserGrabber : MonoBehaviour
         //objectInHand.GetComponent<Rigidbody>().angularVelocity = Controller.angularVelocity;
 
         attachedObject = null;
+        TrashCan.SetActive(false);
     }
     
     private void ShowLaser(RaycastHit hit) 
