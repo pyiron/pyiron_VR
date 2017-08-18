@@ -24,6 +24,9 @@ public class LaserGrabber : MonoBehaviour
     // get the reference to the programm which handles the execution of python
     public PythonExecuter PE;
 
+    // the trashbin in which atoms can be thrown
+    private GameObject Trashbin;
+
     [Header("Move Objects")]
     // the object the controller is currently colliding with
     private GameObject collidingObject;
@@ -91,6 +94,8 @@ public class LaserGrabber : MonoBehaviour
         trackedObj = GetComponent<SteamVR_TrackedObject>();
         // get the reference to the programm which handles the execution of python
         PE = Settings.GetComponent<PythonExecuter>();
+        // the trashbin in which atoms can be thrown
+        Trashbin = GameObject.Find("Trashbin");
 }
 
     void Start()
