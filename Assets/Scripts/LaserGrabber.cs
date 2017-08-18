@@ -312,8 +312,6 @@ public class LaserGrabber : MonoBehaviour
             if (ctrlMaskName.Contains("BoundingboxLayer"))
                 if (collidingObject || laser.activeSelf)
                     if (Controller.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad))
-                    {
-                        printer.Ctrl_print(Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).y.ToString(), 21);
                         if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).y > 0)
                             if (Settings.transMode == "file")
                                 WriteOrder("self.duplicate(2)");
@@ -325,7 +323,6 @@ public class LaserGrabber : MonoBehaviour
                                     WriteOrder("self.duplicate(0.5)");
                                 else
                                     PE.send_order("self.duplicate(0.5)");
-                    }
     }
 
     private void WriteOrder(string order)

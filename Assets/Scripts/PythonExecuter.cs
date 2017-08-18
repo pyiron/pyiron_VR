@@ -11,11 +11,11 @@ public class PythonExecuter : MonoBehaviour {
     // the file to where the python script file is located
     private string pythonPath = "C:/Users/pneugebauer/PycharmProjects/pyiron/tests";
     // the name of the python file which creates the structure for Unity
-    private string pythonFileName = "animationTest5";
+    private string pythonFileName = "StructureLoader1";
     // start a process which executes the commands in the shell to start the python script
     Process myProcess = new Process();
 
-    [Header("Receive data from Python")]
+         [Header("Receive data from Python")]
     // the data send from Python before all data of the structure is there.
     private static string currentData = "";
     // the collected data of what Python sent to Unity for one frame
