@@ -88,8 +88,11 @@ public class LaserGrabber : MonoBehaviour
 
     void Awake()
     {
-        // find the trash can
-        TrashCanScript = GameObject.Find("MyObjects/Trash Can").GetComponent<TrashCan>();
+        try {
+            // find the trash can
+            TrashCanScript = GameObject.Find("MyObjects/Trash Can").GetComponent<TrashCan>();
+        }
+        catch { TrashCanScript = otherCtrl.GetComponent<LaserGrabber>().TrashCanScript; }
         // get the data of the controller
         trackedObj = GetComponent<SteamVR_TrackedObject>();
         // get the reference to the programm which handles the execution of python

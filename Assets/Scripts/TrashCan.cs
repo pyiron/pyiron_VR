@@ -39,7 +39,7 @@ public class TrashCan : MonoBehaviour
 
     }
 
-    public void UpdateTrashCan(GameObject attachedObject)  // make a few little functions for move away and move to bin!
+    public void UpdateTrashCan(GameObject attachedObject)
     {
         topToCan = gameObject.transform.position - TrashCanTop.transform.position;
         float atomToCanDist = (attachedObject.transform.position - gameObject.transform.position).magnitude;
@@ -49,6 +49,7 @@ public class TrashCan : MonoBehaviour
         else if (atomToCanDist < gameObject.transform.localScale.x * 5)  // / Settings.size
             if ((topToCan - Vector3.up * topToCan.y).magnitude < gameObject.transform.localScale.x * 2.5)
                 MoveTopAway();
+            else;
         else
             MoveTopToCan(topToCan);
     }
