@@ -513,8 +513,8 @@ public class LaserGrabber : MonoBehaviour
         //objectInHand.GetComponent<Rigidbody>().angularVelocity = Controller.angularVelocity;
 
         attachedObject = null;
-        TrashCanScript.DeactivateCan();
-        //TrashCanScript.gameObject.SetActive(false);
+        // deactivate the trash can
+        TrashCanScript.gameObject.SetActive(false);
     }
     
     private void ShowLaser(RaycastHit hit) 
