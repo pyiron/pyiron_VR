@@ -515,9 +515,16 @@ public class LaserGrabber : MonoBehaviour
         //objectInHand.GetComponent<Rigidbody>().velocity = Controller.velocity;
         //objectInHand.GetComponent<Rigidbody>().angularVelocity = Controller.angularVelocity;
 
-        attachedObject = null;
+        if (TrashCanScript.atomInCan && ctrlMaskName == "AtomLayer")
+        {
+            PE.send_order("self.destroy_atom(" + attachedObject.GetComponent<AtomID>().ID + ")");
+            // delete the atom and send python/pyiron that the atom should be excluded in the structure
+            //Destroy(attachedObject);
+        }
         // deactivate the trash can
         TrashCanScript.gameObject.SetActive(false);
+        // detach the attached object
+        attachedObject = null;
     }
     
     private void ShowLaser(RaycastHit hit) 
