@@ -55,13 +55,15 @@ public class LaserGrabber : MonoBehaviour
     // the max distance when the laser still detects an object to attach
     private int laserMaxDistance = 100;
 
+    [Header("Destroy Atom")]
+
     [Header("Resize")]
     // shows, which of the controllers currently allows to resize the structure
     public GameObject resizeableRect;
     // the state of the other controller, needed to look if both hairtriggers are pressed, so that the structure should be resized
     public bool readyForResize;
 
-    [Header("ShowInfos")]
+    [Header("Show Infos")]
     // get the reference of the InfoText
     public TextMesh InfoText;
     // the size the text should have
@@ -519,7 +521,11 @@ public class LaserGrabber : MonoBehaviour
         {
             PE.send_order("self.destroy_atom(" + attachedObject.GetComponent<AtomID>().ID + ")");
             // delete the atom and send python/pyiron that the atom should be excluded in the structure
-            //Destroy(attachedObject);
+            print(SD.atomInfos.Length);
+            SD.waitForDestroyedAtom = true;
+
+            Destroy(attachedObject);
+            print(SD.atomInfos.Length);
         }
         // deactivate the trash can
         TrashCanScript.gameObject.SetActive(false);

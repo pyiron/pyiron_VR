@@ -26,6 +26,8 @@ public class StructureData : MonoBehaviour
     public GameObject Settings;
     // the script which stores the global settings
     private ProgramSettings programSettings;
+    // shows whether the structure should check if Pyiron send a structure without the destroyed atom
+    public bool waitForDestroyedAtom;
 
     public void Awake()
     {

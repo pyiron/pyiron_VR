@@ -75,6 +75,8 @@ public class ImportStructure : MonoBehaviour {
     // the input file data as a string
     private string input_file_data;
 
+    private int currentFrame;
+
 
     private void Awake()
     {
@@ -108,7 +110,7 @@ public class ImportStructure : MonoBehaviour {
         void Update()
     {
         // the old path/way
-        // pathName = path + strucFileName + "/" + currentFrame + ".txt";
+        pathName = "AtomStructures/New Folder/new_MD_hydrogen_" + currentFrame + ".dat";  // path + strucFileName + "/" + currentFrame
         // the path to the file which holds all the data for the current frome
 
         if (fps_timer <= 0)
@@ -129,6 +131,15 @@ public class ImportStructure : MonoBehaviour {
 
         if (Time.time - lastTime + Time.deltaTime > 1 / 90)
         {
+            if (SD.waitForDestroyedAtom)
+            {
+                print(PythonExecuter.structureSize + " and " + (SD.atomInfos.Length - 1));
+                if (PythonExecuter.structureSize != SD.atomInfos.Length - 1)
+                    return;
+                else
+                    SD.waitForDestroyedAtom = false;
+            }
+
             if (programSettings.transMode == "file")
             {
                 // the max amount of tries this program has to get the script, else it will just go on
@@ -193,8 +204,8 @@ public class ImportStructure : MonoBehaviour {
             SD.boundingbox.transform.parent = gameObject.transform;
         }
 
-        //if (programSettings.transMode == "shell")
-        //    newImport = true;
+        if (programSettings.transMode == "file")
+            currentFrame = (currentFrame + 1) % 477;
 
         int maxTries;
         maxTries = 1000;
@@ -239,7 +250,8 @@ public class ImportStructure : MonoBehaviour {
         {
             if (!firstImport)
                 foreach (AtomInfos oldAtomInfo in SD.atomInfos)
-                    Destroy(oldAtomInfo.m_transform.gameObject);
+                    if (oldAtomInfo.m_transform.gameObject != null)
+                        Destroy(oldAtomInfo.m_transform.gameObject);
             // set the length of the Arrays which hold the Data of all Atoms to the amount of atoms in the input file
             SD.atomInfos = new AtomInfos[atomCounter];
             SD.atomCtrlPos = new Vector3[atomCounter];
