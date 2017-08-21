@@ -9,7 +9,10 @@ public class TrashCan : MonoBehaviour
     // the upper part of the trashcan
     private GameObject TrashCanTop;
     // the Transform of the Headset
-    public Transform HeadTransform;
+    private Transform HeadTransform;
+
+    // the script of the controller printer
+    public InGamePrinter printer;
 
     private void Awake()
     {
@@ -36,17 +39,36 @@ public class TrashCan : MonoBehaviour
     public void UpdateTrashCan(GameObject attachedObject)  // make a few little functions for move away and move to bin!
     {
         // the distance between the upper part of the trashbin and the main part
-        Vector3 topToBinDistance = gameObject.transform.position - TrashCanTop.transform.position;
-        if ((attachedObject.transform.position - gameObject.transform.position).magnitude <
-            gameObject.transform.localScale.x)  // / Settings.size
-            TrashCanTop.transform.position += new Vector3(topToBinDistance.x, 0, topToBinDistance.z) * Time.deltaTime;
-        else if ((attachedObject.transform.position - gameObject.transform.position).magnitude <
-            gameObject.transform.localScale.x * 5)  // / Settings.size
-            if (topToBinDistance.magnitude < gameObject.transform.localScale.x)
-                TrashCanTop.transform.position += Vector3.right * Settings.size * Time.deltaTime;
-            else;
+        Vector3 topToCan = gameObject.transform.position - TrashCanTop.transform.position;
+        float atomToCanDist = (attachedObject.transform.position - gameObject.transform.position).magnitude;
+        printer.Ctrl_print(atomToCanDist.ToString(), 90);
+        if (atomToCanDist < gameObject.transform.localScale.x
+            + attachedObject.transform.localScale.x * Settings.size)  // / Settings.size
+            MoveTopToCan(topToCan);
+        else if (atomToCanDist < gameObject.transform.localScale.x * 5)  // / Settings.size
+            if ((topToCan - Vector3.up * topToCan.y).magnitude < gameObject.transform.localScale.x * 3)
+                MoveTopAway();
+            else
+                print(topToCan.magnitude + " and " + gameObject.transform.localScale.x * 2);
         else
-            print("to far away!"); // the top should be moved over the bin here
+        {
+            MoveTopToCan(topToCan);
+            printer.Ctrl_print("too far away", 90, false);
+        }
+    }
+
+    private void MoveTopAway()
+    {
+        print("moved away");
+        printer.Ctrl_print("moved away", 90, false);
+        TrashCanTop.transform.position += Vector3.right * Settings.size * Time.deltaTime;
+    }
+
+    private void MoveTopToCan(Vector3 topToCan)
+    {
+        printer.Ctrl_print("movedToCan", 90, false);
+        print("movedToCan");
+        TrashCanTop.transform.position += new Vector3(topToCan.x, 0, topToCan.z) * Time.deltaTime;
     }
 
     public void ActivateCan()

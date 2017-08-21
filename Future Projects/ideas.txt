@@ -22,6 +22,8 @@ IMPORTANT:
 - set the size of MyObjects to 0.3, not the size of the atomStructure
 - fix bug that the distances between the atoms are getting changed for the transfer to Unity but not getting changed back!
 - Let the Trashcan spawn at another location
+- fix bug that the awake of the lasergrabber is called after the start function of the other scripts 
+  -> let the trashcan deactivate itself, instead of letting the lasergrabber do so 
 
 
 Seems to be gone:
