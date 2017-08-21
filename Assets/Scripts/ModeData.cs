@@ -8,7 +8,7 @@ public class ModeData : MonoBehaviour
     // get the references of the controllers
     public GameObject[] controllers = new GameObject[2];
     // the Transform of the Headset
-    public Transform HeadTransform;
+    private Transform HeadTransform;
     // the reference to the settings
     public ProgramSettings Settings;
 
@@ -31,6 +31,12 @@ public class ModeData : MonoBehaviour
         { 1, "Info Mode" },
         { 2, "Edit Mode" },
         };
+
+    private void Awake()
+    {
+        // get the reference to the transform of the headset
+        HeadTransform = GameObject.Find("[CameraRig]/Camera (eye)/Camera (head)").transform;
+    }
 
     // Use this for initialization
     void Start()

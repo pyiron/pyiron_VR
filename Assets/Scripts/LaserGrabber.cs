@@ -17,17 +17,13 @@ public class LaserGrabber : MonoBehaviour
     public GameObject AtomStructure;
     // the script of the controller printer
     public InGamePrinter printer;
-    // the Transform of the Headset
-    public Transform HeadTransform;
 
     public ModeData MD;
     // get the reference to the programm which handles the execution of python
     public PythonExecuter PE;
 
-    // the trashbin in which atoms can be thrown
-    private GameObject TrashCan;
-    // the upper part of the trashcan
-    private GameObject TrashCanTop;
+    // the script of the trashcan in which atoms can be thrown
+    private TrashCan TrashCanScript;
 
     [Header("Move Objects")]
     // the object the controller is currently colliding with
@@ -92,19 +88,16 @@ public class LaserGrabber : MonoBehaviour
 
     void Awake()
     {
+        // find the trash can
+        TrashCanScript = GameObject.Find("MyObjects/Trash Can").GetComponent<TrashCan>();
         // get the data of the controller
         trackedObj = GetComponent<SteamVR_TrackedObject>();
         // get the reference to the programm which handles the execution of python
         PE = Settings.GetComponent<PythonExecuter>();
-
-        // find the trash can and it's upper part
-        TrashCan = GameObject.Find("MyObjects/Trash Can");
-        TrashCanTop = GameObject.Find("MyObjects/Trash Can/Top");
     }
 
     void Start()
     {
-        // initialize the laser
         InitLaser();
 
         // set the variable to the name of the mask
@@ -123,8 +116,8 @@ public class LaserGrabber : MonoBehaviour
         InfoText.transform.localScale = Vector3.one * textSize;
         InfoText.fontSize = (int)Settings.textResolution;
 
-        // deactivate the trashcan (should be done somewhere else maybe)
-        TrashCan.SetActive(false);
+        // deactivate the trashcan
+        TrashCanScript.gameObject.SetActive(false);
     }
 
     private void InitLaser()
@@ -148,7 +141,7 @@ public class LaserGrabber : MonoBehaviour
             if (attachedObject)
             {
                 MoveGrabbedObject();
-                UpdateTrashCan();
+                TrashCanScript.UpdateTrashCan(attachedObject);
             }
         }
         else
@@ -424,22 +417,6 @@ public class LaserGrabber : MonoBehaviour
             // SD.structureCtrlTrans.position += newPos - oldPos;
     }
 
-    private void UpdateTrashCan()  // make a few little functions for move away and move to bin!
-    {
-        // the distance between the upper part of the trashbin and the main part
-        Vector3 topToBinDistance = TrashCan.transform.position - TrashCanTop.transform.position;
-        if ((attachedObject.transform.position - TrashCan.transform.position).magnitude <
-            TrashCan.transform.localScale.x)  // / Settings.size
-            TrashCanTop.transform.position += new Vector3(topToBinDistance.x, 0, topToBinDistance.z) * Time.deltaTime;
-        else if ((attachedObject.transform.position - TrashCan.transform.position).magnitude <
-            TrashCan.transform.localScale.x * 5)  // / Settings.size
-            if (topToBinDistance.magnitude < TrashCan.transform.localScale.x)
-                TrashCanTop.transform.position += Vector3.right * Settings.size * Time.deltaTime;
-            else;
-        else
-            print("to far away!"); // the top should be moved over the bin here
-    }
-
     // set the colliding object as the collidingObject, if it fulfills these conditions
     private void SetCollidingObject(Collider col)
     {
@@ -517,13 +494,8 @@ public class LaserGrabber : MonoBehaviour
             // the laserlength has to be set to the length from the controller to the atom, because it's attached to it's middle point, 
             //and the object should be at the same distance before and after the start of the grab
             laserLength = (attachedObject.transform.position - transform.position).magnitude;
-            // show the trashbin when holding a single atom
-            TrashCan.SetActive(true);
-            // move the trashbin to the place it should be
-            Vector3 newBinPosition = Vector3.zero;
-            newBinPosition.x += Mathf.Sin(HeadTransform.eulerAngles.y / 360 * 2 * Mathf.PI - Mathf.PI / 2);
-            newBinPosition.z += Mathf.Cos(HeadTransform.eulerAngles.y / 360 * 2 * Mathf.PI - Mathf.PI / 2);
-            TrashCan.transform.position = HeadTransform.position + newBinPosition * 1.5f + Vector3.down;
+            // spawn the trashcan
+            TrashCanScript.ActivateCan();
         }
         
         // set the length of the laser to it's new length
@@ -541,7 +513,7 @@ public class LaserGrabber : MonoBehaviour
         //objectInHand.GetComponent<Rigidbody>().angularVelocity = Controller.angularVelocity;
 
         attachedObject = null;
-        TrashCan.SetActive(false);
+        TrashCanScript.gameObject.SetActive(false);
     }
     
     private void ShowLaser(RaycastHit hit) 
