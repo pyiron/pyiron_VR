@@ -11,6 +11,9 @@ public class TrashCan : MonoBehaviour
     // the Transform of the Headset
     private Transform HeadTransform;
 
+    // the distance between the upper part of the trashbin and the main part
+    Vector3 topToCan;
+
     // the script of the controller printer
     public InGamePrinter printer;
 
@@ -38,15 +41,14 @@ public class TrashCan : MonoBehaviour
 
     public void UpdateTrashCan(GameObject attachedObject)  // make a few little functions for move away and move to bin!
     {
-        // the distance between the upper part of the trashbin and the main part
-        Vector3 topToCan = gameObject.transform.position - TrashCanTop.transform.position;
+        topToCan = gameObject.transform.position - TrashCanTop.transform.position;
         float atomToCanDist = (attachedObject.transform.position - gameObject.transform.position).magnitude;
         printer.Ctrl_print(atomToCanDist.ToString(), 90);
-        if (atomToCanDist < gameObject.transform.localScale.x
+        if (atomToCanDist < gameObject.transform.localScale.x / 2
             + attachedObject.transform.localScale.x * Settings.size)  // / Settings.size
             MoveTopToCan(topToCan);
         else if (atomToCanDist < gameObject.transform.localScale.x * 5)  // / Settings.size
-            if ((topToCan - Vector3.up * topToCan.y).magnitude < gameObject.transform.localScale.x * 3)
+            if ((topToCan - Vector3.up * topToCan.y).magnitude < gameObject.transform.localScale.x * 2.5)
                 MoveTopAway();
             else
                 print(topToCan.magnitude + " and " + gameObject.transform.localScale.x * 2);
@@ -61,14 +63,14 @@ public class TrashCan : MonoBehaviour
     {
         print("moved away");
         printer.Ctrl_print("moved away", 90, false);
-        TrashCanTop.transform.position += Vector3.right * Settings.size * Time.deltaTime;
+        TrashCanTop.transform.position += Vector3.right * Settings.size * Time.deltaTime * 4;
     }
 
     private void MoveTopToCan(Vector3 topToCan)
     {
         printer.Ctrl_print("movedToCan", 90, false);
         print("movedToCan");
-        TrashCanTop.transform.position += new Vector3(topToCan.x, 0, topToCan.z) * Time.deltaTime;
+        TrashCanTop.transform.position += new Vector3(topToCan.x, 0, topToCan.z) * Time.deltaTime * 4;
     }
 
     public void ActivateCan()
@@ -80,5 +82,11 @@ public class TrashCan : MonoBehaviour
         newBinPosition.x += Mathf.Sin(HeadTransform.eulerAngles.y / 360 * 2 * Mathf.PI - Mathf.PI / 2);
         newBinPosition.z += Mathf.Cos(HeadTransform.eulerAngles.y / 360 * 2 * Mathf.PI - Mathf.PI / 2);
         gameObject.transform.position = HeadTransform.position + newBinPosition * 1.5f + Vector3.down;
+    }
+
+    public void DeactivateCan()
+    {
+        gameObject.SetActive(false);
+        TrashCanTop.transform.position += new Vector3(topToCan.x, 0, topToCan.z);
     }
 }
