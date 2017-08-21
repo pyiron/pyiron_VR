@@ -13,6 +13,8 @@ public class TrashCan : MonoBehaviour
 
     // the distance between the upper part of the trashbin and the main part
     Vector3 topToCan;
+    // shows whether the atom is currently in the can or not
+    public bool atomInCan;
 
     // the script of the controller printer
     public InGamePrinter printer;
@@ -25,6 +27,9 @@ public class TrashCan : MonoBehaviour
         HeadTransform = GameObject.Find("[CameraRig]/Camera (eye)/Camera (head)").transform;
         // find the upper part of the trash can
         TrashCanTop = GameObject.Find("MyObjects/Trash Can/Top");
+
+        // scale the trashcan size according to the player given global size multiplicator
+        transform.localScale = Vector3.one * Settings.size;
     }
 
     // Use this for initialization
@@ -36,7 +41,7 @@ public class TrashCan : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        
     }
 
     public void UpdateTrashCan(GameObject attachedObject)
@@ -45,13 +50,22 @@ public class TrashCan : MonoBehaviour
         float atomToCanDist = (attachedObject.transform.position - gameObject.transform.position).magnitude;
         if (atomToCanDist < gameObject.transform.localScale.x / 2
             + attachedObject.transform.localScale.x * Settings.size)  // / Settings.size
+        {
             MoveTopToCan(topToCan);
-        else if (atomToCanDist < gameObject.transform.localScale.x * 5)  // / Settings.size
-            if ((topToCan - Vector3.up * topToCan.y).magnitude < gameObject.transform.localScale.x * 2.5)
-                MoveTopAway();
-            else;
+            // show that the atom is currently in the can
+            atomInCan = true;
+        }
         else
-            MoveTopToCan(topToCan);
+        {
+            if (atomToCanDist < gameObject.transform.localScale.x * 5)  // / Settings.size
+                if ((topToCan - Vector3.up * topToCan.y).magnitude < gameObject.transform.localScale.x * 2.5)
+                    MoveTopAway();
+                else;
+            else
+                MoveTopToCan(topToCan);
+            // show that the atom is currently not in the can
+            atomInCan = false;
+        }
     }
 
     private void MoveTopAway()
