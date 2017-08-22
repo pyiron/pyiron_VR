@@ -110,7 +110,7 @@ public class ImportStructure : MonoBehaviour {
         void Update()
     {
         // the old path/way
-        pathName = "AtomStructures/New Folder/new_MD_hydrogen_" + currentFrame + ".dat";  // path + strucFileName + "/" + currentFrame
+        //pathName = "AtomStructures/New Folder/new_MD_hydrogen_" + currentFrame + ".dat";  // path + strucFileName + "/" + currentFrame
         // the path to the file which holds all the data for the current frome
 
         if (fps_timer <= 0)
@@ -204,13 +204,12 @@ public class ImportStructure : MonoBehaviour {
             SD.boundingbox.transform.parent = gameObject.transform;
         }
 
-        if (programSettings.transMode == "file")
-            currentFrame = (currentFrame + 1) % 477;
+        //if (programSettings.transMode == "file")
+        //    currentFrame = (currentFrame + 1) % 477;  // insert the amount of frames here
 
         int maxTries;
         maxTries = 1000;
         input_file_data = "";
-        // print("yay");
         if (programSettings.transMode == "file")
             while (maxTries > 0 || firstImport)
                 try
@@ -250,8 +249,7 @@ public class ImportStructure : MonoBehaviour {
         {
             if (!firstImport)
                 foreach (AtomInfos oldAtomInfo in SD.atomInfos)
-                    if (oldAtomInfo.m_transform.gameObject != null)
-                        Destroy(oldAtomInfo.m_transform.gameObject);
+                    Destroy(oldAtomInfo.m_transform.gameObject);
             // set the length of the Arrays which hold the Data of all Atoms to the amount of atoms in the input file
             SD.atomInfos = new AtomInfos[atomCounter];
             SD.atomCtrlPos = new Vector3[atomCounter];
