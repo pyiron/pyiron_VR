@@ -147,6 +147,8 @@ public class LaserGrabber : MonoBehaviour
             {
                 MoveGrabbedObject();
                 TrashCanScript.UpdateTrashCan(attachedObject);
+                if (ctrlMaskName.Contains("Atom"))
+                    printer.Ctrl_print(attachedObject.GetComponent<AtomID>().ID.ToString(), 101);
             }
         }
         else
@@ -525,11 +527,12 @@ public class LaserGrabber : MonoBehaviour
             {
                 PE.send_order("self.destroy_atom(" + attachedObject.GetComponent<AtomID>().ID + ")");
                 // delete the atom and send python/pyiron that the atom should be excluded in the structure
-                print(SD.atomInfos.Count);
                 SD.waitForDestroyedAtom = true;
+                print(attachedObject.GetComponent<AtomID>().ID);
                 SD.atomInfos.RemoveAt(attachedObject.GetComponent<AtomID>().ID);
+                foreach (AtomInfos AI in SD.atomInfos)
+                    print(AI.m_ID);
                 Destroy(attachedObject);
-                print(SD.atomInfos.Count);
             }
         }
         // deactivate the trash can

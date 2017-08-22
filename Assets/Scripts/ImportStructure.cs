@@ -108,7 +108,7 @@ public class ImportStructure : MonoBehaviour {
     }
 
         void Update()
-    {
+    {    
         // the old path/way
         //pathName = "AtomStructures/New Folder/new_MD_hydrogen_" + currentFrame + ".dat";  // path + strucFileName + "/" + currentFrame
         // the path to the file which holds all the data for the current frome
@@ -133,7 +133,7 @@ public class ImportStructure : MonoBehaviour {
         {
             if (SD.waitForDestroyedAtom)
             {
-                print(PythonExecuter.structureSize + " and " + SD.atomInfos.Count);
+                //print(PythonExecuter.structureSize + " and " + SD.atomInfos.Count);
                 if (PythonExecuter.structureSize != SD.atomInfos.Count)
                     return;
             }
@@ -243,17 +243,18 @@ public class ImportStructure : MonoBehaviour {
         if (animState == "static" && !newImport)
             return;
 
-        if (newImport || SD.waitForDestroyedAtom)
+        if (newImport)
         {
-            if (!firstImport && !SD.waitForDestroyedAtom)
+            if (!firstImport)
                 foreach (AtomInfos oldAtomInfo in SD.atomInfos)
                     Destroy(oldAtomInfo.m_transform.gameObject);
             // set the length of the Arrays which hold the Data of all Atoms to the amount of atoms in the input file
             SD.atomInfos.Clear();
             //SD.atomInfos = new List<AtomInfos>();
             SD.atomCtrlPos = new Vector3[atomCounter];
-            //SD.ctrlTrans = new Transform[atomCounter];
         }
+        else if (SD.waitForDestroyedAtom)
+            SD.atomCtrlPos = new Vector3[atomCounter];
         // create the atoms
         ReadFile("initAtoms");
 
@@ -346,7 +347,7 @@ public class ImportStructure : MonoBehaviour {
 
     private void InitAtoms()
     {
-        if (newImport)
+        if (newImport && !SD.waitForDestroyedAtom)
         {
             // create a new instance of an atom
             currentAtom = Instantiate(AtomPrefab);
@@ -354,9 +355,13 @@ public class ImportStructure : MonoBehaviour {
             currentAtom.transform.parent = gameObject.transform;
         }
         else
-            foreach (AtomInfos AI in SD.atomInfos)
+            currentAtom = SD.atomInfos[atomCounter].m_transform.gameObject;
+            /*foreach (AtomInfos AI in SD.atomInfos)
+            {
+                print("!!!!!!" + AI.m_ID);
                 if (AI.m_ID == atomCounter)
                     currentAtom = AI.m_transform.gameObject;
+            }*/
 
         if (newImport)
         {
@@ -377,12 +382,16 @@ public class ImportStructure : MonoBehaviour {
         currentAtom.GetComponent<Renderer>().material.color = LED.getColour(data[3]);
         // set the atoms size to the size this type of atom has 
         currentAtom.transform.localScale = Vector3.one * LED.getSize(data[3]);
-        if (newImport)
+        if (newImport || SD.waitForDestroyedAtom)
         {
+            print("important!" + atomCounter);
             // give the atom an ID
             currentAtom.GetComponent<AtomID>().ID = atomCounter;
-            // register the atom in the overwiev of StructureData
-            SD.atomInfos.Add(new AtomInfos(atomCounter, data[3], currentAtom.transform));
+            if (SD.waitForDestroyedAtom)
+                SD.atomInfos[atomCounter] = new AtomInfos(atomCounter, data[3], currentAtom.transform);
+            else
+                // register the atom in the overwiev of StructureData
+                SD.atomInfos.Add(new AtomInfos(atomCounter, data[3], currentAtom.transform));
         }
     }
 }
