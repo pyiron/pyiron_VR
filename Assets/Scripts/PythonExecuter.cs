@@ -36,15 +36,10 @@ public class PythonExecuter : MonoBehaviour {
 
     private void Awake()
     {
+        // return if the data of the structure should be received by an file or files
         if (GameObject.Find("Settings").GetComponent<ProgramSettings>().transMode == "file")
-        {
-            print("returned");
             return;
-        }
-        else
-        {
-            print(GameObject.Find("Settings").GetComponent<ProgramSettings>().transMode);
-        }
+
         //IS = GameObject.Find("AtomStructure").GetComponent<ImportStructure>();
         var pyPathThread = new Thread(delegate () {
             Command("cd " + pythonPath + " && python " + pythonFileName + ".py", myProcess); });

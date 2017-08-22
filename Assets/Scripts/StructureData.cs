@@ -8,12 +8,13 @@ public class StructureData : MonoBehaviour
     public GameObject boundingbox; // muss man spater erst holen, wenn die box erstellt wurde
     public Vector3 minPositions;
     public Vector3 maxPositions;
+    // list with all infos about the atoms
     public List<AtomInfos> atomInfos = new List<AtomInfos>();
     // the name of the structure, at the moment the name is defined here
     public string structureName = "Fe-Structure";
 
     // the data, how each atom has been relocated by the player
-    public Vector3[] atomCtrlPos;
+    public List<Vector3> atomCtrlPos = new List<Vector3>();
     // the data, how each atom has been relocated by the player
     public Vector3[] atomCtrlSize;  // might be unnecessary
     // the data, how the structure has been relocated and resized by the player

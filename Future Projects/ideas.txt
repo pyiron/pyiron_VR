@@ -7,23 +7,26 @@
   -> colordependancy, animation
 - connection via the text file has sometimes little problems. If possible, a pipe would be better than this way I think, it might also allow to have more atoms with animation without low fps
 - delete the code needed for the slower mode of transfering data between Python and Unity
+- let the atoms react live
 
 IMPORTANT:
 (- check for bugs)
 - bug: false positioning of structure after duplicating and when resizing
-- try to get better performance when having many atoms
+(- try to get better performance when having many atoms)
 - try to avoid large iterations
 - let the animation be interpolated
 - Think of a fast way to get the average forces for each atom in Python. Most likely, this should be done when a new ham_lammps is given and not when the force should be send. or maybe it should be done when switching to info mode 
 (- ask whether the average force should be the average force in the last 100s or of 50s before and 50s after)
 - bring the python program to PEP-8 standard and fix TODOs
-- just write something new in the atom/structure info if there is a new text to write (might be faster)
 - try to set the position of the atoms to 0 when they are at pos 0,0000000001 in Python (or give them in numpy units)
 - set the size of MyObjects to 0.3, not the size of the atomStructure
 - fix bug that the distances between the atoms are getting changed for the transfer to Unity but not getting changed back!
 - Let the Trashcan spawn at another location
 - fix bug that the awake of the lasergrabber is called after the start function of the other scripts 
   -> let the trashcan deactivate itself, instead of letting the lasergrabber do so 
+- fix bug that just one controller (the left) can activate both ctrl_printers and that just the left controller can change the modes, but backwards, which happens sometimes if not both controllers are activated at the same time
+- set always the same controller to right and left
+
 
 
 Seems to be gone:

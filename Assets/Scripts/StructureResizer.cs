@@ -67,7 +67,7 @@ public class StructureResizer : MonoBehaviour
         if (minStrucSize < newStrucSize && newStrucSize < maxStrucSize)
         {
             // update the values how the player has moved each atom, so that these values depend on the global size
-            for (int i = 0; i < SD.atomCtrlPos.Length; i++)
+            for (int i = 0; i < SD.atomCtrlPos.Count; i++)
                 SD.atomCtrlPos[i] *= newStrucSize / Settings.size;
             // set the global size to the new value and update the structure
             Settings.size = newStrucSize;

@@ -251,10 +251,8 @@ public class ImportStructure : MonoBehaviour {
             // set the length of the Arrays which hold the Data of all Atoms to the amount of atoms in the input file
             SD.atomInfos.Clear();
             //SD.atomInfos = new List<AtomInfos>();
-            SD.atomCtrlPos = new Vector3[atomCounter];
+            SD.atomCtrlPos.Clear();
         }
-        else if (SD.waitForDestroyedAtom)
-            SD.atomCtrlPos = new Vector3[atomCounter];
         // create the atoms
         ReadFile("initAtoms");
 
@@ -370,7 +368,7 @@ public class ImportStructure : MonoBehaviour {
                 float.Parse(data[2])) - (maxPositions + minPositions) / 2;
             if (animState == "new" || (!firstImport && programSettings.transMode == "shell"))
                 currentAtom.transform.position *= programSettings.size;
-            SD.atomCtrlPos[atomCounter] = Vector3.zero;
+            SD.atomCtrlPos.Add(Vector3.zero);
         }
         else
         {

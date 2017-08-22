@@ -524,21 +524,27 @@ public class LaserGrabber : MonoBehaviour
             // check that there isn't just one atom left, because this atom would have no temperature/force/velocity,
             // so it can't build a ham_lammps function
             if (SD.atomInfos.Count >= 3)
-            {
-                PE.send_order("self.destroy_atom(" + attachedObject.GetComponent<AtomID>().ID + ")");
-                // delete the atom and send python/pyiron that the atom should be excluded in the structure
-                SD.waitForDestroyedAtom = true;
-                print(attachedObject.GetComponent<AtomID>().ID);
-                SD.atomInfos.RemoveAt(attachedObject.GetComponent<AtomID>().ID);
-                foreach (AtomInfos AI in SD.atomInfos)
-                    print(AI.m_ID);
-                Destroy(attachedObject);
-            }
+                DestroyAtom();
         }
         // deactivate the trash can
         TrashCanScript.gameObject.SetActive(false);
         // detach the attached object
         attachedObject = null;
+    }
+
+    private void DestroyAtom()
+    {
+        // send Python/{yiron the order to destroy the atom
+        PE.send_order("self.destroy_atom(" + attachedObject.GetComponent<AtomID>().ID + ")");
+        // delete the atom and send python/pyiron that the atom should be excluded in the structure
+        SD.waitForDestroyedAtom = true;
+        print(attachedObject.GetComponent<AtomID>().ID);
+        // remove the atom in the list of the properties of each atom
+        SD.atomInfos.RemoveAt(attachedObject.GetComponent<AtomID>().ID);
+        // remove the atom in the list which stores the data how the player has removed each atom
+        SD.atomCtrlPos.RemoveAt(attachedObject.GetComponent<AtomID>().ID);
+        // destroy the gameobject of the destroyed atom. This way, importStructure won't destroy all atoms and load them new
+        Destroy(attachedObject);
     }
     
     private void ShowLaser(RaycastHit hit) 
