@@ -26,7 +26,7 @@ IMPORTANT:
   -> let the trashcan deactivate itself, instead of letting the lasergrabber do so 
 - fix bug that just one controller (the left) can activate both ctrl_printers and that just the left controller can change the modes, but backwards, which happens sometimes if not both controllers are activated at the same time
 - set always the same controller to right and left
-
+-  after the structure has been duplicated the whole structure gets moved away one time.
 
 
 Seems to be gone:

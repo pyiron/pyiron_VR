@@ -538,7 +538,6 @@ public class LaserGrabber : MonoBehaviour
         PE.send_order("self.destroy_atom(" + attachedObject.GetComponent<AtomID>().ID + ")");
         // delete the atom and send python/pyiron that the atom should be excluded in the structure
         SD.waitForDestroyedAtom = true;
-        print(attachedObject.GetComponent<AtomID>().ID);
         // remove the atom in the list of the properties of each atom
         SD.atomInfos.RemoveAt(attachedObject.GetComponent<AtomID>().ID);
         // remove the atom in the list which stores the data how the player has removed each atom

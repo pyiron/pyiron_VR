@@ -382,7 +382,6 @@ public class ImportStructure : MonoBehaviour {
         currentAtom.transform.localScale = Vector3.one * LED.getSize(data[3]);
         if (newImport || SD.waitForDestroyedAtom)
         {
-            print("important!" + atomCounter);
             // give the atom an ID
             currentAtom.GetComponent<AtomID>().ID = atomCounter;
             if (SD.waitForDestroyedAtom)
