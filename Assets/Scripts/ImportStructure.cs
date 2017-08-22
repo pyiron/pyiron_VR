@@ -133,11 +133,9 @@ public class ImportStructure : MonoBehaviour {
         {
             if (SD.waitForDestroyedAtom)
             {
-                print(PythonExecuter.structureSize + " and " + (SD.atomInfos.Length - 1));
-                if (PythonExecuter.structureSize != SD.atomInfos.Length - 1)
+                print(PythonExecuter.structureSize + " and " + (SD.atomInfos.Count - 1));
+                if (PythonExecuter.structureSize != SD.atomInfos.Count - 1)
                     return;
-                else
-                    SD.waitForDestroyedAtom = false;
             }
 
             if (programSettings.transMode == "file")
@@ -245,13 +243,13 @@ public class ImportStructure : MonoBehaviour {
         if (animState == "static" && !newImport)
             return;
 
-        if (newImport)
+        if (newImport || SD.waitForDestroyedAtom)
         {
-            if (!firstImport)
+            if (!firstImport && !SD.waitForDestroyedAtom)
                 foreach (AtomInfos oldAtomInfo in SD.atomInfos)
                     Destroy(oldAtomInfo.m_transform.gameObject);
             // set the length of the Arrays which hold the Data of all Atoms to the amount of atoms in the input file
-            SD.atomInfos = new AtomInfos[atomCounter];
+            SD.atomInfos = new List<AtomInfos>(atomCounter);
             SD.atomCtrlPos = new Vector3[atomCounter];
             //SD.ctrlTrans = new Transform[atomCounter];
         }
@@ -276,6 +274,7 @@ public class ImportStructure : MonoBehaviour {
         if (animState == "new")
             transform.position += SD.structureCtrlPos;
 
+        SD.waitForDestroyedAtom = false;
         firstImport = false;
         newImport = false;
     }
@@ -328,11 +327,9 @@ public class ImportStructure : MonoBehaviour {
             }
         }
         if (!firstImport)
-            if (atomCounter != SD.atomInfos.Length)
-            {
-                newImport = true;
-                firstImport = false;
-            }
+            if (atomCounter != SD.atomInfos.Count)
+                if (!SD.waitForDestroyedAtom)
+                    newImport = true;
     }
 
     private void GetStructureExpansion()
@@ -384,7 +381,7 @@ public class ImportStructure : MonoBehaviour {
             // give the atom an ID
             currentAtom.GetComponent<AtomID>().ID = atomCounter;
             // register the atom in the overwiev of StructureData
-            SD.atomInfos[atomCounter] = new AtomInfos(atomCounter, data[3], currentAtom.transform);
+            SD.atomInfos.Add(new AtomInfos(atomCounter, data[3], currentAtom.transform));
         }
     }
 }

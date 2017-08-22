@@ -331,7 +331,7 @@ public class LaserGrabber : MonoBehaviour
                             else
                                 PE.send_order("self.duplicate(2)");
                         else
-                            if (SD.atomInfos.Length * 0.5 * 0.5 * 0.5 >= 1)
+                            if (SD.atomInfos.Count * 0.5 * 0.5 * 0.5 >= 1)
                                 if (Settings.transMode == "file")
                                     WriteOrder("self.duplicate(0.5)");
                                 else
@@ -521,11 +521,11 @@ public class LaserGrabber : MonoBehaviour
         {
             PE.send_order("self.destroy_atom(" + attachedObject.GetComponent<AtomID>().ID + ")");
             // delete the atom and send python/pyiron that the atom should be excluded in the structure
-            print(SD.atomInfos.Length);
+            print(SD.atomInfos.Count);
             SD.waitForDestroyedAtom = true;
-
+            //Destroy(SD.atomInfos[attachedObject.GetComponent<AtomID>().ID]);
             Destroy(attachedObject);
-            print(SD.atomInfos.Length);
+            print(SD.atomInfos.Count);
         }
         // deactivate the trash can
         TrashCanScript.gameObject.SetActive(false);
