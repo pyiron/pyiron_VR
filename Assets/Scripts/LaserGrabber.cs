@@ -519,13 +519,18 @@ public class LaserGrabber : MonoBehaviour
 
         if (TrashCanScript.atomInCan && ctrlMaskName == "AtomLayer")
         {
-            PE.send_order("self.destroy_atom(" + attachedObject.GetComponent<AtomID>().ID + ")");
-            // delete the atom and send python/pyiron that the atom should be excluded in the structure
-            print(SD.atomInfos.Count);
-            SD.waitForDestroyedAtom = true;
-            //Destroy(SD.atomInfos[attachedObject.GetComponent<AtomID>().ID]);
-            Destroy(attachedObject);
-            print(SD.atomInfos.Count);
+            // check that there isn't just one atom left, because this atom would have no temperature/force/velocity,
+            // so it can't build a ham_lammps function
+            if (SD.atomInfos.Count >= 3)
+            {
+                PE.send_order("self.destroy_atom(" + attachedObject.GetComponent<AtomID>().ID + ")");
+                // delete the atom and send python/pyiron that the atom should be excluded in the structure
+                print(SD.atomInfos.Count);
+                SD.waitForDestroyedAtom = true;
+                SD.atomInfos.RemoveAt(attachedObject.GetComponent<AtomID>().ID);
+                Destroy(attachedObject);
+                print(SD.atomInfos.Count);
+            }
         }
         // deactivate the trash can
         TrashCanScript.gameObject.SetActive(false);

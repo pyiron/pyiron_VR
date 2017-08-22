@@ -133,8 +133,8 @@ public class ImportStructure : MonoBehaviour {
         {
             if (SD.waitForDestroyedAtom)
             {
-                print(PythonExecuter.structureSize + " and " + (SD.atomInfos.Count - 1));
-                if (PythonExecuter.structureSize != SD.atomInfos.Count - 1)
+                print(PythonExecuter.structureSize + " and " + SD.atomInfos.Count);
+                if (PythonExecuter.structureSize != SD.atomInfos.Count)
                     return;
             }
 
@@ -249,7 +249,8 @@ public class ImportStructure : MonoBehaviour {
                 foreach (AtomInfos oldAtomInfo in SD.atomInfos)
                     Destroy(oldAtomInfo.m_transform.gameObject);
             // set the length of the Arrays which hold the Data of all Atoms to the amount of atoms in the input file
-            SD.atomInfos = new List<AtomInfos>(atomCounter);
+            SD.atomInfos.Clear();
+            //SD.atomInfos = new List<AtomInfos>();
             SD.atomCtrlPos = new Vector3[atomCounter];
             //SD.ctrlTrans = new Transform[atomCounter];
         }

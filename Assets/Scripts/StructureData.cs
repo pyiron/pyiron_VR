@@ -8,7 +8,7 @@ public class StructureData : MonoBehaviour
     public GameObject boundingbox; // muss man spater erst holen, wenn die box erstellt wurde
     public Vector3 minPositions;
     public Vector3 maxPositions;
-    public List<AtomInfos> atomInfos;
+    public List<AtomInfos> atomInfos = new List<AtomInfos>();
     // the name of the structure, at the moment the name is defined here
     public string structureName = "Fe-Structure";
 

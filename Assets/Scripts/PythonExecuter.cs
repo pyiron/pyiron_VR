@@ -38,7 +38,7 @@ public class PythonExecuter : MonoBehaviour {
     {
         if (GameObject.Find("Settings").GetComponent<ProgramSettings>().transMode == "file")
         {
-            print("reaturned");
+            print("returned");
             return;
         }
         else
@@ -82,7 +82,7 @@ public class PythonExecuter : MonoBehaviour {
         {
             StoreData(e.Data);
             collectedData = currentData;
-            print(collectedData);
+            // print(collectedData);
             currentData = "";
             structureForce = currentStructureForce;
             newData = true;
