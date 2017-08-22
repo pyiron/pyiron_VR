@@ -22,6 +22,8 @@ public class ProgramSettings : MonoBehaviour {
     public float textResolution = 100f;
     // decides how the data should be transmitted between Unity and Python
     public string transMode;
+    // the width the borders of the cellbox should have
+    public float cellboxWidth;
 
 
     private void Awake()

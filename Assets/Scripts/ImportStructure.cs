@@ -30,6 +30,8 @@ public class ImportStructure : MonoBehaviour {
     // the script of the controller printer
     public InGamePrinter printer;
 
+    public GameObject CellboxBorderPrefab;
+
     // the min expansion of the cluster of each axis
     Vector3 minPositions = Vector3.one * Mathf.Infinity;
     // the max expansion of the atoms of each axis
@@ -200,6 +202,17 @@ public class ImportStructure : MonoBehaviour {
             // create the instance of the boundingbox
             SD.boundingbox = Instantiate(BoundingboxPrefab);
             SD.boundingbox.transform.parent = gameObject.transform;
+            // create the cubes for the cell box and the parent cellBox
+            SD.cellbox = new GameObject();
+            SD.cellbox.transform.parent = transform;
+            SD.cellbox.name = "Cellbox";
+            GameObject newCellboxBorder;
+            for (int i = 0; i < 12; i++)
+            {
+                newCellboxBorder = Instantiate(CellboxBorderPrefab);
+                newCellboxBorder.transform.parent = SD.cellbox.transform;
+                newCellboxBorder.transform.localScale = Vector3.one;
+            }
         }
 
         //if (programSettings.transMode == "file")

@@ -5,7 +5,11 @@ using UnityEngine;
 // component of AtomStructure
 public class StructureData : MonoBehaviour
 {
-    public GameObject boundingbox; // muss man spater erst holen, wenn die box erstellt wurde
+    // the boundingbox which defines where you can grab the structure. It will be created in importStructure
+    public GameObject boundingbox;
+    // the cellbox of the structure. It will be created in importStructure
+    public GameObject cellbox;
+    // the min and max value of the structure in each axis, needed for the boundingbox
     public Vector3 minPositions;
     public Vector3 maxPositions;
     // list with all infos about the atoms
