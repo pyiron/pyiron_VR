@@ -146,10 +146,12 @@ public class LaserGrabber : MonoBehaviour
             if (attachedObject)
             {
                 MoveGrabbedObject();
-                if (MD.modes[MD.activeMode].showTrashcan)
-                    TrashCanScript.UpdateTrashCan(attachedObject);
                 if (ctrlMaskName.Contains("Atom"))
+                {
+                    if (MD.modes[MD.activeMode].showTrashcan)
+                        TrashCanScript.UpdateTrashCan(attachedObject);
                     printer.Ctrl_print(attachedObject.GetComponent<AtomID>().ID.ToString(), 101);
+                }
             }
         }
         else
