@@ -356,10 +356,8 @@ public class ImportStructure : MonoBehaviour {
         cellBorderVecs[1] = new Vector3(float.Parse(data[3]), float.Parse(data[4]), float.Parse(data[5]));
         cellBorderVecs[2] = new Vector3(float.Parse(data[6]), float.Parse(data[7]), float.Parse(data[8]));
 
-        // reset the positions of the cellbox and it's parts
+        // reset the positions of the cellbox
         SD.cellbox.transform.localPosition = Vector3.zero;
-        for (int i = 0; i < 3; i++)
-            CellBorders[i].transform.position = Vector3.zero;
 
         //set the position and length for each part of the cellbox
         for (int i = 0; i < 4; i++)
@@ -374,7 +372,6 @@ public class ImportStructure : MonoBehaviour {
                     CellBorders[j * 4 + i].transform.localPosition += cellBorderVecs[(j + 1) % 3];
                 if (i == 2 || i == 3)
                     CellBorders[j * 4 + i].transform.localPosition += cellBorderVecs[(j + 2) % 3];
-                //CellBorders[j * 4 + i].transform.localPosition *= programSettings.size;
             }
 
         // set the position for the cellbox
