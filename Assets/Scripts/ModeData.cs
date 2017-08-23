@@ -15,8 +15,6 @@ public class ModeData : MonoBehaviour
     [Header("Modes")]
     // get the textmesh from the 3D Text which shows the current mode
     public TextMesh CurrentModeText;
-    // the amount of modes in the game (because 0 is a mode too)
-    public static int maxModeNr = 3;
     // the current mode in the game:
     // 1: move, 2: show infos, 3: edit
     public int modeNr = 0;
@@ -70,7 +68,7 @@ public class ModeData : MonoBehaviour
     public void raiseMode()
     {
         // raise the mode nr by one, except it reached the highest mode, then set it to 0
-        modeNr = (modeNr + 1) % maxModeNr;
+        modeNr = (modeNr + 1) % modes.Count;
         gameObject.GetComponent<TextMesh>().text = modes[modeNr].name;
         gameObject.SetActive(true);
         modeTextTimer = 3;
