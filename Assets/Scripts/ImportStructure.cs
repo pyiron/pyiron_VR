@@ -333,9 +333,8 @@ public class ImportStructure : MonoBehaviour {
                     else
                     {
                         SetCellbox(data);
-                        //print(data[9]);
-                        //need to get cell data here
-                        break; // breaks the routine if the end of the file is reached
+                        // breaks the routine if the end of the file is reached
+                        break;
                     }
 
                     atomCounter++;
@@ -348,6 +347,7 @@ public class ImportStructure : MonoBehaviour {
                     newImport = true;
     }
 
+    // set the cellbox according to the data given from Python
     private void SetCellbox(string[] data)
     {
         // save the data for the cellbox in 3 Vector3s
@@ -357,11 +357,11 @@ public class ImportStructure : MonoBehaviour {
         cellBorderVecs[2] = new Vector3(float.Parse(data[6]), float.Parse(data[7]), float.Parse(data[8]));
 
         // reset the positions of the cellbox and it's parts
-        SD.cellbox.transform.position = Vector3.zero;
+        SD.cellbox.transform.localPosition = Vector3.zero;
         for (int i = 0; i < 3; i++)
             CellBorders[i].transform.position = Vector3.zero;
 
-        //set the position for each part of the cellbox
+        //set the position and length for each part of the cellbox
         for (int i = 0; i < 4; i++)
             for (int j = 0; j < 3; j++)
             {
@@ -369,16 +369,17 @@ public class ImportStructure : MonoBehaviour {
                 cellBorderSize[j] = cellBorderVecs[j].magnitude + programSettings.cellboxWidth;
                 CellBorders[j * 4 + i].transform.localScale = cellBorderSize;
 
-                CellBorders[j * 4 + i].transform.position = cellBorderVecs[j] * 0.5f;
+                CellBorders[j * 4 + i].transform.localPosition = cellBorderVecs[j] * 0.5f;
                 if (i == 1 || i == 3)
-                    CellBorders[j * 4 + i].transform.position += cellBorderVecs[(j + 1) % 3];
+                    CellBorders[j * 4 + i].transform.localPosition += cellBorderVecs[(j + 1) % 3];
                 if (i == 2 || i == 3)
-                    CellBorders[j * 4 + i].transform.position += cellBorderVecs[(j + 2) % 3];
+                    CellBorders[j * 4 + i].transform.localPosition += cellBorderVecs[(j + 2) % 3];
+                //CellBorders[j * 4 + i].transform.localPosition *= programSettings.size;
             }
 
         // set the position for the cellbox
         for (int i = 0; i < 3; i++)
-            SD.cellbox.transform.position -= cellBorderVecs[i] / 2;
+            SD.cellbox.transform.position -= cellBorderVecs[i] / 2 * programSettings.size;
     }
 
     private void GetStructureExpansion()
