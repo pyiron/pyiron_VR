@@ -376,10 +376,7 @@ public class ImportStructure : MonoBehaviour {
 
         // set the position for the cellbox
         for (int i = 0; i < 3; i++)
-            //if (firstImport)
-            //    SD.cellbox.transform.position -= cellBorderVecs[i] / 2;
-            //else
-                SD.cellbox.transform.position -= cellBorderVecs[i] / 2 * programSettings.size;
+            SD.cellbox.transform.position -= cellBorderVecs[i] / 2 * programSettings.size;
     }
 
     private void GetStructureExpansion()
