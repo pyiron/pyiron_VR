@@ -25,7 +25,7 @@ public class InputManager : MonoBehaviour {
         // get the reference of the controller from the LaserGrabber script
         Controller = LG.Controller;
 
-        printer.Ctrl_print(MD.modeNr.ToString(), 4);
+        printer.Ctrl_print(MD.activeMode.ToString(), 4);
     }
 
     // Update is called once per frame
@@ -61,7 +61,7 @@ public class InputManager : MonoBehaviour {
         if (Controller.GetTouchDown(SteamVR_Controller.ButtonMask.ApplicationMenu))
         {
             MD.raiseMode();
-            printer.Ctrl_print(MD.modeNr.ToString(), 40);
+            printer.Ctrl_print(MD.activeMode.ToString(), 40);
         }
     }
 }

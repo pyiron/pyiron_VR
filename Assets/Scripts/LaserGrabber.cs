@@ -140,13 +140,14 @@ public class LaserGrabber : MonoBehaviour
         // check all the input of the controller and fullfill the following actions
         //CheckControllerInput();
 
-        if (MD.modeNr == 0)
+        if (MD.modes[MD.activeMode].playerCanMoveAtoms)
         {
             // move the grabbed object
             if (attachedObject)
             {
                 MoveGrabbedObject();
-                TrashCanScript.UpdateTrashCan(attachedObject);
+                if (MD.modes[MD.activeMode].showTrashcan)
+                    TrashCanScript.UpdateTrashCan(attachedObject);
                 if (ctrlMaskName.Contains("Atom"))
                     printer.Ctrl_print(attachedObject.GetComponent<AtomID>().ID.ToString(), 101);
             }
@@ -156,7 +157,7 @@ public class LaserGrabber : MonoBehaviour
             if (Controller.GetHairTrigger())
             {
                 SendRaycast();
-                if (MD.modeNr == 1)
+                if (MD.modes[MD.activeMode].showInfo)
                     if (laser.activeSelf || collidingObject)
                     {
                         // set the Infotext to active and edit it 
@@ -213,7 +214,7 @@ public class LaserGrabber : MonoBehaviour
         // if the controller gets pressed, it should try to attach an object to it
         if (Controller.GetHairTriggerDown())
         {
-            if (MD.modeNr == 0)
+            if (MD.modes[MD.activeMode].playerCanMoveAtoms)
             {
                 // if an object is colliding with the controller, it should be attached
                 if (collidingObject)
@@ -245,7 +246,7 @@ public class LaserGrabber : MonoBehaviour
         if (Controller.GetPressUp(SteamVR_Controller.ButtonMask.Trigger))
         {
             // check that the move mode is currently active
-            if (MD.modeNr == 0)
+            if (MD.modes[MD.activeMode].playerCanMoveAtoms)
             {
                 // set the state of the controller to not ready for resizeStructure
                 readyForResize = false;
@@ -280,7 +281,7 @@ public class LaserGrabber : MonoBehaviour
 
     public void CheckTouchpad()
     {
-        if (MD.modeNr == 0)
+        if (MD.modes[MD.activeMode].playerCanMoveAtoms)
         {
             // just do anything if the laser is active, because else the touchpad has no function (yet)
             if (laser.activeSelf)
@@ -323,7 +324,7 @@ public class LaserGrabber : MonoBehaviour
                 }
             }
         }
-        else if (MD.modeNr == 2)
+        else if (MD.modes[MD.activeMode].canDuplicate)
             if (ctrlMaskName.Contains("BoundingboxLayer"))
                 if (collidingObject || laser.activeSelf)
                     if (Controller.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad))
@@ -358,7 +359,7 @@ public class LaserGrabber : MonoBehaviour
         {
             RaycastHit hit;
 
-            if (!attachedObject || MD.modeNr != 0)
+            if (!attachedObject || !MD.modes[MD.activeMode].playerCanMoveAtoms)
                 // send out a raycast to detect if there is an object in front of the laser 
                 if (Physics.Raycast(trackedObj.transform.position, transform.forward, out hit, laserMaxDistance, ctrlMask))
                 {
@@ -366,12 +367,12 @@ public class LaserGrabber : MonoBehaviour
                     laser.SetActive(true);
                     hitPoint = hit.point;
                     ShowLaser(hit);
-                    if (MD.modeNr == 0)
+                    if (MD.modes[MD.activeMode].playerCanMoveAtoms)
                         AttachObject(hit.transform.gameObject);
                     else
                         attachedObject = hit.transform.gameObject;
                 }
-                else if (MD.modeNr == 0)
+                else if (MD.modes[MD.activeMode].playerCanResizeAtoms)
                     if (ctrlMaskName == "AtomLayer")
                         readyForResize = true;
                     else;
@@ -436,8 +437,9 @@ public class LaserGrabber : MonoBehaviour
         {
             // set the colliding object
             collidingObject = col.gameObject;
-            // disable the laser if the controller is colliding when not in mode 0
-            if (MD.modeNr != 0)
+            // disable the laser if the controller is colliding when the player can't move the atoms 
+            // (because the lasr already disables itself in this mode)
+            if (!MD.modes[MD.activeMode].playerCanMoveAtoms)
                 laser.SetActive(false);
         }
     }
@@ -519,15 +521,19 @@ public class LaserGrabber : MonoBehaviour
         //objectInHand.GetComponent<Rigidbody>().velocity = Controller.velocity;
         //objectInHand.GetComponent<Rigidbody>().angularVelocity = Controller.angularVelocity;
 
-        if (TrashCanScript.atomInCan && ctrlMaskName == "AtomLayer")
-        {
-            // check that there isn't just one atom left, because this atom would have no temperature/force/velocity,
-            // so it can't build a ham_lammps function
-            if (SD.atomInfos.Count >= 3)
-                DestroyAtom();
+        if (MD.modes[MD.activeMode].showTrashcan)
+        { 
+            if (TrashCanScript.atomInCan && ctrlMaskName == "AtomLayer")
+                // check that there isn't just one atom left, because this atom would have no temperature/force/velocity,
+                // so it can't build a ham_lammps function
+                if (SD.atomInfos.Count >= 3)
+                    DestroyAtom();
+
+            if (ctrlMaskName == "AtomLayer")
+                // deactivate the trash can
+                TrashCanScript.gameObject.SetActive(false);
         }
-        // deactivate the trash can
-        TrashCanScript.gameObject.SetActive(false);
+
         // detach the attached object
         attachedObject = null;
     }

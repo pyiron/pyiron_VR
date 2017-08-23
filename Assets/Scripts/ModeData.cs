@@ -17,22 +17,17 @@ public class ModeData : MonoBehaviour
     public TextMesh CurrentModeText;
     // the current mode in the game:
     // 1: move, 2: show infos, 3: edit
-    public int modeNr = 0;
+    public int activeMode = 0;
     // a timer which will disable the text after a few seconds
     private float modeTextTimer;
     // the size the text should have
     private float textSize = 1f;
 
-
-    //private static readonly Dictionary<int, string> modes = new Dictionary<int, string> {
-      //  { 0, "Move Mode" },
-        //{ 1, "Info Mode" },
-        //{ 2, "Edit Mode" },
-        //};
-
-    private static readonly Dictionary<int, Mode> modes = new Dictionary<int, Mode> {
-        { 0, new Mode(m_name:"Move Mode", m_playerCanMoveAtoms:true, m_showTemp:true, m_showTrashcan:true) },
-        //{ 1, new Mode(m_name:"Relaxation Mode", m_playerCanMoveAtoms:true, m_relaxation:true, m_showTrashcan:true) },
+    // the dictionary which defines what properties each mode has
+    // attention: the trashcan will just be shown if m_playerCanMoveAtoms is true, even if m_showTrashcan is true
+    public readonly Dictionary<int, Mode> modes = new Dictionary<int, Mode> {
+        { 0, new Mode(m_name:"Move Mode", m_playerCanMoveAtoms:true, m_playerCanResizeAtoms:true, m_showTemp:true, m_showTrashcan:true) },
+        //{ 1, new Mode(m_name:"Relaxation Mode", m_playerCanMoveAtoms:true, m_playerCanResizeAtoms:true, m_relaxation:true, m_showTrashcan:true) },
         { 1, new Mode(m_name:"Info Mode", m_showInfo:true) },
         { 2, new Mode(m_name:"Edit Mode", m_canDuplicate:true) },
         };
@@ -68,8 +63,8 @@ public class ModeData : MonoBehaviour
     public void raiseMode()
     {
         // raise the mode nr by one, except it reached the highest mode, then set it to 0
-        modeNr = (modeNr + 1) % modes.Count;
-        gameObject.GetComponent<TextMesh>().text = modes[modeNr].name;
+        activeMode = (activeMode + 1) % modes.Count;
+        gameObject.GetComponent<TextMesh>().text = modes[activeMode].name;
         gameObject.SetActive(true);
         modeTextTimer = 3;
         // set the text to it's original size
