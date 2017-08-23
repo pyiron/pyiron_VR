@@ -350,46 +350,33 @@ public class ImportStructure : MonoBehaviour {
 
     private void SetCellbox(string[] data)
     {
+        // save the data for the cellbox in 3 Vector3s
         Vector3[] cellBorderVecs = new Vector3[3];
         cellBorderVecs[0] = new Vector3(float.Parse(data[0]), float.Parse(data[1]), float.Parse(data[2]));
         cellBorderVecs[1] = new Vector3(float.Parse(data[3]), float.Parse(data[4]), float.Parse(data[5]));
         cellBorderVecs[2] = new Vector3(float.Parse(data[6]), float.Parse(data[7]), float.Parse(data[8]));
-        /*CellBorders[0].transform.position = cellBorderVecs[0] * 0.5f + cellBorderVecs[1] * 0 + cellBorderVecs[2] * 0;
-        CellBorders[1].transform.position = cellBorderVecs[0] * 0 + cellBorderVecs[1] * 0.5f + cellBorderVecs[2] * 0;
-        CellBorders[2].transform.position = cellBorderVecs[0] * 0 + cellBorderVecs[1] * 0 + cellBorderVecs[2] * 0.5f;
 
-        CellBorders[3].transform.position = cellBorderVecs[0] * 0.5f + cellBorderVecs[1] * 1 + cellBorderVecs[2] * 0;
-        CellBorders[4].transform.position = cellBorderVecs[0] * 0 + cellBorderVecs[1] * 0.5f + cellBorderVecs[2] * 1;
-        CellBorders[5].transform.position = cellBorderVecs[0] * 1 + cellBorderVecs[1] * 0 + cellBorderVecs[2] * 0.5f;
-
-        CellBorders[6].transform.position = cellBorderVecs[0] * 0.5f + cellBorderVecs[1] * 0 + cellBorderVecs[2] * 1;
-        CellBorders[7].transform.position = cellBorderVecs[0] * 1 + cellBorderVecs[1] * 0.5f + cellBorderVecs[2] * 0;
-        CellBorders[8].transform.position = cellBorderVecs[0] * 0 + cellBorderVecs[1] * 1 + cellBorderVecs[2] * 0.5f;
-
-        CellBorders[9].transform.position = cellBorderVecs[0] * 0.5f + cellBorderVecs[1] * 1 + cellBorderVecs[2] * 1;
-        CellBorders[10].transform.position = cellBorderVecs[0] * 1 + cellBorderVecs[1] * 0.5f + cellBorderVecs[2] * 1;
-        CellBorders[11].transform.position = cellBorderVecs[0] * 1 + cellBorderVecs[1] * 1 + cellBorderVecs[2] * 0.5f;*/
-        //foreach (GameObject CellBorder in CellBorders)
-        //    CellBorder.transform.position = Vector3.zero;
-
+        // reset the positions of the cellbox and it's parts
         SD.cellbox.transform.position = Vector3.zero;
-
         for (int i = 0; i < 3; i++)
             CellBorders[i].transform.position = Vector3.zero;
 
+        //set the position for each part of the cellbox
         for (int i = 0; i < 4; i++)
             for (int j = 0; j < 3; j++)
             {
-                CellBorders[j * 4 + i].transform.position = cellBorderVecs[j] * 0.5f;
                 Vector3 cellBorderSize = CellBorders[j * 4 + i].transform.localScale;
                 cellBorderSize[j] = cellBorderVecs[j].magnitude + programSettings.cellboxWidth;
                 CellBorders[j * 4 + i].transform.localScale = cellBorderSize;
+
+                CellBorders[j * 4 + i].transform.position = cellBorderVecs[j] * 0.5f;
                 if (i == 1 || i == 3)
                     CellBorders[j * 4 + i].transform.position += cellBorderVecs[(j + 1) % 3];
                 if (i == 2 || i == 3)
                     CellBorders[j * 4 + i].transform.position += cellBorderVecs[(j + 2) % 3];
             }
 
+        // set the position for the cellbox
         for (int i = 0; i < 3; i++)
             SD.cellbox.transform.position -= cellBorderVecs[i] / 2;
     }
