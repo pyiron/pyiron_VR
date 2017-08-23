@@ -10,10 +10,11 @@ public class Mode
     public readonly bool showRelaxation;
     public readonly bool showInfo;
     public readonly bool canDuplicate;
+    bool showTrashcan;
 
     // create an object which holds the infos of a mode
     public Mode(string m_name, bool m_playerCanMoveAtoms = false, bool m_showTemp = false, bool m_showRelaxation = false,
-        bool m_showInfo = false, bool m_canDuplicate = false)
+        bool m_showInfo = false, bool m_canDuplicate = false, bool m_showTrashcan=false)
     {
         name = m_name;
         playerCanMoveAtoms = m_playerCanMoveAtoms;
@@ -21,5 +22,6 @@ public class Mode
         showRelaxation = m_showRelaxation;
         showInfo = m_showInfo;
         canDuplicate = m_canDuplicate;
+        showTrashcan = m_showTrashcan;
     }
 }
