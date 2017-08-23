@@ -279,6 +279,9 @@ public class ImportStructure : MonoBehaviour {
             // set the size of the cluster to the global scale
             gameObject.transform.localScale = Vector3.one * programSettings.size;
         }
+
+        SetCellbox(data);
+
         if (newImport || programSettings.updateBoundingboxEachFrame)
         {
             // check the expansion of the cluster
@@ -331,11 +334,8 @@ public class ImportStructure : MonoBehaviour {
                             InitAtoms();
                     }
                     else
-                    {
-                        SetCellbox(data);
                         // breaks the routine if the end of the file is reached
                         break;
-                    }
 
                     atomCounter++;
                 }
@@ -376,7 +376,10 @@ public class ImportStructure : MonoBehaviour {
 
         // set the position for the cellbox
         for (int i = 0; i < 3; i++)
-            SD.cellbox.transform.position -= cellBorderVecs[i] / 2 * programSettings.size;
+            //if (firstImport)
+            //    SD.cellbox.transform.position -= cellBorderVecs[i] / 2;
+            //else
+                SD.cellbox.transform.position -= cellBorderVecs[i] / 2 * programSettings.size;
     }
 
     private void GetStructureExpansion()
@@ -401,12 +404,6 @@ public class ImportStructure : MonoBehaviour {
         }
         else
             currentAtom = SD.atomInfos[atomCounter].m_transform.gameObject;
-            /*foreach (AtomInfos AI in SD.atomInfos)
-            {
-                print("!!!!!!" + AI.m_ID);
-                if (AI.m_ID == atomCounter)
-                    currentAtom = AI.m_transform.gameObject;
-            }*/
 
         if (newImport)
         {
