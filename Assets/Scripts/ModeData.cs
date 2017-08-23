@@ -26,10 +26,16 @@ public class ModeData : MonoBehaviour
     private float textSize = 1f;
 
 
-    private static readonly Dictionary<int, string> modes = new Dictionary<int, string> {
-        { 0, "Move Mode" },
-        { 1, "Info Mode" },
-        { 2, "Edit Mode" },
+    //private static readonly Dictionary<int, string> modes = new Dictionary<int, string> {
+      //  { 0, "Move Mode" },
+        //{ 1, "Info Mode" },
+        //{ 2, "Edit Mode" },
+        //};
+
+    private static readonly Dictionary<int, Mode> modes = new Dictionary<int, Mode> {
+        { 0, new Mode(m_name:"Move Mode", m_playerCanMoveAtoms:true, m_showTemp:true) },
+        { 1, new Mode(m_name:"Info Mode", m_showInfo:true) },
+        { 2, new Mode(m_name:"Edit Mode", m_canDuplicate:true) },
         };
 
     private void Awake()
@@ -64,7 +70,7 @@ public class ModeData : MonoBehaviour
     {
         // raise the mode nr by one, except it reached the highest mode, then set it to 0
         modeNr = (modeNr + 1) % maxModeNr;
-        gameObject.GetComponent<TextMesh>().text = modes[modeNr];
+        gameObject.GetComponent<TextMesh>().text = modes[modeNr].name;
         gameObject.SetActive(true);
         modeTextTimer = 3;
         // set the text to it's original size
