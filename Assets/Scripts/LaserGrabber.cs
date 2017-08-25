@@ -344,23 +344,25 @@ public class LaserGrabber : MonoBehaviour
 
         // look if an animation should be started or stopped
         if (MD.modes[MD.activeMode].showTemp || MD.modes[MD.activeMode].showRelaxation)
-            if (Controller.GetTouchDown(SteamVR_Controller.ButtonMask.Touchpad))
-                if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).x > 0.5)
-                    if (PE.pythonRunsAnim)
-                        ;// send Python the order to play the animation faster. if it isn't already at it's fastest speed
-                         //PE.send_order(runAnim: false);
-                    else
-                        PE.send_order("self.frame = (self.frame + 1) % len(self.all_positions)");
-                //PE.send_order(runAnim: true);
-                else if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).x < - 0.5)
-                    if (PE.pythonRunsAnim)
+            // check that the player isn't currently trying to change the length of the laser
+            if (!laser.activeSelf)
+                if (Controller.GetTouchDown(SteamVR_Controller.ButtonMask.Touchpad))
+                    if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).x > 0.5)
+                        if (PE.pythonRunsAnim)
+                            ;// send Python the order to play the animation faster. if it isn't already at it's fastest speed
+                             //PE.send_order(runAnim: false);
+                        else
+                            PE.send_order("self.frame = (self.frame + 1) % len(self.all_positions)");
+                    //PE.send_order(runAnim: true);
+                    else if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).x < - 0.5)
+                        if (PE.pythonRunsAnim)
+                            PE.send_order(runAnim: false);
+                        else
+                            PE.send_order("self.frame = (len(self.all_positions) - ((len(self.all_positions) - self.frame) % len(self.all_positions))) - 1");
+                    else if (PE.pythonRunsAnim)
                         PE.send_order(runAnim: false);
                     else
                         PE.send_order(runAnim: true);
-                else if (PE.pythonRunsAnim)
-                    PE.send_order(runAnim: false);
-                else
-                    PE.send_order(runAnim: true);
     }
 
     private void WriteOrder(string order)
