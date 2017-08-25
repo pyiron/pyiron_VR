@@ -341,6 +341,20 @@ public class LaserGrabber : MonoBehaviour
                                     WriteOrder("self.duplicate(0.5)");
                                 else
                                     PE.send_order("self.duplicate(0.5)");
+
+        // look if an animation should be started or stopped
+        if (MD.modes[MD.activeMode].showTemp || MD.modes[MD.activeMode].showRelaxation)
+            if (Controller.GetTouchDown(SteamVR_Controller.ButtonMask.Touchpad))
+                if (PE.pythonRunsAnim)
+                {
+                    PE.send_order("self.runAnim = False");
+                    PE.pythonRunsAnim = false;
+                }
+                else
+                {
+                    PE.send_order("self.runAnim = True");
+                    PE.pythonRunsAnim = true;
+                }
     }
 
     private void WriteOrder(string order)

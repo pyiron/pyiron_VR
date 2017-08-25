@@ -33,6 +33,9 @@ public class PythonExecuter : MonoBehaviour {
     // shows for which atom the data is currently transmitted from Python
     private static int currentAtomLine;
 
+    // shows whether Python should be currently sending an animation or just always the same frame
+    public bool pythonRunsAnim = false;
+
 
     private void Awake()
     {
@@ -71,6 +74,7 @@ public class PythonExecuter : MonoBehaviour {
 
     private static void readOutput(object sender, DataReceivedEventArgs e) 
     {
+        print(e.Data);
         if (e.Data.Contains("print"))
             print(e.Data);
         else if (currentAtomLine == structureSize + 1)  // e.Data.Split().Length == 3 || 
