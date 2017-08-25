@@ -346,15 +346,9 @@ public class LaserGrabber : MonoBehaviour
         if (MD.modes[MD.activeMode].showTemp || MD.modes[MD.activeMode].showRelaxation)
             if (Controller.GetTouchDown(SteamVR_Controller.ButtonMask.Touchpad))
                 if (PE.pythonRunsAnim)
-                {
-                    PE.send_order("self.runAnim = False");
-                    PE.pythonRunsAnim = false;
-                }
+                    PE.send_order(runAnim: false);
                 else
-                {
-                    PE.send_order("self.runAnim = True");
-                    PE.pythonRunsAnim = true;
-                }
+                    PE.send_order(runAnim: true);
     }
 
     private void WriteOrder(string order)

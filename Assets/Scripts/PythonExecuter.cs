@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System;
 
 // component of Settings
+// this script handles everything related to Python, f.e. it receives the data from Python, formats it and can send data to Python
 public class PythonExecuter : MonoBehaviour {
     [Header("Start Python")]
     // the file to where the python script file is located
@@ -74,7 +75,6 @@ public class PythonExecuter : MonoBehaviour {
 
     private static void readOutput(object sender, DataReceivedEventArgs e) 
     {
-        print(e.Data);
         if (e.Data.Contains("print"))
             print(e.Data);
         else if (currentAtomLine == structureSize + 1)  // e.Data.Split().Length == 3 || 
@@ -117,7 +117,21 @@ public class PythonExecuter : MonoBehaviour {
         myProcess.StandardInput.WriteLine(order);
     }
 
-    public void OnApplicationQuit()
+    public void send_order(bool runAnim)
+    {
+        if (runAnim)
+        {
+            send_order("self.runAnim = True");
+            pythonRunsAnim = true;
+        }
+        else
+        {
+            send_order("self.runAnim = False");
+            pythonRunsAnim = false;
+        }
+    }
+
+        public void OnApplicationQuit()
     {
         print("Application ending after " + Time.time + " seconds");
         myProcess.StandardInput.WriteLine("Stop!");

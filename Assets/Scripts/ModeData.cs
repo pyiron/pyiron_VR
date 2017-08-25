@@ -11,6 +11,8 @@ public class ModeData : MonoBehaviour
     private Transform HeadTransform;
     // the reference to the settings
     public ProgramSettings Settings;
+    // get the reference to the programm which handles the execution of python
+    private PythonExecuter PE;
 
     [Header("Modes")]
     // get the textmesh from the 3D Text which shows the current mode
@@ -44,6 +46,8 @@ public class ModeData : MonoBehaviour
     {
         // get the reference to the transform of the headset
         HeadTransform = GameObject.Find("[CameraRig]/Camera (eye)/Camera (head)").transform;
+        // get the reference to the script that handles the connection to python
+        PE = Settings.GetComponent<PythonExecuter>();
     }
 
     // Use this for initialization
@@ -85,6 +89,9 @@ public class ModeData : MonoBehaviour
         // CurrentModeText.transform.position = HeadTransform.position + Vector3.forward * 5;
         // let the CurrentModeText always look in the direction of the player
         //Face_Player(CurrentModeText.gameObject);
+
+        // stop the currently running animation
+        PE.send_order(runAnim: false);
 
         // detach the currently attached object from the laser and deactivate the laser
         foreach (GameObject controller in controllers)
