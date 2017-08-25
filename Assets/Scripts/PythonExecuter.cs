@@ -36,6 +36,8 @@ public class PythonExecuter : MonoBehaviour {
 
     // shows whether Python should be currently sending an animation or just always the same frame
     public bool pythonRunsAnim = false;
+    // the speed with which Python currently runs the animation
+    public int pythonsAnimSpeed = 4;
 
 
     private void Awake()
@@ -119,6 +121,7 @@ public class PythonExecuter : MonoBehaviour {
 
     public void send_order(bool runAnim=false)
     {
+        // if (pythonRunsAnim)
         if (runAnim)
         {
             send_order("self.runAnim = True");
@@ -129,6 +132,12 @@ public class PythonExecuter : MonoBehaviour {
             send_order("self.runAnim = False");
             pythonRunsAnim = false;
         }
+    }
+
+    public void changeAnimSpeed(int speedChange)
+    {
+        send_order("self.animSpeed += " + speedChange);
+        pythonsAnimSpeed += speedChange;
     }
 
         public void OnApplicationQuit()

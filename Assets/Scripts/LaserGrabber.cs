@@ -349,20 +349,28 @@ public class LaserGrabber : MonoBehaviour
                 if (Controller.GetTouchDown(SteamVR_Controller.ButtonMask.Touchpad))
                     if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).x > 0.5)
                         if (PE.pythonRunsAnim)
-                            ;// send Python the order to play the animation faster. if it isn't already at it's fastest speed
-                             //PE.send_order(runAnim: false);
+                            // send Python the order to play the animation faster. if it isn't already at it's fastest speed
+                            if (PE.pythonsAnimSpeed < 5)
+                                PE.changeAnimSpeed(1);
+                            else;
                         else
                             PE.send_order("self.frame = (self.frame + 1) % len(self.all_positions)");
                     //PE.send_order(runAnim: true);
-                    else if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).x < - 0.5)
+                    else if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).x < -0.5)
                         if (PE.pythonRunsAnim)
-                            PE.send_order(runAnim: false);
+                            // send Python the order to play the animation faster. if it isn't already at it's fastest speed
+                            if (PE.pythonsAnimSpeed > 0)
+                                PE.changeAnimSpeed(-1);
+                            else;
                         else
-                            PE.send_order("self.frame = (len(self.all_positions) - ((len(self.all_positions) - self.frame) % len(self.all_positions))) - 1");
+                            PE.send_order("self.frame = (len(self.all_positions) - ((len(self.all_positions) - self.frame) " +
+                                "% len(self.all_positions))) - 1");
                     else if (PE.pythonRunsAnim)
                         PE.send_order(runAnim: false);
                     else
                         PE.send_order(runAnim: true);
+        //else
+        //  PE.send_order(runAnim: true);
     }
 
     private void WriteOrder(string order)
