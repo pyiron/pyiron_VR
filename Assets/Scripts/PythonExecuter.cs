@@ -117,7 +117,7 @@ public class PythonExecuter : MonoBehaviour {
         myProcess.StandardInput.WriteLine(order);
     }
 
-    public void send_order(bool runAnim)
+    public void send_order(bool runAnim=false)
     {
         if (runAnim)
         {
