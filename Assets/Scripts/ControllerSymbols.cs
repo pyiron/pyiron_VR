@@ -12,14 +12,14 @@ public class ControllerSymbols : MonoBehaviour {
     {
         {"Triangle 0", new Symbol(new Vector3(0.002f, 0.005f, -0.049f), new Vector3(-90, 0 -90), 0.005f, new Color(1, 1, 1, 1), false) },
         {"Pause 0", new Symbol(new Vector3(0.000f, 0.00f, -0.049f), new Vector3(-90, 0, 0), 0.005f, new Color(1, 1, 1, 1), true) },
-        {"FastForward 0", new Symbol(new Vector3(0.012f, 0.005f, -0.049f), new Vector3(-90, 0 -90), 0.005f, new Color(1, 1, 1, 1), true, 5) },
-        {"FastForward 1", new Symbol(new Vector3(-0.008f, 0.005f, -0.049f), new Vector3(-90, 0 -90), 0.005f, new Color(1, 1, 1, 1), true, 0) },
-        {"FrameForward 0", new Symbol(new Vector3(0.002f, 0.005f, -0.049f), new Vector3(-90, 0 -90), 0.005f, new Color(1, 1, 1, 1), false, -2) },
-        {"FrameForward 1", new Symbol(new Vector3(0.002f, 0.005f, -0.049f), new Vector3(-90, 0 -90), 0.005f, new Color(1, 1, 1, 1), false, -3) },
-        {"Triangle 2", new Symbol(new Vector3(0.016f, 0.005f, -0.049f), new Vector3(-90, 0 -90), 0.003f, new Color(1, 1, 1, 1), true, 4) },
-        {"Triangle 1", new Symbol(new Vector3(-0.012f, 0.005f, -0.049f), new Vector3(-90, 0 -90), 0.003f, new Color(1, 1, 1, 1), true, 1) },
-        {"TimelapsForward 0", new Symbol(new Vector3(0.002f, 0.005f, -0.049f), new Vector3(-90, 0 -90), 0.005f, new Color(1, 1, 1, 1), true, 2) },
-        {"TimelapsForward 1", new Symbol(new Vector3(0.002f, 0.005f, -0.049f), new Vector3(-90, 0 -90), 0.005f, new Color(1, 1, 1, 1), true, 3) }
+        {"FastForward 0", new Symbol(new Vector3(-0.012f, 0.005f, -0.049f), new Vector3(-90, 0 -90), 0.005f, new Color(1, 1, 1, 1), true, 5, 0.028f) },
+        {"FastForward 1", new Symbol(new Vector3(-0.012f, 0.005f, -0.049f), new Vector3(-90, 0 -90), 0.005f, new Color(1, 1, 1, 1), true, 0) },
+        {"FrameForward 0", new Symbol(new Vector3(0.016f, 0.005f, -0.049f), new Vector3(-90, 0 -90), 0.005f, new Color(1, 1, 1, 1), false) },
+        {"FrameForward 1", new Symbol(new Vector3(-0.012f, 0.005f, -0.049f), new Vector3(-90, 0 -90), 0.005f, new Color(1, 1, 1, 1), false) },
+        {"Triangle 2", new Symbol(new Vector3(-0.012f, 0.005f, -0.049f), new Vector3(-90, 0 -90), 0.003f, new Color(1, 1, 1, 1), true, 4, 0.028f) },
+        {"Triangle 1", new Symbol(new Vector3(-0.012f, 0.005f, -0.049f), new Vector3(-90, 0 -90), 0.003f, new Color(1, 1, 1, 1), true, 1, 0.028f) },
+        {"TimelapsForward 0", new Symbol(new Vector3(-0.012f, 0.005f, -0.049f), new Vector3(-90, 0 -90), 0.008f, new Color(1, 1, 1, 1), true, 3, 0.028f) },
+        {"TimelapsBackward 0", new Symbol(new Vector3(-0.012f, 0.005f, -0.049f), new Vector3(-90, 0 -90), 0.008f, new Color(1, 1, 1, 1), true, 2, 0.028f) }
     };
 
     // Use this for initialization
@@ -29,8 +29,11 @@ public class ControllerSymbols : MonoBehaviour {
         foreach (string symbolKey in controllerSymbols.Keys)
         {
             AnimSymbols[objectCounter] = Instantiate(Resources.Load("ControllerSymbols/" + symbolKey.Split()[0]) as GameObject);
+            AnimSymbols[objectCounter].name = symbolKey;
             AnimSymbols[objectCounter].transform.parent = transform;
             AnimSymbols[objectCounter].transform.eulerAngles = controllerSymbols[symbolKey].m_rotation;
+            if (symbolKey.Split()[1] == "1")
+                AnimSymbols[objectCounter].transform.eulerAngles += Vector3.forward * 180;
             AnimSymbols[objectCounter].transform.localPosition = controllerSymbols[symbolKey].m_position;
             AnimSymbols[objectCounter].transform.localScale = Vector3.one * controllerSymbols[symbolKey].m_size;
             objectCounter += 1;
@@ -47,41 +50,18 @@ public class ControllerSymbols : MonoBehaviour {
     {
         foreach (GameObject AnimSymbol in AnimSymbols)
         {
-
-            /*if (PE.pythonRunsAnim)
-                if (AnimSymbol.name.Contains("Pause"))
-                    AnimSymbol.SetActive(true);
-                else if (PE.pythonsAnimSpeed == 0)
-                    if (AnimSymbol.name.Contains("Triangle 1"))
+            if (controllerSymbols[AnimSymbol.name].m_showWhenAnimRuns == PE.pythonRunsAnim)
+                if (PE.pythonRunsAnim)
+                    if (controllerSymbols[AnimSymbol.name].m_animSpeed == -1)
                         AnimSymbol.SetActive(true);
-                    else;
-                else if (PE.pythonsAnimSpeed == 1)
-                    if (AnimSymbol.name.Contains("Fast Forward 1") || AnimSymbol.name.Contains("TimelapsForward 1"))
+                    else if (controllerSymbols[AnimSymbol.name].m_animSpeed == PE.pythonsAnimSpeed - 1 && PE.pythonsAnimSpeed != 6)
                         AnimSymbol.SetActive(true);
-                    else;
-                else if (PE.pythonsAnimSpeed == 4)
-                    if (AnimSymbol.name.Contains("Fast Forward 0") || AnimSymbol.name.Contains("TimelapsForward 0"))
-                        AnimSymbol.SetActive(true);
-                    else;
-                else if (PE.pythonsAnimSpeed == 5)
-                    if (AnimSymbol.name.Contains("Triangle 2"))
-                        AnimSymbol.SetActive(true);
-                    else;
+                    else
+                        AnimSymbol.SetActive(false);
                 else
-                    AnimSymbol.SetActive(false);
-            else
-                if (AnimSymbol.name.Contains("Triangle 0"))
                     AnimSymbol.SetActive(true);
-                else
-                    AnimSymbol.SetActive(false);*/
-
-
-            /*else if (PE.pythonRunsAnim && PE.pythonsAnimSpeed == 3 && AnimSymbol.name.Contains("Triangle 2"))
-                AnimSymbol.SetActive(true);
-            else if (PE.pythonRunsAnim && PE.pythonsAnimSpeed == 2 && AnimSymbol.name.Contains("Triangle 1"))
-                AnimSymbol.SetActive(true);
             else
-                AnimSymbol.SetActive(false);*/
+                AnimSymbol.SetActive(false);
         }
     }
 }
