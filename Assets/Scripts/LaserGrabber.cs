@@ -347,6 +347,7 @@ public class LaserGrabber : MonoBehaviour
             // check that the player isn't currently trying to change the length of the laser
             if (!laser.activeSelf)
                 if (Controller.GetTouchDown(SteamVR_Controller.ButtonMask.Touchpad))
+                {
                     if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).x > 0.5)
                         if (PE.pythonRunsAnim)
                             // send Python the order to play the animation faster. if it isn't already at it's fastest speed
@@ -369,6 +370,9 @@ public class LaserGrabber : MonoBehaviour
                         PE.send_order(runAnim: false);
                     else
                         PE.send_order(runAnim: true);
+                    gameObject.GetComponent<ControllerSymbols>().SetSymbol();
+                    otherCtrl.GetComponent<ControllerSymbols>().SetSymbol();
+                }
         //else
         //  PE.send_order(runAnim: true);
     }
