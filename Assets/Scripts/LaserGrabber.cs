@@ -371,7 +371,8 @@ public class LaserGrabber : MonoBehaviour
                     else
                         PE.send_order(runAnim: true);
                     gameObject.GetComponent<ControllerSymbols>().SetSymbol();
-                    otherCtrl.GetComponent<ControllerSymbols>().SetSymbol();
+                    if (otherCtrl.activeSelf)
+                        otherCtrl.GetComponent<ControllerSymbols>().SetSymbol();
                 }
         //else
         //  PE.send_order(runAnim: true);

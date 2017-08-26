@@ -32,7 +32,6 @@ public class ControllerSymbols : MonoBehaviour {
             AnimSymbols[objectCounter].transform.localPosition = controllerSymbols[symbolKey].m_position;
             AnimSymbols[objectCounter].transform.localScale = Vector3.one * controllerSymbols[symbolKey].m_size;
             objectCounter += 1;
-            print("init " + AnimSymbols[objectCounter - 1]);
         }
         SetSymbol();
     }
@@ -45,8 +44,6 @@ public class ControllerSymbols : MonoBehaviour {
     public void SetSymbol()
     {
         foreach (GameObject AnimSymbol in AnimSymbols)
-        {
-            print(AnimSymbol);
             if (PE.pythonRunsAnim && AnimSymbol.name.Contains("Pause"))
                 AnimSymbol.SetActive(true);
             else if (!PE.pythonRunsAnim && AnimSymbol.name.Contains("Triangle"))
@@ -55,6 +52,5 @@ public class ControllerSymbols : MonoBehaviour {
                 AnimSymbol.SetActive(true);
             else
                 AnimSymbol.SetActive(false);
-        }
     }
 }
