@@ -19,7 +19,7 @@ public class ControllerSymbols : MonoBehaviour {
         {"Triangle 2", new Symbol(new Vector3(-0.012f, 0.005f, -0.049f), new Vector3(-90, 0 -90), 0.003f, new Color(1, 1, 1, 1), true, 4, 0.028f) },
         {"Triangle 1", new Symbol(new Vector3(-0.016f, 0.005f, -0.049f), new Vector3(-90, 0 -90), 0.003f, new Color(1, 1, 1, 1), true, 1, 0.028f) },
         {"TimelapsForward 0", new Symbol(new Vector3(-0.016f, 0.005f, -0.049f), new Vector3(-90, 0 -90), 0.008f, new Color(1, 1, 1, 1), true, 3, 0.028f) },
-        {"TimelapsBackward 0", new Symbol(new Vector3(-0.012f, 0.005f, -0.049f), new Vector3(-90, 0 -90), 0.008f, new Color(1, 1, 1, 1), true, 2, 0.028f) }
+        {"TimelapsBackward 0", new Symbol(new Vector3(-0.012f, 0.0035f, -0.049f), new Vector3(-90, 0 -90), 0.008f, new Color(1, 1, 1, 1), true, 2, 0.028f) }
     };
 
     // Use this for initialization
@@ -48,14 +48,24 @@ public class ControllerSymbols : MonoBehaviour {
 
     public void SetSymbol()
     {
+        Symbol symbolProperties;
         foreach (GameObject AnimSymbol in AnimSymbols)
         {
-            if (controllerSymbols[AnimSymbol.name].m_showWhenAnimRuns == PE.pythonRunsAnim)
+            symbolProperties = controllerSymbols[AnimSymbol.name];
+            if (symbolProperties.m_showWhenAnimRuns == PE.pythonRunsAnim)
                 if (PE.pythonRunsAnim)
-                    if (controllerSymbols[AnimSymbol.name].m_animSpeed == -1)
+                    if (symbolProperties.m_animSpeed == -1)
                         AnimSymbol.SetActive(true);
-                    else if (controllerSymbols[AnimSymbol.name].m_animSpeed == PE.pythonsAnimSpeed - 1 && PE.pythonsAnimSpeed != 6)
+                    else if (symbolProperties.m_animSpeed == PE.pythonsAnimSpeed - 1)// && PE.pythonsAnimSpeed != 6)
+                    {
                         AnimSymbol.SetActive(true);
+                        AnimSymbol.transform.localPosition = symbolProperties.m_position;
+                    }
+                    else if (symbolProperties.m_animSpeed == PE.pythonsAnimSpeed + 1) // && PE.pythonsAnimSpeed != -1)
+                    {
+                        AnimSymbol.SetActive(true);
+                        AnimSymbol.transform.localPosition = symbolProperties.m_position + Vector3.right * symbolProperties.m_positionRight;
+                    }
                     else
                         AnimSymbol.SetActive(false);
                 else
