@@ -26,26 +26,31 @@ public class ControllerSymbols : MonoBehaviour {
     void Start () {
         //AnimSymbols = Resources.LoadAll("ControllerSymbols", typeof(GameObject)) as GameObject[];
         int objectCounter = 0;
+        // set each symbol to the right place on the controller, with the right size and tell it its name
         foreach (string symbolKey in controllerSymbols.Keys)
         {
+            // create a new symbol
             AnimSymbols[objectCounter] = Instantiate(Resources.Load("ControllerSymbols/" + symbolKey.Split()[0]) as GameObject);
+            // set its name to the form it is and how it can be found in the dictionary
             AnimSymbols[objectCounter].name = symbolKey;
+            // set its parent to the controller.
             AnimSymbols[objectCounter].transform.parent = transform;
+            // set it's rotation so that it's above the controller, not going in the controller
             AnimSymbols[objectCounter].transform.localEulerAngles = controllerSymbols[symbolKey].m_rotation;
             if (symbolKey.Split()[1] == "1")
                 AnimSymbols[objectCounter].transform.localEulerAngles += Vector3.forward * 180;
+            // set the position of the symbol
             AnimSymbols[objectCounter].transform.localPosition = controllerSymbols[symbolKey].m_position;
+            // set the size of the symbol
             AnimSymbols[objectCounter].transform.localScale = Vector3.one * controllerSymbols[symbolKey].m_size;
+
             objectCounter += 1;
         }
+        // activate the symbols that have to be activated and deactivate the remaining symbols
         SetSymbol();
     }
-	
-	// Update is called once per frame
-	void Update () {
-        
-    }
 
+    // activate the symbols that have to be activated and deactivate the remaining symbols
     public void SetSymbol()
     {
         Symbol symbolProperties;
@@ -53,11 +58,6 @@ public class ControllerSymbols : MonoBehaviour {
         {
             symbolProperties = controllerSymbols[AnimSymbol.name];
 
-            /*// check that the rotation of the symbols is right
-            if (AnimSymbol.transform.eulerAngles != symbolProperties.m_rotation)
-                AnimSymbol.transform.eulerAngles = symbolProperties.m_rotation;*/
-
-            // activate the symbols that have to be activated and deactivate the remaining symbols
             if (symbolProperties.m_showWhenAnimRuns == PE.pythonRunsAnim)
                 if (PE.pythonRunsAnim)
                     if (symbolProperties.m_animSpeed == -1)

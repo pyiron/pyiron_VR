@@ -25,6 +25,7 @@ IMPORTANT:
 (- after the structure has been duplicated the whole structure gets moved away one time.)
 - bug: false position of the cellbox after it has been moved a bit before the structure has loaded
 - implement that the animation can be controlled by the player
+- fix bug that sometimes there are error messages "MissingReferenceException: The object of type 'Transform' has been destroyed but you are still trying to access it." after deleting atoms, most likely because the wrong atom has been destroyed
 
 
 Seems to be gone:
