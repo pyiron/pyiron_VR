@@ -32,6 +32,13 @@ public class ControllerSymbols : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        // create an empty GameObject which holds the symbols
+        GameObject Symbols = new GameObject();
+        // rename the new GameObject to Symbols
+        Symbols.name = "Symbols";
+        // make it a child of the controller
+        Symbols.transform.parent = transform;
+
         //AnimSymbols = Resources.LoadAll("ControllerSymbols", typeof(GameObject)) as GameObject[];
         int objectCounter = 0;
         // set each symbol to the right place on the controller, with the right size and tell it its name
@@ -42,7 +49,7 @@ public class ControllerSymbols : MonoBehaviour {
             // set its name to the form it is and how it can be found in the dictionary
             AnimSymbols[objectCounter].name = symbolKey;
             // set its parent to the controller.
-            AnimSymbols[objectCounter].transform.parent = transform;
+            AnimSymbols[objectCounter].transform.parent = Symbols.transform;
             // set it's rotation so that it's above the controller, not going in the controller
             AnimSymbols[objectCounter].transform.localEulerAngles = controllerSymbols[symbolKey].m_rotation;
             if (symbolKey.Split()[1] == "1")

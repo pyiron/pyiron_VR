@@ -370,9 +370,12 @@ public class LaserGrabber : MonoBehaviour
                         PE.send_order(runAnim: false);
                     else
                         PE.send_order(runAnim: true);
-                    gameObject.GetComponent<ControllerSymbols>().SetSymbol();
-                    if (otherCtrl.activeSelf)
-                        otherCtrl.GetComponent<ControllerSymbols>().SetSymbol();
+                    if (MD.modes[MD.activeMode].showTemp || MD.modes[MD.activeMode].showRelaxation)
+                    {
+                        gameObject.GetComponent<ControllerSymbols>().SetSymbol();
+                        if (otherCtrl.activeSelf)
+                            otherCtrl.GetComponent<ControllerSymbols>().SetSymbol();
+                    }
                 }
         //else
         //  PE.send_order(runAnim: true);
