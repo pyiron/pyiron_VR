@@ -377,11 +377,13 @@ public class LaserGrabber : MonoBehaviour
                     {
                         if (firstAnimStart)
                         {
+                            print("before new calc");
                             if (MD.modes[MD.activeMode].showTemp)
-                                PE.send_order("self.calculate(self.run_md())");
+                                PE.send_order("self.calculate('md')");
                             else if (MD.modes[MD.activeMode].showRelaxation)
-                                PE.send_order("self.calculate(self.run_minimize())");
+                                PE.send_order("self.calculate('minimize')");
                             firstAnimStart = false;
+                            print("after new calc");
                         }
                         PE.send_order(runAnim: true);
                     }
