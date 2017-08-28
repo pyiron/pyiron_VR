@@ -57,6 +57,11 @@ public class LaserGrabber : MonoBehaviour
 
     [Header("Destroy Atom")]
 
+    [Header("Change Animation")]
+    // shows whether it is the first time an animation should be played,
+    // so that the python program knows whether to load a new animation or not
+    private bool firstAnimStart = true;
+
     [Header("Resize")]
     // shows, which of the controllers currently allows to resize the structure
     public GameObject resizeableRect;
@@ -369,13 +374,22 @@ public class LaserGrabber : MonoBehaviour
                     else if (PE.pythonRunsAnim)
                         PE.send_order(runAnim: false);
                     else
-                        PE.send_order(runAnim: true);
-                    if (MD.modes[MD.activeMode].showTemp || MD.modes[MD.activeMode].showRelaxation)
                     {
-                        gameObject.GetComponent<ControllerSymbols>().SetSymbol();
-                        if (otherCtrl.activeSelf)
-                            otherCtrl.GetComponent<ControllerSymbols>().SetSymbol();
+                        if (firstAnimStart)
+                        {
+                            if (MD.modes[MD.activeMode].showTemp)
+                                PE.send_order("self.calculate(self.run_md())");
+                            else if (MD.modes[MD.activeMode].showRelaxation)
+                                PE.send_order("self.calculate(self.run_minimize())");
+                            firstAnimStart = false;
+                        }
+                        PE.send_order(runAnim: true);
                     }
+
+                    // update the symbols on the controller
+                    gameObject.GetComponent<ControllerSymbols>().SetSymbol();
+                    if (otherCtrl.activeSelf)
+                        otherCtrl.GetComponent<ControllerSymbols>().SetSymbol();
                 }
         //else
         //  PE.send_order(runAnim: true);

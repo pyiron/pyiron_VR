@@ -40,8 +40,9 @@ public class ControllerSymbols : MonoBehaviour {
         Symbols.name = "Symbols";
         // make it a child of the controller
         Symbols.transform.parent = transform;
-        // set its localPosition to zero, so that the symbols will be at the right place
+        // set its localPosition and localEulerAngles to zero, so that the symbols will be at the right place
         Symbols.transform.localPosition = Vector3.zero;
+        Symbols.transform.localEulerAngles = Vector3.zero;
 
         //AnimSymbols = Resources.LoadAll("ControllerSymbols", typeof(GameObject)) as GameObject[];
         int objectCounter = 0;
