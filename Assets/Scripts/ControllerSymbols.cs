@@ -31,9 +31,9 @@ public class ControllerSymbols : MonoBehaviour {
             AnimSymbols[objectCounter] = Instantiate(Resources.Load("ControllerSymbols/" + symbolKey.Split()[0]) as GameObject);
             AnimSymbols[objectCounter].name = symbolKey;
             AnimSymbols[objectCounter].transform.parent = transform;
-            AnimSymbols[objectCounter].transform.eulerAngles = controllerSymbols[symbolKey].m_rotation;
+            AnimSymbols[objectCounter].transform.localEulerAngles = controllerSymbols[symbolKey].m_rotation;
             if (symbolKey.Split()[1] == "1")
-                AnimSymbols[objectCounter].transform.eulerAngles += Vector3.forward * 180;
+                AnimSymbols[objectCounter].transform.localEulerAngles += Vector3.forward * 180;
             AnimSymbols[objectCounter].transform.localPosition = controllerSymbols[symbolKey].m_position;
             AnimSymbols[objectCounter].transform.localScale = Vector3.one * controllerSymbols[symbolKey].m_size;
             objectCounter += 1;
@@ -53,9 +53,9 @@ public class ControllerSymbols : MonoBehaviour {
         {
             symbolProperties = controllerSymbols[AnimSymbol.name];
 
-            // check that the rotation of the symbols is right
+            /*// check that the rotation of the symbols is right
             if (AnimSymbol.transform.eulerAngles != symbolProperties.m_rotation)
-                AnimSymbol.transform.eulerAngles = symbolProperties.m_rotation;
+                AnimSymbol.transform.eulerAngles = symbolProperties.m_rotation;*/
 
             // activate the symbols that have to be activated and deactivate the remaining symbols
             if (symbolProperties.m_showWhenAnimRuns == PE.pythonRunsAnim)
