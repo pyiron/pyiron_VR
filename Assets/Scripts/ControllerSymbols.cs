@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// component of both controllers
 public class ControllerSymbols : MonoBehaviour {
     // get the reference to the programm which handles the execution of python
-    public PythonExecuter PE;
-
+    private PythonExecuter PE;
+    // an array which contains all the GameObjects of the symbols
     private GameObject[] AnimSymbols = new GameObject[10];
 
+    // the dictionary that holds all information about the symbols
     private static readonly Dictionary<string, Symbol> controllerSymbols = new Dictionary<string, Symbol>
     {
         {"Triangle 0", new Symbol(new Vector3(0.002f, 0.005f, -0.049f), new Vector3(-90, 0 -90), 0.005f, new Color(1, 1, 1, 1), false) },
-        {"Pause 0", new Symbol(new Vector3(0.000f, 0.00f, -0.049f), new Vector3(-90, 0, 0), 0.005f, new Color(1, 1, 1, 1), true) },
+        {"Pause 0", new Symbol(new Vector3(0.000f, 0, -0.049f), new Vector3(-90, 0, 0), 0.005f, new Color(1, 1, 1, 1), true) },
         {"FastForward 0", new Symbol(new Vector3(-0.012f, 0.005f, -0.049f), new Vector3(-90, 0 -90), 0.005f, new Color(1, 1, 1, 1), true, 5, 0.028f) },
         {"FastForward 1", new Symbol(new Vector3(-0.016f, 0.005f, -0.049f), new Vector3(-90, 0 -90), 0.005f, new Color(1, 1, 1, 1), true, 0) },
         {"FrameForward 0", new Symbol(new Vector3(0.016f, 0.005f, -0.049f), new Vector3(-90, 0 -90), 0.005f, new Color(1, 1, 1, 1), false) },
@@ -21,6 +23,12 @@ public class ControllerSymbols : MonoBehaviour {
         {"TimelapsForward 0", new Symbol(new Vector3(-0.016f, 0.005f, -0.049f), new Vector3(-90, 0 -90), 0.008f, new Color(1, 1, 1, 1), true, 3, 0.028f) },
         {"TimelapsBackward 0", new Symbol(new Vector3(-0.012f, 0.0035f, -0.049f), new Vector3(-90, 0 -90), 0.008f, new Color(1, 1, 1, 1), true, 2, 0.028f) }
     };
+
+    private void Awake()
+    {
+        // get the reference to the programm which handles the execution of python
+        PE = GameObject.Find("Settings").GetComponent<PythonExecuter>();
+    }
 
     // Use this for initialization
     void Start () {
@@ -58,23 +66,32 @@ public class ControllerSymbols : MonoBehaviour {
         {
             symbolProperties = controllerSymbols[AnimSymbol.name];
 
+            // deactivate a symbol, if it should be shown while the animation is on and it isn't on or vice versa
             if (symbolProperties.m_showWhenAnimRuns == PE.pythonRunsAnim)
                 if (PE.pythonRunsAnim)
+                    // activate the pause symbol, because it should be always active if the animation is active
                     if (symbolProperties.m_animSpeed == -1)
                         AnimSymbol.SetActive(true);
+                    // activate the symbol which show which animation speed will come when clicking on the left side
                     else if (symbolProperties.m_animSpeed == PE.pythonsAnimSpeed - 1)
                     {
                         AnimSymbol.SetActive(true);
+                        // set the symbol on the left side of the touchpad
                         AnimSymbol.transform.localPosition = symbolProperties.m_position;
                     }
+                    // activate the symbols which show which animation speed will come when clicking on the right side
                     else if (symbolProperties.m_animSpeed == PE.pythonsAnimSpeed + 1)
                     {
                         AnimSymbol.SetActive(true);
+                        // set the symbol on the right side of the touchpad
                         AnimSymbol.transform.localPosition = symbolProperties.m_position + Vector3.right * symbolProperties.m_positionRight;
                     }
                     else
+                        // deactivate all other symbols
                         AnimSymbol.SetActive(false);
                 else
+                    // activate all symbols that should be active when the animation isn't,
+                    // because they don't depend on the animation speed
                     AnimSymbol.SetActive(true);
             else
                 AnimSymbol.SetActive(false);
