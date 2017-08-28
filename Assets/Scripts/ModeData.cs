@@ -90,11 +90,20 @@ public class ModeData : MonoBehaviour
         // let the CurrentModeText always look in the direction of the player
         //Face_Player(CurrentModeText.gameObject);
 
+
         // stop the currently running animation
         PE.send_order(runAnim: false);
 
-        // detach the currently attached object from the laser and deactivate the laser
+
         foreach (GameObject controller in controllers)
+        {
+            // activate the symbols of the controller, if changing into a mode which can play an animation, else deactivate them
+            if (modes[activeMode].showTemp || modes[activeMode].showRelaxation)
+                controller.GetComponent<ControllerSymbols>().Symbols.SetActive(true);
+            else
+                controller.GetComponent<ControllerSymbols>().Symbols.SetActive(false);
+
+            // detach the currently attached object from the laser and deactivate the laser
             if (controller.activeSelf)
             {
                 LaserGrabber LG = controller.GetComponent<LaserGrabber>();
@@ -103,5 +112,6 @@ public class ModeData : MonoBehaviour
                 LG.readyForResize = false;
                 LG.InfoText.gameObject.SetActive(false);
             }
+        }
     }
 }

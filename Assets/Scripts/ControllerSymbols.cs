@@ -8,6 +8,8 @@ public class ControllerSymbols : MonoBehaviour {
     private PythonExecuter PE;
     // an array which contains all the GameObjects of the symbols
     private GameObject[] AnimSymbols = new GameObject[10];
+    // an empty GameObject which holds the symbols
+    public GameObject Symbols;
 
     // the dictionary that holds all information about the symbols
     private static readonly Dictionary<string, Symbol> controllerSymbols = new Dictionary<string, Symbol>
@@ -33,7 +35,7 @@ public class ControllerSymbols : MonoBehaviour {
     // Use this for initialization
     void Start () {
         // create an empty GameObject which holds the symbols
-        GameObject Symbols = new GameObject();
+        Symbols = new GameObject();
         // rename the new GameObject to Symbols
         Symbols.name = "Symbols";
         // make it a child of the controller
