@@ -18,6 +18,7 @@ public class LaserGrabber : MonoBehaviour
     // the script of the controller printer
     public InGamePrinter printer;
 
+    // all data about the modes, f.e. which mode is currently active
     public ModeData MD;
     // get the reference to the programm which handles the execution of python
     public PythonExecuter PE;

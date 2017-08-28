@@ -96,22 +96,20 @@ public class ModeData : MonoBehaviour
 
 
         foreach (GameObject controller in controllers)
-        {
-            // activate the symbols of the controller, if changing into a mode which can play an animation, else deactivate them
-            if (modes[activeMode].showTemp || modes[activeMode].showRelaxation)
-                controller.GetComponent<ControllerSymbols>().Symbols.SetActive(true);
-            else
-                controller.GetComponent<ControllerSymbols>().Symbols.SetActive(false);
-
-            // detach the currently attached object from the laser and deactivate the laser
             if (controller.activeSelf)
             {
+                // activate the symbols of the controller, if changing into a mode which can play an animation, else deactivate them
+                if (modes[activeMode].showTemp || modes[activeMode].showRelaxation)
+                    controller.GetComponent<ControllerSymbols>().Symbols.SetActive(true);
+                else
+                    controller.GetComponent<ControllerSymbols>().Symbols.SetActive(false);
+
+                // detach the currently attached object from the laser and deactivate the laser
                 LaserGrabber LG = controller.GetComponent<LaserGrabber>();
                 LG.attachedObject = null;
                 LG.laser.SetActive(false);
                 LG.readyForResize = false;
                 LG.InfoText.gameObject.SetActive(false);
-            }
         }
     }
 }

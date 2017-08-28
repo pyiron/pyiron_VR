@@ -6,6 +6,9 @@ using UnityEngine;
 public class ControllerSymbols : MonoBehaviour {
     // get the reference to the programm which handles the execution of python
     private PythonExecuter PE;
+    // all data about the modes, f.e. which mode is currently active
+    public ModeData MD;
+
     // an array which contains all the GameObjects of the symbols
     private GameObject[] AnimSymbols = new GameObject[10];
     // an empty GameObject which holds the symbols
@@ -66,8 +69,12 @@ public class ControllerSymbols : MonoBehaviour {
 
             objectCounter += 1;
         }
-        // activate the symbols that have to be activated and deactivate the remaining symbols
-        SetSymbol();
+        if (MD.modes[MD.activeMode].showRelaxation || MD.modes[MD.activeMode].showTemp)
+            // activate the symbols that have to be activated and deactivate the remaining symbols
+            SetSymbol();
+        else
+            // deactivate the symbols, if the mode is already without possible animation when starting
+            Symbols.SetActive(false);
     }
 
     // activate the symbols that have to be activated and deactivate the remaining symbols
