@@ -52,16 +52,22 @@ public class ControllerSymbols : MonoBehaviour {
         foreach (GameObject AnimSymbol in AnimSymbols)
         {
             symbolProperties = controllerSymbols[AnimSymbol.name];
+
+            // check that the rotation of the symbols is right
+            if (AnimSymbol.transform.eulerAngles != symbolProperties.m_rotation)
+                AnimSymbol.transform.eulerAngles = symbolProperties.m_rotation;
+
+            // activate the symbols that have to be activated and deactivate the remaining symbols
             if (symbolProperties.m_showWhenAnimRuns == PE.pythonRunsAnim)
                 if (PE.pythonRunsAnim)
                     if (symbolProperties.m_animSpeed == -1)
                         AnimSymbol.SetActive(true);
-                    else if (symbolProperties.m_animSpeed == PE.pythonsAnimSpeed - 1)// && PE.pythonsAnimSpeed != 6)
+                    else if (symbolProperties.m_animSpeed == PE.pythonsAnimSpeed - 1)
                     {
                         AnimSymbol.SetActive(true);
                         AnimSymbol.transform.localPosition = symbolProperties.m_position;
                     }
-                    else if (symbolProperties.m_animSpeed == PE.pythonsAnimSpeed + 1) // && PE.pythonsAnimSpeed != -1)
+                    else if (symbolProperties.m_animSpeed == PE.pythonsAnimSpeed + 1)
                     {
                         AnimSymbol.SetActive(true);
                         AnimSymbol.transform.localPosition = symbolProperties.m_position + Vector3.right * symbolProperties.m_positionRight;

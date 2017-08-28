@@ -136,17 +136,20 @@ public class PythonExecuter : MonoBehaviour {
 
     public void changeAnimSpeed(int speedChange)
     {
+        // send python the order to change the animation speed, but also remember what the new animation speed is in unity
         send_order("self.animSpeed += " + speedChange);
         pythonsAnimSpeed += speedChange;
     }
 
         public void OnApplicationQuit()
     {
+        // close the python script
         print("Application ending after " + Time.time + " seconds");
         myProcess.StandardInput.WriteLine("Stop!");
-        print("stopped");
         myProcess.StandardInput.Close();
-        //myProcess.StandardOutput.Close();
         myProcess.Close();
+        // close python if it wasn't possible the clean way
+        try { myProcess.Kill(); } catch { }
+        print("should have stopped!");
     }
 }
