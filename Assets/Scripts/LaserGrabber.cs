@@ -361,6 +361,7 @@ public class LaserGrabber : MonoBehaviour
                                 PE.changeAnimSpeed(1);
                             else;
                         else
+                            // go one frame forward
                             PE.send_order("self.frame = (self.frame + 1) % len(self.all_positions)");
                     //PE.send_order(runAnim: true);
                     else if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).x < -0.5)
@@ -370,6 +371,7 @@ public class LaserGrabber : MonoBehaviour
                                 PE.changeAnimSpeed(-1);
                             else;
                         else
+                            // go one frame back
                             PE.send_order("self.frame = (len(self.all_positions) - ((len(self.all_positions) - self.frame) " +
                                 "% len(self.all_positions))) - 1");
                     else if (PE.pythonRunsAnim)

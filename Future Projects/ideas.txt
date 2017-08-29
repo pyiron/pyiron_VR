@@ -26,6 +26,8 @@ IMPORTANT:
 - bug: false position of the cellbox after it has been moved a bit before the structure has loaded
 - implement that the animation can be controlled by the player
 - fix bug that sometimes there are error messages "MissingReferenceException: The object of type 'Transform' has been destroyed but you are still trying to access it." after deleting atoms, most likely because the wrong atom has been destroyed
+(- check what happens if an controller deactivates itself after not being used for too long (could maybe happen in a presentation))
+- continue on calculating
 
 
 Seems to be gone:

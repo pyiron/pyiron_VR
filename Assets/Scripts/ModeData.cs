@@ -39,7 +39,7 @@ public class ModeData : MonoBehaviour
         { 0, new Mode(m_name:"Move Mode", m_playerCanMoveAtoms:true, m_playerCanResizeAtoms:true, m_showTemp:true, m_showTrashcan:true) },
         { 1, new Mode(m_name:"Relaxation Mode", m_playerCanMoveAtoms:true, m_playerCanResizeAtoms:true, m_showRelaxation:true, m_showTrashcan:true) },
         { 2, new Mode(m_name:"Info Mode", m_showInfo:true) },
-        { 3, new Mode(m_name:"Edit Mode", m_canDuplicate:true) },
+        //{ 3, new Mode(m_name:"Edit Mode", m_canDuplicate:true) },
         };
 
     private void Awake()

@@ -79,7 +79,7 @@ public class PythonExecuter : MonoBehaviour {
     {
         if (e.Data.Contains("print"))
             print(e.Data);
-        else if (currentAtomLine == structureSize + 1)  // e.Data.Split().Length == 3 || 
+        else if (currentAtomLine == structureSize + 1)
         {
             StoreData(e.Data);
             collectedData = currentData;
