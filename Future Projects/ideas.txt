@@ -28,6 +28,7 @@ IMPORTANT:
 - fix bug that sometimes there are error messages "MissingReferenceException: The object of type 'Transform' has been destroyed but you are still trying to access it." after deleting atoms, most likely because the wrong atom has been destroyed
 (- check what happens if an controller deactivates itself after not being used for too long (could maybe happen in a presentation))
 - continue on calculating
+- use this to start the 3D Beamer in the shell: *cd to Desktop* VABuild7_18VRAndBeamer.exe -vrmode Stereo
 
 
 Seems to be gone:

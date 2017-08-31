@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+// component of Trash Can
 public class TrashCan : MonoBehaviour
 {
     // the global settings of the program

@@ -141,7 +141,7 @@ public class PythonExecuter : MonoBehaviour {
         pythonsAnimSpeed += speedChange;
     }
 
-        public void OnApplicationQuit()
+    public void OnApplicationQuit()
     {
         // close the python script
         print("Application ending after " + Time.time + " seconds");
