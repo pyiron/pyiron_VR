@@ -33,6 +33,8 @@ public class StructureData : MonoBehaviour
     private ProgramSettings programSettings;
     // shows whether the structure should check if Pyiron send a structure without the destroyed atom
     public bool waitForDestroyedAtom;
+    // shows whether a new animation has to be created, or whther the structure hasn't changed
+    public bool needsNewAnim = true;
 
     public void Awake()
     {

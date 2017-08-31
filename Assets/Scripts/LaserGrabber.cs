@@ -388,6 +388,14 @@ public class LaserGrabber : MonoBehaviour
                             firstAnimStart = false;
                             print("after new calc");
                         }
+                        else if (SD.needsNewAnim)
+                        {
+                            if (MD.modes[MD.activeMode].showTemp)
+                                PE.send_order("self.create_new_lammps('md')");
+                            else if (MD.modes[MD.activeMode].showRelaxation)
+                                PE.send_order("self.create_new_lammps('minimize')");
+                            SD.needsNewAnim = false;
+                        }
                         PE.send_order(runAnim: true);
                     }
 
@@ -609,6 +617,8 @@ public class LaserGrabber : MonoBehaviour
         SD.atomCtrlPos.RemoveAt(attachedObject.GetComponent<AtomID>().ID);
         // destroy the gameobject of the destroyed atom. This way, importStructure won't destroy all atoms and load them new
         Destroy(attachedObject);
+        // show that when loading a python anim the next time, it should first load the new one (without the removed atom)
+        SD.needsNewAnim = true;
     }
     
     private void ShowLaser(RaycastHit hit) 

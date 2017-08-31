@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// component of CurrentModeText
 public class ModeData : MonoBehaviour
 {
     [Header("Scene")]
@@ -100,7 +101,10 @@ public class ModeData : MonoBehaviour
             {
                 // activate the symbols of the controller, if changing into a mode which can play an animation, else deactivate them
                 if (modes[activeMode].showTemp || modes[activeMode].showRelaxation)
+                {
                     controller.GetComponent<ControllerSymbols>().Symbols.SetActive(true);
+                    controller.GetComponent<ControllerSymbols>().SetSymbol();
+                }
                 else
                     controller.GetComponent<ControllerSymbols>().Symbols.SetActive(false);
 
