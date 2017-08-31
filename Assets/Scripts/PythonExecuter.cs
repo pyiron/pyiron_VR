@@ -114,17 +114,18 @@ public class PythonExecuter : MonoBehaviour {
         currentAtomLine += 1;
     }
 
+    // send the given order to Python, where it will be executed with the exec() command
     public void send_order(string order)
     {
+        // write the command in the input of Python
         myProcess.StandardInput.WriteLine(order);
     }
 
     public void send_order(bool runAnim=false)
     {
-        // if (pythonRunsAnim)
         if (runAnim)
         {
-            send_order("self.runAnim = True");
+            send_order("self.start_anim()");
             pythonRunsAnim = true;
         }
         else
