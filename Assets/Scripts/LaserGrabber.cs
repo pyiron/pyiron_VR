@@ -248,7 +248,6 @@ public class LaserGrabber : MonoBehaviour
                     SendRaycast();
             }
         }
-
         
         // check if the player released the button
         if (Controller.GetPressUp(SteamVR_Controller.ButtonMask.Trigger))
