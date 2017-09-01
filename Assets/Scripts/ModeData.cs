@@ -73,7 +73,7 @@ public class ModeData : MonoBehaviour
         }
     }
 
-    public void raiseMode()
+    public void RaiseMode()
     {
         // raise the mode nr by one, except it reached the highest mode, then set it to 0
         activeMode = (activeMode + 1) % modes.Count;
@@ -93,7 +93,7 @@ public class ModeData : MonoBehaviour
 
 
         // stop the currently running animation
-        PE.send_order(runAnim: false);
+        PE.SendOrder(runAnim: false);
 
 
         foreach (GameObject controller in controllers)

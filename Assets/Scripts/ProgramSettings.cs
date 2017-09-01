@@ -52,13 +52,13 @@ public class ProgramSettings : MonoBehaviour {
     }
 
     // a function to get the name of a layer/mask
-    public string getLayerName(LayerMask layer)
+    public string GetLayerName(LayerMask layer)
     {
         return (LayerMask.LayerToName((int)Mathf.Log(layer.value, 2)));
     }
 
     // a function to get the number of a layer/mask
-    public int getLayerNum(LayerMask layer) // I think not needed atm
+    public int GetLayerNum(LayerMask layer) // I think not needed atm
     {
         return (int)Mathf.Log(layer.value, 2);
     }

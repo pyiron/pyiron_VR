@@ -112,7 +112,7 @@ public class LaserGrabber : MonoBehaviour
         InitLaser();
 
         // set the variable to the name of the mask
-        ctrlMaskName = Settings.getLayerName(ctrlMask);
+        ctrlMaskName = Settings.GetLayerName(ctrlMask);
         // get the script StructureData from AtomStructure
         SD = AtomStructure.GetComponent<StructureData>();
         // get the script StructureResizer from AtomStructure
@@ -340,63 +340,63 @@ public class LaserGrabber : MonoBehaviour
                             if (Settings.transMode == "file")
                                 WriteOrder("self.duplicate(2)");
                             else
-                                PE.send_order("self.duplicate(2)");
+                                PE.SendOrder("self.duplicate(2)");
                         else
                             if (SD.atomInfos.Count * 0.5 * 0.5 * 0.5 >= 1)
                                 if (Settings.transMode == "file")
                                     WriteOrder("self.duplicate(0.5)");
                                 else
-                                    PE.send_order("self.duplicate(0.5)");
+                                    PE.SendOrder("self.duplicate(0.5)");
 
         // look if an animation should be started or stopped
         if (MD.modes[MD.activeMode].showTemp || MD.modes[MD.activeMode].showRelaxation)
             // check that the player isn't currently trying to change the length of the laser
             if (!laser.activeSelf)
-                if (Controller.GetTouchDown(SteamVR_Controller.ButtonMask.Touchpad))
+                if (Controller.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad))
                 {
                     if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).x > 0.5)
                         if (PE.pythonRunsAnim)
                             // send Python the order to play the animation faster. if it isn't already at it's fastest speed
                             if (PE.pythonsAnimSpeed < 5)
-                                PE.changeAnimSpeed(1);
+                                PE.ChangeAnimSpeed(1);
                             else;
                         else
                             // go one frame forward
-                            PE.send_order("self.frame = (self.frame + 1) % len(self.all_positions)");
-                    //PE.send_order(runAnim: true);
+                            PE.SendOrder("self.frame = (self.frame + 1) % len(self.all_positions)");
+                    //PE.SendOrder(runAnim: true);
                     else if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).x < -0.5)
                         if (PE.pythonRunsAnim)
                             // send Python the order to play the animation faster. if it isn't already at it's fastest speed
                             if (PE.pythonsAnimSpeed > 0)
-                                PE.changeAnimSpeed(-1);
+                                PE.ChangeAnimSpeed(-1);
                             else;
                         else
                             // go one frame back
-                            PE.send_order("self.frame = (len(self.all_positions) - ((len(self.all_positions) - self.frame) " +
+                            PE.SendOrder("self.frame = (len(self.all_positions) - ((len(self.all_positions) - self.frame) " +
                                 "% len(self.all_positions))) - 1");
                     else if (PE.pythonRunsAnim)
-                        PE.send_order(runAnim: false);
+                        PE.SendOrder(runAnim: false);
                     else
                     {
                         if (firstAnimStart)
                         {
                             print("before new calc");
                             if (MD.modes[MD.activeMode].showTemp)
-                                PE.send_order("self.calculate('md')");
+                                PE.SendOrder("self.calculate('md')");
                             else if (MD.modes[MD.activeMode].showRelaxation)
-                                PE.send_order("self.calculate('minimize')");
+                                PE.SendOrder("self.calculate('minimize')");
                             firstAnimStart = false;
                             print("after new calc");
                         }
                         else if (SD.needsNewAnim)
                         {
                             if (MD.modes[MD.activeMode].showTemp)
-                                PE.send_order("self.create_new_lammps('md')");
+                                PE.SendOrder("self.create_new_lammps('md')");
                             else if (MD.modes[MD.activeMode].showRelaxation)
-                                PE.send_order("self.create_new_lammps('minimize')");
+                                PE.SendOrder("self.create_new_lammps('minimize')");
                             SD.needsNewAnim = false;
                         }
-                        PE.send_order(runAnim: true);
+                        PE.SendOrder(runAnim: true);
                     }
 
                     // update the symbols on the controller
@@ -405,7 +405,7 @@ public class LaserGrabber : MonoBehaviour
                         otherCtrl.GetComponent<ControllerSymbols>().SetSymbol();
                 }
         //else
-        //  PE.send_order(runAnim: true);
+        //  PE.SendOrder(runAnim: true);
     }
 
     private void WriteOrder(string order)
@@ -608,7 +608,7 @@ public class LaserGrabber : MonoBehaviour
     private void DestroyAtom()
     {
         // send Python/{yiron the order to destroy the atom
-        PE.send_order("self.destroy_atom(" + attachedObject.GetComponent<AtomID>().ID + ")");
+        PE.SendOrder("self.destroy_atom(" + attachedObject.GetComponent<AtomID>().ID + ")");
         // delete the atom and send python/pyiron that the atom should be excluded in the structure
         SD.waitForDestroyedAtom = true;
         // remove the atom in the list of the properties of each atom

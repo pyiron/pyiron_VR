@@ -6,8 +6,11 @@ using System.Diagnostics;
 using System;
 
 // component of Settings
-// this script handles everything related to Python, f.e. it receives the data from Python, formats it and can send data to Python
+// this script handles everything related to Python, e.g. it receives the data from Python, formats it and can send data to Python
 public class PythonExecuter : MonoBehaviour {
+    // the script of the controller printer
+    public InGamePrinter printer;
+
     [Header("Start Python")]
     // the file to where the python script file is located
     private string pythonPath = "C:/Users/pneugebauer/PycharmProjects/pyiron/tests";
@@ -16,7 +19,7 @@ public class PythonExecuter : MonoBehaviour {
     // start a process which executes the commands in the shell to start the python script
     Process myProcess = new Process();
 
-         [Header("Receive data from Python")]
+    [Header("Receive data from Python")]
     // the data send from Python before all data of the structure is there.
     private static string currentData = "";
     // the collected data of what Python sent to Unity for one frame
@@ -62,7 +65,7 @@ public class PythonExecuter : MonoBehaviour {
             myProcess.StartInfo.UseShellExecute = false;
             myProcess.StartInfo.RedirectStandardInput = true;
             myProcess.StartInfo.RedirectStandardOutput = true;
-            myProcess.OutputDataReceived += new DataReceivedEventHandler(readOutput);
+            myProcess.OutputDataReceived += new DataReceivedEventHandler(ReadOutput);
             myProcess.StartInfo.FileName = "C:\\Windows\\system32\\cmd.exe";
             myProcess.StartInfo.Arguments = "/c" + order;
             myProcess.EnableRaisingEvents = true;
@@ -75,7 +78,7 @@ public class PythonExecuter : MonoBehaviour {
         catch (Exception e) { print(e); }
     }
 
-    private static void readOutput(object sender, DataReceivedEventArgs e) 
+    private static void ReadOutput(object sender, DataReceivedEventArgs e) 
     {
         if (e.Data.Contains("print"))
             print(e.Data);
@@ -98,7 +101,7 @@ public class PythonExecuter : MonoBehaviour {
                     currentStructureForce = new float[structureSize];
                 }
                 StoreData(e.Data.Split()[0]);
-            } else ;
+            } else;
         else if (!e.Data.Contains("job"))
             StoreData(e.Data);
     }
@@ -115,30 +118,30 @@ public class PythonExecuter : MonoBehaviour {
     }
 
     // send the given order to Python, where it will be executed with the exec() command
-    public void send_order(string order)
+    public void SendOrder(string order)
     {
         // write the command in the input of Python
         myProcess.StandardInput.WriteLine(order);
     }
 
-    public void send_order(bool runAnim=false)
+    public void SendOrder(bool runAnim=false)
     {
         if (runAnim)
         {
-            send_order("self.start_anim()");
+            SendOrder("self.start_anim()");
             pythonRunsAnim = true;
         }
         else
         {
-            send_order("self.runAnim = False");
+            SendOrder("self.runAnim = False");
             pythonRunsAnim = false;
         }
     }
 
-    public void changeAnimSpeed(int speedChange)
+    public void ChangeAnimSpeed(int speedChange)
     {
         // send python the order to change the animation speed, but also remember what the new animation speed is in unity
-        send_order("self.animSpeed += " + speedChange);
+        SendOrder("self.animSpeed += " + speedChange);
         pythonsAnimSpeed += speedChange;
     }
 
