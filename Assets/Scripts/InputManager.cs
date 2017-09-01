@@ -56,6 +56,7 @@ public class InputManager : MonoBehaviour {
                 printer.printers[1].gameObject.SetActive(false);
     }
 
+    // check if the application menu button has been pressed. If that's the case, go to the next mode
     private void CheckapplicationMenu()
     {
         if (Controller.GetTouchDown(SteamVR_Controller.ButtonMask.ApplicationMenu))

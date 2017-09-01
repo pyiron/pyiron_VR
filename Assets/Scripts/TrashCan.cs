@@ -86,9 +86,9 @@ public class TrashCan : MonoBehaviour
         // close the trash can
         TrashCanTop.transform.position += new Vector3(topToCan.x, 0, topToCan.z);
         // move the trashbin to the place it should be
-        Vector3 newBinPosition = Vector3.zero;
+        /*Vector3 newBinPosition = Vector3.zero;
         newBinPosition.x += Mathf.Sin(HeadTransform.eulerAngles.y / 360 * 2 * Mathf.PI - Mathf.PI / 4);
         newBinPosition.z += Mathf.Cos(HeadTransform.eulerAngles.y / 360 * 2 * Mathf.PI - Mathf.PI / 4);
-        gameObject.transform.position = HeadTransform.position + (newBinPosition * 5f + Vector3.down / 0.3f) * Settings.size;
+        gameObject.transform.position = HeadTransform.position + (newBinPosition * 5f + Vector3.down / 0.3f) * Settings.size;*/
     }
 }
