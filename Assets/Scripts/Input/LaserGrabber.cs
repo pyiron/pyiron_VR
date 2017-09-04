@@ -342,102 +342,77 @@ public class LaserGrabber : MonoBehaviour
     public void TouchpadPressDown()
     {
         if (MD.modes[MD.activeMode].canDuplicate)
-            if (ctrlMaskName.Contains("BoundingboxLayer"))
-                if (collidingObject || laser.activeSelf)
-                    if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).y > 0)
-                        if (Settings.transMode == "file")
-                            WriteOrder("self.duplicate(2)");
-                        else
-                            PE.SendOrder("self.duplicate(2)");
-                    else
-                        if (SD.atomInfos.Count * 0.5 * 0.5 * 0.5 >= 1)
-                        if (Settings.transMode == "file")
-                            WriteOrder("self.duplicate(0.5)");
-                        else
-                            PE.SendOrder("self.duplicate(0.5)");
-    }
-
-    /*public void TouchpadUp()
-    {
-
-    }*/
-
-    public void CheckTouchpad()
-    {
-        /*if (MD.modes[MD.activeMode].playerCanMoveAtoms)
-        {
-            // just do anything if the laser is active, because else the touchpad has no function (yet)
-            if (laser.activeSelf)
-            {
-                // mark the start touchpoint
-                if (Controller.GetTouchDown(SteamVR_Controller.ButtonMask.Touchpad))
-
-                // scale the laser
-                if (Controller.GetTouch(SteamVR_Controller.ButtonMask.Touchpad))
-                {
-                    
-                }
-
-                // scale the laser to the new laserlength
-                if (Controller.GetTouchUp(SteamVR_Controller.ButtonMask.Touchpad))
-                {
-                    laserLength += currentTouch.y - startTouchPoint.y;
-                    ScaleLaser();
-                }
-            }
-        } */ 
-
+            DuplicateStructure();
         // look if an animation should be started or stopped
-        if (MD.modes[MD.activeMode].showTemp || MD.modes[MD.activeMode].showRelaxation)
+        else if (MD.modes[MD.activeMode].showTemp || MD.modes[MD.activeMode].showRelaxation)
             // check that the player isn't currently trying to change the length of the laser
             if (!laser.activeSelf)
-                if (Controller.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad))
-                {
-                    if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).x > 0.5)
-                        if (PE.pythonRunsAnim)
-                            // send Python the order to play the animation faster. if it isn't already at it's fastest speed
-                            if (PE.pythonsAnimSpeed < 5)
-                                PE.ChangeAnimSpeed(1);
-                            else;
-                        else
-                            // go one frame forward
-                            PE.SendOrder("self.frame = (self.frame + 1) % len(self.all_positions)");
-                    //PE.SendOrder(runAnim: true);
-                    else if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).x < -0.5)
-                        if (PE.pythonRunsAnim)
-                            // send Python the order to play the animation faster. if it isn't already at it's fastest speed
-                            if (PE.pythonsAnimSpeed > 0)
-                                PE.ChangeAnimSpeed(-1);
-                            else;
-                        else
-                            // go one frame back
-                            PE.SendOrder("self.frame = (len(self.all_positions) - ((len(self.all_positions) - self.frame) " +
-                                "% len(self.all_positions))) - 1");
-                    else if (PE.pythonRunsAnim)
-                        PE.SendOrder(runAnim: false);
+                ControllAnimation();
+    }
+
+    private void DuplicateStructure()
+    {
+        if (ctrlMaskName.Contains("BoundingboxLayer"))
+            if (collidingObject || laser.activeSelf)
+                if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).y > 0)
+                    if (Settings.transMode == "file")
+                        WriteOrder("self.duplicate(2)");
                     else
-                    {
-                        if (firstAnimStart)
-                        {
-                            LoadNewLammps("self.calculate");
-                            firstAnimStart = false;
-                        }
-                        else if (SD.needsNewAnim)
-                        {
-                            LoadNewLammps("self.create_new_lammps");
-                            SD.needsNewAnim = false;
-                        }
-                        else if(lammpsIsMd != MD.modes[MD.activeMode].showTemp)
-                            LoadNewLammps("self.create_new_lammps");
+                        PE.SendOrder("self.duplicate(2)");
+                else
+                    if (SD.atomInfos.Count * 0.5 * 0.5 * 0.5 >= 1)
+                    if (Settings.transMode == "file")
+                        WriteOrder("self.duplicate(0.5)");
+                    else
+                        PE.SendOrder("self.duplicate(0.5)");
+    }
 
-                        PE.SendOrder(runAnim: true);
-                    }
+    private void ControllAnimation()
+    {
+        if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).x > 0.5)
+            if (PE.pythonRunsAnim)
+                // send Python the order to play the animation faster. if it isn't already at it's fastest speed
+                if (PE.pythonsAnimSpeed < 5)
+                    PE.ChangeAnimSpeed(1);
+                else;
+            else
+                // go one frame forward
+                PE.SendOrder("self.frame = (self.frame + 1) % len(self.all_positions)");
+        //PE.SendOrder(runAnim: true);
+        else if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).x < -0.5)
+            if (PE.pythonRunsAnim)
+                // send Python the order to play the animation faster. if it isn't already at it's fastest speed
+                if (PE.pythonsAnimSpeed > 0)
+                    PE.ChangeAnimSpeed(-1);
+                else;
+            else
+                // go one frame back
+                PE.SendOrder("self.frame = (len(self.all_positions) - ((len(self.all_positions) - self.frame) " +
+                    "% len(self.all_positions))) - 1");
+        else if (PE.pythonRunsAnim)
+            PE.SendOrder(runAnim: false);
+        else
+        {
+            if (firstAnimStart)
+            {
+                LoadNewLammps("self.calculate");
+                firstAnimStart = false;
+            }
+            else if (SD.needsNewAnim)
+            {
+                LoadNewLammps("self.create_new_lammps");
+                SD.needsNewAnim = false;
+            }
+            else if (lammpsIsMd != MD.modes[MD.activeMode].showTemp)
+                LoadNewLammps("self.create_new_lammps");
 
-                    // update the symbols on the controller
-                    gameObject.GetComponent<ControllerSymbols>().SetSymbol();
-                    if (otherCtrl.activeSelf)
-                        otherCtrl.GetComponent<ControllerSymbols>().SetSymbol();
-                }
+            PE.SendOrder(runAnim: true);
+        }
+
+        // update the symbols on the controller
+        gameObject.GetComponent<ControllerSymbols>().SetSymbol();
+        if (otherCtrl.activeSelf)
+            otherCtrl.GetComponent<ControllerSymbols>().SetSymbol();
     }
 
     private void LoadNewLammps(string loadOrder)
