@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+//// NOT IN USE ANY MORE!!! \\\\
 public class ControllerInputManager : MonoBehaviour
 {
     [Header("Scene Data")]

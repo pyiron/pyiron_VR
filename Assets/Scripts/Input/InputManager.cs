@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Component of Settings
+// Handles all the relevant Input Data.
 public class InputManager : MonoBehaviour
 {
     [Header("Scene Data")]
@@ -48,12 +50,13 @@ public class InputManager : MonoBehaviour
                     GetControllerReferences(i);
                 else
                     CheckViveController(i);
+        CheckKeyboard();
     }
 
     private void CheckViveController(int nr)
     {
         // check the state of the button on the back of the controller and perform following actions
-        LGs[nr].CheckHairTrigger();
+        CheckHairTrigger(nr);
         // check the state of the touchpad and perform following actions
         LGs[nr].CheckTouchpad();
 
@@ -61,6 +64,15 @@ public class InputManager : MonoBehaviour
         CheckGripButton(nr);
         // check if the applicationMenu button is down to switch the mode
         CheckapplicationMenu(nr);
+    }
+
+    public void CheckHairTrigger(int ctrlNr)
+    {
+        if (ControllerDevices[ctrlNr].GetHairTriggerDown())
+            LGs[ctrlNr].HairTriggerDown();
+
+        if (ControllerDevices[ctrlNr].GetPressUp(SteamVR_Controller.ButtonMask.Trigger))
+            LGs[ctrlNr].HairTriggerUp();
     }
 
     private void CheckGripButton(int nr)
@@ -86,5 +98,13 @@ public class InputManager : MonoBehaviour
             MD.RaiseMode();
             printer.Ctrl_print(MD.activeMode.ToString(), 40);
         }
+    }
+
+    private void CheckKeyboard()
+    {
+        if (Input.anyKeyDown)
+            if (Input.GetKeyDown(KeyCode.Escape))
+                // quits the program when it isn't run in the Editor
+                Application.Quit();
     }
 }

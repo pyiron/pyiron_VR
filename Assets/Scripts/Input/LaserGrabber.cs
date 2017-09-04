@@ -226,72 +226,68 @@ public class LaserGrabber : MonoBehaviour
             resizeableRect.SetActive(false);
     }
 
-    public void CheckHairTrigger()
+    public void HairTriggerDown()
     {
         // if the controller gets pressed, it should try to attach an object to it
-        if (Controller.GetHairTriggerDown())
+        if (MD.modes[MD.activeMode].playerCanMoveAtoms)
         {
-            if (MD.modes[MD.activeMode].playerCanMoveAtoms)
+            // if an object is colliding with the controller, it should be attached
+            if (collidingObject)
             {
-                // if an object is colliding with the controller, it should be attached
-                if (collidingObject)
-                {
-                    AttachObject(collidingObject);
-                    // set the controller ready for size, if it grabs the boundingbox
-                    if (ctrlMaskName == "BoundingboxLayer")
-                        if (otherCtrl.GetComponent<LaserGrabber>().readyForResize)
-                        {
-                            InitResize();
-                        }
-                        else
-                            readyForResize = true;
-                }
-                // test if the other controller is ready for a resize
-                else if (otherCtrl.GetComponent<LaserGrabber>().readyForResize)
-                    // init the resize, because now are both controllers ready
-                    if (ctrlMaskName == "AtomLayer")
+                AttachObject(collidingObject);
+                // set the controller ready for size, if it grabs the boundingbox
+                if (ctrlMaskName == "BoundingboxLayer")
+                    if (otherCtrl.GetComponent<LaserGrabber>().readyForResize)
+                    {
                         InitResize();
-                    else;
-                else
-                    // send out a raycast to detect objects in front of the controller
-                    SendRaycast();
+                    }
+                    else
+                        readyForResize = true;
+            }
+            // test if the other controller is ready for a resize
+            else if (otherCtrl.GetComponent<LaserGrabber>().readyForResize)
+                // init the resize, because now are both controllers ready
+                if (ctrlMaskName == "AtomLayer")
+                    InitResize();
+                else;
+            else
+                // send out a raycast to detect objects in front of the controller
+                SendRaycast();
+        }
+    }
+
+    public void HairTriggerUp()
+    {
+        // check that the move mode is currently active
+        if (MD.modes[MD.activeMode].playerCanMoveAtoms)
+        {
+            // set the state of the controller to not ready for resizeStructure
+            readyForResize = false;
+
+            // disattach the attached object
+            if (attachedObject)
+            {
+                // deactivate the laser
+                if (laser.activeSelf)
+                    laser.SetActive(false);
+
+                // change the boundingbox to the new extension of the structure, if an atom has been attached
+                if (ctrlMaskName == "AtomLayer")
+                {
+                    // check the new extension of the structure
+                    SD.SearchMaxAndMin();
+                    // set the boundingbox so that it encloses the structure
+                    SD.UpdateBoundingbox();
+                }
+
+                ReleaseObject();
             }
         }
-        
-        // check if the player released the button
-        if (Controller.GetPressUp(SteamVR_Controller.ButtonMask.Trigger))
+        else
         {
-            // check that the move mode is currently active
-            if (MD.modes[MD.activeMode].playerCanMoveAtoms)
-            {
-                // set the state of the controller to not ready for resizeStructure
-                readyForResize = false;
-
-                // disattach the attached object
-                if (attachedObject)
-                {
-                    // deactivate the laser
-                    if (laser.activeSelf)
-                        laser.SetActive(false);
-
-                    // change the boundingbox to the new extension of the structure, if an atom has been attached
-                    if (ctrlMaskName == "AtomLayer")
-                    {
-                        // check the new extension of the structure
-                        SD.SearchMaxAndMin();
-                        // set the boundingbox so that it encloses the structure
-                        SD.UpdateBoundingbox();
-                    }
-
-                    ReleaseObject();
-                }
-            }
-            else
-            { 
-                // detach the attached object and deactivate the laser when the press on the trigger is up
-                attachedObject = null;
-                laser.SetActive(false);
-            }
+            // detach the attached object and deactivate the laser when the press on the trigger is up
+            attachedObject = null;
+            laser.SetActive(false);
         }
     }
 
