@@ -110,9 +110,7 @@ public class LaserGrabber : MonoBehaviour
         // get the reference to the programm which handles the execution of python
         PE = Settings.GetComponent<PythonExecuter>();
         // get the Script of the Hourglass, which indicates that the structure is currently loading
-        foreach (Transform GO in AtomStructure.transform)
-            if (GO.name == "Hourglass")
-                HourglassScript = GO.gameObject.GetComponent<Hourglass>();
+        HourglassScript = GameObject.Find("HourglassRotator").transform.GetChild(0).gameObject.GetComponent<Hourglass>();
     }
 
     void Start()
@@ -166,6 +164,8 @@ public class LaserGrabber : MonoBehaviour
                         TrashCanScript.UpdateTrashCan(attachedObject);
                     printer.Ctrl_print(attachedObject.GetComponent<AtomID>().ID.ToString(), 101);
                 }
+                else
+                    HourglassScript.transform.parent.eulerAngles = Vector3.up * transform.eulerAngles.y;
             }
         }
         else

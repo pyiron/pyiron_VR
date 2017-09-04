@@ -95,7 +95,7 @@ public class ImportStructure : MonoBehaviour {
         LED = Settings.GetComponent<LocalElementData>();
         SD = gameObject.GetComponent<StructureData>();
         // get the Script of the Hourglass, which indicates that the structure is currently loading
-        HourglassScript = GameObject.Find("Hourglass").GetComponent<Hourglass>();
+        HourglassScript = GameObject.Find("HourglassRotator/Hourglass").GetComponent<Hourglass>();
         foreach (UnityEngine.UI.Text text in MyCanvas.GetComponentsInChildren<UnityEngine.UI.Text>())
             if (text.name.Contains("min_fps_display"))
                 min_fps_display = text;

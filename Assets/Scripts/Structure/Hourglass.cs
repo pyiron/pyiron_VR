@@ -16,7 +16,6 @@ public class Hourglass : MonoBehaviour {
         anim = gameObject.GetComponent<Animator>();
         // get the reference to the transform of the headset
         HeadTransform = GameObject.Find("[CameraRig]/Camera (head)").transform;
-        print(HeadTransform + "hourglass");
     }
 
     // Use this for initialization
@@ -26,8 +25,8 @@ public class Hourglass : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
+
+    }
 
     public void ActivateHourglass(bool active)
     {
@@ -37,9 +36,6 @@ public class Hourglass : MonoBehaviour {
         {
             // start the rotation animation
             anim.Play("Rotate");
-            // face the player
-            Vector3 playerToHourglass = (HeadTransform.position - transform.position);
-            transform.eulerAngles = new Vector3(playerToHourglass.x, 90, playerToHourglass.z);
         }
     }
 }
