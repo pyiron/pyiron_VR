@@ -392,7 +392,7 @@ public class LaserGrabber : MonoBehaviour
                                 PE.SendOrder("self.calculate('minimize')");
                             firstAnimStart = false;
                             // Activate the Hourglass
-                            HourglassScript.SetActive(true);
+                            HourglassScript.ActivateHourglass(true);
                             print("after new calc");
                         }
                         else if (SD.needsNewAnim)
@@ -403,7 +403,7 @@ public class LaserGrabber : MonoBehaviour
                                 PE.SendOrder("self.create_new_lammps('minimize')");
                             SD.needsNewAnim = false;
                             // Activate the Hourglass
-                            HourglassScript.SetActive(true);
+                            HourglassScript.ActivateHourglass(true);
                         }
                         PE.SendOrder(runAnim: true);
                     }

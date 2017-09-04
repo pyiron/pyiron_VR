@@ -24,7 +24,7 @@ public class Hourglass : MonoBehaviour {
 		
 	}
 
-    public void SetActive(bool active)
+    public void ActivateHourglass(bool active)
     {
         gameObject.SetActive(active);
         anim.enabled = active;

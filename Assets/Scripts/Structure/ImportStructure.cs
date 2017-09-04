@@ -295,7 +295,10 @@ public class ImportStructure : MonoBehaviour {
         }
         if (animState == "new")
             transform.position += SD.structureCtrlPos;
-        HourglassScript.SetActive(false);
+
+        // deactivate the Hourglass, after a new animation has been loaded or after the structure has been loaded
+        if (HourglassScript.gameObject.activeSelf)
+            HourglassScript.ActivateHourglass(false);
 
         SD.waitForDestroyedAtom = false;
         firstImport = false;
