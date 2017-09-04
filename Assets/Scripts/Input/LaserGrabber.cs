@@ -64,6 +64,8 @@ public class LaserGrabber : MonoBehaviour
     // shows whether it is the first time an animation should be played,
     // so that the python program knows whether to load a new animation or not
     private bool firstAnimStart = true;
+    // shows if the current lammps is a calc_md or calc_minimize
+    private bool lammpsIsMd;
 
     [Header("Resize")]
     // shows, which of the controllers currently allows to resize the structure
@@ -385,26 +387,17 @@ public class LaserGrabber : MonoBehaviour
                     {
                         if (firstAnimStart)
                         {
-                            print("before new calc");
-                            if (MD.modes[MD.activeMode].showTemp)
-                                PE.SendOrder("self.calculate('md')");
-                            else if (MD.modes[MD.activeMode].showRelaxation)
-                                PE.SendOrder("self.calculate('minimize')");
+                            LoadNewLammps("self.calculate");
                             firstAnimStart = false;
-                            // Activate the Hourglass
-                            HourglassScript.ActivateHourglass(true);
-                            print("after new calc");
                         }
                         else if (SD.needsNewAnim)
                         {
-                            if (MD.modes[MD.activeMode].showTemp)
-                                PE.SendOrder("self.create_new_lammps('md')");
-                            else if (MD.modes[MD.activeMode].showRelaxation)
-                                PE.SendOrder("self.create_new_lammps('minimize')");
+                            LoadNewLammps("self.create_new_lammps");
                             SD.needsNewAnim = false;
-                            // Activate the Hourglass
-                            HourglassScript.ActivateHourglass(true);
                         }
+                        //else if(lammpsIsMd != MD.modes[MD.activeMode].showTemp)
+                        //    LoadNewLammps("self.create_new_lammps");
+
                         PE.SendOrder(runAnim: true);
                     }
 
@@ -413,8 +406,17 @@ public class LaserGrabber : MonoBehaviour
                     if (otherCtrl.activeSelf)
                         otherCtrl.GetComponent<ControllerSymbols>().SetSymbol();
                 }
-        //else
-        //  PE.SendOrder(runAnim: true);
+    }
+
+    private void LoadNewLammps(string loadOrder)
+    {
+        if (MD.modes[MD.activeMode].showTemp)
+            PE.SendOrder(loadOrder + "('md')");
+        else if (MD.modes[MD.activeMode].showRelaxation)
+            PE.SendOrder(loadOrder + "('minimize')");
+        lammpsIsMd = MD.modes[MD.activeMode].showTemp;
+        // Activate the Hourglass
+        HourglassScript.ActivateHourglass(true);
     }
 
     private void WriteOrder(string order)
