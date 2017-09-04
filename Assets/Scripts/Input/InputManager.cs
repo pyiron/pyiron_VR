@@ -24,10 +24,10 @@ public class InputManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        for (int i = 0; i < 2; i++)
+        for (int ctrlNr = 0; ctrlNr < 2; ctrlNr++)
         {
             if (controllerObjects[0].activeSelf)
-                GetControllerReferences(i);
+                GetControllerReferences(ctrlNr);
 
                 //printer.Ctrl_print(MD.activeMode.ToString(), 4);
         }
@@ -44,26 +44,26 @@ public class InputManager : MonoBehaviour
 
     void Update()
     {
-        for (int i = 0; i < 2; i++)
-            if (controllerObjects[i].activeSelf)
-                if (LGs[i] == null)
-                    GetControllerReferences(i);
+        for (int ctrlNr = 0; ctrlNr < 2; ctrlNr++)
+            if (controllerObjects[ctrlNr].activeSelf)
+                if (LGs[ctrlNr] == null)
+                    GetControllerReferences(ctrlNr);
                 else
-                    CheckViveController(i);
+                    CheckViveController(ctrlNr);
         CheckKeyboard();
     }
 
-    private void CheckViveController(int nr)
+    private void CheckViveController(int ctrlNr)
     {
         // check the state of the button on the back of the controller and perform following actions
-        CheckHairTrigger(nr);
+        CheckHairTrigger(ctrlNr);
         // check the state of the touchpad and perform following actions
-        CheckTouchpad(nr);
+        CheckTouchpad(ctrlNr);
 
         // check if the application menu button is down to print before the controller
-        CheckGripButton(nr);
+        CheckGripButton(ctrlNr);
         // check if the applicationMenu button is down to switch the mode
-        CheckapplicationMenu(nr);
+        CheckapplicationMenu(ctrlNr);
     }
 
     public void CheckHairTrigger(int ctrlNr)
@@ -93,25 +93,25 @@ public class InputManager : MonoBehaviour
             LGs[ctrlNr].TouchpadPressDown();
     }
 
-    private void CheckGripButton(int nr)
+    private void CheckGripButton(int ctrlNr)
     {
-        if (ControllerDevices[nr].GetTouchDown(SteamVR_Controller.ButtonMask.Grip))
-            if (LGs[nr].ctrlMaskName.Contains("Atom"))
+        if (ControllerDevices[ctrlNr].GetTouchDown(SteamVR_Controller.ButtonMask.Grip))
+            if (LGs[ctrlNr].ctrlMaskName.Contains("Atom"))
                 printer.printers[0].gameObject.SetActive(true);
             else
                 printer.printers[1].gameObject.SetActive(true);
 
-        if (ControllerDevices[nr].GetTouchUp(SteamVR_Controller.ButtonMask.Grip))
-            if (LGs[nr].ctrlMaskName.Contains("Atom"))
+        if (ControllerDevices[ctrlNr].GetTouchUp(SteamVR_Controller.ButtonMask.Grip))
+            if (LGs[ctrlNr].ctrlMaskName.Contains("Atom"))
                 printer.printers[0].gameObject.SetActive(false);
             else
                 printer.printers[1].gameObject.SetActive(false);
     }
 
     // check if the application menu button has been pressed. If that's the case, go to the next mode
-    private void CheckapplicationMenu(int nr)
+    private void CheckapplicationMenu(int ctrlNr)
     {
-        if (ControllerDevices[nr].GetTouchDown(SteamVR_Controller.ButtonMask.ApplicationMenu))
+        if (ControllerDevices[ctrlNr].GetTouchDown(SteamVR_Controller.ButtonMask.ApplicationMenu))
         {
             MD.RaiseMode();
             printer.Ctrl_print(MD.activeMode.ToString(), 40);
