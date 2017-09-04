@@ -218,23 +218,15 @@ public class LaserGrabber : MonoBehaviour
                     //InfoText.transform.eulerAngles = new Vector3(0, HeadTransform.eulerAngles.y, 0);
                     if (ctrlMaskName.Contains("AtomLayer"))
                     {
-                        if (attachedObject)
-                        {
-                            // set the info text to the top of the atom
-                            InfoText.transform.position = attachedObject.transform.position // + Vector3.up * 0.1f
-                                 + Vector3.up * attachedObject.transform.localScale[0] / 2 * Settings.size;
-                            InfoText.text = SD.atomInfos[attachedObject.GetComponent<AtomID>().ID].m_type;
-                            if (PythonExecuter.extendedData)
-                                InfoText.text += "\nForce: "
-                                    + PythonExecuter.structureForce[attachedObject.GetComponent<AtomID>().ID];
-                            // might be needed so that the text will stand above the atom
-                            //InfoText.GetComponent<TextMesh>().text += "\n";
-                        }
-                        else
-                        {
-                            printer.Ctrl_print("No attached Object!", rightCtrl: false);
-                            print("No attached Object!");
-                        }
+                        // set the info text to the top of the atom
+                        InfoText.transform.position = attachedObject.transform.position // + Vector3.up * 0.1f
+                                + Vector3.up * attachedObject.transform.localScale[0] / 2 * Settings.size;
+                        InfoText.text = SD.atomInfos[attachedObject.GetComponent<AtomID>().ID].m_type;
+                        if (PythonExecuter.extendedData)
+                            InfoText.text += "\nForce: "
+                                + PythonExecuter.structureForce[attachedObject.GetComponent<AtomID>().ID];
+                        // might be needed so that the text will stand above the atom
+                        //InfoText.GetComponent<TextMesh>().text += "\n";
                     }
                     else
                     {
@@ -242,6 +234,8 @@ public class LaserGrabber : MonoBehaviour
                         InfoText.transform.position = boundingbox.transform.position + Vector3.up * 0.1f
                             + Vector3.up * boundingbox.transform.localScale[0] / 2 * Settings.size;
                         InfoText.text = SD.structureName;
+                        InfoText.text += "\nAtoms: "
+                                + SD.atomInfos.Count;
                         // InfoText.text += "\nForce: " + PythonExecuter.structureForce;
                         //might be needed so that the text will stand above the boundingbox
                         //InfoText.GetComponent<TextMesh>().text += "\n";
