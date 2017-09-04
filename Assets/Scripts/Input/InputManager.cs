@@ -58,7 +58,7 @@ public class InputManager : MonoBehaviour
         // check the state of the button on the back of the controller and perform following actions
         CheckHairTrigger(nr);
         // check the state of the touchpad and perform following actions
-        LGs[nr].CheckTouchpad();
+        CheckTouchpad(nr);
 
         // check if the application menu button is down to print before the controller
         CheckGripButton(nr);
@@ -76,6 +76,21 @@ public class InputManager : MonoBehaviour
 
         if (ControllerDevices[ctrlNr].GetPressUp(SteamVR_Controller.ButtonMask.Trigger))
             LGs[ctrlNr].HairTriggerUp();
+    }
+
+    private void CheckTouchpad(int ctrlNr)
+    {
+        if (ControllerDevices[ctrlNr].GetTouchDown(SteamVR_Controller.ButtonMask.Touchpad))
+            LGs[ctrlNr].TouchpadTouchDown();
+
+        if (ControllerDevices[ctrlNr].GetTouch(SteamVR_Controller.ButtonMask.Touchpad))
+            LGs[ctrlNr].WhileTouchpadTouchDown();
+
+        if (ControllerDevices[ctrlNr].GetTouchUp(SteamVR_Controller.ButtonMask.Touchpad))
+            LGs[ctrlNr].TouchpadTouchUp();
+
+        if (ControllerDevices[ctrlNr].GetPressDown(SteamVR_Controller.ButtonMask.Touchpad))
+            LGs[ctrlNr].TouchpadPressDown();
     }
 
     private void CheckGripButton(int nr)

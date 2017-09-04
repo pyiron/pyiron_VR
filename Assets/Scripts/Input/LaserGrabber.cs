@@ -289,41 +289,93 @@ public class LaserGrabber : MonoBehaviour
         }
     }
 
+    // show that the laser is currently active and it's possible in the current move to move atoms
+    private bool ScaleAbleLaser()
+    {
+        return (MD.modes[MD.activeMode].playerCanMoveAtoms && laser.activeSelf);
+    }
+
+    public void TouchpadTouchDown()
+    {
+        if (ScaleAbleLaser())
+            // mark the start touchpoint
+            startTouchPoint = Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0);
+    }
+
+    public void WhileTouchpadTouchDown()
+    {
+        if (ScaleAbleLaser())
+        {
+            // scale the laser
+            currentTouch = Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0);
+            ScaleLaser(currentTouch.y - startTouchPoint.y);
+
+            // set the max distance the laser should have to exist and not grab the object
+            float minLaserLength;
+            if (ctrlMaskName == "BoundingboxLayer")
+                minLaserLength = 0;
+            else
+                // set the distance to the width of the atom, so that the atom is in front of the controller, and not in it
+                minLaserLength = attachedObject.transform.localScale.x * Settings.size / 2;
+
+            // if the laserlength is changed to a value less than the minimum distance, the attached object is going to be grabbed
+            if (laserLength + currentTouch.y - startTouchPoint.y <= minLaserLength)
+            {
+                AttachObject(attachedObject);
+                laser.SetActive(false);
+                if (ctrlMaskName == "BoundingboxLayer")
+                    readyForResize = true;
+            }
+        }
+    }
+
+    public void TouchpadTouchUp()
+    {
+        if (ScaleAbleLaser())
+        {
+            // scale the laser to the new laserlength
+            laserLength += currentTouch.y - startTouchPoint.y;
+            ScaleLaser();
+        }
+    }
+
+    public void TouchpadPressDown()
+    {
+        if (MD.modes[MD.activeMode].canDuplicate)
+            if (ctrlMaskName.Contains("BoundingboxLayer"))
+                if (collidingObject || laser.activeSelf)
+                    if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).y > 0)
+                        if (Settings.transMode == "file")
+                            WriteOrder("self.duplicate(2)");
+                        else
+                            PE.SendOrder("self.duplicate(2)");
+                    else
+                        if (SD.atomInfos.Count * 0.5 * 0.5 * 0.5 >= 1)
+                        if (Settings.transMode == "file")
+                            WriteOrder("self.duplicate(0.5)");
+                        else
+                            PE.SendOrder("self.duplicate(0.5)");
+    }
+
+    /*public void TouchpadUp()
+    {
+
+    }*/
+
     public void CheckTouchpad()
     {
-        if (MD.modes[MD.activeMode].playerCanMoveAtoms)
+        /*if (MD.modes[MD.activeMode].playerCanMoveAtoms)
         {
             // just do anything if the laser is active, because else the touchpad has no function (yet)
             if (laser.activeSelf)
             {
                 // mark the start touchpoint
                 if (Controller.GetTouchDown(SteamVR_Controller.ButtonMask.Touchpad))
-                {
-                    startTouchPoint = Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0);
-                }
 
                 // scale the laser
                 if (Controller.GetTouch(SteamVR_Controller.ButtonMask.Touchpad))
                 {
-                    currentTouch = Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0);
-                    ScaleLaser(currentTouch.y - startTouchPoint.y);
-
-                    // set the max distance the laser should have to exist and not grab the object
-                    float minLaserLength;
-                    if (ctrlMaskName == "BoundingboxLayer")
-                        minLaserLength = 0;
-                    else
-                        // set the distance to the width of the atom, so that the atom is in front of the controller, and not in it
-                        minLaserLength = attachedObject.transform.localScale.x * Settings.size / 2;
-
-                    // if the laserlength is changed to a value less than the minimum distance, the attached object is going to be grabbed
-                    if (laserLength + currentTouch.y - startTouchPoint.y <= minLaserLength)
-                    {
-                        AttachObject(attachedObject);
-                        laser.SetActive(false);
-                        if (ctrlMaskName == "BoundingboxLayer")
-                            readyForResize = true;
-                    }
+                    
                 }
 
                 // scale the laser to the new laserlength
@@ -333,22 +385,7 @@ public class LaserGrabber : MonoBehaviour
                     ScaleLaser();
                 }
             }
-        }
-        else if (MD.modes[MD.activeMode].canDuplicate)
-            if (ctrlMaskName.Contains("BoundingboxLayer"))
-                if (collidingObject || laser.activeSelf)
-                    if (Controller.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad))
-                        if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).y > 0)
-                            if (Settings.transMode == "file")
-                                WriteOrder("self.duplicate(2)");
-                            else
-                                PE.SendOrder("self.duplicate(2)");
-                        else
-                            if (SD.atomInfos.Count * 0.5 * 0.5 * 0.5 >= 1)
-                                if (Settings.transMode == "file")
-                                    WriteOrder("self.duplicate(0.5)");
-                                else
-                                    PE.SendOrder("self.duplicate(0.5)");
+        } */ 
 
         // look if an animation should be started or stopped
         if (MD.modes[MD.activeMode].showTemp || MD.modes[MD.activeMode].showRelaxation)
