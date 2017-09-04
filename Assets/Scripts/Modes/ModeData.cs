@@ -14,6 +14,8 @@ public class ModeData : MonoBehaviour
     public ProgramSettings Settings;
     // get the reference to the programm which handles the execution of python
     private PythonExecuter PE;
+    // the thermometer, needed to handle the temperature of the structure
+    private GameObject Thermometer;
 
     [Header("Modes")]
     // get the textmesh from the 3D Text which shows the current mode
@@ -50,6 +52,8 @@ public class ModeData : MonoBehaviour
         print(HeadTransform + "mode");
         // get the reference to the script that handles the connection to python
         PE = Settings.GetComponent<PythonExecuter>();
+        // get the reference to the thermometer
+        Thermometer = GameObject.Find("MyObjects/Thermometer");
     }
 
     // Use this for initialization
@@ -92,6 +96,8 @@ public class ModeData : MonoBehaviour
         // let the CurrentModeText always look in the direction of the player
         //Face_Player(CurrentModeText.gameObject);
 
+        // activate the thermometer when changing into temperature mode, else deactivate it
+        Thermometer.SetActive(modes[activeMode].showTemp);
 
         // stop the currently running animation
         PE.SendOrder(runAnim: false);

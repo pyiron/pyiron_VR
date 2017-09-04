@@ -420,6 +420,7 @@ public class LaserGrabber : MonoBehaviour
         HourglassScript.ActivateHourglass(true);
     }
 
+    // write an Order to Python via a file
     private void WriteOrder(string order)
     {
         StreamWriter sw = new StreamWriter(Settings.GetFilePath(fileName:fileName));
