@@ -82,6 +82,8 @@ public class PythonExecuter : MonoBehaviour {
     {
         if (e.Data.Contains("print"))
             print(e.Data);
+        else if (e.Data.Contains("job"))
+            return;
         else if (currentAtomLine == structureSize + 1)
         {
             StoreData(e.Data);
@@ -93,7 +95,7 @@ public class PythonExecuter : MonoBehaviour {
             currentAtomLine = 0;
         }
         else if (currentAtomLine == 0)
-            if (e.Data.Split().Length == 3)
+            if (true) //(e.Data.Split().Length == 3)
             {
                 if (int.Parse(e.Data.Split()[1]) != structureSize)
                 {
@@ -102,7 +104,7 @@ public class PythonExecuter : MonoBehaviour {
                 }
                 StoreData(e.Data.Split()[0]);
             } else;
-        else if (!e.Data.Contains("job"))
+        else
             StoreData(e.Data);
     }
 
