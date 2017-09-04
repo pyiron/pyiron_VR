@@ -39,7 +39,6 @@ public class ControllerInputManager : MonoBehaviour
         CheckGripButton();
         // check if the applicationMenu button is down to switch the mode
         CheckapplicationMenu();
-
     }
 
     private void CheckGripButton()
