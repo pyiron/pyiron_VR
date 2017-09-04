@@ -25,6 +25,10 @@ public class ProgramSettings : MonoBehaviour {
     // the width the borders of the cellbox should have
     public float cellboxWidth;
 
+    [Header("Data")]
+    // the temperature each structure in the Scene has
+    public int temperature;
+
 
     private void Awake()
     {
