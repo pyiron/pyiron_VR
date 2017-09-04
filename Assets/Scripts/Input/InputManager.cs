@@ -71,6 +71,9 @@ public class InputManager : MonoBehaviour
         if (ControllerDevices[ctrlNr].GetHairTriggerDown())
             LGs[ctrlNr].HairTriggerDown();
 
+        if (ControllerDevices[ctrlNr].GetHairTrigger())
+            LGs[ctrlNr].WhileHairTriggerDown();
+
         if (ControllerDevices[ctrlNr].GetPressUp(SteamVR_Controller.ButtonMask.Trigger))
             LGs[ctrlNr].HairTriggerUp();
     }

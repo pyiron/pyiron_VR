@@ -149,9 +149,6 @@ public class LaserGrabber : MonoBehaviour
 
     void Update()
     {
-        // check all the input of the controller and fullfill the following actions
-        //CheckControllerInput();
-
         if (MD.modes[MD.activeMode].playerCanMoveAtoms)
         {
             // move the grabbed object
@@ -168,56 +165,6 @@ public class LaserGrabber : MonoBehaviour
                     // update the rotation of the Hourglass
                     HourglassScript.transform.parent.eulerAngles = Vector3.up * transform.eulerAngles.y;
             }
-        }
-        else
-        {
-            if (Controller.GetHairTrigger())
-            {
-                SendRaycast();
-                if (MD.modes[MD.activeMode].showInfo)
-                    if (laser.activeSelf || collidingObject)
-                    {
-                        // set the Infotext to active and edit it 
-                        InfoText.gameObject.SetActive(true);
-                        // let the InfoText always look in the direction of the player
-                        Settings.Face_Player(InfoText.gameObject);
-                        //InfoText.transform.eulerAngles = new Vector3(0, HeadTransform.eulerAngles.y, 0);
-                        if (ctrlMaskName.Contains("AtomLayer"))
-                        {
-                            if (attachedObject)
-                            {
-                                // set the info text to the top of the atom
-                                InfoText.transform.position = attachedObject.transform.position // + Vector3.up * 0.1f
-                                     + Vector3.up * attachedObject.transform.localScale[0]/2 * Settings.size;
-                                InfoText.text = SD.atomInfos[attachedObject.GetComponent<AtomID>().ID].m_type;
-                                if (PythonExecuter.extendedData)
-                                    InfoText.text += "\nForce: "
-                                        + PythonExecuter.structureForce[attachedObject.GetComponent<AtomID>().ID];
-                                // might be needed so that the text will stand above the atom
-                                //InfoText.GetComponent<TextMesh>().text += "\n";
-                            }
-                            else
-                            {
-                                printer.Ctrl_print("No attached Object!", rightCtrl: false);
-                                print("No attached Object!");
-                            }
-                        }
-                        else
-                        {
-                            // set the info text to the top of the boundingbox
-                            InfoText.transform.position = boundingbox.transform.position + Vector3.up * 0.1f
-                                + Vector3.up * boundingbox.transform.localScale[0]/2 * Settings.size;
-                            InfoText.text = SD.structureName;
-                            // InfoText.text += "\nForce: " + PythonExecuter.structureForce;
-                            //might be needed so that the text will stand above the boundingbox
-                            //InfoText.GetComponent<TextMesh>().text += "\n";
-                        }
-                    }
-                    else
-                        InfoText.gameObject.SetActive(false);
-            }
-            else
-                InfoText.gameObject.SetActive(false);
         }
 
         if (readyForResize)
@@ -254,6 +201,57 @@ public class LaserGrabber : MonoBehaviour
                 // send out a raycast to detect objects in front of the controller
                 SendRaycast();
         }
+    }
+
+    public void WhileHairTriggerDown()
+    {
+        if (!MD.modes[MD.activeMode].playerCanMoveAtoms)
+        {
+            SendRaycast();
+            if (MD.modes[MD.activeMode].showInfo)
+                if (laser.activeSelf || collidingObject)
+                {
+                    // set the Infotext to active and edit it 
+                    InfoText.gameObject.SetActive(true);
+                    // let the InfoText always look in the direction of the player
+                    Settings.Face_Player(InfoText.gameObject);
+                    //InfoText.transform.eulerAngles = new Vector3(0, HeadTransform.eulerAngles.y, 0);
+                    if (ctrlMaskName.Contains("AtomLayer"))
+                    {
+                        if (attachedObject)
+                        {
+                            // set the info text to the top of the atom
+                            InfoText.transform.position = attachedObject.transform.position // + Vector3.up * 0.1f
+                                 + Vector3.up * attachedObject.transform.localScale[0] / 2 * Settings.size;
+                            InfoText.text = SD.atomInfos[attachedObject.GetComponent<AtomID>().ID].m_type;
+                            if (PythonExecuter.extendedData)
+                                InfoText.text += "\nForce: "
+                                    + PythonExecuter.structureForce[attachedObject.GetComponent<AtomID>().ID];
+                            // might be needed so that the text will stand above the atom
+                            //InfoText.GetComponent<TextMesh>().text += "\n";
+                        }
+                        else
+                        {
+                            printer.Ctrl_print("No attached Object!", rightCtrl: false);
+                            print("No attached Object!");
+                        }
+                    }
+                    else
+                    {
+                        // set the info text to the top of the boundingbox
+                        InfoText.transform.position = boundingbox.transform.position + Vector3.up * 0.1f
+                            + Vector3.up * boundingbox.transform.localScale[0] / 2 * Settings.size;
+                        InfoText.text = SD.structureName;
+                        // InfoText.text += "\nForce: " + PythonExecuter.structureForce;
+                        //might be needed so that the text will stand above the boundingbox
+                        //InfoText.GetComponent<TextMesh>().text += "\n";
+                    }
+                }
+                else
+                    InfoText.gameObject.SetActive(false);
+        }
+        else
+            InfoText.gameObject.SetActive(false);
     }
 
     public void HairTriggerUp()
