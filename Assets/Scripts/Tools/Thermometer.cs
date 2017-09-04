@@ -22,7 +22,7 @@ public class Thermometer : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        ThermometerText.text = Settings.temperature.ToString();
+        UpdateTemperature();
         ThermometerText.transform.localScale = Vector3.one * TextSize;
         //ThermometerText.transform.eulerAngles = Vector3.up * 225;
     }
@@ -31,4 +31,9 @@ public class Thermometer : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    public void UpdateTemperature()
+    {
+        ThermometerText.text = Settings.temperature.ToString();
+    }
 }

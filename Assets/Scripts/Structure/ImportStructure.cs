@@ -16,6 +16,8 @@ public class ImportStructure : MonoBehaviour {
     public PythonExecuter PE;
     // the Script of the Hourglass, which indicates that the structure is currently loading
     private Hourglass HourglassScript;
+    // the script of thermometer which shows which temperature the structure has
+    private GameObject ThermometerObject;
 
     // the prefab for the atoms
     public GameObject AtomPrefab;
@@ -88,6 +90,9 @@ public class ImportStructure : MonoBehaviour {
     {
         // get the reference to the programm which handles the execution of python
         PE = Settings.GetComponent<PythonExecuter>();
+        // get the script of thermometer which shows which temperature the structure has
+        ThermometerObject = GameObject.Find("MyObjects/Thermometer");
+        ThermometerObject.SetActive(false);
         // get the scripts from the gameobjects to get their data
         programSettings = Settings.GetComponent<ProgramSettings>();
         // get the path to the transmitter file which holds the data pyiron send to unity
@@ -301,7 +306,12 @@ public class ImportStructure : MonoBehaviour {
             HourglassScript.ActivateHourglass(false);
 
         SD.waitForDestroyedAtom = false;
-        firstImport = false;
+        if (firstImport)
+        {
+            firstImport = false;
+            programSettings.temperature = PythonExecuter.temperature;
+            ThermometerObject.SetActive(true);
+        }
         newImport = false;
     }
 
