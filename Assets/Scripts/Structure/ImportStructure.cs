@@ -14,6 +14,8 @@ public class ImportStructure : MonoBehaviour {
 
     // get the reference to the programm which handles the execution of python
     public PythonExecuter PE;
+    // the Script of the Hourglass, which indicates that the structure is currently loading
+    private Hourglass HourglassScript;
 
     // the prefab for the atoms
     public GameObject AtomPrefab;
@@ -92,6 +94,8 @@ public class ImportStructure : MonoBehaviour {
         pathName = programSettings.GetFilePath(strucFileName);
         LED = Settings.GetComponent<LocalElementData>();
         SD = gameObject.GetComponent<StructureData>();
+        // get the Script of the Hourglass, which indicates that the structure is currently loading
+        HourglassScript = GameObject.Find("Hourglass").GetComponent<Hourglass>();
         foreach (UnityEngine.UI.Text text in MyCanvas.GetComponentsInChildren<UnityEngine.UI.Text>())
             if (text.name.Contains("min_fps_display"))
                 min_fps_display = text;
@@ -294,7 +298,11 @@ public class ImportStructure : MonoBehaviour {
 
         SD.waitForDestroyedAtom = false;
         firstImport = false;
-        newImport = false;
+        if (newImport)
+        {
+            newImport = false;
+            HourglassScript.SetActive(false);
+        }
     }
 
     private void ReadFile(string action)

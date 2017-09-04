@@ -152,8 +152,5 @@ public class PythonExecuter : MonoBehaviour {
         myProcess.StandardInput.WriteLine("Stop!");
         myProcess.StandardInput.Close();
         myProcess.Close();
-        // close python if it wasn't possible the clean way
-        try { myProcess.Kill(); } catch { }
-        print("should have stopped!");
     }
 }
