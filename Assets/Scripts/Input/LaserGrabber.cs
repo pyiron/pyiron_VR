@@ -165,6 +165,7 @@ public class LaserGrabber : MonoBehaviour
                     printer.Ctrl_print(attachedObject.GetComponent<AtomID>().ID.ToString(), 101);
                 }
                 else
+                    // update the rotation of the Hourglass
                     HourglassScript.transform.parent.eulerAngles = Vector3.up * transform.eulerAngles.y;
             }
         }

@@ -30,7 +30,9 @@ public class Hourglass : MonoBehaviour {
 
     public void ActivateHourglass(bool active)
     {
+        // activate or deactivate the Hourglass Gameobject
         gameObject.SetActive(active);
+        // start or stop the Animator of the Hourglass
         anim.enabled = active;
         if (active)
         {
