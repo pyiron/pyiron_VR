@@ -590,6 +590,8 @@ public class LaserGrabber : MonoBehaviour
             laserLength = (attachedObject.transform.position - transform.position).magnitude;
             // spawn the trashcan
             TrashCanScript.ActivateCan();
+            // deactivate the animation
+            PE.SendOrder(runAnim: false);
         }
         
         // set the length of the laser to it's new length
