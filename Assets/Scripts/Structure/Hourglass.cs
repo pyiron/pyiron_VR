@@ -7,11 +7,16 @@ using UnityEngine;
 public class Hourglass : MonoBehaviour {
     // the animationController of the Hourglass
     private Animator anim;
+    // the Transform of the Headset
+    private Transform HeadTransform;
 
     private void Awake()
     {
         // get the reference to the animationController of the Hourglass
         anim = gameObject.GetComponent<Animator>();
+        // get the reference to the transform of the headset
+        HeadTransform = GameObject.Find("[CameraRig]/Camera (head)").transform;
+        print(HeadTransform + "hourglass");
     }
 
     // Use this for initialization
@@ -29,7 +34,12 @@ public class Hourglass : MonoBehaviour {
         gameObject.SetActive(active);
         anim.enabled = active;
         if (active)
+        {
             // start the rotation animation
-            anim.Play("Rotate"); 
+            anim.Play("Rotate");
+            // face the player
+            Vector3 playerToHourglass = (HeadTransform.position - transform.position);
+            transform.eulerAngles = new Vector3(playerToHourglass.x, 90, playerToHourglass.z);
+        }
     }
 }

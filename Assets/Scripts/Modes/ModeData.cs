@@ -47,6 +47,7 @@ public class ModeData : MonoBehaviour
     {
         // get the reference to the transform of the headset
         HeadTransform = GameObject.Find("[CameraRig]/Camera (eye)/Camera (head)").transform;
+        print(HeadTransform + "mode");
         // get the reference to the script that handles the connection to python
         PE = Settings.GetComponent<PythonExecuter>();
     }
