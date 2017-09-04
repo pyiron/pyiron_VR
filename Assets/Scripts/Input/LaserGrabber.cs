@@ -395,8 +395,8 @@ public class LaserGrabber : MonoBehaviour
                             LoadNewLammps("self.create_new_lammps");
                             SD.needsNewAnim = false;
                         }
-                        //else if(lammpsIsMd != MD.modes[MD.activeMode].showTemp)
-                        //    LoadNewLammps("self.create_new_lammps");
+                        else if(lammpsIsMd != MD.modes[MD.activeMode].showTemp)
+                            LoadNewLammps("self.create_new_lammps");
 
                         PE.SendOrder(runAnim: true);
                     }
