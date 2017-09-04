@@ -17,6 +17,8 @@ public class LaserGrabber : MonoBehaviour
     public GameObject AtomStructure;
     // the script of the controller printer
     public InGamePrinter printer;
+    // the Script of the Hourglass, which indicates that the structure is currently loading
+    private Hourglass HourglassScript;
 
     // all data about the modes, f.e. which mode is currently active
     public ModeData MD;
@@ -105,6 +107,10 @@ public class LaserGrabber : MonoBehaviour
         trackedObj = GetComponent<SteamVR_TrackedObject>();
         // get the reference to the programm which handles the execution of python
         PE = Settings.GetComponent<PythonExecuter>();
+        // get the Script of the Hourglass, which indicates that the structure is currently loading
+        foreach (Transform GO in AtomStructure.transform)
+            if (GO.name == "Hourglass")
+                HourglassScript = GO.gameObject.GetComponent<Hourglass>();
     }
 
     void Start()
@@ -385,6 +391,8 @@ public class LaserGrabber : MonoBehaviour
                             else if (MD.modes[MD.activeMode].showRelaxation)
                                 PE.SendOrder("self.calculate('minimize')");
                             firstAnimStart = false;
+                            // Activate the Hourglass
+                            HourglassScript.SetActive(true);
                             print("after new calc");
                         }
                         else if (SD.needsNewAnim)
@@ -394,6 +402,8 @@ public class LaserGrabber : MonoBehaviour
                             else if (MD.modes[MD.activeMode].showRelaxation)
                                 PE.SendOrder("self.create_new_lammps('minimize')");
                             SD.needsNewAnim = false;
+                            // Activate the Hourglass
+                            HourglassScript.SetActive(true);
                         }
                         PE.SendOrder(runAnim: true);
                     }

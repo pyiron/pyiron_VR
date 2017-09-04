@@ -65,4 +65,9 @@ public class InputManager : MonoBehaviour {
             printer.Ctrl_print(MD.activeMode.ToString(), 40);
         }
     }
+
+    private void OnApplicationQuit()
+    {
+        print("Inputmanager quitted!");
+    }
 }

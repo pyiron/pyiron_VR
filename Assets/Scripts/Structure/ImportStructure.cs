@@ -295,14 +295,11 @@ public class ImportStructure : MonoBehaviour {
         }
         if (animState == "new")
             transform.position += SD.structureCtrlPos;
+        HourglassScript.SetActive(false);
 
         SD.waitForDestroyedAtom = false;
         firstImport = false;
-        if (newImport)
-        {
-            newImport = false;
-            HourglassScript.SetActive(false);
-        }
+        newImport = false;
     }
 
     private void ReadFile(string action)
