@@ -25,7 +25,7 @@ public class TrashCan : MonoBehaviour
         // get the reference to the transform of the headset
         HeadTransform = GameObject.Find("[CameraRig]/Camera (eye)/Camera (head)").transform;
         // find the upper part of the trash can
-        TrashCanTop = GameObject.Find("MyObjects/Trash Can/Top");
+        TrashCanTop = GameObject.Find("Trash Can/Top");
 
         // scale the trashcan size according to the player given global size multiplicator
         transform.localScale = Vector3.one * Settings.size;

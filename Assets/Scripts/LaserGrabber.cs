@@ -98,7 +98,7 @@ public class LaserGrabber : MonoBehaviour
     {
         try {
             // find the trash can
-            TrashCanScript = GameObject.Find("MyObjects/Trash Can").GetComponent<TrashCan>();
+            TrashCanScript = GameObject.Find("Trash Can").GetComponent<TrashCan>();
         }
         catch { TrashCanScript = otherCtrl.GetComponent<LaserGrabber>().TrashCanScript; }
         // get the data of the controller
