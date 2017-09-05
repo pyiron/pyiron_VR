@@ -40,9 +40,11 @@ public class LaserGrabber : MonoBehaviour
     // the vector between the positions of the boundingbox and it's parent
     private Transform boundingbox;
 
-    [Header("Masks")] // the controller mask and it's name
-    public LayerMask ctrlMask;
-    public string ctrlMaskName;
+    [Header("Thermometer")]
+    // shows whether the laser is currently pointing at the thermometer
+    private bool laserOnThermometer = false;
+    // the mask of the thermometer
+    public LayerMask thermometerMask;
 
     [Header("Laser")]
     // the prefab for the laser
@@ -89,6 +91,10 @@ public class LaserGrabber : MonoBehaviour
     // the point where the player currently touches the touchpad
     private Vector2 currentTouch;
     // the object of the controller
+    // the controller mask and it's name
+    public LayerMask ctrlMask;
+    public string ctrlMaskName;
+
     private SteamVR_TrackedObject trackedObj;
     // get the device of the controller
     public SteamVR_Controller.Device Controller
@@ -178,8 +184,14 @@ public class LaserGrabber : MonoBehaviour
         // if the controller gets pressed, it should try to attach an object to it
         if (MD.modes[MD.activeMode].playerCanMoveAtoms)
         {
+            // test if the other controller is ready for a resize
+            if (otherCtrl.GetComponent<LaserGrabber>().readyForResize)
+                // init the resize, because now are both controllers ready
+                if (ctrlMaskName == "AtomLayer")
+                    InitResize();
+                else;
             // if an object is colliding with the controller, it should be attached
-            if (collidingObject)
+            else if (collidingObject)
             {
                 AttachObject(collidingObject);
                 // set the controller ready for size, if it grabs the boundingbox
@@ -191,58 +203,59 @@ public class LaserGrabber : MonoBehaviour
                     else
                         readyForResize = true;
             }
-            // test if the other controller is ready for a resize
-            else if (otherCtrl.GetComponent<LaserGrabber>().readyForResize)
-                // init the resize, because now are both controllers ready
-                if (ctrlMaskName == "AtomLayer")
-                    InitResize();
-                else;
             else
                 // send out a raycast to detect objects in front of the controller
-                SendRaycast();
+                SendRaycast(ctrlMask);
         }
+        //if (MD.modes[MD.activeMode].showTemp)
+        //    SendRaycast(thermometerMask);
     }
 
     public void WhileHairTriggerDown()
     {
         if (!MD.modes[MD.activeMode].playerCanMoveAtoms)
         {
-            SendRaycast();
+            SendRaycast(ctrlMask);
             if (MD.modes[MD.activeMode].showInfo)
-                if (laser.activeSelf || collidingObject)
-                {
-                    // set the Infotext to active and edit it 
-                    InfoText.gameObject.SetActive(true);
-                    // let the InfoText always look in the direction of the player
-                    Settings.Face_Player(InfoText.gameObject);
-                    //InfoText.transform.eulerAngles = new Vector3(0, HeadTransform.eulerAngles.y, 0);
-                    if (ctrlMaskName.Contains("AtomLayer"))
-                    {
-                        // set the info text to the top of the atom
-                        InfoText.transform.position = attachedObject.transform.position // + Vector3.up * 0.1f
-                                + Vector3.up * attachedObject.transform.localScale[0] / 2 * Settings.size;
-                        InfoText.text = SD.atomInfos[attachedObject.GetComponent<AtomID>().ID].m_type;
-                        if (PythonExecuter.extendedData)
-                            InfoText.text += "\nForce: "
-                                + PythonExecuter.structureForce[attachedObject.GetComponent<AtomID>().ID];
-                        // might be needed so that the text will stand above the atom
-                        //InfoText.GetComponent<TextMesh>().text += "\n";
-                    }
-                    else
-                    {
-                        // set the info text to the top of the boundingbox
-                        InfoText.transform.position = boundingbox.transform.position + Vector3.up * 0.1f
-                            + Vector3.up * boundingbox.transform.localScale[0] / 2 * Settings.size;
-                        InfoText.text = SD.structureName;
-                        InfoText.text += "\nAtoms: "
-                                + SD.atomInfos.Count;
-                        // InfoText.text += "\nForce: " + PythonExecuter.structureForce;
-                        //might be needed so that the text will stand above the boundingbox
-                        //InfoText.GetComponent<TextMesh>().text += "\n";
-                    }
-                }
-                else
-                    InfoText.gameObject.SetActive(false);
+                ShowInfo();
+        }
+        else
+            InfoText.gameObject.SetActive(false);
+    }
+
+    private void ShowInfo()
+    {
+        if (laser.activeSelf || collidingObject)
+        {
+            // set the Infotext to active and edit it 
+            InfoText.gameObject.SetActive(true);
+            // let the InfoText always look in the direction of the player
+            Settings.Face_Player(InfoText.gameObject);
+            //InfoText.transform.eulerAngles = new Vector3(0, HeadTransform.eulerAngles.y, 0);
+            if (ctrlMaskName.Contains("AtomLayer"))
+            {
+                // set the info text to the top of the atom
+                InfoText.transform.position = attachedObject.transform.position // + Vector3.up * 0.1f
+                        + Vector3.up * attachedObject.transform.localScale[0] / 2 * Settings.size;
+                InfoText.text = SD.atomInfos[attachedObject.GetComponent<AtomID>().ID].m_type;
+                if (PythonExecuter.extendedData)
+                    InfoText.text += "\nForce: "
+                        + PythonExecuter.structureForce[attachedObject.GetComponent<AtomID>().ID];
+                // might be needed so that the text will stand above the atom
+                //InfoText.GetComponent<TextMesh>().text += "\n";
+            }
+            else
+            {
+                // set the info text to the top of the boundingbox
+                InfoText.transform.position = boundingbox.transform.position + Vector3.up * 0.1f
+                    + Vector3.up * boundingbox.transform.localScale[0] / 2 * Settings.size;
+                InfoText.text = SD.structureName;
+                InfoText.text += "\nAtoms: "
+                        + SD.atomInfos.Count;
+                // InfoText.text += "\nForce: " + PythonExecuter.structureForce;
+                //might be needed so that the text will stand above the boundingbox
+                //InfoText.GetComponent<TextMesh>().text += "\n";
+            }
         }
         else
             InfoText.gameObject.SetActive(false);
@@ -250,6 +263,8 @@ public class LaserGrabber : MonoBehaviour
 
     public void HairTriggerUp()
     {
+        if (laserOnThermometer)
+            laserOnThermometer = false;
         // check that the move mode is currently active
         if (MD.modes[MD.activeMode].playerCanMoveAtoms)
         {
@@ -432,7 +447,7 @@ public class LaserGrabber : MonoBehaviour
     }
 
     // checks if the laser hits an object, which it should hit (an atom or a structure)
-    private void SendRaycast()
+    private void SendRaycast(LayerMask mask)
     {
         // check that there isn't an object in range to grab
         if (collidingObject == null)
@@ -441,14 +456,15 @@ public class LaserGrabber : MonoBehaviour
 
             if (!attachedObject || !MD.modes[MD.activeMode].playerCanMoveAtoms)
                 // send out a raycast to detect if there is an object in front of the laser 
-                if (Physics.Raycast(trackedObj.transform.position, transform.forward, out hit, laserMaxDistance, ctrlMask))
+                if (Physics.Raycast(trackedObj.transform.position, transform.forward, out hit, laserMaxDistance, mask))
                 {
-                    // print(ctrlMaskName);
                     laser.SetActive(true);
                     hitPoint = hit.point;
                     ShowLaser(hit);
                     if (MD.modes[MD.activeMode].playerCanMoveAtoms)
                         AttachObject(hit.transform.gameObject);
+                    else if (mask == thermometerMask)
+                        laserOnThermometer = true;
                     else
                         attachedObject = hit.transform.gameObject;
                 }
