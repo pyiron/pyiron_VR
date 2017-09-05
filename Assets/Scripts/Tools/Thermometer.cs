@@ -40,6 +40,9 @@ public class Thermometer : MonoBehaviour {
         foreach (Transform Trans in transform)
             if (Trans.name == "Liquid")
                 ThermometerRenderer = Trans.GetComponent<Renderer>();
+
+        // make sure the color is the usual one
+        ChangeLiquidColor();
     }
 	
 	// Update is called once per frame
@@ -50,9 +53,7 @@ public class Thermometer : MonoBehaviour {
     public void UpdateTemperature()
     {
         ThermometerText.text = Settings.temperature.ToString();
-        print(Settings.temperature / maxTemperature);
         anim.SetFloat("Temperature", Settings.temperature / maxTemperature);
-        print("get " + anim.GetFloat("Temperature"));
     }
 
     public void ChangeLiquidColor(string state="")

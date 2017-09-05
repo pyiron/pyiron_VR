@@ -469,12 +469,10 @@ public class LaserGrabber : MonoBehaviour
                     laser.SetActive(true);
                     hitPoint = hit.point;
                     ShowLaser(hit);
-                    print(hittedObject + hittedObject.name);
                     
                     if (hittedObject.name.Contains("Thermometer"))
                     {
                         laserOnThermometer = true;
-                        print("good3");
 
                         // get the reference to the thermometer, if it is not yet defined
                         if (hit.transform.gameObject.name == "Thermometer")
@@ -547,7 +545,7 @@ public class LaserGrabber : MonoBehaviour
     private void SetCollidingObject(Collider col)
     {
         // check that the colliding object has a rigidbody
-        if (collidingObject) // || !col.GetComponent<Rigidbody>())
+        if (collidingObject || col.gameObject.name.Contains("Thermometer"))
             return;
 
         // checks if the colliding object is of interrest to the controller
