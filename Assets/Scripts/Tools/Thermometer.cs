@@ -16,7 +16,7 @@ public class Thermometer : MonoBehaviour {
     // the size the text on the thermometer telling the temperature should have
     private float TextSize = 0.4f;
     // the max temperature you can set with the thermometer and when the thermometer won't show any higher temperatures
-    private int maxTemperature = 1000;
+    private int maxTemperature = 10000;
     // the color of the liquid of the thermometer
     private Color liquidColor = Color.red;
     // the height from where on the thermometer won't show any temperature changes any more, if the controller shows above
@@ -24,7 +24,7 @@ public class Thermometer : MonoBehaviour {
     // the height from where on the thermometer won't show any temperature changes any more, if the controller shows under this height
     private float lowestPoint = 0.31f;
     // determines in which intervals the thermometer should update the temperature text
-    public int precision = 1000;
+    private int precision = 100;
 
 
     private void Awake()
@@ -56,15 +56,14 @@ public class Thermometer : MonoBehaviour {
 		
 	}
 
-    public void UpdateTemperature(bool round=false)
+    public void UpdateTemperature(int exactTemperature = -1)
     {
-        if (round)
-        {
-
-        }
         ThermometerText.text = Settings.temperature.ToString();
-        anim.SetFloat("Temperature", (float)Settings.temperature / maxTemperature);
-            //(Mathf.Round(Settings.temperature / temperatureStep) * temperatureStep).ToString();
+        if (exactTemperature != -1)
+            anim.SetFloat("Temperature", (float)exactTemperature / maxTemperature);
+        else
+            anim.SetFloat("Temperature", (float)Settings.temperature / maxTemperature);
+         //(Mathf.Round(Settings.temperature / temperatureStep) * temperatureStep).ToString();
         //anim.SetFloat("Temperature", (float)Mathf.Round(Settings.temperature / temperatureStep) * temperatureStep / maxTemperature);
     }
 
@@ -85,9 +84,8 @@ public class Thermometer : MonoBehaviour {
             newTemperatureGradient = 0;
         else if (newTemperatureGradient > 1)
             newTemperatureGradient = 1;
-        Settings.temperature = (int)(maxTemperature * newTemperatureGradient);
-        UpdateTemperature(round: true);
-        
-        // (int)(maxTemperature * (hitPointHeight - lowestPoint) / (highestPoint - lowestPoint))
+
+        Settings.temperature = (int)(precision * newTemperatureGradient) * maxTemperature / precision;
+        UpdateTemperature(exactTemperature:(int)(maxTemperature * newTemperatureGradient));
     }
 }

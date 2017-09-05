@@ -90,7 +90,6 @@ public class PythonExecuter : MonoBehaviour {
         {
             StoreData(e.Data);
             collectedData = currentData;
-            print(collectedData);
             // print(collectedData);
             currentData = "";
             structureForce = currentStructureForce;
