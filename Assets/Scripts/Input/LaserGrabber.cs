@@ -55,8 +55,10 @@ public class LaserGrabber : MonoBehaviour
     private int laserMaxDistance = 100;
 
     [Header("Thermometer")]
-    // shows whether the laser is currently pointing at the thermometer
+    // shows if the user hitted the thermometer with the laser when he pressed the hair trigger down the last time
     private bool laserOnThermometer = false;
+    // shows whether the laser is currently pointing at the thermometer
+    private bool laserCurrentlyOnThermometer = false;
     // the reference to the thermometer
     private GameObject ThermometerObject;
     // the script of the thermometer
@@ -208,7 +210,9 @@ public class LaserGrabber : MonoBehaviour
 
     public void WhileHairTriggerDown()
     {
-        if (!MD.modes[MD.activeMode].playerCanMoveAtoms)
+        if (laserOnThermometer)
+            SendRaycast();
+        else if (!MD.modes[MD.activeMode].playerCanMoveAtoms)
         {
             SendRaycast();
             if (MD.modes[MD.activeMode].showInfo)
@@ -261,6 +265,7 @@ public class LaserGrabber : MonoBehaviour
         if (laserOnThermometer)
         {
             laserOnThermometer = false;
+            laserCurrentlyOnThermometer = false;
             thermometerScript.ChangeLiquidColor();
             laser.SetActive(false);
         }
@@ -457,11 +462,11 @@ public class LaserGrabber : MonoBehaviour
     private void SendRaycast()
     {
         // check that there isn't an object in range to grab
-        if (collidingObject == null)
+        if (true) //(collidingObject == null)
         {
             RaycastHit hit;
 
-            if (!attachedObject || !MD.modes[MD.activeMode].playerCanMoveAtoms)
+            if (!attachedObject || !MD.modes[MD.activeMode].playerCanMoveAtoms || laserOnThermometer)
                 // send out a raycast to detect if there is an object in front of the laser 
                 if (Physics.Raycast(trackedObj.transform.position, transform.forward, out hit, laserMaxDistance, ctrlMask))
                 {
@@ -469,10 +474,11 @@ public class LaserGrabber : MonoBehaviour
                     laser.SetActive(true);
                     hitPoint = hit.point;
                     ShowLaser(hit);
-                    
+
                     if (hittedObject.name.Contains("Thermometer"))
                     {
                         laserOnThermometer = true;
+                        laserCurrentlyOnThermometer = true;
 
                         // get the reference to the thermometer, if it is not yet defined
                         if (hit.transform.gameObject.name == "Thermometer")
@@ -483,10 +489,17 @@ public class LaserGrabber : MonoBehaviour
                         thermometerScript = ThermometerObject.GetComponent<Thermometer>();
                         thermometerScript.ChangeLiquidColor("clicked");
                     }
-                    else if (MD.modes[MD.activeMode].playerCanMoveAtoms)
-                        AttachObject(hittedObject);
-                    else
-                        attachedObject = hittedObject;
+                    else if (!laserOnThermometer)
+                        if (MD.modes[MD.activeMode].playerCanMoveAtoms)
+                            AttachObject(hittedObject);
+                        else
+                            attachedObject = hittedObject;
+                }
+                else if (laserOnThermometer)
+                {
+                    laserCurrentlyOnThermometer = false;
+                    laser.SetActive(false);
+                    thermometerScript.ChangeLiquidColor("clickedButMovedAway");
                 }
                 else if (MD.modes[MD.activeMode].playerCanResizeAtoms)
                     if (ctrlMaskName == "AtomLayer")

@@ -60,6 +60,8 @@ public class Thermometer : MonoBehaviour {
     {
         if (state == "clicked")
             ThermometerRenderer.materials[0].color = new Color(0.7f, 0, 0);
+        else if (state == "clickedButMovedAway")
+            ThermometerRenderer.materials[0].color = new Color(0.85f, 0, 0);
         else
             ThermometerRenderer.materials[0].color = liquidColor;
     }
