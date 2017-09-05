@@ -1,0 +1,34 @@
+The current data which gets send from Python to Unity can have these following parts:
+
+First Line:
+anim 16 1000\n
+
+anim: tells Unity, that there will be new frames following after this structure, and that this frame has the same amount of atoms as the one before, so that Unity won't create new Atoms. It doesn't have much use anymore, but was needed for sending the data via files. It's the usual word, so when importing new data, just use this! Other possibilities are 
+static: signals, that the structure has no animation (so that Unity will just read one file and doesn't looks for new files anymore.
+new: Signals, that the amount of atoms in the structure has changed.
+
+16: The amount of atoms in the following structure. Needed when getting the Data from Python via the output log.
+
+1000: The temperature the user wants the structure to have. I think, if it gets not send, there will be no thermometer in the scene, but I have to test this. It should just be send when sending the first frame.
+
+Main Part:
+Each Line should look like this
+1.435 1.435 1.435 Fe 0.08102\n
+or this
+1.435 1.435 1.435 Fe\n
+
+The first three numers are the x, y, and z coordinates for the atom described in this line. But maybe they are shown as x, z, y coordinates in Unity, because Unity has some strange kind of coordinate system. But this wasn't a problem yet.
+
+Fe is the symbol of the Element, in this case the symbol for Iron
+
+0.08102 is the force the atom possesses. It's optional.
+
+Last line:
+5.74 0 0 -3.515e-16 5.74 0 -3.515e-16 -3.515e-16 5.74 \n
+
+The last line is the flattened cellbox. It can be devided into 3 Vectors with 3 values, which would look like this if wriiten in Python style:
+(5.74 0 0), (-3.515e-16 5.74 0), (-3.515e-16 -3.515e-16 5.74)
+
+Care: there is a blanc space before the \n in this line! This is needed, else it will crash!
+
+I think, at the moment Unity can't read this data out of a file without crashing. But if I have time left, I'll code that Unity can again read this data out of files. But then, it can't handle most of the interacting stuff, like changing the temperature, destroying an atom or even moving an atom and get the new Animation how the structure is reacting to the change.
