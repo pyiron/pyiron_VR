@@ -16,9 +16,13 @@ public class Thermometer : MonoBehaviour {
     // the size the text on the thermometer telling the temperature should have
     private float TextSize = 0.4f;
     // the max temperature you can set with the thermometer and when the thermometer won't show any higher temperatures
-    private float maxTemperature = 10000;
+    private int maxTemperature = 10000;
     // the color of the liquid of the thermometer
     private Color liquidColor = Color.red;
+    // the height from where on the thermometer won't show any temperature changes any more, if the controller shows above
+    private float highestPoint = 1.76f;
+    // the height from where on the thermometer won't show any temperature changes any more, if the controller shows under this height
+    private float lowestPoint = 0.31f;
 
 
     private void Awake()
@@ -53,7 +57,7 @@ public class Thermometer : MonoBehaviour {
     public void UpdateTemperature()
     {
         ThermometerText.text = Settings.temperature.ToString();
-        anim.SetFloat("Temperature", Settings.temperature / maxTemperature);
+        anim.SetFloat("Temperature", (float)Settings.temperature / maxTemperature);
     }
 
     public void ChangeLiquidColor(string state="")
@@ -64,5 +68,11 @@ public class Thermometer : MonoBehaviour {
             ThermometerRenderer.materials[0].color = new Color(0.85f, 0, 0);
         else
             ThermometerRenderer.materials[0].color = liquidColor;
+    }
+
+    public void ChangeThemperature(float hitPointHeight)
+    {
+        Settings.temperature = (int)(maxTemperature * (hitPointHeight - lowestPoint) / (highestPoint - lowestPoint));
+        UpdateTemperature();
     }
 }

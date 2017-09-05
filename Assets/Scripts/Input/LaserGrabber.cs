@@ -488,6 +488,7 @@ public class LaserGrabber : MonoBehaviour
 
                         thermometerScript = ThermometerObject.GetComponent<Thermometer>();
                         thermometerScript.ChangeLiquidColor("clicked");
+                        thermometerScript.ChangeThemperature(hitPoint.y);
                     }
                     else if (!laserOnThermometer)
                         if (MD.modes[MD.activeMode].playerCanMoveAtoms)
