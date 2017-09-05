@@ -56,42 +56,60 @@ public class Thermometer : MonoBehaviour {
 		
 	}
 
+    // show the current temperature data on the thermometer
     public void UpdateTemperature(int exactTemperature = -1)
     {
+        // set the current temperature on the text field
         ThermometerText.text = Settings.temperature.ToString();
+        // set the red liquid to the right state / up to the right height
         if (exactTemperature != -1)
             anim.SetFloat("Temperature", (float)exactTemperature / maxTemperature);
         else
+            // set the temperature to an exact value, although the temperature is rounded,
+            // to make it look smooth how the temperature gets scaled
             anim.SetFloat("Temperature", (float)Settings.temperature / maxTemperature);
-         //(Mathf.Round(Settings.temperature / temperatureStep) * temperatureStep).ToString();
-        //anim.SetFloat("Temperature", (float)Mathf.Round(Settings.temperature / temperatureStep) * temperatureStep / maxTemperature);
     }
 
+    // change the color if the user interacts with the thermometer
     public void ChangeLiquidColor(string state="")
     {
+        // set the color to a dark red if the user currently clicks on the thermometer
         if (state == "clicked")
             ThermometerRenderer.materials[0].color = new Color(0.7f, 0, 0);
+        // set the color to a slightly dark red if the user has clicked on the thermometer but moved the laser away from it,
+        // while still pressing the trigger
         else if (state == "clickedButMovedAway")
             ThermometerRenderer.materials[0].color = new Color(0.85f, 0, 0);
+        // set it to the usual bright red color
         else
             ThermometerRenderer.materials[0].color = liquidColor;
     }
 
+    // change the temperature, according to where the user is pointing
     public void ChangeThemperature(float hitPointHeight)
     {
+        // calculate where the user is pointing at
         float newTemperatureGradient = (hitPointHeight - lowestPoint) / (highestPoint - lowestPoint);
+        // if the user points to a point lower than 0, the temperature will still be 0 and not a negative value
         if (newTemperatureGradient < 0)
             newTemperatureGradient = 0;
+        // if the user points to a point higher than 1, the temperature will still be 1 and not a value higher than one.
+        // This way, the temperature can't get higher than maxTemperature
         else if (newTemperatureGradient > 1)
             newTemperatureGradient = 1;
 
+        // set the temperature to the new value
         Settings.temperature = (int)(precision * newTemperatureGradient) * maxTemperature / precision;
+        // show the current temperature data on the thermometer
         UpdateTemperature(exactTemperature:(int)(maxTemperature * newTemperatureGradient));
     }
 
+    // allows to change the maxTemperature
     public void SetMaxTemperature(float change)
     {
+        // prevents that the maxTemperature will fall to a value lower than 100, because this would be of no use for the user
         if (maxTemperature > 100 || change > 1)
+            // changes the current maxTemperature to the new value
             maxTemperature = (int)(maxTemperature * change);
     }
 }

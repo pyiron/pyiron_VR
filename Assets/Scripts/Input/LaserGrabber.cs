@@ -362,8 +362,10 @@ public class LaserGrabber : MonoBehaviour
             if (!laser.activeSelf)
                 ControllAnimation();
         if (laserOnThermometer)
+            // increases the maxTemperature by a factor of 10 when pressing on the upper half of the touchpad
             if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).y > 0)
                 thermometerScript.SetMaxTemperature(10);
+            // decreases the maxTemperature by a factor of 10 when pressing on the lower half of the touchpad, if possible
             else
                 thermometerScript.SetMaxTemperature(0.1f);
     }
