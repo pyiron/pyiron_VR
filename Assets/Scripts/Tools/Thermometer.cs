@@ -11,10 +11,15 @@ public class Thermometer : MonoBehaviour {
     private Animator anim;
     // the text on the thermometer how high the temperature currently is
     private TextMesh ThermometerText;
+    // the renderer of the thermometer
+    private Renderer ThermometerRenderer;
     // the size the text on the thermometer telling the temperature should have
     private float TextSize = 0.4f;
     // the max temperature you can set with the thermometer and when the thermometer won't show any higher temperatures
     private float maxTemperature = 10000;
+    // the color of the liquid of the thermometer
+    private Color liquidColor = Color.red;
+
 
     private void Awake()
     {
@@ -30,7 +35,11 @@ public class Thermometer : MonoBehaviour {
     void Start () {
         UpdateTemperature();
         ThermometerText.transform.localScale = Vector3.one * TextSize;
-        //ThermometerText.transform.eulerAngles = Vector3.up * 225;
+        
+        // get the reference to the Renderer of the thermometer
+        foreach (Transform Trans in transform)
+            if (Trans.name == "Liquid")
+                ThermometerRenderer = Trans.GetComponent<Renderer>();
     }
 	
 	// Update is called once per frame
@@ -44,5 +53,13 @@ public class Thermometer : MonoBehaviour {
         print(Settings.temperature / maxTemperature);
         anim.SetFloat("Temperature", Settings.temperature / maxTemperature);
         print("get " + anim.GetFloat("Temperature"));
+    }
+
+    public void ChangeLiquidColor(string state="")
+    {
+        if (state == "clicked")
+            ThermometerRenderer.materials[0].color = new Color(0.7f, 0, 0);
+        else
+            ThermometerRenderer.materials[0].color = liquidColor;
     }
 }

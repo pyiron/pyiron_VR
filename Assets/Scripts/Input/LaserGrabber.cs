@@ -40,12 +40,6 @@ public class LaserGrabber : MonoBehaviour
     // the vector between the positions of the boundingbox and it's parent
     private Transform boundingbox;
 
-    [Header("Thermometer")]
-    // shows whether the laser is currently pointing at the thermometer
-    private bool laserOnThermometer = false;
-    // the mask of the thermometer
-    public LayerMask thermometerMask;
-
     [Header("Laser")]
     // the prefab for the laser
     public GameObject LaserPrefab;
@@ -59,6 +53,14 @@ public class LaserGrabber : MonoBehaviour
     private float laserLength;
     // the max distance when the laser still detects an object to attach
     private int laserMaxDistance = 100;
+
+    [Header("Thermometer")]
+    // shows whether the laser is currently pointing at the thermometer
+    private bool laserOnThermometer = false;
+    // the reference to the thermometer
+    private GameObject ThermometerObject;
+    // the script of the thermometer
+    private Thermometer thermometerScript;
 
     [Header("Destroy Atom")]
 
@@ -117,7 +119,7 @@ public class LaserGrabber : MonoBehaviour
         PE = Settings.GetComponent<PythonExecuter>();
         // get the Script of the Hourglass, which indicates that the structure is currently loading
         HourglassScript = GameObject.Find("HourglassRotator").transform.GetChild(0).gameObject.GetComponent<Hourglass>();
-    }
+}
 
     void Start()
     {
@@ -173,10 +175,8 @@ public class LaserGrabber : MonoBehaviour
             }
         }
 
-        if (readyForResize)
-            resizeableRect.SetActive(true);
-        else
-            resizeableRect.SetActive(false);
+        // show the white rect if this controller is ready for a resize of the structure
+        resizeableRect.SetActive(readyForResize);
     }
 
     public void HairTriggerDown()
@@ -196,16 +196,11 @@ public class LaserGrabber : MonoBehaviour
                 AttachObject(collidingObject);
                 // set the controller ready for size, if it grabs the boundingbox
                 if (ctrlMaskName == "BoundingboxLayer")
-                    if (otherCtrl.GetComponent<LaserGrabber>().readyForResize)
-                    {
-                        InitResize();
-                    }
-                    else
-                        readyForResize = true;
+                    SetControllerToReady();
             }
             else
                 // send out a raycast to detect objects in front of the controller
-                SendRaycast(ctrlMask);
+                SendRaycast();
         }
         //if (MD.modes[MD.activeMode].showTemp)
         //    SendRaycast(thermometerMask);
@@ -215,7 +210,7 @@ public class LaserGrabber : MonoBehaviour
     {
         if (!MD.modes[MD.activeMode].playerCanMoveAtoms)
         {
-            SendRaycast(ctrlMask);
+            SendRaycast();
             if (MD.modes[MD.activeMode].showInfo)
                 ShowInfo();
         }
@@ -264,9 +259,13 @@ public class LaserGrabber : MonoBehaviour
     public void HairTriggerUp()
     {
         if (laserOnThermometer)
+        {
             laserOnThermometer = false;
-        // check that the move mode is currently active
-        if (MD.modes[MD.activeMode].playerCanMoveAtoms)
+            thermometerScript.ChangeLiquidColor();
+            laser.SetActive(false);
+        }
+            // check that the move mode is currently active
+            if (MD.modes[MD.activeMode].playerCanMoveAtoms)
         {
             // set the state of the controller to not ready for resizeStructure
             readyForResize = false;
@@ -359,6 +358,14 @@ public class LaserGrabber : MonoBehaviour
                 ControllAnimation();
     }
 
+    private void SetControllerToReady()
+    {
+        if (otherCtrl.GetComponent<LaserGrabber>().readyForResize)
+            InitResize();
+        else
+            readyForResize = true;
+    }
+
     private void DuplicateStructure()
     {
         if (ctrlMaskName.Contains("BoundingboxLayer"))
@@ -447,7 +454,7 @@ public class LaserGrabber : MonoBehaviour
     }
 
     // checks if the laser hits an object, which it should hit (an atom or a structure)
-    private void SendRaycast(LayerMask mask)
+    private void SendRaycast()
     {
         // check that there isn't an object in range to grab
         if (collidingObject == null)
@@ -456,17 +463,32 @@ public class LaserGrabber : MonoBehaviour
 
             if (!attachedObject || !MD.modes[MD.activeMode].playerCanMoveAtoms)
                 // send out a raycast to detect if there is an object in front of the laser 
-                if (Physics.Raycast(trackedObj.transform.position, transform.forward, out hit, laserMaxDistance, mask))
+                if (Physics.Raycast(trackedObj.transform.position, transform.forward, out hit, laserMaxDistance, ctrlMask))
                 {
+                    GameObject hittedObject = hit.transform.gameObject;
                     laser.SetActive(true);
                     hitPoint = hit.point;
                     ShowLaser(hit);
-                    if (MD.modes[MD.activeMode].playerCanMoveAtoms)
-                        AttachObject(hit.transform.gameObject);
-                    else if (mask == thermometerMask)
+                    print(hittedObject + hittedObject.name);
+                    
+                    if (hittedObject.name.Contains("Thermometer"))
+                    {
                         laserOnThermometer = true;
+                        print("good3");
+
+                        // get the reference to the thermometer, if it is not yet defined
+                        if (hit.transform.gameObject.name == "Thermometer")
+                            ThermometerObject = hittedObject;
+                        else
+                            ThermometerObject = hittedObject.transform.parent.gameObject;
+
+                        thermometerScript = ThermometerObject.GetComponent<Thermometer>();
+                        thermometerScript.ChangeLiquidColor("clicked");
+                    }
+                    else if (MD.modes[MD.activeMode].playerCanMoveAtoms)
+                        AttachObject(hittedObject);
                     else
-                        attachedObject = hit.transform.gameObject;
+                        attachedObject = hittedObject;
                 }
                 else if (MD.modes[MD.activeMode].playerCanResizeAtoms)
                     if (ctrlMaskName == "AtomLayer")
