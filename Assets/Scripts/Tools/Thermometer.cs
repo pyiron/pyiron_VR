@@ -23,6 +23,8 @@ public class Thermometer : MonoBehaviour {
     private float highestPoint = 1.76f;
     // the height from where on the thermometer won't show any temperature changes any more, if the controller shows under this height
     private float lowestPoint = 0.31f;
+    // determines in which intervals the thermometer should update the temperature text
+    public float temperatureStep = 1000;
 
 
     private void Awake()
@@ -54,10 +56,10 @@ public class Thermometer : MonoBehaviour {
 		
 	}
 
-    public void UpdateTemperature()
+    public void UpdateTemperature(bool round=false)
     {
-        ThermometerText.text = Settings.temperature.ToString();
-        anim.SetFloat("Temperature", (float)Settings.temperature / maxTemperature);
+        ThermometerText.text = (Mathf.Round(Settings.temperature / temperatureStep) * temperatureStep).ToString();
+        anim.SetFloat("Temperature", (float)Mathf.Round(Settings.temperature / temperatureStep) * temperatureStep / maxTemperature);
     }
 
     public void ChangeLiquidColor(string state="")
@@ -73,6 +75,6 @@ public class Thermometer : MonoBehaviour {
     public void ChangeThemperature(float hitPointHeight)
     {
         Settings.temperature = (int)(maxTemperature * (hitPointHeight - lowestPoint) / (highestPoint - lowestPoint));
-        UpdateTemperature();
+        UpdateTemperature(round:true);
     }
 }
