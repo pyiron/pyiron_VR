@@ -361,6 +361,11 @@ public class LaserGrabber : MonoBehaviour
             // check that the player isn't currently trying to change the length of the laser
             if (!laser.activeSelf)
                 ControllAnimation();
+        if (laserOnThermometer)
+            if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).y > 0)
+                thermometerScript.SetMaxTemperature(10);
+            else
+                thermometerScript.SetMaxTemperature(0.1f);
     }
 
     private void SetControllerToReady()

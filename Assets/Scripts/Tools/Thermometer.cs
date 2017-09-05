@@ -88,4 +88,10 @@ public class Thermometer : MonoBehaviour {
         Settings.temperature = (int)(precision * newTemperatureGradient) * maxTemperature / precision;
         UpdateTemperature(exactTemperature:(int)(maxTemperature * newTemperatureGradient));
     }
+
+    public void SetMaxTemperature(float change)
+    {
+        if (maxTemperature > 100 || change > 1)
+            maxTemperature = (int)(maxTemperature * change);
+    }
 }
