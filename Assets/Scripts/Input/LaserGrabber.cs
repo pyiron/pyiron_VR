@@ -167,8 +167,10 @@ public class LaserGrabber : MonoBehaviour
                 MoveGrabbedObject();
                 if (ctrlMaskName.Contains("Atom"))
                 {
+                    // update the trashcan, if it is shown in the current mode
                     if (MD.modes[MD.activeMode].showTrashcan)
                         TrashCanScript.UpdateTrashCan(attachedObject);
+                    // let the controller printer print the atom ID of the current attached atom
                     printer.Ctrl_print(attachedObject.GetComponent<AtomID>().ID.ToString(), 101);
                 }
                 else
@@ -198,6 +200,7 @@ public class LaserGrabber : MonoBehaviour
                 AttachObject(collidingObject);
                 // set the controller ready for size, if it grabs the boundingbox
                 if (ctrlMaskName == "BoundingboxLayer")
+                    // initialize the resize if both controllers are ready, else just set the controller to ready
                     SetControllerToReady();
             }
             else
@@ -262,11 +265,15 @@ public class LaserGrabber : MonoBehaviour
 
     public void HairTriggerUp()
     {
+        // check if the player has clicked on the thermometer
         if (laserOnThermometer)
         {
+            // show that the thermometer isn't being clicked anymore
             laserOnThermometer = false;
             laserCurrentlyOnThermometer = false;
+            // turn the color of the thermometer back to it's usual color
             thermometerScript.ChangeLiquidColor();
+            // deactivate the laser
             laser.SetActive(false);
         }
             // check that the move mode is currently active
@@ -370,6 +377,7 @@ public class LaserGrabber : MonoBehaviour
                 thermometerScript.SetMaxTemperature(0.1f);
     }
 
+    // initialize the resize if both controllers are ready, else just set the controller to ready
     private void SetControllerToReady()
     {
         if (otherCtrl.GetComponent<LaserGrabber>().readyForResize)
@@ -421,19 +429,24 @@ public class LaserGrabber : MonoBehaviour
             PE.SendOrder(runAnim: false);
         else
         {
+            // when loading the first animation, show Python that it's the first time, so that it can check if there is already a loaded ham_lammps
             if (firstAnimStart)
             {
                 LoadNewLammps("self.calculate");
                 firstAnimStart = false;
             }
+            // tell Python to create a new ham_lammps because the structure has changed
             else if (SD.needsNewAnim)
             {
                 LoadNewLammps("self.create_new_lammps");
+                // remember that the ham_lammps is now according to the current structure
                 SD.needsNewAnim = false;
             }
+            // load a new ham_lammps if the current ham_lammps is for md and the animation for minimize is needed or vice versa
             else if (lammpsIsMd != MD.modes[MD.activeMode].showTemp)
                 LoadNewLammps("self.create_new_lammps");
 
+            // tell Python to start sending the dataframes from the current ham_lammps
             PE.SendOrder(runAnim: true);
         }
 
