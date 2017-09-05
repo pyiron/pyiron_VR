@@ -74,7 +74,12 @@ public class Thermometer : MonoBehaviour {
 
     public void ChangeThemperature(float hitPointHeight)
     {
-        Settings.temperature = (int)(maxTemperature * (hitPointHeight - lowestPoint) / (highestPoint - lowestPoint));
-        UpdateTemperature(round:true);
+        float newTemperatureGradient = (hitPointHeight - lowestPoint) / (highestPoint - lowestPoint);
+        if (0 <= newTemperatureGradient && 1 >= newTemperatureGradient)
+        {
+            Settings.temperature = (int)(maxTemperature * newTemperatureGradient);
+            UpdateTemperature(round: true);
+        }
+        // (int)(maxTemperature * (hitPointHeight - lowestPoint) / (highestPoint - lowestPoint))
     }
 }
