@@ -695,7 +695,7 @@ public class LaserGrabber : MonoBehaviour
                 // so it can't build a ham_lammps function
                 if (SD.atomInfos.Count >= 3)
                     //DestroyAtom();
-                    OTP.ExecuteOrder("Destroy Atom " + attachedObject.GetComponent<AtomID>().ID, this);
+                    OTP.ExecuteOrder("Destroy Atom " + attachedObject.GetComponent<AtomID>().ID);
 
             if (ctrlMaskName == "AtomLayer")
                 // deactivate the trash can
