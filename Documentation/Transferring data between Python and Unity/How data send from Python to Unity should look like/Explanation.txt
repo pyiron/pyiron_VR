@@ -1,7 +1,9 @@
 The current data which gets send from Python to Unity can have these following parts:
 
 First Line:
-anim 16 1000\n
+new anim 16 1000\n
+
+new: tells Unity, that a new frame begins, which data will be send in the following lines. Has to be included. There are no other options than new.
 
 anim: tells Unity, that there will be new frames following after this structure, and that this frame has the same amount of atoms as the one before, so that Unity won't create new Atoms. It doesn't have much use anymore, but was needed for sending the data via files. It's the usual word, so when importing new data, just use this! Other possibilities are 
 static: signals, that the structure has no animation (so that Unity will just read one file and doesn't looks for new files anymore.
