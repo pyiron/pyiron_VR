@@ -88,6 +88,8 @@ public class LaserGrabber : MonoBehaviour
     [Header("Transmittion")]
     // the filename of the file which will send orders from unity to pyiron
     private string fileName = "orders";
+    // the script that stores the possible orders which can be send to Python
+    private OrdersToPython OTP;
 
     [Header("Controller")]
     // the start touch point from when the player lays his finger on the touchpad
@@ -119,6 +121,8 @@ public class LaserGrabber : MonoBehaviour
         trackedObj = GetComponent<SteamVR_TrackedObject>();
         // get the reference to the programm which handles the execution of python
         PE = Settings.GetComponent<PythonExecuter>();
+        // get the reference to the script that stores the possible orders which can be send to Python
+        OTP = Settings.GetComponent<OrdersToPython>();
         // get the Script of the Hourglass, which indicates that the structure is currently loading
         HourglassScript = GameObject.Find("HourglassRotator").transform.GetChild(0).gameObject.GetComponent<Hourglass>();
 }
@@ -685,12 +689,13 @@ public class LaserGrabber : MonoBehaviour
         //objectInHand.GetComponent<Rigidbody>().angularVelocity = Controller.angularVelocity;
 
         if (MD.modes[MD.activeMode].showTrashcan)
-        { 
+        {
             if (TrashCanScript.atomInCan && ctrlMaskName == "AtomLayer")
                 // check that there isn't just one atom left, because this atom would have no temperature/force/velocity,
                 // so it can't build a ham_lammps function
                 if (SD.atomInfos.Count >= 3)
-                    DestroyAtom();
+                    //DestroyAtom();
+                    OTP.ExecuteOrder("Destroy Atom " + attachedObject.GetComponent<AtomID>().ID, this);
 
             if (ctrlMaskName == "AtomLayer")
                 // deactivate the trash can
@@ -701,7 +706,7 @@ public class LaserGrabber : MonoBehaviour
         attachedObject = null;
     }
 
-    private void DestroyAtom()
+    /*private void DestroyAtom()
     {
         // send Python/{yiron the order to destroy the atom
         PE.SendOrder("self.destroy_atom(" + attachedObject.GetComponent<AtomID>().ID + ")");
@@ -715,7 +720,7 @@ public class LaserGrabber : MonoBehaviour
         Destroy(attachedObject);
         // show that when loading a python anim the next time, it should first load the new one (without the removed atom)
         SD.needsNewAnim = true;
-    }
+    }*/
     
     private void ShowLaser(RaycastHit hit) 
     {

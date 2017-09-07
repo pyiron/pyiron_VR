@@ -35,6 +35,7 @@ IMPORTANT:
 - Let Unity send an order to Python with the current frame requesting the force data (of one atom or all) when being in info mode, else let it not send the force data
 - Let Python send the current frame each frame and the amount of frames in the beginning
 - Let Unity show in a time bar which frame is currently shown.
+- try to create a script, from which most other scripts are children from, and which gives them the important references to some (or maybe all) scripts
 
 - use this to start the 3D Beamer in the shell: *cd to Desktop* VABuild7_18VRAndBeamer.exe -vrmode Stereo
 
