@@ -35,6 +35,8 @@ public class PythonExecuter : MonoBehaviour {
     private static float[] currentStructureForce;
     // the force the structure currently posseses
     public static float[] structureForce;
+    // the frame Python sends to Unity this frame
+    public static int frame;
     // the temperature Python sends to Unity when sending the first structure data
     public static int temperature;
     // the amount of atoms the new structure posseses
@@ -106,16 +108,24 @@ public class PythonExecuter : MonoBehaviour {
             currentAtomLine = 0;
         }
         else if (currentAtomLine == 0)
+        {
+            if (e.Data.Split()[0].Contains("new"))
             {
-            if (e.Data.Split()[0] == "new")
-                temperature = int.Parse(e.Data.Split()[3]);
-            if (int.Parse(e.Data.Split()[2]) != structureSize)
-            {
-                structureSize = int.Parse(e.Data.Split()[2]);
-                currentStructureForce = new float[structureSize];
+                // remember the temperature with which the structure has been initialised
+                if (e.Data.Split()[0] == "newTemperature")
+                    temperature = int.Parse(e.Data.Split()[4]);
+                // remember the frame which Python will send to Unity next
+                frame = int.Parse(e.Data.Split()[3]);
+                // remember the size of the structure
+                if (int.Parse(e.Data.Split()[2]) != structureSize)
+                {
+                    structureSize = int.Parse(e.Data.Split()[2]);
+                    currentStructureForce = new float[structureSize];
+                }
+                // remember if the structure is static (irrelevant when sending data this way), has a changed size or will be send normally
+                StoreData(e.Data.Split()[1]);
             }
-            StoreData(e.Data.Split()[1]);
-            }
+        }
         else
             StoreData(e.Data);
     }
