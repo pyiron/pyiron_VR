@@ -309,10 +309,10 @@ public class LaserGrabber : MonoBehaviour
         }
     }
 
-    // show that the laser is currently active and it's possible in the current move to move atoms
+    // show that the laser is currently active and it's possible in the current move to move atoms, and that the laser doesn't point on the thermometer
     private bool ScaleAbleLaser()
     {
-        return (MD.modes[MD.activeMode].playerCanMoveAtoms && laser.activeSelf);
+        return (MD.modes[MD.activeMode].playerCanMoveAtoms && laser.activeSelf && !laserOnThermometer);
     }
 
     public void TouchpadTouchDown()
