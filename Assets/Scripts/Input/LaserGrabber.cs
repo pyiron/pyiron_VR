@@ -434,7 +434,13 @@ public class LaserGrabber : MonoBehaviour
                     PE.SendOrder("self.temperature = " + Settings.temperature);
                     // remember that a new ham_lammps has to be loaded
                     temperatureHasChanged = true;
+                    // remember that the last ham_lammps has been created with the current temperature
+                    thermometerScript.lastTemperature = Settings.temperature;
                 }
+                else
+                    print("no temperature change" + thermometerScript.lastTemperature + Settings.temperature);
+            else
+                print("Doesn't have the reference to the thermometer.");
 
             // when loading the first animation, show Python that it's the first time, so that it can check if there is already a loaded ham_lammps
             if (firstAnimStart)
@@ -503,6 +509,7 @@ public class LaserGrabber : MonoBehaviour
                             ThermometerObject = hittedObject.transform.parent.gameObject;
 
                         thermometerScript = ThermometerObject.GetComponent<Thermometer>();
+                        print(ThermometerObject + " here !!! ");
                         thermometerScript.ChangeLiquidColor("clicked");
                         thermometerScript.ChangeThemperature(hitPoint.y);
                     }

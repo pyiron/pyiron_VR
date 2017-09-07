@@ -116,6 +116,7 @@ public class PythonExecuter : MonoBehaviour {
                     temperature = int.Parse(e.Data.Split()[4]);
                 // remember the frame which Python will send to Unity next
                 frame = int.Parse(e.Data.Split()[3]);
+                print(frame);
                 // remember the size of the structure
                 if (int.Parse(e.Data.Split()[2]) != structureSize)
                 {
@@ -132,6 +133,7 @@ public class PythonExecuter : MonoBehaviour {
 
     private static void StoreData(string data)
     {
+        // should be done in an other way, but will be solved if just sending the force when the player requests the info for an atom
         if (data.Split().Length == 6)
         {
             currentStructureForce[currentAtomLine - 1] = float.Parse(data.Split()[4]);
