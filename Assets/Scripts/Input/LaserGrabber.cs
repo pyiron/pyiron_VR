@@ -86,8 +86,6 @@ public class LaserGrabber : MonoBehaviour
     private float textSize = 1f;
 
     [Header("Transmittion")]
-    // the filename of the file which will send orders from unity to pyiron
-    private string fileName = "orders";
     // the script that stores the possible orders which can be send to Python
     private OrdersToPython OTP;
 
@@ -395,15 +393,9 @@ public class LaserGrabber : MonoBehaviour
         if (ctrlMaskName.Contains("BoundingboxLayer"))
             if (collidingObject || laser.activeSelf)
                 if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).y > 0)
-                    if (Settings.transMode == "file")
-                        WriteOrder("self.duplicate(2)");
-                    else
-                        PE.SendOrder("self.duplicate(2)");
+                    PE.SendOrder("self.duplicate(2)");
                 else
                     if (SD.atomInfos.Count * 0.5 * 0.5 * 0.5 >= 1)
-                    if (Settings.transMode == "file")
-                        WriteOrder("self.duplicate(0.5)");
-                    else
                         PE.SendOrder("self.duplicate(0.5)");
     }
 
@@ -480,17 +472,6 @@ public class LaserGrabber : MonoBehaviour
         lammpsIsMd = MD.modes[MD.activeMode].showTemp;
         // Activate the Hourglass
         HourglassScript.ActivateHourglass(true);
-    }
-
-    // write an Order to Python via a file
-    private void WriteOrder(string order)
-    {
-        StreamWriter sw = new StreamWriter(Settings.GetFilePath(fileName:fileName));
-        using (sw)
-        {
-            sw.WriteLine(order);
-        }
-        printer.Ctrl_print("order", 20);
     }
 
     // checks if the laser hits an object, which it should hit (an atom or a structure)
@@ -705,22 +686,6 @@ public class LaserGrabber : MonoBehaviour
         // detach the attached object
         attachedObject = null;
     }
-
-    /*private void DestroyAtom()
-    {
-        // send Python/{yiron the order to destroy the atom
-        PE.SendOrder("self.destroy_atom(" + attachedObject.GetComponent<AtomID>().ID + ")");
-        // delete the atom and send python/pyiron that the atom should be excluded in the structure
-        SD.waitForDestroyedAtom = true;
-        // remove the atom in the list of the properties of each atom
-        SD.atomInfos.RemoveAt(attachedObject.GetComponent<AtomID>().ID);
-        // remove the atom in the list which stores the data how the player has removed each atom
-        SD.atomCtrlPos.RemoveAt(attachedObject.GetComponent<AtomID>().ID);
-        // destroy the gameobject of the destroyed atom. This way, importStructure won't destroy all atoms and load them new
-        Destroy(attachedObject);
-        // show that when loading a python anim the next time, it should first load the new one (without the removed atom)
-        SD.needsNewAnim = true;
-    }*/
     
     private void ShowLaser(RaycastHit hit) 
     {

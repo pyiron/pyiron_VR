@@ -4,6 +4,7 @@ using System.Threading;
 using UnityEngine;
 using System.Diagnostics;
 using System;
+using System.IO;
 
 // component of Settings
 // this script handles everything related to Python, e.g. it receives the data from Python, formats it and can send data to Python
@@ -40,6 +41,10 @@ public class PythonExecuter : MonoBehaviour {
     public static int structureSize = 99999;
     // shows for which atom the data is currently transmitted from Python
     private static int currentAtomLine;
+
+    [Header("Send Data to Python")]
+    // the filename of the file which will send orders from unity to pyiron
+    private string fileName = "orders";
 
     // shows whether Python should be currently sending an animation or just always the same frame
     public bool pythonRunsAnim = false;
@@ -129,8 +134,23 @@ public class PythonExecuter : MonoBehaviour {
     // send the given order to Python, where it will be executed with the exec() command
     public void SendOrder(string order)
     {
-        // write the command in the input of Python
-        myProcess.StandardInput.WriteLine(order);
+        if (Settings.transMode == "file")
+            // write an Order to Python via a file
+            WriteOrder(order);
+        else
+            // write the command in the input of Python
+            myProcess.StandardInput.WriteLine(order);
+    }
+
+    // write an Order to Python via a file
+    private void WriteOrder(string order)
+    {
+        StreamWriter sw = new StreamWriter(Settings.GetFilePath(fileName: fileName));
+        using (sw)
+        {
+            sw.WriteLine(order);
+        }
+        printer.Ctrl_print("order", 20);
     }
 
     public void SendOrder(bool runAnim=false)
