@@ -107,14 +107,14 @@ public class PythonExecuter : MonoBehaviour {
         }
         else if (currentAtomLine == 0)
             {
-            if (e.Data.Split().Length > 3)
-                temperature = int.Parse(e.Data.Split()[2]);
-            if (int.Parse(e.Data.Split()[1]) != structureSize)
+            if (e.Data.Split()[0] == "new")
+                temperature = int.Parse(e.Data.Split()[3]);
+            if (int.Parse(e.Data.Split()[2]) != structureSize)
             {
-                structureSize = int.Parse(e.Data.Split()[1]);
+                structureSize = int.Parse(e.Data.Split()[2]);
                 currentStructureForce = new float[structureSize];
             }
-            StoreData(e.Data.Split()[0]);
+            StoreData(e.Data.Split()[1]);
             }
         else
             StoreData(e.Data);
