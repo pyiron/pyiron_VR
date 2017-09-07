@@ -25,6 +25,8 @@ public class Thermometer : MonoBehaviour {
     private float lowestPoint = 0.31f;
     // determines in which intervals the thermometer should update the temperature text
     private int precision = 100;
+    // the temperature of last calculated ham_lammps
+    public int lastTemperature;
 
 
     private void Awake()
@@ -49,6 +51,9 @@ public class Thermometer : MonoBehaviour {
 
         // make sure the color is the usual one
         ChangeLiquidColor();
+
+        // set lastTemperature to the value the thermometer has been initialised with
+        lastTemperature = Settings.temperature;
     }
 	
 	// Update is called once per frame

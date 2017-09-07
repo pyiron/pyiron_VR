@@ -8,6 +8,8 @@ using System;
 // component of Settings
 // this script handles everything related to Python, e.g. it receives the data from Python, formats it and can send data to Python
 public class PythonExecuter : MonoBehaviour {
+    // the Settings of the program
+    private ProgramSettings Settings;
     // the script of the controller printer
     public InGamePrinter printer;
 
@@ -47,12 +49,14 @@ public class PythonExecuter : MonoBehaviour {
 
     private void Awake()
     {
+        // get the scripts from the gameobjects to get their data
+        Settings = GameObject.Find("Settings").GetComponent<ProgramSettings>();
         // return if the data of the structure should be received by an file or files
-        if (GameObject.Find("Settings").GetComponent<ProgramSettings>().transMode == "file")
+        if (Settings.transMode == "file")
             return;
 
-        //IS = GameObject.Find("AtomStructure").GetComponent<ImportStructure>();
-        var pyPathThread = new Thread(delegate () {
+    //IS = GameObject.Find("AtomStructure").GetComponent<ImportStructure>();
+    var pyPathThread = new Thread(delegate () {
             Command("cd " + pythonPath + " && python " + pythonFileName + ".py", myProcess); });
         pyPathThread.Start();
         //Command("cd " + pythonPath + " && python " + pythonFileName + ".py", myProcess);

@@ -429,14 +429,24 @@ public class LaserGrabber : MonoBehaviour
             PE.SendOrder(runAnim: false);
         else
         {
+            bool temperatureHasChanged = false;
+            // check if the thermometer has been initialised yet and is currently active
+            if (ThermometerObject != null)
+                // send Python the order to change the temperature if the user has changed the temperature on the thermometer
+                if (thermometerScript.lastTemperature != Settings.temperature)
+                {
+                    PE.SendOrder("self.temperature = " + Settings.temperature);
+                    temperatureHasChanged = true;
+                }
+
             // when loading the first animation, show Python that it's the first time, so that it can check if there is already a loaded ham_lammps
-            if (firstAnimStart)
+                    if (firstAnimStart)
             {
                 LoadNewLammps("self.calculate");
                 firstAnimStart = false;
             }
-            // tell Python to create a new ham_lammps because the structure has changed
-            else if (SD.needsNewAnim)
+            // tell Python to create a new ham_lammps because the structure or it's temperature has changed
+            else if (SD.needsNewAnim || temperatureHasChanged)
             {
                 LoadNewLammps("self.create_new_lammps");
                 // remember that the ham_lammps is now according to the current structure
