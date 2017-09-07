@@ -116,7 +116,6 @@ public class PythonExecuter : MonoBehaviour {
                     temperature = int.Parse(e.Data.Split()[4]);
                 // remember the frame which Python will send to Unity next
                 frame = int.Parse(e.Data.Split()[3]);
-                print(frame);
                 // remember the size of the structure
                 if (int.Parse(e.Data.Split()[2]) != structureSize)
                 {

@@ -503,13 +503,15 @@ public class LaserGrabber : MonoBehaviour
                         laserCurrentlyOnThermometer = true;
 
                         // get the reference to the thermometer, if it is not yet defined
-                        if (hit.transform.gameObject.name == "Thermometer")
-                            ThermometerObject = hittedObject;
-                        else
-                            ThermometerObject = hittedObject.transform.parent.gameObject;
-
-                        thermometerScript = ThermometerObject.GetComponent<Thermometer>();
-                        print(ThermometerObject + " here !!! ");
+                        if (ThermometerObject == null)
+                        {
+                            if (hit.transform.gameObject.name == "Thermometer")
+                                ThermometerObject = hittedObject;
+                            else
+                                ThermometerObject = hittedObject.transform.parent.gameObject;
+                            thermometerScript = ThermometerObject.GetComponent<Thermometer>();
+                            print(ThermometerObject + " here !!! ");
+                        }
                         thermometerScript.ChangeLiquidColor("clicked");
                         thermometerScript.ChangeThemperature(hitPoint.y);
                     }
