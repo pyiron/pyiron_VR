@@ -436,11 +436,12 @@ public class LaserGrabber : MonoBehaviour
                 if (thermometerScript.lastTemperature != Settings.temperature)
                 {
                     PE.SendOrder("self.temperature = " + Settings.temperature);
+                    // remember that a new ham_lammps has to be loaded
                     temperatureHasChanged = true;
                 }
 
             // when loading the first animation, show Python that it's the first time, so that it can check if there is already a loaded ham_lammps
-                    if (firstAnimStart)
+            if (firstAnimStart)
             {
                 LoadNewLammps("self.calculate");
                 firstAnimStart = false;

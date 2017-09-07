@@ -27,7 +27,15 @@ IMPORTANT:
 - implement that the animation can be controlled by the player
 - fix bug that sometimes there are error messages "MissingReferenceException: The object of type 'Transform' has been destroyed but you are still trying to access it." after deleting atoms, most likely because the wrong atom has been destroyed
 (- check what happens if an controller deactivates itself after not being used for too long (could maybe happen in a presentation))
-- continue on calculating
+
+- fix bug that the houglass vanishes after a tenth of a second
+- fix bug that the trigger Input of one controller gets sometimes send to both controllers, while the other controller can't do anything (not even use the touchpad I think), if they are initialised in the wrong order
+- Make Unity send an order to Python when at least one atom has been removed
+- make functions in Unity for each order which can be send to Python
+- Let Unity send an order to Python with the current frame requesting the force data (of one atom or all) when being in info mode, else let it not send the force data
+- Let Python send the current frame each frame and the amount of frames in the beginning
+- Let Unity show in a time bar which frame is currently shown.
+
 - use this to start the 3D Beamer in the shell: *cd to Desktop* VABuild7_18VRAndBeamer.exe -vrmode Stereo
 
 
