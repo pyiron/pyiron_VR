@@ -14,7 +14,7 @@ public class OrdersToPython : MonoBehaviour {
     // shows whether the input order of the user could be executed or not
     private bool couldExecuteOrder;
     // shows whether Python should be currently sending an animation or just always the same frame
-    public bool pythonRunsAnim = false;
+    public static bool pythonRunsAnim = false;
 
     public readonly Dictionary<string, string> Orders = new Dictionary<string, string>
     {

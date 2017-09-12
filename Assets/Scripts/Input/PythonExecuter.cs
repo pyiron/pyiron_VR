@@ -48,8 +48,6 @@ public class PythonExecuter : MonoBehaviour {
     // the filename of the file which will send orders from unity to pyiron
     private string fileName = "orders";
 
-    // shows whether Python should be currently sending an animation or just always the same frame
-    public bool pythonRunsAnim = false; // TODO: delete this!
     // the speed with which Python currently runs the animation
     public int pythonsAnimSpeed = 4;
 
@@ -164,7 +162,7 @@ public class PythonExecuter : MonoBehaviour {
         printer.Ctrl_print("order", 20);
     }
 
-    public void SendOrder(bool runAnim=false)
+    /*public void SendOrder(bool runAnim=false)
     {
         if (runAnim)
         {
@@ -176,7 +174,7 @@ public class PythonExecuter : MonoBehaviour {
             SendOrder("self.runAnim = False");
             pythonRunsAnim = false;
         }
-    }
+    }*/
 
     public void ChangeAnimSpeed(int speedChange)
     {

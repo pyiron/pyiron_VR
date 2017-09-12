@@ -409,7 +409,7 @@ public class LaserGrabber : MonoBehaviour
     private void ControllAnimation()
     {
         if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).x > 0.5)
-            if (PE.pythonRunsAnim)
+            if (OrdersToPython.pythonRunsAnim)
                 // send Python the order to play the animation faster. if it isn't already at it's fastest speed
                 if (PE.pythonsAnimSpeed < 5)
                     PE.ChangeAnimSpeed(1);
@@ -419,7 +419,7 @@ public class LaserGrabber : MonoBehaviour
                 PE.SendOrder("self.frame = (self.frame + 1) % len(self.all_positions)");
         //PE.SendOrder(runAnim: true);
         else if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).x < -0.5)
-            if (PE.pythonRunsAnim)
+            if (OrdersToPython.pythonRunsAnim)
                 // send Python the order to play the animation faster. if it isn't already at it's fastest speed
                 if (PE.pythonsAnimSpeed > 0)
                     PE.ChangeAnimSpeed(-1);
@@ -428,8 +428,8 @@ public class LaserGrabber : MonoBehaviour
                 // go one frame back
                 PE.SendOrder("self.frame = (len(self.all_positions) - ((len(self.all_positions) - self.frame) " +
                     "% len(self.all_positions))) - 1");
-        else if (PE.pythonRunsAnim)
-            PE.SendOrder(runAnim: false);
+        else if (OrdersToPython.pythonRunsAnim)
+            OTP.RunAnim(false);
         else
         {
             bool temperatureHasChanged = false;
@@ -470,7 +470,7 @@ public class LaserGrabber : MonoBehaviour
                 LoadNewLammps("self.create_new_lammps");
 
             // tell Python to start sending the dataframes from the current ham_lammps
-            PE.SendOrder(runAnim: true);
+            OTP.RunAnim(true);
         }
 
         // update the symbols on on all active controllers
@@ -527,7 +527,7 @@ public class LaserGrabber : MonoBehaviour
                         thermometerScript.ChangeThemperature(hitPoint.y);
 
                         // stop the animation
-                        //PE.SendOrder(runAnim: false);
+                        //OTP.RunAnim(false);
                     }
                     else if (!laserOnThermometer)
                         if (MD.modes[MD.activeMode].playerCanMoveAtoms)
@@ -689,7 +689,7 @@ public class LaserGrabber : MonoBehaviour
             // spawn the trashcan
             TrashCanScript.ActivateCan();
             // deactivate the animation
-            PE.SendOrder(runAnim: false);
+            OTP.RunAnim(false);
         }
         
         // set the length of the laser to it's new length

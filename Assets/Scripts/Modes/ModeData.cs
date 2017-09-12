@@ -16,6 +16,8 @@ public class ModeData : MonoBehaviour
     private PythonExecuter PE;
     // the thermometer, needed to handle the temperature of the structure
     private GameObject Thermometer;
+    // the script that stores the possible orders which can be send to Python
+    private OrdersToPython OTP;
 
     [Header("Modes")]
     // get the textmesh from the 3D Text which shows the current mode
@@ -54,6 +56,8 @@ public class ModeData : MonoBehaviour
         PE = Settings.GetComponent<PythonExecuter>();
         // get the reference to the thermometer
         Thermometer = GameObject.Find("MyObjects/Thermometer");
+        // get the reference to the script that stores the possible orders which can be send to Python
+        OTP = Settings.GetComponent<OrdersToPython>();
     }
 
     // Use this for initialization
@@ -100,7 +104,7 @@ public class ModeData : MonoBehaviour
         Thermometer.SetActive(modes[activeMode].showTemp);
 
         // stop the currently running animation
-        PE.SendOrder(runAnim: false);
+        OTP.RunAnim(false);
 
 
         foreach (GameObject controller in controllers)

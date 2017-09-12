@@ -86,8 +86,8 @@ public class ControllerSymbols : MonoBehaviour {
             symbolProperties = controllerSymbols[AnimSymbol.name];
 
             // deactivate a symbol, if it should be shown while the animation is on and it isn't on or vice versa
-            if (symbolProperties.m_showWhenAnimRuns == PE.pythonRunsAnim)
-                if (PE.pythonRunsAnim)
+            if (symbolProperties.m_showWhenAnimRuns == OrdersToPython.pythonRunsAnim)
+                if (OrdersToPython.pythonRunsAnim)
                     // activate the pause symbol, because it should be always active if the animation is active
                     if (symbolProperties.m_animSpeed == -1)
                         AnimSymbol.SetActive(true);
