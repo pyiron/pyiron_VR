@@ -95,16 +95,23 @@ public class Thermometer : MonoBehaviour {
     {
         // calculate where the user is pointing at
         float newTemperatureGradient = (hitPointHeight - lowestPoint) / (highestPoint - lowestPoint);
-        // if the user points to a point lower than 0, the temperature will still be 0 and not a negative value
-        if (newTemperatureGradient < 0)
-            newTemperatureGradient = 0;
         // if the user points to a point higher than 1, the temperature will still be 1 and not a value higher than one.
         // This way, the temperature can't get higher than maxTemperature
-        else if (newTemperatureGradient > 1)
+        if (newTemperatureGradient > 1)
             newTemperatureGradient = 1;
 
         // set the temperature to the new value
         Settings.temperature = (int)(precision * newTemperatureGradient) * maxTemperature / precision;
+
+        // if the temperature would be less or equal 0, the program will set it to 1, because PyIron would crash if it would get the temperature 0
+        if (Settings.temperature <= 0)
+        {
+            Settings.temperature = 1;
+            // if the user points to a point lower than 0, the temperature will still be shown as 0 and not a negative value
+            if (newTemperatureGradient <= 0)
+                newTemperatureGradient = 0;
+        }
+
         // show the current temperature data on the thermometer
         UpdateTemperature(exactTemperature:(int)(maxTemperature * newTemperatureGradient));
     }

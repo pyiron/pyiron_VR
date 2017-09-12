@@ -427,7 +427,9 @@ public class LaserGrabber : MonoBehaviour
         {
             bool temperatureHasChanged = false;
             // check if the thermometer has been initialised yet and is currently active
-            if (ThermometerObject != null)
+            if (thermometerScript != null)
+            {
+                print(thermometerScript.lastTemperature +"  "+ Settings.temperature);
                 // send Python the order to change the temperature if the user has changed the temperature on the thermometer
                 if (thermometerScript.lastTemperature != Settings.temperature)
                 {
@@ -439,6 +441,7 @@ public class LaserGrabber : MonoBehaviour
                 }
                 else
                     print("no temperature change" + thermometerScript.lastTemperature + Settings.temperature);
+            }
             else
                 print("Doesn't have the reference to the thermometer.");
 
