@@ -473,7 +473,13 @@ public class LaserGrabber : MonoBehaviour
             PE.SendOrder(runAnim: true);
         }
 
-        // update the symbols on the controller
+        // update the symbols on on all active controllers
+        UpdateSymbols();
+    }
+
+    // update the symbols on all active controllers
+    private void UpdateSymbols()
+    {
         gameObject.GetComponent<ControllerSymbols>().SetSymbol();
         if (otherCtrl.activeSelf)
             otherCtrl.GetComponent<ControllerSymbols>().SetSymbol();
@@ -519,6 +525,9 @@ public class LaserGrabber : MonoBehaviour
 
                         thermometerScript.ChangeLiquidColor("clicked");
                         thermometerScript.ChangeThemperature(hitPoint.y);
+
+                        // stop the animation
+                        //PE.SendOrder(runAnim: false);
                     }
                     else if (!laserOnThermometer)
                         if (MD.modes[MD.activeMode].playerCanMoveAtoms)

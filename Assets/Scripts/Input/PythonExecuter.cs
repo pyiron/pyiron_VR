@@ -49,7 +49,7 @@ public class PythonExecuter : MonoBehaviour {
     private string fileName = "orders";
 
     // shows whether Python should be currently sending an animation or just always the same frame
-    public bool pythonRunsAnim = false;
+    public bool pythonRunsAnim = false; // TODO: delete this!
     // the speed with which Python currently runs the animation
     public int pythonsAnimSpeed = 4;
 

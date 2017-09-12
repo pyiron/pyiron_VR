@@ -11,12 +11,15 @@ public class OrdersToPython : MonoBehaviour {
     private PythonExecuter PE;
     // the reference to the LaserGrabber script of the controller that can move single atoms
     private LaserGrabber AtomLayerLG;
-
+    // shows whether the input order of the user could be executed or not
     private bool couldExecuteOrder;
+    // shows whether Python should be currently sending an animation or just always the same frame
+    public bool pythonRunsAnim = false;
 
     public readonly Dictionary<string, string> Orders = new Dictionary<string, string>
     {
-        {"Destroy Atom Nr", "DestroyAtom" }
+        {"Destroy Atom Nr", "DestroyAtom" },
+        {"Stop Animation", "RunAnimation(false)" }
     };
 
     private void Awake()
@@ -111,8 +114,14 @@ public class OrdersToPython : MonoBehaviour {
         Destroy(AtomLayerLG.attachedObject);
         // show that when loading a python anim the next time, it should first load the new one (without the removed atom)
         SD.needsNewAnim = true;
+    }
 
-        print("Yaaaaaaaaaaay" + atomId);
-        // DestroyAtom.GetType();
+    private void RunAnim(bool shouldRun)
+    {
+        if (shouldRun)
+            PE.SendOrder("self.start_anim()");
+        else
+            PE.SendOrder("self.runAnim = False");
+        pythonRunsAnim = shouldRun;
     }
 }
