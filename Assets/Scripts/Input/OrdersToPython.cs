@@ -16,7 +16,7 @@ public class OrdersToPython : MonoBehaviour {
 
     public readonly Dictionary<string, string> Orders = new Dictionary<string, string>
     {
-        {"Destroy Atom", "DestroyAtom" }
+        {"Destroy Atom Nr", "DestroyAtom" }
     };
 
     private void Awake()
@@ -50,6 +50,8 @@ public class OrdersToPython : MonoBehaviour {
         foreach (string key in Orders.Keys)
             if (order.Contains(key))
                 orderFunctionName = Orders[key];
+
+        // check if the order is known, else return false
          if (orderFunctionName == "")
             return false;
 
@@ -60,28 +62,42 @@ public class OrdersToPython : MonoBehaviour {
         return couldExecuteOrder;
     }
 
+    private void SendError(string errorMessage)
+    {
+        print(errorMessage);
+        couldExecuteOrder = false;
+    }
+
+    // destroys the atom, the user wants to destroy
     public void DestroyAtom(string order)
     {
+        // the ID of the atom that should be destroyed
         int atomId;
-        if (!int.TryParse(order.Split()[2], out atomId))
+        // checks if the argument that should contain the atom ID is an integer, else return and just print what the error was
+        if (!int.TryParse(order.Split()[3], out atomId))
         {
-            couldExecuteOrder = false;
+            SendError("The Atom ID has to be an Integer!");
             return;
         }
 
-        // check if the given atomId is valid
+        // check if the given atomId is less big than the maximum amount of atoms in the structure
+        if (atomId >= PythonExecuter.structureSize)
+        {
+            SendError("The Atom ID has to be less big than the maximum amount of atoms in the structure!");
+            return;
+        }
 
-
+        // Get the reference to the LaserGrabber of the AtomLayer, if it is still unknown
         if (AtomLayerLG == null)
         {
             GetReferenceToAtomLayerLG();
+            // return if the controller hasn't been activated yet
             if (AtomLayerLG == null)
             {
-                couldExecuteOrder = false;
+                SendError("Left Controller has to be active to do this!");
                 return;
             }
         }
-
 
         // send Python/Pyiron the order to destroy the atom
         PE.SendOrder("self.destroy_atom(" + atomId + ")");
