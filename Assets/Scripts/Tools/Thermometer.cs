@@ -120,7 +120,7 @@ public class Thermometer : MonoBehaviour {
     public void SetMaxTemperature(float change)
     {
         // prevents that the maxTemperature will fall to a value lower than 100, because this would be of no use for the user
-        if (maxTemperature > 100 || change > 1)
+        if ((maxTemperature > 100 || change > 1) && (maxTemperature < 100000 || change < 1))
             // changes the current maxTemperature to the new value
             maxTemperature = (int)(maxTemperature * change);
     }
