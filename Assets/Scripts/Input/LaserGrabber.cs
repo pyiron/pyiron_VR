@@ -145,6 +145,13 @@ public class LaserGrabber : MonoBehaviour
         InfoText.transform.localScale = Vector3.one * textSize;
         InfoText.fontSize = (int)Settings.textResolution;
 
+        // get the references to the thermometer related objects from the other controller, if it is active and knows them
+        if (otherCtrl.activeSelf)
+        {
+            ThermometerObject = otherCtrl.GetComponent<LaserGrabber>().ThermometerObject;
+            thermometerScript = otherCtrl.GetComponent<LaserGrabber>().thermometerScript;
+        }
+
         // deactivate the trashcan
         TrashCanScript.gameObject.SetActive(false);
     }
@@ -505,16 +512,11 @@ public class LaserGrabber : MonoBehaviour
                         laserOnThermometer = true;
                         laserCurrentlyOnThermometer = true;
 
-                        // get the reference to the thermometer, if it is not yet defined
-                        if (ThermometerObject == null)
-                        {
-                            if (hit.transform.gameObject.name == "Thermometer")
-                                ThermometerObject = hittedObject;
-                            else
-                                ThermometerObject = hittedObject.transform.parent.gameObject;
-                            thermometerScript = ThermometerObject.GetComponent<Thermometer>();
-                            print(ThermometerObject + " here !!! ");
-                        }
+                        GetThermometerReference(hittedObject);
+                        // set the references for the other controller as well, if the controller is activated yet
+                        if (otherCtrl.activeSelf)
+                            otherCtrl.GetComponent<LaserGrabber>().GetThermometerReference(hittedObject);
+
                         thermometerScript.ChangeLiquidColor("clicked");
                         thermometerScript.ChangeThemperature(hitPoint.y);
                     }
@@ -539,6 +541,20 @@ public class LaserGrabber : MonoBehaviour
                     laser.SetActive(false);
                     attachedObject = null;
                 }
+        }
+    }
+
+    public void GetThermometerReference(GameObject hittedObject)
+    {
+        // get the reference to the thermometer, if it is not yet defined
+        if (ThermometerObject == null)
+        {
+            if (hittedObject.name == "Thermometer")
+                ThermometerObject = hittedObject;
+            else
+                ThermometerObject = hittedObject.transform.parent.gameObject;
+            thermometerScript = ThermometerObject.GetComponent<Thermometer>();
+            print(ThermometerObject + " here !!! ");
         }
     }
 
