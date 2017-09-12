@@ -19,7 +19,8 @@ public class OrdersToPython : MonoBehaviour {
     public readonly Dictionary<string, string> Orders = new Dictionary<string, string>
     {
         {"Destroy Atom Nr", "DestroyAtom" },
-        {"Stop Animation", "RunAnimation(false)" }
+        {"Stop Animation", "RunAnimation" },
+        {"Run Animation", "RunAnimation" }
     };
 
     private void Awake()
@@ -61,7 +62,8 @@ public class OrdersToPython : MonoBehaviour {
         //MethodInfo theMethod = this.GetType().GetMethod(orderFunctionName);
         object[] myParams = new object[1];
         myParams[0] = order;
-        GetType().GetMethod(orderFunctionName).Invoke(this, myParams);
+        print(myParams[0]);
+        GetType().GetMethod(orderFunctionName + "Order").Invoke(this, myParams);
         return couldExecuteOrder;
     }
 
@@ -71,8 +73,7 @@ public class OrdersToPython : MonoBehaviour {
         couldExecuteOrder = false;
     }
 
-    // destroys the atom, the user wants to destroy
-    public void DestroyAtom(string order)
+    public void DestroyAtomOrder(string order)
     {
         // the ID of the atom that should be destroyed
         int atomId;
@@ -82,7 +83,13 @@ public class OrdersToPython : MonoBehaviour {
             SendError("The Atom ID has to be an Integer!");
             return;
         }
+        else
+            DestroyAtom(atomId);
+    }
 
+    // destroys the atom, the user wants to destroy
+    private void DestroyAtom(int atomId)
+    {
         // check if the given atomId is less big than the maximum amount of atoms in the structure
         if (atomId >= PythonExecuter.structureSize)
         {
@@ -116,7 +123,13 @@ public class OrdersToPython : MonoBehaviour {
         SD.needsNewAnim = true;
     }
 
-    private void RunAnim(bool shouldRun)
+    public void RunAnimOrder(string order)
+    {
+        if (order != "")
+            RunAnim(order.Contains("Run"));
+    }
+
+    public void RunAnim(bool shouldRun=false)
     {
         if (shouldRun)
             PE.SendOrder("self.start_anim()");
