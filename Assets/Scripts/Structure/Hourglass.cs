@@ -25,7 +25,7 @@ public class Hourglass : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+        
     }
 
     public void ActivateHourglass(bool active)

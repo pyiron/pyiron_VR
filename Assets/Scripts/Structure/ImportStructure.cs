@@ -14,8 +14,6 @@ public class ImportStructure : MonoBehaviour {
 
     // get the reference to the programm which handles the execution of python
     public PythonExecuter PE;
-    // the Script of the Hourglass, which indicates that the structure is currently loading
-    private Hourglass HourglassScript;
     // the script of thermometer which shows which temperature the structure has
     private GameObject ThermometerObject;
 
@@ -99,8 +97,6 @@ public class ImportStructure : MonoBehaviour {
         pathName = programSettings.GetFilePath(strucFileName);
         LED = Settings.GetComponent<LocalElementData>();
         SD = gameObject.GetComponent<StructureData>();
-        // get the Script of the Hourglass, which indicates that the structure is currently loading
-        HourglassScript = GameObject.Find("HourglassRotator/Hourglass").GetComponent<Hourglass>();
         foreach (UnityEngine.UI.Text text in MyCanvas.GetComponentsInChildren<UnityEngine.UI.Text>())
             if (text.name.Contains("min_fps_display"))
                 min_fps_display = text;
@@ -300,10 +296,6 @@ public class ImportStructure : MonoBehaviour {
         }
         if (animState == "new")
             transform.position += SD.structureCtrlPos;
-
-        // deactivate the Hourglass, after a new animation has been loaded or after the structure has been loaded
-        if (HourglassScript.gameObject.activeSelf)
-            HourglassScript.ActivateHourglass(false);
 
         SD.waitForDestroyedAtom = false;
         if (firstImport)

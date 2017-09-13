@@ -159,6 +159,8 @@ public class LaserGrabber : SceneReferences
 
     void Update()
     {
+        printer.Ctrl_print(PythonExecuter.outgoingChanges.ToString(), 120);
+        printer.Ctrl_print(PythonExecuter.incomingChanges.ToString(), 120, false);
         if (MD.modes[MD.activeMode].playerCanMoveAtoms)
         {
             // move the grabbed object
@@ -427,7 +429,7 @@ public class LaserGrabber : SceneReferences
             // check if the thermometer has been initialised yet and is currently active
             if (thermometerScript != null)
             {
-                print(thermometerScript.lastTemperature +"  "+ SettingsScript.temperature);
+
                 // send Python the order to change the temperature if the user has changed the temperature on the thermometer
                 if (thermometerScript.lastTemperature != SettingsScript.temperature)
                 {
@@ -483,8 +485,6 @@ public class LaserGrabber : SceneReferences
         else if (MD.modes[MD.activeMode].showRelaxation)
             PE.SendOrder(loadOrder + "('minimize')");
         lammpsIsMd = MD.modes[MD.activeMode].showTemp;
-        // Activate the Hourglass
-        HourglassScript.ActivateHourglass(true);
     }
 
     // checks if the laser hits an object, which it should hit (an atom or a structure)

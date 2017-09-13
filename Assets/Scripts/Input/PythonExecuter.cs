@@ -52,12 +52,18 @@ public class PythonExecuter : MonoBehaviour {
     // the data how the cellbox can be build
     public static float[] cellboxData = new float[9];
 
+    // the amount of changes the Python program did after the Unity program requested it
+    public static int incomingChanges = -1;
+
     [Header("Send Data to Python")]
     // the filename of the file which will send orders from unity to pyiron
     private string fileName = "orders";
 
     // the speed with which Python currently runs the animation
     public int pythonsAnimSpeed = 4;
+
+    // the amount of changes the Unity program requested the Python program to do
+    public static int outgoingChanges;
 
 
     private void Awake()
@@ -129,6 +135,8 @@ public class PythonExecuter : MonoBehaviour {
                 frame = int.Parse(splittedData[3]);
             if (ContainsValue(splittedData[4]))
                 frameAmount = int.Parse(splittedData[4]);
+            if (ContainsValue(splittedData[5]))
+                incomingChanges = int.Parse(splittedData[5]);
 
             currentAtomLine += 1;
 
@@ -174,6 +182,9 @@ public class PythonExecuter : MonoBehaviour {
     // send the given order to Python, where it will be executed with the exec() command
     public void SendOrder(string order)
     {
+        // show that the Unity program has send the Python program an order
+        outgoingChanges += 1;
+
         if (Settings.transMode == "file")
             // write an Order to Python via a file
             WriteOrder(order);
