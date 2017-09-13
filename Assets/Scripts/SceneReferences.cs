@@ -2,7 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Component of no GameObject
+// Scripts deriving from this class can call the functions of this class to get the needed references
 public class SceneReferences : MonoBehaviour {
+    [Header("Reference Library")]
+    // the reference to this script, but as component of Settings. This way, other scripts can get references by copying them from this scipt
+    protected SceneReferences SR;
+
     [Header("Settings and it's components")]
     // the reference to the Settings object
     protected GameObject Settings;
@@ -13,15 +19,44 @@ public class SceneReferences : MonoBehaviour {
     // the script that stores the possible orders which can be send to Python
     protected OrdersToPython OTP;
 
-    protected void GetReferences()
+    [Header("Controllers")]
+    // the reference to the controllers
+    public GameObject[] Controllers = new GameObject[2];
+    // the reference to the LaserGrabber script of the controllers
+    protected LaserGrabber[] LGs = new LaserGrabber[2];
+
+    private void Awake()
+    {
+
+    }
+
+    // get the reference to this script, but as component of Settings, so first it has to get the reference to the Settings
+    protected void GetReferenceToReferences()
     {
         // the reference to the Settings object
         Settings = GameObject.Find("Settings");
+        // get the reference to this script, but as component of Settings. This way, other scripts can get references by copying them from this scipt
+        SR = Settings.GetComponent<SceneReferences>();
+    }
+
+    // get the references to all objects and scripts related to the Settings
+    protected void GetSettingsReferences()
+    {
+        // get the reference to the Settings object and the script which stores most of the references (this script as component of Settings)
+        GetReferenceToReferences();
         // get the reference to the script, which contains all the settings of the program
         SettingsScript = Settings.GetComponent<ProgramSettings>();
         // get the reference to the programm which handles the execution of python
         PE = SettingsScript.GetComponent<PythonExecuter>();
         // get the reference to the script that stores the possible orders which can be send to Python
         OTP = SettingsScript.GetComponent<OrdersToPython>();
+    }
+
+    protected void GetControllerReferences()
+    {
+        // copy the reference to the controllers from the reference library to the specific script which needs the reference
+        Controllers = SR.Controllers;
+        // get the references to the LaserGraber scripts of the controllers
+        LGs = Controllers[0].transform.parent.GetComponentsInChildren<LaserGrabber>();
     }
 }

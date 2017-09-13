@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Reflection;
 
-public class OrdersToPython : MonoBehaviour {
+public class OrdersToPython : SceneReferences
+{
     [Header("Scene")]
     // the data about the structure
     private StructureData SD;
     // the reference to the programm which handles the execution of python
-    private PythonExecuter PE;
+    //private PythonExecuter PE;
     // the reference to the LaserGrabber script of the controller that can move single atoms
     private LaserGrabber AtomLayerLG;
     // the reference to the LaserGrabber script of the controller that can move the whole structure
@@ -29,6 +30,10 @@ public class OrdersToPython : MonoBehaviour {
 
     private void Awake()
     {
+        // get the reference to the script that stores most references
+        GetReferenceToReferences();
+        // get the reference to the controllers
+        GetControllerReferences();
         // the data about the structure
         // get the script StructureData from AtomStructure
         SD = GameObject.Find("AtomStructure").GetComponent<StructureData>();
@@ -146,7 +151,10 @@ public class OrdersToPython : MonoBehaviour {
         else
             PE.SendOrder("self.runAnim = False");
         pythonRunsAnim = shouldRun;
-        // update the symbols on the controllers
-        
+        print("eeeeeee");
+        // update the symbols on all active controllers
+        foreach (GameObject Controller in Controllers)
+            if (Controller.activeSelf)
+                Controller.GetComponent<ControllerSymbols>().SetSymbol();
     }
 }

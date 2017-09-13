@@ -84,7 +84,7 @@ public class ControllerSymbols : MonoBehaviour {
         foreach (GameObject AnimSymbol in AnimSymbols)
         {
             symbolProperties = controllerSymbols[AnimSymbol.name];
-
+            print(OrdersToPython.pythonRunsAnim);
             // deactivate a symbol, if it should be shown while the animation is on and it isn't on or vice versa
             if (symbolProperties.m_showWhenAnimRuns == OrdersToPython.pythonRunsAnim)
                 if (OrdersToPython.pythonRunsAnim)

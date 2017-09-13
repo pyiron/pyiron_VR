@@ -12,7 +12,7 @@ public class LaserGrabber : SceneReferences
     // the data about the structure
     private StructureData SD;
     // the properties about the resize
-    private StructureResizer SR;
+    private StructureResizer StrucResizer;
     // the gameobject of the structure
     public GameObject AtomStructure;
     // the script of the controller printer
@@ -102,8 +102,8 @@ public class LaserGrabber : SceneReferences
 
     void Awake()
     {
-        // get the references to most objects and scripts of the scene
-        GetReferences();
+        // get the references to all objects and scripts related to the Settings
+        GetSettingsReferences();
         try {
             // find the trash can
             TrashCanScript = GameObject.Find("Trash Can").GetComponent<TrashCan>();
@@ -125,7 +125,7 @@ public class LaserGrabber : SceneReferences
         // get the script StructureData from AtomStructure
         SD = AtomStructure.GetComponent<StructureData>();
         // get the script StructureResizer from AtomStructure
-        SR = AtomStructure.GetComponent<StructureResizer>();
+        StrucResizer = AtomStructure.GetComponent<StructureResizer>();
 
         // get the transform of the boundingbox
         foreach (Transform tr in AtomStructure.GetComponentsInChildren<Transform>())
@@ -469,7 +469,7 @@ public class LaserGrabber : SceneReferences
     }
 
     // update the symbols on all active controllers
-    private void UpdateSymbols()
+    public void UpdateSymbols()
     {
         gameObject.GetComponent<ControllerSymbols>().SetSymbol();
         if (otherCtrl.activeSelf)
@@ -518,7 +518,7 @@ public class LaserGrabber : SceneReferences
                         thermometerScript.ChangeThemperature(hitPoint.y);
 
                         // stop the animation
-                        //OTP.RunAnim(false);
+                        OTP.RunAnim(false);
                     }
                     else if (!laserOnThermometer)
                         if (MD.modes[MD.activeMode].playerCanMoveAtoms)
@@ -646,7 +646,7 @@ public class LaserGrabber : SceneReferences
     private void InitResize()
     {
         readyForResize = true;
-        SR.InitResize();
+        StrucResizer.InitResize();
     }
 
     private void ScaleLaser(float modification = 0)
