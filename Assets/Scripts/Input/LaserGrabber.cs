@@ -506,19 +506,24 @@ public class LaserGrabber : SceneReferences
 
                     if (hittedObject.name.Contains("Thermometer"))
                     {
-                        laserOnThermometer = true;
-                        laserCurrentlyOnThermometer = true;
-
                         GetThermometerReference(hittedObject);
                         // set the references for the other controller as well, if the controller is activated yet
                         if (otherCtrl.activeSelf)
                             otherCtrl.GetComponent<LaserGrabber>().GetThermometerReference(hittedObject);
 
-                        thermometerScript.ChangeLiquidColor("clicked");
                         thermometerScript.ChangeThemperature(hitPoint.y);
 
-                        // stop the animation
-                        OTP.RunAnim(false);
+                        if (!laserOnThermometer || !laserCurrentlyOnThermometer)
+                        {
+                            laserOnThermometer = true;
+                            laserCurrentlyOnThermometer = true;
+                            // set the color to a dark red to show that the user currently clicks on the thermometer
+                            thermometerScript.ChangeLiquidColor("clicked");
+                        }
+
+                        if (OrdersToPython.pythonRunsAnim)
+                            // stop the animation
+                            OTP.RunAnim(false);
                     }
                     else if (!laserOnThermometer)
                         if (MD.modes[MD.activeMode].playerCanMoveAtoms)

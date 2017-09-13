@@ -31,7 +31,6 @@ public class InputManager : SceneReferences
     // Use this for initialization
     void Start()
     {
-        print("staaaaaaaaat");
         for (int ctrlNr = 0; ctrlNr < 2; ctrlNr++)
         {
             if (Controllers[0].activeSelf)
@@ -46,17 +45,10 @@ public class InputManager : SceneReferences
     {
         // get the reference of the controller from the LaserGrabber script
         ControllerDevices[ctrlNr] = LGs[ctrlNr].Controller;
-        print(ControllerDevices[ctrlNr]);
     }
 
     void Update()
     {
-        /*for (int ctrlNr = 0; ctrlNr < 2; ctrlNr++)
-            if (Controllers[ctrlNr].activeSelf)
-                if (LGs[ctrlNr] == null)
-                    GetControllerReferences(ctrlNr);
-                else
-                    CheckViveController(ctrlNr);*/
         for (int ctrlNr = 0; ctrlNr < 2; ctrlNr++)
             if (Controllers[ctrlNr].activeSelf)
                 if (ControllerDevices[ctrlNr] == null)
