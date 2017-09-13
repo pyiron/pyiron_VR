@@ -111,7 +111,7 @@ public class PythonExecuter : MonoBehaviour {
                 for (int i = 0; i < 9; i++)
                     cellboxData[i] = float.Parse(splittedData[i]);
             collectedData = currentData;
-            print(collectedData);
+            // print(collectedData);
             currentData = "";
             //structureForce = currentStructureForce;
             newData = true;

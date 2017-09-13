@@ -324,12 +324,12 @@ public class ImportStructure : MonoBehaviour {
             // (re)set the counter to 0
             atomCounter = 0;
             // shows if the current read line is the first line of the file/string
-            bool firstLine;
-            firstLine = true;
+            //bool firstLine;
+            //firstLine = true;
             while (true)
             {
                 line = sr.ReadLine();
-                if (firstLine)
+                /*if (false) // (firstLine && programSettings.transMode == "file")
                 {
                     if (programSettings.transMode == "file")
                         animState = line;
@@ -340,21 +340,20 @@ public class ImportStructure : MonoBehaviour {
                     firstLine = false;
                 }
                 else
-                {
-                    // split the data into the position (data[0 - 2]) and it's type (data[3]) or in the cell data
-                    if (line == null)
-                        break;
-                    print(line);
-                    data = line.Split(' ');
-                    //if (line != null) // reads line for line, until the end is reached
-                    if (action == "getStructureExpansion")
-                        GetStructureExpansion();
-                    else if (action == "initAtoms")
-                        InitAtoms();
+                {*/
+                // split the data into the position (data[0 - 2]) and it's type (data[3]) or in the cell data
+                if (line == null)
+                    break;
+                data = line.Split(' ');
+                //if (line != null) // reads line for line, until the end is reached
+                if (action == "getStructureExpansion")
+                    GetStructureExpansion();
+                else if (action == "initAtoms")
+                    InitAtoms();
 
 
-                    atomCounter++;
-                }
+                atomCounter++;
+                //}
             }
         }
         if (!firstImport)
