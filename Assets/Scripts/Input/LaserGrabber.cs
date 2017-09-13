@@ -238,13 +238,14 @@ public class LaserGrabber : SceneReferences
             //InfoText.transform.eulerAngles = new Vector3(0, HeadTransform.eulerAngles.y, 0);
             if (ctrlMaskName.Contains("AtomLayer"))
             {
-                OTP.RequestForce(attachedObject.GetComponent<AtomID>().ID);
+                if (PythonExecuter.lastAtomForceId != attachedObject.GetComponent<AtomID>().ID)
+                    OTP.RequestForce(attachedObject.GetComponent<AtomID>().ID);
                 // set the info text to the top of the atom
                 InfoText.transform.position = attachedObject.transform.position // + Vector3.up * 0.1f
                         + Vector3.up * attachedObject.transform.localScale[0] / 2 * SettingsScript.size;
                 InfoText.text = SD.atomInfos[attachedObject.GetComponent<AtomID>().ID].m_type;
                 InfoText.text += "\nForce:";
-                if (PythonExecuter.atomForces != null)
+                if (PythonExecuter.lastAtomForceId == attachedObject.GetComponent<AtomID>().ID)
                     for (int i = 0; i < 3; i++)
                         InfoText.text += " " + PythonExecuter.atomForces[1];
                 //if (PythonExecuter.extendedData)

@@ -103,6 +103,9 @@ public class ModeData : MonoBehaviour
         // activate the thermometer when changing into temperature mode, else deactivate it
         Thermometer.SetActive(modes[activeMode].showTemp);
 
+        // show that the current force of no atom is known anymore
+        PythonExecuter.lastAtomForceId = -1;
+
         // stop the currently running animation
         OTP.RunAnim(false);
 

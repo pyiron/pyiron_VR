@@ -56,6 +56,8 @@ public class PythonExecuter : MonoBehaviour {
 
     // the force the atom the player requested the force from has
     public static float[] atomForces = new float[3];
+    // the atom ID from the atom which force was sent the last time a force was requested
+    public static int lastAtomForceId = -1;
 
     [Header("Send Data to Python")]
     // the filename of the file which will send orders from unity to pyiron
@@ -117,6 +119,7 @@ public class PythonExecuter : MonoBehaviour {
             atomForces[0] = float.Parse(splittedData[1]);
             atomForces[1] = float.Parse(splittedData[2]);
             atomForces[2] = float.Parse(splittedData[3]);
+            lastAtomForceId = int.Parse(splittedData[4]);
         }
         // this is the line where Python sends the data about the cellbox
         else if (currentAtomLine == structureSize + 1)
