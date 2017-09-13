@@ -108,10 +108,10 @@ public class PythonExecuter : MonoBehaviour {
         else if (currentAtomLine == structureSize + 1)
         {
             if (ContainsValue(e.Data))
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < 9; i++)
                     cellboxData[i] = float.Parse(splittedData[i]);
             collectedData = currentData;
-            // print(collectedData);
+            print(collectedData);
             currentData = "";
             //structureForce = currentStructureForce;
             newData = true;

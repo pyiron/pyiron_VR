@@ -240,9 +240,9 @@ public class LaserGrabber : SceneReferences
                 InfoText.transform.position = attachedObject.transform.position // + Vector3.up * 0.1f
                         + Vector3.up * attachedObject.transform.localScale[0] / 2 * SettingsScript.size;
                 InfoText.text = SD.atomInfos[attachedObject.GetComponent<AtomID>().ID].m_type;
-                if (PythonExecuter.extendedData)
-                    InfoText.text += "\nForce: "
-                        + PythonExecuter.structureForce[attachedObject.GetComponent<AtomID>().ID];
+                //if (PythonExecuter.extendedData)
+                //    InfoText.text += "\nForce: "
+                //        + PythonExecuter.structureForce[attachedObject.GetComponent<AtomID>().ID];
                 // might be needed so that the text will stand above the atom
                 //InfoText.GetComponent<TextMesh>().text += "\n";
             }

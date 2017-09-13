@@ -289,7 +289,7 @@ public class ImportStructure : MonoBehaviour {
             gameObject.transform.localScale = Vector3.one * programSettings.size;
         }
 
-        SetCellbox(data);
+        SetCellbox();
 
         if (newImport || programSettings.updateBoundingboxEachFrame)
         {
@@ -342,18 +342,16 @@ public class ImportStructure : MonoBehaviour {
                 else
                 {
                     // split the data into the position (data[0 - 2]) and it's type (data[3]) or in the cell data
-                    data = line.Split(' ');
-                    if (atomCounter < PythonExecuter.structureSize)
-                    //if (line != null) // reads line for line, until the end is reached
-                    {
-                        if (action == "getStructureExpansion")
-                            GetStructureExpansion();
-                        else if (action == "initAtoms")
-                            InitAtoms();
-                    }
-                    else
-                        // breaks the routine if the end of the file is reached
+                    if (line == null)
                         break;
+                    print(line);
+                    data = line.Split(' ');
+                    //if (line != null) // reads line for line, until the end is reached
+                    if (action == "getStructureExpansion")
+                        GetStructureExpansion();
+                    else if (action == "initAtoms")
+                        InitAtoms();
+
 
                     atomCounter++;
                 }
@@ -366,13 +364,14 @@ public class ImportStructure : MonoBehaviour {
     }
 
     // set the cellbox according to the data given from Python
-    private void SetCellbox(string[] data)
+    private void SetCellbox()
     {
+        float[] cellboxData = PythonExecuter.cellboxData;
         // save the data for the cellbox in 3 Vector3s
         Vector3[] cellBorderVecs = new Vector3[3];
-        cellBorderVecs[0] = new Vector3(float.Parse(data[0]), float.Parse(data[1]), float.Parse(data[2]));
-        cellBorderVecs[1] = new Vector3(float.Parse(data[3]), float.Parse(data[4]), float.Parse(data[5]));
-        cellBorderVecs[2] = new Vector3(float.Parse(data[6]), float.Parse(data[7]), float.Parse(data[8]));
+        cellBorderVecs[0] = new Vector3(cellboxData[0], cellboxData[1], cellboxData[2]);
+        cellBorderVecs[1] = new Vector3(cellboxData[3], cellboxData[4], cellboxData[5]);
+        cellBorderVecs[2] = new Vector3(cellboxData[6], cellboxData[7], cellboxData[8]);
 
         // reset the positions of the cellbox
         SD.cellbox.transform.localPosition = Vector3.zero;
