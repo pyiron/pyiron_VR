@@ -1,4 +1,4 @@
-newStruc strucKind size temp currentFrame animFrames
+strucKind size temp currentFrame animFrames
 x y z kind
 x y z kind
 (flattened array of cellbox, given as 9 floats)

@@ -29,20 +29,28 @@ public class PythonExecuter : MonoBehaviour {
     public static string collectedData = "";
     // shows whether there is some new data about the structure which has to be used in ImportStructure
     public static bool newData;
-    // shows whether python has send some data about the force/temperature/etc. already or not
-    public static bool extendedData;
-    // the force the structure currently posseses, but when the data is incomplete
-    private static float[] currentStructureForce;
-    // the force the structure currently posseses
-    public static float[] structureForce;
-    // the frame Python sends to Unity this frame
-    public static int frame;
-    // the temperature Python sends to Unity when sending the first structure data
-    public static int temperature;
-    // the amount of atoms the new structure posseses
-    public static int structureSize = 99999;
     // shows for which atom the data is currently transmitted from Python
     private static int currentAtomLine;
+
+    // shows whether python has send some data about the force/temperature/etc. already or not
+    //public static bool extendedData;
+    // the force the structure currently posseses, but when the data is incomplete
+    //private static float[] currentStructureForce;
+    // the force the structure currently posseses
+    //public static float[] structureForce;
+
+    // stores the data how the data of the animation changes (if it changes and if the amount of atoms is the same or a new one)
+    public static string animKind = "";
+    // the amount of atoms the new structure posseses
+    public static int structureSize = 99999;
+    // the temperature Python sends to Unity when sending the first structure data
+    public static int temperature;
+    // the frame Python sends to Unity this frame
+    public static int frame;
+    // the amount of frames the current ham_lammps has
+    public static int frameAmount;
+    // the data how the cellbox can be build
+    public static float[] cellboxData = new float[9];
 
     [Header("Send Data to Python")]
     // the filename of the file which will send orders from unity to pyiron
@@ -91,22 +99,40 @@ public class PythonExecuter : MonoBehaviour {
 
     private static void ReadOutput(object sender, DataReceivedEventArgs e) 
     {
+        string[] splittedData = e.Data.Split();
         if (e.Data.Contains("print"))
             print(e.Data);
         else if (e.Data.Contains("job"))
             return;
+        // this is the line where Python sends the data about the cellbox
         else if (currentAtomLine == structureSize + 1)
         {
-            StoreData(e.Data);
+            if (ContainsValue(e.Data))
+                for (int i = 0; i < 10; i++)
+                    cellboxData[i] = float.Parse(splittedData[i]);
             collectedData = currentData;
             // print(collectedData);
             currentData = "";
-            structureForce = currentStructureForce;
+            //structureForce = currentStructureForce;
             newData = true;
             currentAtomLine = 0;
         }
         else if (currentAtomLine == 0)
         {
+            if (ContainsValue(splittedData[0]))
+                animKind = splittedData[0];
+            if (ContainsValue(splittedData[1]))
+                structureSize = int.Parse(splittedData[1]);
+            if (ContainsValue(splittedData[2]))
+                temperature = int.Parse(splittedData[2]);
+            if (ContainsValue(splittedData[3]))
+                frame = int.Parse(splittedData[3]);
+            if (ContainsValue(splittedData[4]))
+                frameAmount = int.Parse(splittedData[4]);
+
+            currentAtomLine += 1;
+
+            /*
             if (e.Data.Split()[0].Contains("new"))
             {
                 // remember the temperature with which the structure has been initialised
@@ -122,20 +148,25 @@ public class PythonExecuter : MonoBehaviour {
                 }
                 // remember if the structure is static (irrelevant when sending data this way), has a changed size or will be send normally
                 StoreData(e.Data.Split()[1]);
-            }
+            }*/
         }
         else
             StoreData(e.Data);
     }
 
+    private static bool ContainsValue(string data)
+    {
+        return (data != "empty");
+    }
+
     private static void StoreData(string data)
     {
         // should be done in an other way, but will be solved if just sending the force when the player requests the info for an atom
-        if (data.Split().Length == 6)
+        /*if (data.Split().Length == 6)
         {
             currentStructureForce[currentAtomLine - 1] = float.Parse(data.Split()[4]);
             extendedData = true;
-        }
+        }*/
         currentData += data + "\n";
         currentAtomLine += 1;
     }
