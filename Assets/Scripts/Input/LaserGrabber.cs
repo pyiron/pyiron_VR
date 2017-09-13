@@ -4,11 +4,11 @@ using UnityEngine;
 using System.IO;
 
 // Component of both controllers
-public class LaserGrabber : MonoBehaviour
+public class LaserGrabber : SceneReferences
 {
     [Header("Scene Data")]
     // the global settings of the program
-    public ProgramSettings Settings;
+    //public ProgramSettings SettingsScript;
     // the data about the structure
     private StructureData SD;
     // the properties about the resize
@@ -22,8 +22,6 @@ public class LaserGrabber : MonoBehaviour
 
     // all data about the modes, f.e. which mode is currently active
     public ModeData MD;
-    // get the reference to the programm which handles the execution of python
-    public PythonExecuter PE;
 
     // the script of the trashcan in which atoms can be thrown
     private TrashCan TrashCanScript;
@@ -64,8 +62,6 @@ public class LaserGrabber : MonoBehaviour
     // the script of the thermometer
     private Thermometer thermometerScript;
 
-    [Header("Destroy Atom")]
-
     [Header("Change Animation")]
     // shows whether it is the first time an animation should be played,
     // so that the python program knows whether to load a new animation or not
@@ -84,10 +80,6 @@ public class LaserGrabber : MonoBehaviour
     public TextMesh InfoText;
     // the size the text should have
     private float textSize = 1f;
-
-    [Header("Transmittion")]
-    // the script that stores the possible orders which can be send to Python
-    private OrdersToPython OTP;
 
     [Header("Controller")]
     // the start touch point from when the player lays his finger on the touchpad
@@ -110,6 +102,8 @@ public class LaserGrabber : MonoBehaviour
 
     void Awake()
     {
+        // get the references to most objects and scripts of the scene
+        GetReferences();
         try {
             // find the trash can
             TrashCanScript = GameObject.Find("Trash Can").GetComponent<TrashCan>();
@@ -117,10 +111,7 @@ public class LaserGrabber : MonoBehaviour
         catch { TrashCanScript = otherCtrl.GetComponent<LaserGrabber>().TrashCanScript; }
         // get the data of the controller
         trackedObj = GetComponent<SteamVR_TrackedObject>();
-        // get the reference to the programm which handles the execution of python
-        PE = Settings.GetComponent<PythonExecuter>();
-        // get the reference to the script that stores the possible orders which can be send to Python
-        OTP = Settings.GetComponent<OrdersToPython>();
+        
         // get the Script of the Hourglass, which indicates that the structure is currently loading
         HourglassScript = GameObject.Find("HourglassRotator").transform.GetChild(0).gameObject.GetComponent<Hourglass>();
 }
@@ -130,7 +121,7 @@ public class LaserGrabber : MonoBehaviour
         InitLaser();
 
         // set the variable to the name of the mask
-        ctrlMaskName = Settings.GetLayerName(ctrlMask);
+        ctrlMaskName = SettingsScript.GetLayerName(ctrlMask);
         // get the script StructureData from AtomStructure
         SD = AtomStructure.GetComponent<StructureData>();
         // get the script StructureResizer from AtomStructure
@@ -141,9 +132,9 @@ public class LaserGrabber : MonoBehaviour
             if (tr.name == "Boundingbox(Clone)")
                 boundingbox = tr;
 
-        textSize = textSize / Settings.textResolution * 10;
+        textSize = textSize / SettingsScript.textResolution * 10;
         InfoText.transform.localScale = Vector3.one * textSize;
-        InfoText.fontSize = (int)Settings.textResolution;
+        InfoText.fontSize = (int)SettingsScript.textResolution;
 
         // get the references to the thermometer related objects from the other controller, if it is active and knows them
         if (otherCtrl.activeSelf)
@@ -241,13 +232,13 @@ public class LaserGrabber : MonoBehaviour
             // set the Infotext to active and edit it 
             InfoText.gameObject.SetActive(true);
             // let the InfoText always look in the direction of the player
-            Settings.Face_Player(InfoText.gameObject);
+            SettingsScript.Face_Player(InfoText.gameObject);
             //InfoText.transform.eulerAngles = new Vector3(0, HeadTransform.eulerAngles.y, 0);
             if (ctrlMaskName.Contains("AtomLayer"))
             {
                 // set the info text to the top of the atom
                 InfoText.transform.position = attachedObject.transform.position // + Vector3.up * 0.1f
-                        + Vector3.up * attachedObject.transform.localScale[0] / 2 * Settings.size;
+                        + Vector3.up * attachedObject.transform.localScale[0] / 2 * SettingsScript.size;
                 InfoText.text = SD.atomInfos[attachedObject.GetComponent<AtomID>().ID].m_type;
                 if (PythonExecuter.extendedData)
                     InfoText.text += "\nForce: "
@@ -259,7 +250,7 @@ public class LaserGrabber : MonoBehaviour
             {
                 // set the info text to the top of the boundingbox
                 InfoText.transform.position = boundingbox.transform.position + Vector3.up * 0.1f
-                    + Vector3.up * boundingbox.transform.localScale[0] / 2 * Settings.size;
+                    + Vector3.up * boundingbox.transform.localScale[0] / 2 * SettingsScript.size;
                 InfoText.text = SD.structureName;
                 InfoText.text += "\nAtoms: "
                         + SD.atomInfos.Count;
@@ -345,7 +336,7 @@ public class LaserGrabber : MonoBehaviour
                 minLaserLength = 0;
             else
                 // set the distance to the width of the atom, so that the atom is in front of the controller, and not in it
-                minLaserLength = attachedObject.transform.localScale.x * Settings.size / 2;
+                minLaserLength = attachedObject.transform.localScale.x * SettingsScript.size / 2;
 
             // if the laserlength is changed to a value less than the minimum distance, the attached object is going to be grabbed
             if (laserLength + currentTouch.y - startTouchPoint.y <= minLaserLength)
@@ -436,18 +427,18 @@ public class LaserGrabber : MonoBehaviour
             // check if the thermometer has been initialised yet and is currently active
             if (thermometerScript != null)
             {
-                print(thermometerScript.lastTemperature +"  "+ Settings.temperature);
+                print(thermometerScript.lastTemperature +"  "+ SettingsScript.temperature);
                 // send Python the order to change the temperature if the user has changed the temperature on the thermometer
-                if (thermometerScript.lastTemperature != Settings.temperature)
+                if (thermometerScript.lastTemperature != SettingsScript.temperature)
                 {
-                    PE.SendOrder("self.temperature = " + Settings.temperature);
+                    PE.SendOrder("self.temperature = " + SettingsScript.temperature);
                     // remember that a new ham_lammps has to be loaded
                     temperatureHasChanged = true;
                     // remember that the last ham_lammps has been created with the current temperature
-                    thermometerScript.lastTemperature = Settings.temperature;
+                    thermometerScript.lastTemperature = SettingsScript.temperature;
                 }
                 else
-                    print("no temperature change" + thermometerScript.lastTemperature + Settings.temperature);
+                    print("no temperature change" + thermometerScript.lastTemperature + SettingsScript.temperature);
             }
             else
                 print("Doesn't have the reference to the thermometer.");

@@ -14,7 +14,7 @@ public class InputManager : MonoBehaviour
 
     [Header("Controller")]
     // the two controllers
-    public GameObject[] controllerObjects = new GameObject[2];
+    public GameObject[] controllerObjects = new GameObject[2];  // TODO: should be private
     // get the reference of LaserGrabber
     private LaserGrabber[] LGs = new LaserGrabber[2];
     // get the device of the controller

@@ -11,6 +11,10 @@ public class OrdersToPython : MonoBehaviour {
     private PythonExecuter PE;
     // the reference to the LaserGrabber script of the controller that can move single atoms
     private LaserGrabber AtomLayerLG;
+    // the reference to the LaserGrabber script of the controller that can move the whole structure
+    private LaserGrabber BoundingboxLayerLG;  // useless atm
+    // the reference to the controllers
+    //private GameObject[] Controllers = new GameObject[2];
     // shows whether the input order of the user could be executed or not
     private bool couldExecuteOrder;
     // shows whether Python should be currently sending an animation or just always the same frame
@@ -36,10 +40,16 @@ public class OrdersToPython : MonoBehaviour {
 
     private void GetReferenceToAtomLayerLG()
     {
+        foreach (Transform ControllerTransform in GameObject.Find("[CameraRig]").transform)
+        // get the reference to the controllers
+        //Controllers = TODO
         // get the reference to the LaserGrabber script of the controller that can move single atoms
         foreach (LaserGrabber LG in GameObject.Find("[CameraRig]").GetComponentsInChildren<LaserGrabber>())
             if (LG.ctrlMaskName.Contains("Atom"))
                 AtomLayerLG = LG;
+            else
+                BoundingboxLayerLG = LG;
+
     }
 
     // Use this for initialization
@@ -136,5 +146,7 @@ public class OrdersToPython : MonoBehaviour {
         else
             PE.SendOrder("self.runAnim = False");
         pythonRunsAnim = shouldRun;
+        // update the symbols on the controllers
+        
     }
 }
