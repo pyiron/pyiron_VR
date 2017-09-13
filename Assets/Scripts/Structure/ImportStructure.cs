@@ -343,7 +343,7 @@ public class ImportStructure : MonoBehaviour {
                 {
                     // split the data into the position (data[0 - 2]) and it's type (data[3]) or in the cell data
                     data = line.Split(' ');
-                    if (data.Length < 9)
+                    if (atomCounter < PythonExecuter.structureSize)
                     //if (line != null) // reads line for line, until the end is reached
                     {
                         if (action == "getStructureExpansion")

@@ -33,6 +33,4 @@ Last line:
 The last line is the flattened cellbox. It can be devided into 3 Vectors with 3 values, which would look like this if wriiten in Python style:
 (5.74 0 0), (-3.515e-16 5.74 0), (-3.515e-16 -3.515e-16 5.74)
 
-Care: there is a blanc space before the \n in this line! This is needed, else it will crash!
-
 I think, at the moment Unity can't read this data out of a file without crashing. But if I have time left, I'll code that Unity can again read this data out of files. But then, it can't handle most of the interacting stuff, like changing the temperature, destroying an atom or even moving an atom and get the new Animation how the structure is reacting to the change.
