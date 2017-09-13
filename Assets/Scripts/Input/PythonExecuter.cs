@@ -49,11 +49,13 @@ public class PythonExecuter : MonoBehaviour {
     public static int frame;
     // the amount of frames the current ham_lammps has
     public static int frameAmount;
+    // the amount of changes the Python program did after the Unity program requested it
+    public static int incomingChanges = -1;
     // the data how the cellbox can be build
     public static float[] cellboxData = new float[9];
 
-    // the amount of changes the Python program did after the Unity program requested it
-    public static int incomingChanges = -1;
+    // the force the atom the player requested the force from has
+    public static float[] atomForces = new float[3];
 
     [Header("Send Data to Python")]
     // the filename of the file which will send orders from unity to pyiron
@@ -110,6 +112,12 @@ public class PythonExecuter : MonoBehaviour {
             print(e.Data);
         else if (e.Data.Contains("job"))
             return;
+        else if (splittedData[0] == "force")
+        {
+            atomForces[0] = float.Parse(splittedData[1]);
+            atomForces[1] = float.Parse(splittedData[2]);
+            atomForces[2] = float.Parse(splittedData[3]);
+        }
         // this is the line where Python sends the data about the cellbox
         else if (currentAtomLine == structureSize + 1)
         {
@@ -201,22 +209,7 @@ public class PythonExecuter : MonoBehaviour {
         {
             sw.WriteLine(order);
         }
-        printer.Ctrl_print("order", 20);
     }
-
-    /*public void SendOrder(bool runAnim=false)
-    {
-        if (runAnim)
-        {
-            SendOrder("self.start_anim()");
-            pythonRunsAnim = true;
-        }
-        else
-        {
-            SendOrder("self.runAnim = False");
-            pythonRunsAnim = false;
-        }
-    }*/
 
     public void ChangeAnimSpeed(int speedChange)
     {
@@ -229,6 +222,8 @@ public class PythonExecuter : MonoBehaviour {
     {
         // close the python script
         print("Application ending after " + Time.time + " seconds");
+        print("Sent  " + outgoingChanges + " Orders to PyIron");
+        print("Received  " + incomingChanges + " Responses from PyIron");
         myProcess.StandardInput.WriteLine("Stop!");
         myProcess.StandardInput.Close();
         myProcess.Close();

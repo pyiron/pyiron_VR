@@ -25,7 +25,8 @@ public class OrdersToPython : SceneReferences
     {
         {"Destroy Atom Nr", "DestroyAtom" },
         {"Stop Animation", "RunAnimation" },
-        {"Run Animation", "RunAnimation" }
+        {"Run Animation", "RunAnimation" },
+        {"Force of atom Nr ", "RequestForce" }
     };
 
     private void Awake()
@@ -157,5 +158,16 @@ public class OrdersToPython : SceneReferences
         foreach (GameObject Controller in Controllers)
             if (Controller.activeSelf)
                 Controller.GetComponent<ControllerSymbols>().SetSymbol();
+    }
+
+    public void RequestForceOrder(string order)
+    {
+        // TODO: Check if the Input is valid
+        RequestForce(int.Parse(order.Split()[4]));
+    }
+
+    public void RequestForce(int atomNr)
+    {
+        PE.SendOrder("self.send_forces(" + atomNr + ")");
     }
 }
