@@ -34,6 +34,7 @@ IMPORTANT:
 - Let Unity show in a time bar which frame is currently shown.
 - try to create a script, from which most other scripts are children from, and which gives them the important references to some (or maybe all) scripts
 - stop the 3D text from shining through other objects
+(- Stop the error messages which pop up if the program has been started while one of the controllers was inactive.)
 
 - use this to start the 3D Beamer in the shell: *cd to Desktop* VABuild7_18VRAndBeamer.exe -vrmode Stereo
 

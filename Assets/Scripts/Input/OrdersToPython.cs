@@ -45,9 +45,6 @@ public class OrdersToPython : SceneReferences
 
     private void GetReferenceToAtomLayerLG()
     {
-        foreach (Transform ControllerTransform in GameObject.Find("[CameraRig]").transform)
-        // get the reference to the controllers
-        //Controllers = TODO
         // get the reference to the LaserGrabber script of the controller that can move single atoms
         foreach (LaserGrabber LG in GameObject.Find("[CameraRig]").GetComponentsInChildren<LaserGrabber>())
             if (LG.ctrlMaskName.Contains("Atom"))
@@ -61,6 +58,11 @@ public class OrdersToPython : SceneReferences
     void Start () {
         //if (!ExecuteOrder("Destroy Atom 0"))
         //    print("Invalid Input!");
+    }
+
+    private void Update()
+    {
+        
     }
 
     public bool ExecuteOrder(string order)
@@ -151,7 +153,6 @@ public class OrdersToPython : SceneReferences
         else
             PE.SendOrder("self.runAnim = False");
         pythonRunsAnim = shouldRun;
-        print("eeeeeee");
         // update the symbols on all active controllers
         foreach (GameObject Controller in Controllers)
             if (Controller.activeSelf)

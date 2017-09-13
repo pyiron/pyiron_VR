@@ -4,7 +4,7 @@ using UnityEngine;
 
 // Component of Settings
 // Handles all the relevant Input Data.
-public class InputManager : MonoBehaviour
+public class InputManager : SceneReferences
 {
     [Header("Scene Data")]
     // the script of the controller printer
@@ -14,19 +14,27 @@ public class InputManager : MonoBehaviour
 
     [Header("Controller")]
     // the two controllers
-    public GameObject[] controllerObjects = new GameObject[2];  // TODO: should be private
+    //public GameObject[] Controllers = new GameObject[2];  // TODO: should be private
     // get the reference of LaserGrabber
-    private LaserGrabber[] LGs = new LaserGrabber[2];
+    // LaserGrabber[] LGs = new LaserGrabber[2];
     // get the device of the controller
     private SteamVR_Controller.Device[] ControllerDevices = new SteamVR_Controller.Device[2];
 
+    private void Awake()
+    {
+        // get the reference to the script that stores most references
+        GetReferenceToReferences();
+        // get the reference to the controllers
+        GetControllerReferences();
+    }
 
     // Use this for initialization
     void Start()
     {
+        print("staaaaaaaaat");
         for (int ctrlNr = 0; ctrlNr < 2; ctrlNr++)
         {
-            if (controllerObjects[0].activeSelf)
+            if (Controllers[0].activeSelf)
                 GetControllerReferences(ctrlNr);
 
                 //printer.Ctrl_print(MD.activeMode.ToString(), 4);
@@ -36,17 +44,22 @@ public class InputManager : MonoBehaviour
     // get the references to the Script which controlls the controller, which isn't possible before the controller is activated
     private void GetControllerReferences(int ctrlNr)
     {
-        // get the reference of LaserGrabber
-        LGs[ctrlNr] = controllerObjects[ctrlNr].GetComponent<LaserGrabber>();
         // get the reference of the controller from the LaserGrabber script
         ControllerDevices[ctrlNr] = LGs[ctrlNr].Controller;
+        print(ControllerDevices[ctrlNr]);
     }
 
     void Update()
     {
-        for (int ctrlNr = 0; ctrlNr < 2; ctrlNr++)
-            if (controllerObjects[ctrlNr].activeSelf)
+        /*for (int ctrlNr = 0; ctrlNr < 2; ctrlNr++)
+            if (Controllers[ctrlNr].activeSelf)
                 if (LGs[ctrlNr] == null)
+                    GetControllerReferences(ctrlNr);
+                else
+                    CheckViveController(ctrlNr);*/
+        for (int ctrlNr = 0; ctrlNr < 2; ctrlNr++)
+            if (Controllers[ctrlNr].activeSelf)
+                if (ControllerDevices[ctrlNr] == null)
                     GetControllerReferences(ctrlNr);
                 else
                     CheckViveController(ctrlNr);
