@@ -7,8 +7,6 @@ using System.IO;
 public class LaserGrabber : SceneReferences
 {
     [Header("Scene Data")]
-    // the global settings of the program
-    //public ProgramSettings SettingsScript;
     // the data about the structure
     private StructureData SD;
     // the properties about the resize
@@ -437,16 +435,16 @@ public class LaserGrabber : SceneReferences
             {
 
                 // send Python the order to change the temperature if the user has changed the temperature on the thermometer
-                if (thermometerScript.lastTemperature != SettingsScript.temperature)
+                if (thermometerScript.lastTemperature != ProgramSettings.temperature)
                 {
-                    PE.SendOrder("self.temperature = " + SettingsScript.temperature);
+                    PE.SendOrder("self.temperature = " + ProgramSettings.temperature);
                     // remember that a new ham_lammps has to be loaded
                     temperatureHasChanged = true;
                     // remember that the last ham_lammps has been created with the current temperature
-                    thermometerScript.lastTemperature = SettingsScript.temperature;
+                    thermometerScript.lastTemperature = ProgramSettings.temperature;
                 }
                 else
-                    print("no temperature change" + thermometerScript.lastTemperature + SettingsScript.temperature);
+                    print("no temperature change" + thermometerScript.lastTemperature + ProgramSettings.temperature);
             }
             else
                 print("Doesn't have the reference to the thermometer.");

@@ -301,7 +301,7 @@ public class ImportStructure : MonoBehaviour {
         if (firstImport)
         {
             firstImport = false;
-            programSettings.temperature = PythonExecuter.temperature;
+            ProgramSettings.temperature = PythonExecuter.temperature;
             ThermometerObject.SetActive(true);
         }
         newImport = false;

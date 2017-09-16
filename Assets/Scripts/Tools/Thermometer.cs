@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Thermometer : MonoBehaviour {
-
-    // the Settings of the program
-    private ProgramSettings Settings;
-
     // the reference to the animationController of the thermometer
     private Animator anim;
     // the text on the thermometer how high the temperature currently is
@@ -33,8 +29,6 @@ public class Thermometer : MonoBehaviour {
     {
         // get the reference to the animationController of the thermometer
         anim = gameObject.GetComponent<Animator>();
-        // get the Settings of the program
-        Settings = GameObject.Find("Settings").GetComponent<ProgramSettings>();
         // get the reference to the TextMesh of the temperature
         ThermometerText = GetComponentInChildren<TextMesh>();
     }
@@ -53,7 +47,7 @@ public class Thermometer : MonoBehaviour {
         ChangeLiquidColor();
 
         // set lastTemperature to the value the thermometer has been initialised with
-        lastTemperature = Settings.temperature;
+        lastTemperature = ProgramSettings.temperature;
     }
 	
 	// Update is called once per frame
@@ -65,14 +59,14 @@ public class Thermometer : MonoBehaviour {
     public void UpdateTemperature(int exactTemperature = -1)
     {
         // set the current temperature on the text field
-        ThermometerText.text = Settings.temperature.ToString();
+        ThermometerText.text = ProgramSettings.temperature.ToString();
         // set the red liquid to the right state / up to the right height
         if (exactTemperature != -1)
             anim.SetFloat("Temperature", (float)exactTemperature / maxTemperature);
         else
             // set the temperature to an exact value, although the temperature is rounded,
             // to make it look smooth how the temperature gets scaled
-            anim.SetFloat("Temperature", (float)Settings.temperature / maxTemperature);
+            anim.SetFloat("Temperature", (float)ProgramSettings.temperature / maxTemperature);
     }
 
     // change the color if the user interacts with the thermometer
@@ -101,12 +95,12 @@ public class Thermometer : MonoBehaviour {
             newTemperatureGradient = 1;
 
         // set the temperature to the new value
-        Settings.temperature = (int)(precision * newTemperatureGradient) * maxTemperature / precision;
+        ProgramSettings.temperature = (int)(precision * newTemperatureGradient) * maxTemperature / precision;
 
         // if the temperature would be less or equal 0, the program will set it to 1, because PyIron would crash if it would get the temperature 0
-        if (Settings.temperature <= 0)
+        if (ProgramSettings.temperature <= 0)
         {
-            Settings.temperature = 1;
+            ProgramSettings.temperature = 1;
             // if the user points to a point lower than 0, the temperature will still be shown as 0 and not a negative value
             if (newTemperatureGradient <= 0)
                 newTemperatureGradient = 0;

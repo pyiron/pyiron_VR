@@ -27,7 +27,7 @@ public class ProgramSettings : MonoBehaviour {
 
     [Header("Data")]
     // the temperature each structure in the Scene has
-    public int temperature;
+    public static int temperature;
 
 
     private void Awake()
