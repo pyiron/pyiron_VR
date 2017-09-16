@@ -20,8 +20,11 @@ public class ProgressBar : MonoBehaviour {
         // get the reference to the TextMeshes of the ProgressBar
         TextMeshes = ProgressBarObject.GetComponentsInChildren<TextMesh>();
         //
-        foreach (TextMesh TM in TextMeshes)
-            TM.transform.localScale = Vector3.one * ProgramSettings.size;
+        for (int i = 0; i < TextMeshes.Length; i++)
+        {
+            TextMeshes[i].transform.localScale = Vector3.one * ProgramSettings.size;
+            TextMeshes[i].transform.localPosition += Vector3.up * (i + 1) / 2;
+        }
 
         // deactivate the ProgressBar at the beginning because the current frame and the amount of frames is not yet known
         ProgressBarObject.SetActive(false);
