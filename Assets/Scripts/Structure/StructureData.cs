@@ -52,7 +52,7 @@ public class StructureData : MonoBehaviour
         // set it to the size of the structure
         boundingbox.transform.localScale = maxPositions - minPositions;
         // place it in the the middle of the structure
-        boundingbox.transform.position = (minPositions + (maxPositions - minPositions) / 2) * programSettings.size;
+        boundingbox.transform.position = (minPositions + (maxPositions - minPositions) / 2) * ProgramSettings.size;
     }
 
     // search for the min and max position of the atoms in the cluster for each axis
@@ -64,10 +64,10 @@ public class StructureData : MonoBehaviour
         foreach (AtomInfos atom in atomInfos)
             for (int i = 0; i < 3; i++)
             {
-                if (atom.m_transform.position[i] / programSettings.size + atom.m_transform.localScale[i] / 2 > maxPositions[i])
-                    maxPositions[i] = atom.m_transform.position[i] / programSettings.size + atom.m_transform.localScale[i] / 2;
-                if (atom.m_transform.position[i] / programSettings.size - atom.m_transform.localScale[i] / 2 < minPositions[i])
-                    minPositions[i] = atom.m_transform.position[i] / programSettings.size - atom.m_transform.localScale[i] / 2;
+                if (atom.m_transform.position[i] / ProgramSettings.size + atom.m_transform.localScale[i] / 2 > maxPositions[i])
+                    maxPositions[i] = atom.m_transform.position[i] / ProgramSettings.size + atom.m_transform.localScale[i] / 2;
+                if (atom.m_transform.position[i] / ProgramSettings.size - atom.m_transform.localScale[i] / 2 < minPositions[i])
+                    minPositions[i] = atom.m_transform.position[i] / ProgramSettings.size - atom.m_transform.localScale[i] / 2;
             }
     }
 

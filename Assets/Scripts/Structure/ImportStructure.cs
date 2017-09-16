@@ -282,7 +282,7 @@ public class ImportStructure : MonoBehaviour {
         if (newImport)
         {
             // set the size of the cluster to the global scale
-            gameObject.transform.localScale = Vector3.one * programSettings.size;
+            gameObject.transform.localScale = Vector3.one * ProgramSettings.size;
         }
 
         SetCellbox();
@@ -384,7 +384,7 @@ public class ImportStructure : MonoBehaviour {
 
         // set the position for the cellbox
         for (int i = 0; i < 3; i++)
-            SD.cellbox.transform.position -= cellBorderVecs[i] / 2 * programSettings.size;
+            SD.cellbox.transform.position -= cellBorderVecs[i] / 2 * ProgramSettings.size;
     }
 
     private void GetStructureExpansion()
@@ -416,13 +416,13 @@ public class ImportStructure : MonoBehaviour {
             currentAtom.transform.position = new Vector3(float.Parse(data[0]), float.Parse(data[1]),
                 float.Parse(data[2])) - (maxPositions + minPositions) / 2;
             if (animState == "new" || (!firstImport && programSettings.transMode == "shell"))
-                currentAtom.transform.position *= programSettings.size;
+                currentAtom.transform.position *= ProgramSettings.size;
             SD.atomCtrlPos.Add(Vector3.zero);
         }
         else
         {
             currentAtom.transform.position = (new Vector3(float.Parse(data[0]), float.Parse(data[1]),
-                float.Parse(data[2])) - (maxPositions + minPositions) / 2) * programSettings.size;
+                float.Parse(data[2])) - (maxPositions + minPositions) / 2) * ProgramSettings.size;
             currentAtom.transform.position += SD.atomCtrlPos[atomCounter] + transform.position;
         }
         // set the atom colour to the colour this type of atom has

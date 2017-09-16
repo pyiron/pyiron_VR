@@ -242,7 +242,7 @@ public class LaserGrabber : SceneReferences
                     OTP.RequestForce(attachedObject.GetComponent<AtomID>().ID);
                 // set the info text to the top of the atom
                 InfoText.transform.position = attachedObject.transform.position // + Vector3.up * 0.1f
-                        + Vector3.up * attachedObject.transform.localScale[0] / 2 * SettingsScript.size;
+                        + Vector3.up * attachedObject.transform.localScale[0] / 2 * ProgramSettings.size;
                 InfoText.text = SD.atomInfos[attachedObject.GetComponent<AtomID>().ID].m_type;
                 InfoText.text += "\nForce:";
                 if (PythonExecuter.lastAtomForceId == attachedObject.GetComponent<AtomID>().ID)
@@ -258,7 +258,7 @@ public class LaserGrabber : SceneReferences
             {
                 // set the info text to the top of the boundingbox
                 InfoText.transform.position = boundingbox.transform.position + Vector3.up * 0.1f
-                    + Vector3.up * boundingbox.transform.localScale[0] / 2 * SettingsScript.size;
+                    + Vector3.up * boundingbox.transform.localScale[0] / 2 * ProgramSettings.size;
                 InfoText.text = SD.structureName;
                 InfoText.text += "\nAtoms: "
                         + SD.atomInfos.Count;
@@ -344,7 +344,7 @@ public class LaserGrabber : SceneReferences
                 minLaserLength = 0;
             else
                 // set the distance to the width of the atom, so that the atom is in front of the controller, and not in it
-                minLaserLength = attachedObject.transform.localScale.x * SettingsScript.size / 2;
+                minLaserLength = attachedObject.transform.localScale.x * ProgramSettings.size / 2;
 
             // if the laserlength is changed to a value less than the minimum distance, the attached object is going to be grabbed
             if (laserLength + currentTouch.y - startTouchPoint.y <= minLaserLength)

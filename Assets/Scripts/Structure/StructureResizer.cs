@@ -5,8 +5,6 @@ using UnityEngine;
 // component of AtomStructure
 public class StructureResizer : MonoBehaviour
 {
-    // the global settings of the program
-    public ProgramSettings Settings;
     // the scripts of the two ctrls
     public GameObject[] Controllers = new GameObject[2];
     // the data about the structure
@@ -43,7 +41,7 @@ public class StructureResizer : MonoBehaviour
         // set the distance of the controllers when the resizeStructure begins
         startCtrlDistance = (Controllers[0].transform.position - Controllers[1].transform.position).magnitude;
         // remember the size the structure had before the resize
-        oldStructureSize = Settings.size;
+        oldStructureSize = ProgramSettings.size;
     }
 
     private void TestForResize()
@@ -68,10 +66,10 @@ public class StructureResizer : MonoBehaviour
         {
             // update the values how the player has moved each atom, so that these values depend on the global size
             for (int i = 0; i < SD.atomCtrlPos.Count; i++)
-                SD.atomCtrlPos[i] *= newStrucSize / Settings.size;
+                SD.atomCtrlPos[i] *= newStrucSize / ProgramSettings.size;
             // set the global size to the new value and update the structure
-            Settings.size = newStrucSize;
-            transform.localScale = Vector3.one * Settings.size;        }
+            ProgramSettings.size = newStrucSize;
+            transform.localScale = Vector3.one * ProgramSettings.size;        }
     }
 }
 
