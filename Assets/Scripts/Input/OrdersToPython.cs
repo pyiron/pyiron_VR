@@ -21,12 +21,13 @@ public class OrdersToPython : SceneReferences
     // shows whether Python should be currently sending an animation or just always the same frame
     public static bool pythonRunsAnim = false;
 
-    public readonly Dictionary<string, string> Orders = new Dictionary<string, string>
+    public static readonly Dictionary<string, string> Orders = new Dictionary<string, string>
     {
         {"Destroy Atom Nr", "DestroyAtom" },
         {"Stop Animation", "RunAnimation" },
         {"Run Animation", "RunAnimation" },
-        {"Force of atom Nr ", "RequestForce" }
+        {"Force of atom Nr ", "RequestForce" }, // outdated
+        {"Send all forces", "RequestAllForces" }
     };
 
     private void Awake()
@@ -80,8 +81,9 @@ public class OrdersToPython : SceneReferences
         //MethodInfo theMethod = this.GetType().GetMethod(orderFunctionName);
         object[] myParams = new object[1];
         myParams[0] = order;
-        print(myParams[0]);
-        GetType().GetMethod(orderFunctionName + "Order").Invoke(this, myParams);
+        if (orderFunctionName != "RequestOrders")
+            orderFunctionName += "Order";
+        GetType().GetMethod(orderFunctionName).Invoke(this, myParams);
         return couldExecuteOrder;
     }
 
@@ -160,14 +162,22 @@ public class OrdersToPython : SceneReferences
                 Controller.GetComponent<ControllerSymbols>().SetSymbol();
     }
 
+    // outdated by RequestForces
     public void RequestForceOrder(string order)
     {
         // TODO: Check if the Input is valid
         RequestForce(int.Parse(order.Split()[4]));
     }
 
+    // outdated by RequestForces
     public void RequestForce(int atomNr)
     {
         PE.SendOrder("self.send_forces(" + atomNr + ")");
+    }
+
+    // request the forces of all atoms from Python
+    public void RequestAllForces()
+    {
+        PE.SendOrder("self.send_all_forces()");
     }
 }

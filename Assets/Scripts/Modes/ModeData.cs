@@ -51,7 +51,6 @@ public class ModeData : MonoBehaviour
     {
         // get the reference to the transform of the headset
         HeadTransform = GameObject.Find("[CameraRig]/Camera (eye)/Camera (head)").transform;
-        print(HeadTransform + "mode");
         // get the reference to the Settings
         Settings = GameObject.Find("Settings");
         // get the reference to the script that handles the connection to python
@@ -62,7 +61,6 @@ public class ModeData : MonoBehaviour
         OTP = Settings.GetComponent<OrdersToPython>();
     }
 
-    // Use this for initialization
     void Start()
     {
         textSize = textSize / ProgramSettings.textResolution * 10;
@@ -70,7 +68,6 @@ public class ModeData : MonoBehaviour
         gameObject.GetComponent<TextMesh>().fontSize = (int)ProgramSettings.textResolution;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (modeTextTimer > 0)
@@ -111,6 +108,8 @@ public class ModeData : MonoBehaviour
         // stop the currently running animation
         OTP.RunAnim(false);
 
+        if (modes[activeMode].name == "Info Mode")
+            OTP.RequestAllForces();
 
         foreach (GameObject controller in controllers)
             if (controller.activeSelf)

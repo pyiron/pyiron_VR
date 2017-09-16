@@ -124,10 +124,18 @@ public class PythonExecuter : MonoBehaviour {
             return;
         else if (splittedData[0] == "force")
         {
-            atomForces[0] = float.Parse(splittedData[1]);
-            atomForces[1] = float.Parse(splittedData[2]);
-            atomForces[2] = float.Parse(splittedData[3]);
-            lastAtomForceId = int.Parse(splittedData[4]);
+            if (ContainsValue(splittedData[1]))
+            {
+                allForces[int.Parse(splittedData[4])] = new float[3];
+                for (int i = 0; i < 3; i++)
+                    allForces[int.Parse(splittedData[4])][i] = float.Parse(splittedData[i + 1]);
+                // show that Unity received the change from Python
+                if (int.Parse(splittedData[4]) == 1)
+                    PythonExecuter.incomingChanges += 1;
+            }
+            else
+                // show that Unity received the change from Python
+                PythonExecuter.incomingChanges += 1;
         }
         // this is the line where Python sends the data about the cellbox
         else if (currentAtomLine == structureSize + 1)
@@ -138,7 +146,6 @@ public class PythonExecuter : MonoBehaviour {
             collectedData = currentData;
             // print(collectedData);
             currentData = "";
-            //structureForce = currentStructureForce;
             newData = true;
             currentAtomLine = 0;
         }
@@ -152,7 +159,10 @@ public class PythonExecuter : MonoBehaviour {
                     structureSize = int.Parse(splittedData[1]);
                     allForces = new float[structureSize][];
                     for (int atomNr = 0; atomNr < structureSize; atomNr++)
+                    {
                         allForces[atomNr] = new float[3];
+                        allForces[atomNr][0] = -1;
+                    }
                 }
             if (ContainsValue(splittedData[2]))
                 temperature = int.Parse(splittedData[2]);
@@ -194,12 +204,6 @@ public class PythonExecuter : MonoBehaviour {
 
     private static void StoreData(string data)
     {
-        // should be done in an other way, but will be solved if just sending the force when the player requests the info for an atom
-        /*if (data.Split().Length == 6)
-        {
-            currentStructureForce[currentAtomLine - 1] = float.Parse(data.Split()[4]);
-            extendedData = true;
-        }*/
         currentData += data + "\n";
         currentAtomLine += 1;
     }
