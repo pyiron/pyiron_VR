@@ -66,6 +66,8 @@ public class LaserGrabber : SceneReferences
     private bool firstAnimStart = true;
     // shows if the current lammps is a calc_md or calc_minimize
     private bool lammpsIsMd;
+    // shows whether the positions of the atoms are still the same es they were when the last ham_lammps was created
+    private static bool positionsHaveChanged;
 
     [Header("Resize")]
     // shows, which of the controllers currently allows to resize the structure
@@ -443,11 +445,16 @@ public class LaserGrabber : SceneReferences
                     // remember that the last ham_lammps has been created with the current temperature
                     thermometerScript.lastTemperature = ProgramSettings.temperature;
                 }
-                else
-                    print("no temperature change" + thermometerScript.lastTemperature + ProgramSettings.temperature);
             }
-            else
-                print("Doesn't have the reference to the thermometer.");
+
+            // check if the positions of any atom has been changed since the last animation has been started
+            if (PythonExecuter.frame != 0 || positionsHaveChanged)
+            {
+                // send the new positions to Python
+                positionsHaveChanged = true;
+                // send Python the new positions of all atoms
+                print("send Python the new positions of all atoms here");
+            }
 
             // when loading the first animation, show Python that it's the first time, so that it can check if there is already a loaded ham_lammps
             if (firstAnimStart)
@@ -456,11 +463,11 @@ public class LaserGrabber : SceneReferences
                 firstAnimStart = false;
             }
             // tell Python to create a new ham_lammps because the structure or it's temperature has changed
-            else if (SD.needsNewAnim || temperatureHasChanged)
+            else if (temperatureHasChanged || positionsHaveChanged)
             {
                 LoadNewLammps("self.create_new_lammps");
                 // remember that the ham_lammps is now according to the current structure
-                SD.needsNewAnim = false;
+                positionsHaveChanged = false;
             }
             // load a new ham_lammps if the current ham_lammps is for md and the animation for minimize is needed or vice versa
             else if (lammpsIsMd != MD.modes[MD.activeMode].showTemp)
@@ -688,6 +695,8 @@ public class LaserGrabber : SceneReferences
             laserLength = (attachedObject.transform.position - transform.position).magnitude;
             // spawn the trashcan
             TrashCanScript.ActivateCan();
+
+            positionsHaveChanged = true;
             // deactivate the animation
             OTP.RunAnim(false);
         }
@@ -702,10 +711,6 @@ public class LaserGrabber : SceneReferences
 
     private void ReleaseObject()
     {
-        // would allow the object to fly away with the velocity and angularvelocity it has when it gets detached
-        //objectInHand.GetComponent<Rigidbody>().velocity = Controller.velocity;
-        //objectInHand.GetComponent<Rigidbody>().angularVelocity = Controller.angularVelocity;
-
         if (MD.modes[MD.activeMode].showTrashcan)
         {
             if (TrashCanScript.atomInCan && ctrlMaskName == "AtomLayer")

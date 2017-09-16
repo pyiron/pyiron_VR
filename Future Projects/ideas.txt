@@ -1,10 +1,11 @@
 -periodic system, where you can get new atoms from
--colour the atoms according to their warmth or energy
--make a GUI!
+(-colour the atoms according to their warmth or energy)
+-make a GUI
 - make a file which tells Unity details about the pyiron structure:
   -> colordependancy, animation
 (- delete the code needed for the slower mode of transfering data between Python and Unity)
 - let the atoms react live
+(- implement the animation of the trashcan (some information for this are in the documentation), instead of having the top of the can just being moved to the side)
 
 IMPORTANT:
 - bug: false positioning of structure after duplicating and when resizing

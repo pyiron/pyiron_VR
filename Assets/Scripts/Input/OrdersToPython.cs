@@ -139,8 +139,6 @@ public class OrdersToPython : SceneReferences
         SD.atomCtrlPos.RemoveAt(AtomLayerLG.attachedObject.GetComponent<AtomID>().ID);
         // destroy the gameobject of the destroyed atom. This way, importStructure won't destroy all atoms and load them new
         Destroy(AtomLayerLG.attachedObject);
-        // show that when loading a python anim the next time, it should first load the new one (without the removed atom)
-        SD.needsNewAnim = true;
     }
 
     public void RunAnimOrder(string order)
