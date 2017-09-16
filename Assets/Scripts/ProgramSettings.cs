@@ -17,15 +17,15 @@ public class ProgramSettings : MonoBehaviour {
     // the global size multiplikator
     public static float size = 0.3f;
     // determines whether the boundingbox gets just updated if the player changes it or if it gets updated each frame
-    public static bool updateBoundingboxEachFrame;
+    public static bool updateBoundingboxEachFrame = true;
     // determines whether errors should be printed
     public static bool showErrors = false;
     // the resolution each text in the scene should have
     public static float textResolution = 100f;
     // decides how the data should be transmitted between Unity and Python
-    public static string transMode;
+    public static string transMode = "shell";
     // the width the borders of the cellbox should have
-    public static float cellboxWidth;
+    public static float cellboxWidth = 0.1f;
 
     [Header("Data")]
     // the temperature each structure in the Scene has
