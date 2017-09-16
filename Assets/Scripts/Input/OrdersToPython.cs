@@ -27,7 +27,8 @@ public class OrdersToPython : SceneReferences
         {"Stop Animation", "RunAnimation" },
         {"Run Animation", "RunAnimation" },
         {"Force of atom Nr ", "RequestForce" }, // outdated
-        {"Send all forces", "RequestAllForces" }
+        {"Send all forces", "RequestAllForces" },
+        {"Set new positions", "SetNewPositions" }
     };
 
     private void Awake()
@@ -81,7 +82,7 @@ public class OrdersToPython : SceneReferences
         //MethodInfo theMethod = this.GetType().GetMethod(orderFunctionName);
         object[] myParams = new object[1];
         myParams[0] = order;
-        if (orderFunctionName != "RequestOrders")
+        if (orderFunctionName != "RequestOrders" || orderFunctionName == "SetNewPositions") // TODO: add in the dict if the functions take params or not
             orderFunctionName += "Order";
         GetType().GetMethod(orderFunctionName).Invoke(this, myParams);
         return couldExecuteOrder;
@@ -177,5 +178,22 @@ public class OrdersToPython : SceneReferences
     public void RequestAllForces()
     {
         PE.SendOrder("self.send_all_forces()");
+    }
+
+    public void SetNewPositions()
+    {
+        string newPositions = "";
+        foreach (AtomInfos atomInfo in SD.atomInfos)
+        {
+            Vector3 atomPosition = atomInfo.m_transform.position;
+            for (int i = 0; i < 2; i++)
+                newPositions += atomPosition[i] - SD.structureCtrlPos[i] + " ";
+            newPositions += atomPosition[2] - SD.structureCtrlPos[2] + "\n";
+        }
+        // newPositions are the wrong values, because the whole structure can be moved too
+        // TODO: use the boundingboxvalues to get the biggest and littelest(?) value and use this to make all values between 0 and 1
+        print(newPositions);
+        // TODO: this will just send one line at a time to Python, so the Python program crashes
+        PE.SendOrder("self.set_new_base_positions(" + newPositions + ")");
     }
 }
