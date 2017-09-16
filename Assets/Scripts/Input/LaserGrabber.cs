@@ -236,24 +236,20 @@ public class LaserGrabber : SceneReferences
             //InfoText.transform.eulerAngles = new Vector3(0, HeadTransform.eulerAngles.y, 0);
             if (ctrlMaskName.Contains("AtomLayer"))
             {
-                print("numero 1  " + attachedObject);
-                print("numero 2  " + attachedObject.GetComponent<AtomID>());
-                int atomId = attachedObject.GetComponent<AtomID>().ID;
-                //if (PythonExecuter.lastAtomForceId != atomId)
-                //    OTP.RequestForce(atomId);
-                // set the info text to the top of the atom
-                InfoText.transform.position = attachedObject.transform.position // + Vector3.up * 0.1f
-                        + Vector3.up * attachedObject.transform.localScale[0] / 2 * ProgramSettings.size;
-                InfoText.text = SD.atomInfos[atomId].m_type;
-                //InfoText.text += "\nForce:";
-                /*if (PythonExecuter.lastAtomForceId == atomId)
-                    for (int i = 0; i < 3; i++)
-                        InfoText.text += " " + PythonExecuter.atomForces[1];*/
-                if (PythonExecuter.allForces[atomId][0] != -1)
+                if (attachedObject != null)
                 {
-                    InfoText.text += "\nForce:";
-                    for (int i = 0; i < 3; i++)
-                        InfoText.text += " " + PythonExecuter.allForces[atomId][i];
+                    int atomId = attachedObject.GetComponent<AtomID>().ID;
+                    InfoText.transform.position = attachedObject.transform.position // + Vector3.up * 0.1f
+                            + Vector3.up * attachedObject.transform.localScale[0] / 2 * ProgramSettings.size;
+                    InfoText.text = SD.atomInfos[atomId].m_type;
+                    // test if the forces are known
+                    if (PythonExecuter.allForces[atomId][0] != -1)
+                    {
+                        // show the force of the atom in each direction
+                        InfoText.text += "\nForce:";
+                        for (int i = 0; i < 3; i++)
+                            InfoText.text += " " + PythonExecuter.allForces[atomId][i];
+                    }
                 }
             }
             else
