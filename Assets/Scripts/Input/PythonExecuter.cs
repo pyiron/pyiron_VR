@@ -58,6 +58,9 @@ public class PythonExecuter : MonoBehaviour {
     public static float[] atomForces = new float[3];
     // the atom ID from the atom which force was sent the last time a force was requested
     public static int lastAtomForceId = -1;
+    // the forces of all the atoms
+    public static float[][] allForces;
+
 
     [Header("Send Data to Python")]
     // the filename of the file which will send orders from unity to pyiron
@@ -139,7 +142,13 @@ public class PythonExecuter : MonoBehaviour {
             if (ContainsValue(splittedData[0]))
                 animKind = splittedData[0];
             if (ContainsValue(splittedData[1]))
-                structureSize = int.Parse(splittedData[1]);
+                if (int.Parse(splittedData[1]) != structureSize)
+                {
+                    structureSize = int.Parse(splittedData[1]);
+                    allForces = new float[structureSize][];
+                    for (int atomNr = 0; atomNr < structureSize; atomNr++)
+                        allForces[atomNr] = new float[3];
+                }
             if (ContainsValue(splittedData[2]))
                 temperature = int.Parse(splittedData[2]);
             if (ContainsValue(splittedData[3]))

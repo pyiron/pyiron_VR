@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 7993c059db59ed14f827ffaa2346d89a
-timeCreated: 1505554963
+guid: e9643798f45a6f741bb8ccb744271ff2
+timeCreated: 1505561218
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -9,16 +9,18 @@ ModelImporter:
     100002: Bone
     100004: Bone.001
     100006: Bone.001_end
-    100008: Cube
-    100010: //RootNode
-    100012: Sphere
+    100008: Bone_end
+    100010: Cube
+    100012: //RootNode
+    100014: Sphere
     400000: Armature
     400002: Bone
     400004: Bone.001
     400006: Bone.001_end
-    400008: Cube
-    400010: //RootNode
-    400012: Sphere
+    400008: Bone_end
+    400010: Cube
+    400012: //RootNode
+    400014: Sphere
     2300000: Cube
     3300000: Cube
     4300000: Sphere
@@ -27,6 +29,8 @@ ModelImporter:
     7400002: Armature|TextAction
     7400004: Sphere|TextAction
     7400006: Cube|TextAction
+    7400008: empty
+    7400010: full
     9500000: //RootNode
     13700000: Sphere
   materials:
@@ -51,7 +55,95 @@ ModelImporter:
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: empty
+      takeName: Armature|ArmatureAction
+      firstFrame: 19
+      lastFrame: 20
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/Bone
+        weight: 1
+      - path: Armature/Bone/Bone_end
+        weight: 1
+      - path: Armature/Bone.001
+        weight: 1
+      - path: Armature/Bone.001/Bone.001_end
+        weight: 1
+      - path: Cube
+        weight: 1
+      - path: Sphere
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: full
+      takeName: Armature|ArmatureAction
+      firstFrame: 0
+      lastFrame: 1
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/Bone
+        weight: 1
+      - path: Armature/Bone/Bone_end
+        weight: 1
+      - path: Armature/Bone.001
+        weight: 1
+      - path: Armature/Bone.001/Bone.001_end
+        weight: 1
+      - path: Cube
+        weight: 1
+      - path: Sphere
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []
