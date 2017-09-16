@@ -9,10 +9,13 @@ using System.IO;
 // component of Settings
 // this script handles everything related to Python, e.g. it receives the data from Python, formats it and can send data to Python
 public class PythonExecuter : MonoBehaviour {
+    [Header("Scene")]
     // the Settings of the program
     private ProgramSettings Settings;
     // the script of the controller printer
     public InGamePrinter printer;
+    // the reference to the ProgressBar
+    private GameObject ProgressBar;
 
     [Header("Start Python")]
     // the file to where the python script file is located
@@ -46,9 +49,9 @@ public class PythonExecuter : MonoBehaviour {
     // the temperature Python sends to Unity when sending the first structure data
     public static int temperature;
     // the frame Python sends to Unity this frame
-    public static int frame;
+    public static int frame = -1;
     // the amount of frames the current ham_lammps has
-    public static int frameAmount;
+    public static int frameAmount = -1;
     // the amount of changes the Python program did after the Unity program requested it
     public static int incomingChanges = -1;
     // the data how the cellbox can be build
@@ -77,6 +80,8 @@ public class PythonExecuter : MonoBehaviour {
     {
         // get the scripts from the gameobjects to get their data
         Settings = GameObject.Find("Settings").GetComponent<ProgramSettings>();
+        // the reference to the ProgressBar
+        ProgressBar = GameObject.Find("MyObjects/ProgressBar");
         // return if the data of the structure should be received by an file or files
         if (Settings.transMode == "file")
             return;
