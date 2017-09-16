@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class InGamePrinter : MonoBehaviour {
     [Header("Scene")]
-    public ProgramSettings Settings;
     public GameObject[] printers;
     public LaserGrabber[] LG;
     private string[] printText = new string[2];
@@ -20,11 +19,11 @@ public class InGamePrinter : MonoBehaviour {
             currentImportance[i] = 0;
         }
 
-        textSize = textSize / Settings.textResolution * 10;
+        textSize = textSize / ProgramSettings.textResolution * 10;
         foreach (GameObject printerText in printers)
         {
             printerText.transform.localScale = Vector3.one * textSize;
-            printerText.GetComponent<TextMesh>().fontSize = (int)Settings.textResolution;
+            printerText.GetComponent<TextMesh>().fontSize = (int)ProgramSettings.textResolution;
         }
     }
 	

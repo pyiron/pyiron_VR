@@ -83,7 +83,7 @@ public class PythonExecuter : MonoBehaviour {
         // the reference to the ProgressBar
         ProgressBar = GameObject.Find("MyObjects/ProgressBar");
         // return if the data of the structure should be received by an file or files
-        if (Settings.transMode == "file")
+        if (ProgramSettings.transMode == "file")
             return;
 
     //IS = GameObject.Find("AtomStructure").GetComponent<ImportStructure>();
@@ -210,7 +210,7 @@ public class PythonExecuter : MonoBehaviour {
         // show that the Unity program has send the Python program an order
         outgoingChanges += 1;
 
-        if (Settings.transMode == "file")
+        if (ProgramSettings.transMode == "file")
             // write an Order to Python via a file
             WriteOrder(order);
         else
@@ -221,7 +221,7 @@ public class PythonExecuter : MonoBehaviour {
     // write an Order to Python via a file
     private void WriteOrder(string order)
     {
-        StreamWriter sw = new StreamWriter(Settings.GetFilePath(fileName: fileName));
+        StreamWriter sw = new StreamWriter(ProgramSettings.GetFilePath(fileName: fileName));
         using (sw)
         {
             sw.WriteLine(order);

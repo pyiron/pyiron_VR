@@ -12,8 +12,6 @@ public class SceneReferences : MonoBehaviour {
     [Header("Settings and it's components")]
     // the reference to the Settings object
     protected GameObject Settings;
-    // the reference to the script, which contains all the settings of the program
-    protected ProgramSettings SettingsScript;
     // get the reference to the programm which handles the execution of python
     protected PythonExecuter PE;
     // the script that stores the possible orders which can be send to Python
@@ -43,12 +41,10 @@ public class SceneReferences : MonoBehaviour {
     {
         // get the reference to the Settings object and the script which stores most of the references (this script as component of Settings)
         GetReferenceToReferences();
-        // get the reference to the script, which contains all the settings of the program
-        SettingsScript = Settings.GetComponent<ProgramSettings>();
         // get the reference to the programm which handles the execution of python
-        PE = SettingsScript.GetComponent<PythonExecuter>();
+        PE = Settings.GetComponent<PythonExecuter>();
         // get the reference to the script that stores the possible orders which can be send to Python
-        OTP = SettingsScript.GetComponent<OrdersToPython>();
+        OTP = Settings.GetComponent<OrdersToPython>();
     }
 
     // get the references to the controllers. Has to be called on the first frame of the Update function!!!

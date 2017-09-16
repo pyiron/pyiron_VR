@@ -119,7 +119,7 @@ public class LaserGrabber : SceneReferences
         InitLaser();
 
         // set the variable to the name of the mask
-        ctrlMaskName = SettingsScript.GetLayerName(ctrlMask);
+        ctrlMaskName = ProgramSettings.GetLayerName(ctrlMask);
         // get the script StructureData from AtomStructure
         SD = AtomStructure.GetComponent<StructureData>();
         // get the script StructureResizer from AtomStructure
@@ -130,9 +130,9 @@ public class LaserGrabber : SceneReferences
             if (tr.name == "Boundingbox(Clone)")
                 boundingbox = tr;
 
-        textSize = textSize / SettingsScript.textResolution * 10;
+        textSize = textSize / ProgramSettings.textResolution * 10;
         InfoText.transform.localScale = Vector3.one * textSize;
-        InfoText.fontSize = (int)SettingsScript.textResolution;
+        InfoText.fontSize = (int)ProgramSettings.textResolution;
 
         // get the references to the thermometer related objects from the other controller, if it is active and knows them
         if (otherCtrl.activeSelf)
@@ -232,7 +232,7 @@ public class LaserGrabber : SceneReferences
             // set the Infotext to active and edit it 
             InfoText.gameObject.SetActive(true);
             // let the InfoText always look in the direction of the player
-            SettingsScript.Face_Player(InfoText.gameObject);
+            ProgramSettings.Face_Player(InfoText.gameObject);
             //InfoText.transform.eulerAngles = new Vector3(0, HeadTransform.eulerAngles.y, 0);
             if (ctrlMaskName.Contains("AtomLayer"))
             {

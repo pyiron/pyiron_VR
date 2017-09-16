@@ -23,8 +23,6 @@ public class ImportStructure : MonoBehaviour {
     private GameObject currentAtom;
     // the gameobject which holds the global settings for the program
     public GameObject Settings;
-    // the script which stores the global settings
-    private ProgramSettings programSettings;
     // script which stores the properties of each element, to give each atom it's properties
     private LocalElementData LED;
     // the data of the structure the atoms are in
@@ -91,10 +89,8 @@ public class ImportStructure : MonoBehaviour {
         // get the script of thermometer which shows which temperature the structure has
         ThermometerObject = GameObject.Find("MyObjects/Thermometer");
         ThermometerObject.SetActive(false);
-        // get the scripts from the gameobjects to get their data
-        programSettings = Settings.GetComponent<ProgramSettings>();
         // get the path to the transmitter file which holds the data pyiron send to unity
-        pathName = programSettings.GetFilePath(strucFileName);
+        pathName = ProgramSettings.GetFilePath(strucFileName);
         LED = Settings.GetComponent<LocalElementData>();
         SD = gameObject.GetComponent<StructureData>();
         foreach (UnityEngine.UI.Text text in MyCanvas.GetComponentsInChildren<UnityEngine.UI.Text>())
@@ -147,7 +143,7 @@ public class ImportStructure : MonoBehaviour {
                     return;
             }
 
-            if (programSettings.transMode == "file")
+            if (ProgramSettings.transMode == "file")
             {
                 // the max amount of tries this program has to get the script, else it will just go on
                 int maxTries;
@@ -172,7 +168,7 @@ public class ImportStructure : MonoBehaviour {
                             catch
                             {
                                 if (maxTries == 1)
-                                    if (programSettings.showErrors)
+                                    if (ProgramSettings.showErrors)
                                         print("No Input!");
                                 maxTries -= 1;
                                 // print("error, probably because both programs want to simultaniously use the file");
@@ -184,7 +180,7 @@ public class ImportStructure : MonoBehaviour {
                         if (animState == "static")
                             break;
                         if (maxTries == 1)
-                            if (programSettings.showErrors)
+                            if (ProgramSettings.showErrors)
                                 print("No Input!");
                         maxTries -= 1;
                     }
@@ -218,7 +214,7 @@ public class ImportStructure : MonoBehaviour {
                 CellBorders[i] = Instantiate(CellboxBorderPrefab);
                 CellBorders[i].transform.parent = SD.cellbox.transform;
                 CellBorders[i].transform.localScale = Vector3.one;
-                CellBorders[i].transform.localScale = Vector3.one * programSettings.cellboxWidth;
+                CellBorders[i].transform.localScale = Vector3.one * ProgramSettings.cellboxWidth;
             }
         }
 
@@ -228,7 +224,7 @@ public class ImportStructure : MonoBehaviour {
         int maxTries;
         maxTries = 1000;
         input_file_data = "";
-        if (programSettings.transMode == "file")
+        if (ProgramSettings.transMode == "file")
             while (maxTries > 0 || firstImport)
                 try
                 {
@@ -287,7 +283,7 @@ public class ImportStructure : MonoBehaviour {
 
         SetCellbox();
 
-        if (newImport || programSettings.updateBoundingboxEachFrame)
+        if (newImport || ProgramSettings.updateBoundingboxEachFrame)
         {
             // check the expansion of the cluster
             SD.SearchMaxAndMin();
@@ -372,7 +368,7 @@ public class ImportStructure : MonoBehaviour {
             for (int j = 0; j < 3; j++)
             {
                 Vector3 cellBorderSize = CellBorders[j * 4 + i].transform.localScale;
-                cellBorderSize[j] = cellBorderVecs[j].magnitude + programSettings.cellboxWidth;
+                cellBorderSize[j] = cellBorderVecs[j].magnitude + ProgramSettings.cellboxWidth;
                 CellBorders[j * 4 + i].transform.localScale = cellBorderSize;
 
                 CellBorders[j * 4 + i].transform.localPosition = cellBorderVecs[j] * 0.5f;
@@ -415,7 +411,7 @@ public class ImportStructure : MonoBehaviour {
             // Set the new atom position to the pos from the file and adjust it, so that the clusters middle is in the origin
             currentAtom.transform.position = new Vector3(float.Parse(data[0]), float.Parse(data[1]),
                 float.Parse(data[2])) - (maxPositions + minPositions) / 2;
-            if (animState == "new" || (!firstImport && programSettings.transMode == "shell"))
+            if (animState == "new" || (!firstImport && ProgramSettings.transMode == "shell"))
                 currentAtom.transform.position *= ProgramSettings.size;
             SD.atomCtrlPos.Add(Vector3.zero);
         }

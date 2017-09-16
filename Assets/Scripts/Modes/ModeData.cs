@@ -11,7 +11,7 @@ public class ModeData : MonoBehaviour
     // the Transform of the Headset
     private Transform HeadTransform;
     // the reference to the settings
-    public ProgramSettings Settings;
+    private GameObject Settings;
     // get the reference to the programm which handles the execution of python
     private PythonExecuter PE;
     // the thermometer, needed to handle the temperature of the structure
@@ -52,6 +52,8 @@ public class ModeData : MonoBehaviour
         // get the reference to the transform of the headset
         HeadTransform = GameObject.Find("[CameraRig]/Camera (eye)/Camera (head)").transform;
         print(HeadTransform + "mode");
+        // get the reference to the Settings
+        Settings = GameObject.Find("Settings");
         // get the reference to the script that handles the connection to python
         PE = Settings.GetComponent<PythonExecuter>();
         // get the reference to the thermometer
@@ -63,9 +65,9 @@ public class ModeData : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        textSize = textSize / Settings.textResolution * 10;
+        textSize = textSize / ProgramSettings.textResolution * 10;
         transform.localScale = Vector3.one * textSize;
-        gameObject.GetComponent<TextMesh>().fontSize = (int)Settings.textResolution;
+        gameObject.GetComponent<TextMesh>().fontSize = (int)ProgramSettings.textResolution;
     }
 
     // Update is called once per frame
