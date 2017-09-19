@@ -4,7 +4,8 @@ using UnityEngine;
 
 // component of Hourglass
 // Handles the actions of the Hourglass, which shows when the structure is currently loading
-public class Hourglass : MonoBehaviour {
+public class Hourglass : MonoBehaviour
+{
     // the animationController of the Hourglass
     private Animator anim;
     // the Transform of the Headset
@@ -18,12 +19,17 @@ public class Hourglass : MonoBehaviour {
         HeadTransform = GameObject.Find("[CameraRig]/Camera (head)").transform;
     }
 
-    void Start () {
+    void Start()
+    {
+        // scale the hourglass according to the global size
         transform.localScale = Vector3.one * ProgramSettings.size;
-	}
-	
-	void Update () {
-        
+        // let the hourglass face the player
+        transform.parent.eulerAngles = Vector3.up * HeadTransform.eulerAngles.y;
+    }
+
+    void Update()
+    {
+
     }
 
     public void ActivateHourglass(bool active)

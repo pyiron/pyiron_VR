@@ -12,6 +12,7 @@ public class ImportStructure : MonoBehaviour {
     // name of the data file which contains the information about the atom structure
     public string strucFileName;
 
+    [Header("Scene")]
     // get the reference to the programm which handles the execution of python
     public PythonExecuter PE;
     // the script of thermometer which shows which temperature the structure has
@@ -29,6 +30,8 @@ public class ImportStructure : MonoBehaviour {
     private StructureData SD;
     // the script of the controller printer
     public InGamePrinter printer;
+    // the reference to the hourglass
+    private GameObject HourglassRotator;
 
     [Header("Cellbox")]
     public GameObject CellboxBorderPrefab;
@@ -93,6 +96,7 @@ public class ImportStructure : MonoBehaviour {
         pathName = ProgramSettings.GetFilePath(strucFileName);
         LED = Settings.GetComponent<LocalElementData>();
         SD = gameObject.GetComponent<StructureData>();
+        HourglassRotator = GameObject.Find("AtomStructure/HourglassRotator");
         foreach (UnityEngine.UI.Text text in MyCanvas.GetComponentsInChildren<UnityEngine.UI.Text>())
             if (text.name.Contains("min_fps_display"))
                 min_fps_display = text;
@@ -382,7 +386,12 @@ public class ImportStructure : MonoBehaviour {
         //for (int i = 0; i < 3; i++)
         //    SD.cellbox.transform.position -= cellBorderVecs[i] / 2 * ProgramSettings.size;
 
-        
+        // set the position of the Hourglass to the middle of the cellbox
+        HourglassRotator.transform.localPosition = Vector3.zero;
+        for (int i = 0; i < 3; i++)
+            HourglassRotator.transform.localPosition += cellBorderVecs[i] / 2;
+        // set the size of the Hourglass to the size it should have
+        HourglassRotator.transform.GetChild(0).localScale = Vector3.one;
     }
 
     private void GetStructureExpansion()

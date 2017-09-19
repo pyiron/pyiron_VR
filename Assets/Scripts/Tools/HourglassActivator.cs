@@ -14,8 +14,7 @@ public class HourglassActivator : MonoBehaviour {
     private void Awake()
     {
         // get the reference to the Hourglass
-        foreach (Transform Child in transform)
-            Hourglass = Child.gameObject;
+        Hourglass = transform.GetChild(0).gameObject;
     }
 
     void Start () {
