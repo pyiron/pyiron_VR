@@ -443,8 +443,11 @@ public class ImportStructure : MonoBehaviour {
             if (SD.waitForDestroyedAtom)
                 SD.atomInfos[atomCounter] = new AtomInfos(atomCounter, data[3], currentAtom.transform);
             else
+            {
                 // register the atom in the overwiev of StructureData
                 SD.atomInfos.Add(new AtomInfos(atomCounter, data[3], currentAtom.transform));
+                print("Added an atom");
+            }
         }
     }
 }
