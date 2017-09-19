@@ -190,10 +190,12 @@ public class OrdersToPython : SceneReferences
             for (int i = 0; i < 3; i++)
                 newPosition += atomPosition[i] + " ";
             newPosition += atomInfo.m_ID;
-            // newPositions are the wrong values, because the whole structure can be moved too
-            // TODO: use the boundingboxvalues to get the biggest and littelest(?) value and use this to make all values between 0 and 1
-            // TODO: this will just send one line at a time to Python, so the Python program crashes
+            // send the local position of the current atom to Python
             PE.SendOrder("self.set_new_base_position('" + newPosition + "')");
+            // set the atom back to the position where it was before the player moved it
+            atomPosition -= SD.atomCtrlPos[atomInfo.m_ID];
+            // show that the player hasn't moved an atom since the last creation of an ham_lammps
+            SD.atomCtrlPos[atomInfo.m_ID] = Vector3.zero;
         }
     }
 }
