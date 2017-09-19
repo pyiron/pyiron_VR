@@ -182,18 +182,19 @@ public class OrdersToPython : SceneReferences
 
     public void SetNewPositions()
     {
-        string newPositions = "";
+        string newPosition;
         foreach (AtomInfos atomInfo in SD.atomInfos)
         {
+            newPosition = "";
             Vector3 atomPosition = atomInfo.m_transform.position;
-            for (int i = 0; i < 2; i++)
-                newPositions += atomPosition[i] - SD.structureCtrlPos[i] + " ";
-            newPositions += atomPosition[2] - SD.structureCtrlPos[2] + "\n";
+            for (int i = 0; i < 3; i++)
+                newPosition += atomPosition[i] - SD.structureCtrlPos[i] + " ";
+            newPosition += atomInfo.m_ID;
+            // newPositions are the wrong values, because the whole structure can be moved too
+            // TODO: use the boundingboxvalues to get the biggest and littelest(?) value and use this to make all values between 0 and 1
+            print(newPosition);
+            // TODO: this will just send one line at a time to Python, so the Python program crashes
+            PE.SendOrder("self.set_new_base_position('" + newPosition + "')");
         }
-        // newPositions are the wrong values, because the whole structure can be moved too
-        // TODO: use the boundingboxvalues to get the biggest and littelest(?) value and use this to make all values between 0 and 1
-        print(newPositions);
-        // TODO: this will just send one line at a time to Python, so the Python program crashes
-        PE.SendOrder("self.set_new_base_positions(" + newPositions + ")");
     }
 }
