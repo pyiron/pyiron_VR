@@ -542,16 +542,19 @@ public class LaserGrabber : SceneReferences
                         else
                             attachedObject = hittedObject;
                 }
+            // show that the laser no longer points on the thermometer
                 else if (laserOnThermometer)
                 {
                     laserCurrentlyOnThermometer = false;
                     laser.SetActive(false);
                     thermometerScript.ChangeLiquidColor("clickedButMovedAway");
                 }
+                // show that the controller is ready to resize the structure, if it is the AtomLayer controller
                 else if (MD.modes[MD.activeMode].playerCanResizeAtoms)
                     if (ctrlMaskName == "AtomLayer")
                         readyForResize = true;
                     else;
+                // deactivate the laser and show, detach the attached object if there is an object attached to the controller 
                 else
                 {
                     laser.SetActive(false);
@@ -570,7 +573,6 @@ public class LaserGrabber : SceneReferences
             else
                 ThermometerObject = hittedObject.transform.parent.gameObject;
             thermometerScript = ThermometerObject.GetComponent<Thermometer>();
-            print(ThermometerObject + " here !!! ");
         }
     }
 

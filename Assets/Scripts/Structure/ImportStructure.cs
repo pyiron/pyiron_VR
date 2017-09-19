@@ -446,7 +446,6 @@ public class ImportStructure : MonoBehaviour {
             {
                 // register the atom in the overwiev of StructureData
                 SD.atomInfos.Add(new AtomInfos(atomCounter, data[3], currentAtom.transform));
-                print("Added an atom");
             }
         }
     }
