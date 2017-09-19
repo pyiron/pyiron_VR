@@ -34,6 +34,7 @@ public class ImportStructure : MonoBehaviour {
     private GameObject HourglassRotator;
 
     [Header("Cellbox")]
+    private GameObject Cellbox;
     public GameObject CellboxBorderPrefab;
     GameObject[] CellBorders = new GameObject[12];
 
@@ -96,6 +97,8 @@ public class ImportStructure : MonoBehaviour {
         pathName = ProgramSettings.GetFilePath(strucFileName);
         LED = Settings.GetComponent<LocalElementData>();
         SD = gameObject.GetComponent<StructureData>();
+        //Cellbox = GameObject.Find("AtomStructure/Cellbox");
+        //Cellbox.SetActive(false);
         HourglassRotator = GameObject.Find("AtomStructure/HourglassRotator");
         foreach (UnityEngine.UI.Text text in MyCanvas.GetComponentsInChildren<UnityEngine.UI.Text>())
             if (text.name.Contains("min_fps_display"))
@@ -209,14 +212,15 @@ public class ImportStructure : MonoBehaviour {
             // create the instance of the boundingbox
             SD.boundingbox = Instantiate(BoundingboxPrefab);
             SD.boundingbox.transform.parent = gameObject.transform;
+
             // create the cubes for the cell box and the parent cellBox
-            SD.cellbox = new GameObject();
-            SD.cellbox.transform.parent = transform;
-            SD.cellbox.name = "Cellbox";
+            Cellbox = new GameObject();
+            Cellbox.transform.parent = transform;
+            Cellbox.name = "Cellbox";
             for (int i = 0; i < 12; i++)
             {
                 CellBorders[i] = Instantiate(CellboxBorderPrefab);
-                CellBorders[i].transform.parent = SD.cellbox.transform;
+                CellBorders[i].transform.parent = Cellbox.transform;
                 CellBorders[i].transform.localScale = Vector3.one;
                 CellBorders[i].transform.localScale = Vector3.one * ProgramSettings.cellboxWidth;
             }
@@ -357,6 +361,9 @@ public class ImportStructure : MonoBehaviour {
     // set the cellbox according to the data given from Python
     private void SetCellbox()
     {
+        // activate the cellbox
+        Cellbox.SetActive(true);
+
         float[] cellboxData = PythonExecuter.cellboxData;
         // save the data for the cellbox in 3 Vector3s
         Vector3[] cellBorderVecs = new Vector3[3];
@@ -365,7 +372,7 @@ public class ImportStructure : MonoBehaviour {
         cellBorderVecs[2] = new Vector3(cellboxData[6], cellboxData[7], cellboxData[8]);
 
         // reset the positions of the cellbox
-        SD.cellbox.transform.localPosition = Vector3.zero;
+        Cellbox.transform.localPosition = Vector3.zero;
 
         //set the position and length for each part of the cellbox
         for (int i = 0; i < 4; i++)
@@ -429,7 +436,7 @@ public class ImportStructure : MonoBehaviour {
         else
         {
             currentAtom.transform.position = (new Vector3(float.Parse(data[0]), float.Parse(data[1]),
-                float.Parse(data[2]))) * ProgramSettings.size; // - (maxPositions + minPositions) / 2) * ProgramSettings.size;
+                float.Parse(data[2]))) * ProgramSettings.size; // - (maxPositions + minPositions) / 2);
             currentAtom.transform.position += SD.atomCtrlPos[atomCounter] + transform.position;
         }
         // set the atom colour to the colour this type of atom has
