@@ -429,7 +429,7 @@ public class ImportStructure : MonoBehaviour {
         else
         {
             currentAtom.transform.position = (new Vector3(float.Parse(data[0]), float.Parse(data[1]),
-                float.Parse(data[2]))); // - (maxPositions + minPositions) / 2) * ProgramSettings.size;
+                float.Parse(data[2]))) * ProgramSettings.size; // - (maxPositions + minPositions) / 2) * ProgramSettings.size;
             currentAtom.transform.position += SD.atomCtrlPos[atomCounter] + transform.position;
         }
         // set the atom colour to the colour this type of atom has
