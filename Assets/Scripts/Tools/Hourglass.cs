@@ -18,12 +18,10 @@ public class Hourglass : MonoBehaviour {
         HeadTransform = GameObject.Find("[CameraRig]/Camera (head)").transform;
     }
 
-    // Use this for initialization
     void Start () {
-		
+        transform.localScale = Vector3.one * ProgramSettings.size;
 	}
 	
-	// Update is called once per frame
 	void Update () {
         
     }

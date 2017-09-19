@@ -379,8 +379,10 @@ public class ImportStructure : MonoBehaviour {
             }
 
         // set the position for the cellbox
-        for (int i = 0; i < 3; i++)
-            SD.cellbox.transform.position -= cellBorderVecs[i] / 2 * ProgramSettings.size;
+        //for (int i = 0; i < 3; i++)
+        //    SD.cellbox.transform.position -= cellBorderVecs[i] / 2 * ProgramSettings.size;
+
+        
     }
 
     private void GetStructureExpansion()
@@ -410,7 +412,7 @@ public class ImportStructure : MonoBehaviour {
         {
             // Set the new atom position to the pos from the file and adjust it, so that the clusters middle is in the origin
             currentAtom.transform.position = new Vector3(float.Parse(data[0]), float.Parse(data[1]),
-                float.Parse(data[2])) - (maxPositions + minPositions) / 2;
+                float.Parse(data[2])); // - (maxPositions + minPositions) / 2;
             if (animState == "new" || (!firstImport && ProgramSettings.transMode == "shell"))
                 currentAtom.transform.position *= ProgramSettings.size;
             SD.atomCtrlPos.Add(Vector3.zero);
@@ -418,7 +420,7 @@ public class ImportStructure : MonoBehaviour {
         else
         {
             currentAtom.transform.position = (new Vector3(float.Parse(data[0]), float.Parse(data[1]),
-                float.Parse(data[2])) - (maxPositions + minPositions) / 2) * ProgramSettings.size;
+                float.Parse(data[2]))); // - (maxPositions + minPositions) / 2) * ProgramSettings.size;
             currentAtom.transform.position += SD.atomCtrlPos[atomCounter] + transform.position;
         }
         // set the atom colour to the colour this type of atom has

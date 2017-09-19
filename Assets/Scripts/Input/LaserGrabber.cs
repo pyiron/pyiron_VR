@@ -453,7 +453,7 @@ public class LaserGrabber : SceneReferences
                 // send the new positions to Python
                 positionsHaveChanged = true;
                 // send Python the new positions of all atoms
-                OTP.SetNewPositions();
+                //OTP.SetNewPositions();
             }
 
             // when loading the first animation, show Python that it's the first time, so that it can check if there is already a loaded ham_lammps

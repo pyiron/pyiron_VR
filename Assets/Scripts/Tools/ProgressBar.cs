@@ -36,7 +36,7 @@ public class ProgressBar : MonoBehaviour {
         // set the TextMeshes to the right size and position
         for (int i = 0; i < TextMeshes.Length; i++)
         {
-            TextMeshes[i].transform.localScale = Vector3.one * ProgramSettings.size;
+            TextMeshes[i].transform.localScale = Vector3.one * 0.3f;
             TextMeshes[i].transform.localPosition += Vector3.up * (i + 1) / 2;
         }
 

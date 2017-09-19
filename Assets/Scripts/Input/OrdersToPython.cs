@@ -192,7 +192,6 @@ public class OrdersToPython : SceneReferences
             newPosition += atomInfo.m_ID;
             // newPositions are the wrong values, because the whole structure can be moved too
             // TODO: use the boundingboxvalues to get the biggest and littelest(?) value and use this to make all values between 0 and 1
-            print(newPosition);
             // TODO: this will just send one line at a time to Python, so the Python program crashes
             PE.SendOrder("self.set_new_base_position('" + newPosition + "')");
         }
