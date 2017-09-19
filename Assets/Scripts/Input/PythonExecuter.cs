@@ -117,6 +117,7 @@ public class PythonExecuter : MonoBehaviour {
 
     private static void ReadOutput(object sender, DataReceivedEventArgs e) 
     {
+        print(e.Data);
         string[] splittedData = e.Data.Split();
         if (e.Data.Contains("print"))
             print(e.Data);
@@ -135,13 +136,7 @@ public class PythonExecuter : MonoBehaviour {
                 allForces[int.Parse(splittedData[4])] = new float[3];
                 for (int i = 0; i < 3; i++)
                     allForces[int.Parse(splittedData[4])][i] = float.Parse(splittedData[i + 1]);
-                // show that Unity received the change from Python
-                if (int.Parse(splittedData[4]) == 1)
-                    PythonExecuter.incomingChanges += 1;
             }
-            else
-                // show that Unity received the change from Python
-                PythonExecuter.incomingChanges += 1;
         }
         // this is the line where Python sends the data about the cellbox
         else if (currentAtomLine == structureSize + 1)

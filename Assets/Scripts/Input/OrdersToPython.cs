@@ -57,7 +57,6 @@ public class OrdersToPython : SceneReferences
 
     }
 
-    // Use this for initialization
     void Start () {
         //if (!ExecuteOrder("Destroy Atom 0"))
         //    print("Invalid Input!");
@@ -136,11 +135,9 @@ public class OrdersToPython : SceneReferences
         SD.waitForDestroyedAtom = true;
         // remove the atom in the list of the properties of each atom
         SD.atomInfos.RemoveAt(AtomLayerLG.attachedObject.GetComponent<AtomID>().ID);
-
+        // decrease the atomId of the atoms which have a higher ID than the deleted one by one
         for (int i = AtomLayerLG.attachedObject.GetComponent<AtomID>().ID; i < PythonExecuter.structureSize - 2; i++)
             SD.atomInfos[i + 1].m_ID -= 1;
-        //foreach (AtomInfos atomInfo in SD.atomInfos)
-        //    print("after destroy " + atomInfo.m_ID);
         // remove the atom in the list which stores the data how the player has removed each atom
         SD.atomCtrlPos.RemoveAt(AtomLayerLG.attachedObject.GetComponent<AtomID>().ID);
         // destroy the gameobject of the destroyed atom. This way, importStructure won't destroy all atoms and load them new
@@ -197,7 +194,6 @@ public class OrdersToPython : SceneReferences
             newPosition += atomInfo.m_ID;
             // send the local position of the current atom to Python
             PE.SendOrder("self.set_new_base_position('" + newPosition + "')");
-            print("ID! " + atomInfo.m_ID);
             // set the atom back to the position where it was before the player moved it
             atomPosition -= SD.atomCtrlPos[atomInfo.m_ID];
             // show that the player hasn't moved an atom since the last creation of an ham_lammps
