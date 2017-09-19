@@ -122,6 +122,12 @@ public class PythonExecuter : MonoBehaviour {
             print(e.Data);
         else if (e.Data.Contains("job"))
             return;
+        else if (e.Data.Contains("Order executed"))
+        {
+            // show that Unity received the change from Python
+            PythonExecuter.incomingChanges += 1;
+            return;
+        }
         else if (splittedData[0] == "force")
         {
             if (ContainsValue(splittedData[1]))
