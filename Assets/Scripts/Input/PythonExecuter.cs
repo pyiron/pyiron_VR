@@ -55,7 +55,7 @@ public class PythonExecuter : MonoBehaviour {
     // the amount of changes the Python program did after the Unity program requested it
     public static int incomingChanges = -1;
     // the data how the cellbox can be build
-    public static float[] cellboxData = new float[9];
+    public static Vector3[] cellBorderVecs = new Vector3[3];
 
     // the force the atom the player requested the force from has
     public static float[] atomForces = new float[3];
@@ -140,9 +140,18 @@ public class PythonExecuter : MonoBehaviour {
         // this is the line where Python sends the data about the cellbox
         else if (currentAtomLine == structureSize + 1)
         {
+            float[] cellboxData = new float[9];
             if (ContainsValue(e.Data))
+            {
                 for (int i = 0; i < 9; i++)
                     cellboxData[i] = float.Parse(splittedData[i]);
+
+                // save the data for the cellbox in 3 Vector3s
+                cellBorderVecs[0] = new Vector3(cellboxData[0], cellboxData[1], cellboxData[2]);
+                cellBorderVecs[1] = new Vector3(cellboxData[3], cellboxData[4], cellboxData[5]);
+                cellBorderVecs[2] = new Vector3(cellboxData[6], cellboxData[7], cellboxData[8]);
+            }
+
             collectedData = currentData;
             // print(collectedData);
             currentData = "";

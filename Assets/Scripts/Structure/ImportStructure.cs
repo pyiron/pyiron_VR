@@ -364,13 +364,6 @@ public class ImportStructure : MonoBehaviour {
         // activate the cellbox
         Cellbox.SetActive(true);
 
-        float[] cellboxData = PythonExecuter.cellboxData;
-        // save the data for the cellbox in 3 Vector3s
-        Vector3[] cellBorderVecs = new Vector3[3];
-        cellBorderVecs[0] = new Vector3(cellboxData[0], cellboxData[1], cellboxData[2]);
-        cellBorderVecs[1] = new Vector3(cellboxData[3], cellboxData[4], cellboxData[5]);
-        cellBorderVecs[2] = new Vector3(cellboxData[6], cellboxData[7], cellboxData[8]);
-
         // reset the positions of the cellbox
         Cellbox.transform.localPosition = Vector3.zero;
 
@@ -379,14 +372,14 @@ public class ImportStructure : MonoBehaviour {
             for (int j = 0; j < 3; j++)
             {
                 Vector3 cellBorderSize = CellBorders[j * 4 + i].transform.localScale;
-                cellBorderSize[j] = cellBorderVecs[j].magnitude + ProgramSettings.cellboxWidth;
+                cellBorderSize[j] = PythonExecuter.cellBorderVecs[j].magnitude + ProgramSettings.cellboxWidth;
                 CellBorders[j * 4 + i].transform.localScale = cellBorderSize;
 
-                CellBorders[j * 4 + i].transform.localPosition = cellBorderVecs[j] * 0.5f;
+                CellBorders[j * 4 + i].transform.localPosition = PythonExecuter.cellBorderVecs[j] * 0.5f;
                 if (i == 1 || i == 3)
-                    CellBorders[j * 4 + i].transform.localPosition += cellBorderVecs[(j + 1) % 3];
+                    CellBorders[j * 4 + i].transform.localPosition += PythonExecuter.cellBorderVecs[(j + 1) % 3];
                 if (i == 2 || i == 3)
-                    CellBorders[j * 4 + i].transform.localPosition += cellBorderVecs[(j + 2) % 3];
+                    CellBorders[j * 4 + i].transform.localPosition += PythonExecuter.cellBorderVecs[(j + 2) % 3];
             }
 
         // set the position for the cellbox
@@ -396,7 +389,7 @@ public class ImportStructure : MonoBehaviour {
         // set the position of the Hourglass to the middle of the cellbox
         HourglassRotator.transform.localPosition = Vector3.zero;
         for (int i = 0; i < 3; i++)
-            HourglassRotator.transform.localPosition += cellBorderVecs[i] / 2;
+            HourglassRotator.transform.localPosition += PythonExecuter.cellBorderVecs[i] / 2;
         // set the size of the Hourglass to the size it should have
         HourglassRotator.transform.GetChild(0).localScale = Vector3.one;
     }

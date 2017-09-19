@@ -186,9 +186,9 @@ public class OrdersToPython : SceneReferences
         foreach (AtomInfos atomInfo in SD.atomInfos)
         {
             newPosition = "";
-            Vector3 atomPosition = atomInfo.m_transform.position;
+            Vector3 atomPosition = atomInfo.m_transform.localPosition;
             for (int i = 0; i < 3; i++)
-                newPosition += atomPosition[i] - SD.structureCtrlPos[i] + " ";
+                newPosition += atomPosition[i] + " ";
             newPosition += atomInfo.m_ID;
             // newPositions are the wrong values, because the whole structure can be moved too
             // TODO: use the boundingboxvalues to get the biggest and littelest(?) value and use this to make all values between 0 and 1
