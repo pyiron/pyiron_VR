@@ -6,6 +6,7 @@
 (- delete the code needed for the slower mode of transfering data between Python and Unity)
 - let the atoms react live
 (- implement the animation of the trashcan (some information for this are in the documentation), instead of having the top of the can just being moved to the side)
+- show the periodic boundary condition, and think of the details (show it just when moving an atom?)
 
 IMPORTANT:
 - bug: false positioning of structure after duplicating and when resizing

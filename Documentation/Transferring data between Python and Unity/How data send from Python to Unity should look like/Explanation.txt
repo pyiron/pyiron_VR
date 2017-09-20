@@ -1,3 +1,4 @@
+--OUTDATED--
 The current data which gets send from Python to Unity can have these following parts:
 
 First Line:

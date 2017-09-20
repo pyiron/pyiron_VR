@@ -19,7 +19,7 @@ public class PythonExecuter : MonoBehaviour {
 
     [Header("Start Python")]
     // the file to where the python script file is located
-    private string pythonPath = "C:/Users/pneugebauer/PycharmProjects/pyiron/tests";
+    public static string pythonPath = "C:/Users/pneugebauer/PycharmProjects/pyiron/tests";
     // the name of the python file which creates the structure for Unity
     public string pythonFileName;
     // start a process which executes the commands in the shell to start the python script
