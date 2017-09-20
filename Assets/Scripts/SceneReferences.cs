@@ -50,25 +50,25 @@ public class SceneReferences : MonoBehaviour {
     // get the references to the controllers. Has to be called on the first frame of the Update function!!!
     protected void GetControllerReferences()
     {
-        if (false) //(SR.Controllers[0] == null || SR.Controllers[1] == null)
+        /*if (false) //(SR.Controllers[0] == null || SR.Controllers[1] == null)
         {
             UnityEditor.EditorApplication.isPlaying = false;
             print("Both Controllers have to be active to start the program!");
             return;
         }
         else
+        {*/
+        for (int i = 0; i < 2; i++)
         {
-            for (int i = 0; i < 2; i++)
+            if (Controllers[i] == null || LGs[i] == null)
             {
-                if (Controllers[i] == null || LGs[i] == null)
-                {
-                    // copy the reference to the controllers from the reference library to the specific script which needs the reference
-                    Controllers = SR.Controllers;
-                    // get the references to the LaserGraber scripts of the controllers
-                    //LGs = Controllers[0].transform.parent.GetComponentsInChildren<LaserGrabber>();
-                    LGs[i] = Controllers[i].GetComponent<LaserGrabber>();
-                }
+                // copy the reference to the controllers from the reference library to the specific script which needs the reference
+                Controllers = SR.Controllers;
+                // get the references to the LaserGraber scripts of the controllers
+                //LGs = Controllers[0].transform.parent.GetComponentsInChildren<LaserGrabber>();
+                LGs[i] = Controllers[i].GetComponent<LaserGrabber>();
             }
         }
+        //}
     }
 }

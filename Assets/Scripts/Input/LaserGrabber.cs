@@ -453,7 +453,7 @@ public class LaserGrabber : SceneReferences
             }
 
             // check if the positions of any atom has been changed since the last animation has been started
-            if (PythonExecuter.frame != 0 || positionsHaveChanged)
+            if (PythonExecuter.frame != 0 || positionsHaveChanged || lammpsIsMd != MD.modes[MD.activeMode].showTemp)
             {
                 // send the new positions to Python
                 positionsHaveChanged = true;
@@ -475,8 +475,8 @@ public class LaserGrabber : SceneReferences
                 positionsHaveChanged = false;
             }
             // load a new ham_lammps if the current ham_lammps is for md and the animation for minimize is needed or vice versa
-            else if (lammpsIsMd != MD.modes[MD.activeMode].showTemp)
-                LoadNewLammps("self.create_new_lammps");
+            //else if (lammpsIsMd != MD.modes[MD.activeMode].showTemp)
+            //    LoadNewLammps("self.create_new_lammps");
 
             // tell Python to start sending the dataframes from the current ham_lammps
             OTP.RunAnim(true);

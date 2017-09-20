@@ -31,7 +31,6 @@ public class ProgramSettings : MonoBehaviour {
     // the temperature each structure in the Scene has
     public static int temperature;
 
-
     private void Awake()
     {
         // defines where the file is stored which holds the data about the structure 
