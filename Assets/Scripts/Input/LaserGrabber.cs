@@ -415,7 +415,8 @@ public class LaserGrabber : SceneReferences
                 else;
             else
                 // go one frame forward
-                PE.SendOrder("self.frame = (self.frame + 1) % len(self.all_positions)");
+                PE.SendOrder("self.move_one_frame(True)");
+                // PE.SendOrder("self.frame = (self.frame + 1) % len(self.all_positions)");
         //PE.SendOrder(runAnim: true);
         else if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).x < -0.5)
             if (OrdersToPython.pythonRunsAnim)
@@ -425,8 +426,9 @@ public class LaserGrabber : SceneReferences
                 else;
             else
                 // go one frame back
-                PE.SendOrder("self.frame = (len(self.all_positions) - ((len(self.all_positions) - self.frame) " +
-                    "% len(self.all_positions))) - 1");
+                //PE.SendOrder("self.frame = (len(self.all_positions) - ((len(self.all_positions) - self.frame) " +
+                //    "% len(self.all_positions))) - 1");
+                PE.SendOrder("self.move_one_frame(False)");
         else if (OrdersToPython.pythonRunsAnim)
             OTP.RunAnim(false);
         else
