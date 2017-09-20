@@ -96,6 +96,12 @@ public class InputManager : SceneReferences
 
         if (ControllerDevices[ctrlNr].GetPressDown(SteamVR_Controller.ButtonMask.Touchpad))
             LGs[ctrlNr].TouchpadPressDown();
+
+        if (ControllerDevices[ctrlNr].GetPress(SteamVR_Controller.ButtonMask.Touchpad))
+            LGs[ctrlNr].WhileTouchpadPressDown();
+
+        if (ControllerDevices[ctrlNr].GetPressUp(SteamVR_Controller.ButtonMask.Touchpad))
+            LGs[ctrlNr].TouchpadPressUp();
     }
 
     private void CheckGripButton(int ctrlNr)

@@ -68,6 +68,10 @@ public class LaserGrabber : SceneReferences
     private bool lammpsIsMd;
     // shows whether the positions of the atoms are still the same es they were when the last ham_lammps was created
     private static bool positionsHaveChanged;
+    // a timer, which counts when the program should go a frame forward or backwards, when keeping the one frame forward button pressed
+    private float moveOneFrameTimer = -1;
+    // the time until the program should go a frame forward or backwards, when keeping the "one frame forward button" pressed
+    private float timeUntilMoveOneFrame = 0.5f;
 
     [Header("Resize")]
     // shows, which of the controllers currently allows to resize the structure
@@ -161,6 +165,7 @@ public class LaserGrabber : SceneReferences
     {
         printer.Ctrl_print(PythonExecuter.outgoingChanges.ToString(), 120);
         printer.Ctrl_print(PythonExecuter.incomingChanges.ToString(), 120, false);
+        printer.Ctrl_print(moveOneFrameTimer.ToString(), 130); 
         if (MD.modes[MD.activeMode].playerCanMoveAtoms)
         {
             // move the grabbed object
@@ -385,6 +390,27 @@ public class LaserGrabber : SceneReferences
                 thermometerScript.SetMaxTemperature(0.1f);
     }
 
+    public void WhileTouchpadPressDown()
+    {
+        if (moveOneFrameTimer >= 0)
+        {
+            moveOneFrameTimer += Time.deltaTime;
+            if (moveOneFrameTimer >= timeUntilMoveOneFrame)
+            {
+                if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).x > 0)
+                    PE.SendOrder("self.move_one_frame(True)");
+                else
+                    PE.SendOrder("self.move_one_frame(False)");
+                moveOneFrameTimer = 0;
+            }
+        }
+    }
+
+    public void TouchpadPressUp()
+    {
+        moveOneFrameTimer = -1;
+    }
+
     // initialize the resize if both controllers are ready, else just set the controller to ready
     private void SetControllerToReady()
     {
@@ -414,8 +440,12 @@ public class LaserGrabber : SceneReferences
                     PE.ChangeAnimSpeed(1);
                 else;
             else
+            {
                 // go one frame forward
                 PE.SendOrder("self.move_one_frame(True)");
+                // show that the user pressed the button to go one step forward
+                moveOneFrameTimer = 0;
+            }
         // PE.SendOrder("self.frame = (self.frame + 1) % len(self.all_positions)");
         //PE.SendOrder(runAnim: true);
         else if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).x < -0.5)
@@ -430,7 +460,7 @@ public class LaserGrabber : SceneReferences
                 //PE.SendOrder("self.frame = (len(self.all_positions) - ((len(self.all_positions) - self.frame) " +
                 //    "% len(self.all_positions))) - 1");
                 PE.SendOrder("self.move_one_frame(False)");
-                print("one step back");
+                moveOneFrameTimer = 0;
             }
         else if (OrdersToPython.pythonRunsAnim)
             OTP.RunAnim(false);
