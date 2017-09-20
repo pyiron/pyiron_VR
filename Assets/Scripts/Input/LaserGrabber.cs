@@ -165,7 +165,6 @@ public class LaserGrabber : SceneReferences
     {
         printer.Ctrl_print(PythonExecuter.outgoingChanges.ToString(), 120);
         printer.Ctrl_print(PythonExecuter.incomingChanges.ToString(), 120, false);
-        printer.Ctrl_print(moveOneFrameTimer.ToString(), 130); 
         if (MD.modes[MD.activeMode].playerCanMoveAtoms)
         {
             // move the grabbed object
