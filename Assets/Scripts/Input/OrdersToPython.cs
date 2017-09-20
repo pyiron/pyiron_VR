@@ -153,9 +153,9 @@ public class OrdersToPython : SceneReferences
     public void RunAnim(bool shouldRun=false)
     {
         if (shouldRun)
-            PE.SendOrder("self.start_anim()");
+            PE.SendOrder("self.start_anim(True)");
         else
-            PE.SendOrder("self.runAnim = False");
+            PE.SendOrder("self.start_anim(False)");
         pythonRunsAnim = shouldRun;
         // update the symbols on all active controllers
         foreach (GameObject Controller in Controllers)
