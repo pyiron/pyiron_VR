@@ -13,7 +13,7 @@ public class StructureData : MonoBehaviour
     // list with all infos about the atoms
     public List<AtomInfos> atomInfos = new List<AtomInfos>();
     // the name of the structure, at the moment the name is defined here
-    public string structureName = "Fe-Structure";
+    public static string structureName = "Atom Structure";
 
     // the data, how each atom has been relocated by the player
     public List<Vector3> atomCtrlPos = new List<Vector3>();

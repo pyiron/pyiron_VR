@@ -264,7 +264,7 @@ public class LaserGrabber : SceneReferences
                 // set the info text to the top of the boundingbox
                 InfoText.transform.position = boundingbox.transform.position + Vector3.up * 0.1f
                     + Vector3.up * boundingbox.transform.localScale[0] / 2 * ProgramSettings.size;
-                InfoText.text = SD.structureName;
+                InfoText.text = StructureData.structureName;
                 InfoText.text += "\nAtoms: "
                         + SD.atomInfos.Count;
                 // InfoText.text += "\nForce: " + PythonExecuter.structureForce;
