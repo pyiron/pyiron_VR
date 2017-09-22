@@ -6,12 +6,14 @@ using UnityEngine;
 public class ChooseStructure : MonoBehaviour {
     // start a process which executes the commands in the shell to start the python script
     Process myProcess = new Process();
+
+    public static bool shouldGetPythonScripts;
     //
     public static List<string> PythonFileNames = new List<string>();
 
     private void Awake()
     {
-        GetPythonScripts();
+        // GetPythonScripts();
     }
 
     private void GetPythonScripts()
@@ -46,7 +48,11 @@ public class ChooseStructure : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+        if (shouldGetPythonScripts)
+        {
+            GetPythonScripts();
+            shouldGetPythonScripts = false;
+        }
 	}
 
     private void OnApplicationQuit()
