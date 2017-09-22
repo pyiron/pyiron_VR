@@ -237,6 +237,8 @@ public class LaserGrabber : SceneReferences
         }
         else
             InfoText.gameObject.SetActive(false);
+        if (MD.modes[MD.activeMode].showPossibleStructures)
+            CS.WhileHairTriggerDown(trackedObj.transform);
     }
 
     private void ShowInfo()

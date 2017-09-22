@@ -26,11 +26,13 @@ public class ChooseStructure : MonoBehaviour
 
     public static bool shouldShowPossibleStructures;
 
+    private GameObject hittedButton;
+
     private Dictionary<string, Color> Colors = new Dictionary<string, Color>()
     {
         { "Idle", new Color(0, 1, 0) },
         { "clicked", new Color(0, 0.6f, 0) },
-        { "clickedButMovedAway", new Color(0, 0.8f, 0) }
+        //{ "clickedButMovedAway", new Color(0, 0.8f, 0) }
     };
 
     private void Awake()
@@ -153,8 +155,36 @@ public class ChooseStructure : MonoBehaviour
         if (Physics.Raycast(trackedObj.position, trackedObj.forward, out hit, LaserGrabber.laserMaxDistance))
         {
             if (!hit.transform.parent.name.Contains("PythonScript")) return;
+            hittedButton = hit.transform.gameObject;
             print(hit.transform.parent.GetComponentInChildren<TextMesh>().text);
             hit.transform.GetComponent<Renderer>().material.color = Colors["clicked"];
+        }
+    }
+
+    public void WhileHairTriggerDown(Transform trackedObj)
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(trackedObj.position, trackedObj.forward, out hit, LaserGrabber.laserMaxDistance))
+        {
+            if (!hit.transform.parent.name.Contains("PythonScript")) return;
+            hittedButton = hit.transform.gameObject;
+            print(hit.transform.parent.GetComponentInChildren<TextMesh>().text);
+            hit.transform.GetComponent<Renderer>().material.color = Colors["clicked"];
+        }
+        else
+            if (hittedButton != null)
+            {
+                hittedButton.GetComponent<Renderer>().material.color = Colors["Idle"];
+                hittedButton = null;
+            }   
+    }
+
+    public void HairTriggerUp(Transform trackedObj)
+    {
+        if (hittedButton != null)
+        {
+            hittedButton.GetComponent<Renderer>().material.color = Colors["Idle"];
+            hittedButton = null;
         }
     }
 
