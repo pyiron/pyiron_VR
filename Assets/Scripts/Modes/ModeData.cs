@@ -97,6 +97,8 @@ public class ModeData : MonoBehaviour
     {
         // raise the mode nr by one, except it reached the highest mode, then set it to 0
         activeMode = (activeMode + 1) % modes.Count;
+        // stop the currently running animation
+        OTP.RunAnim(false);
         UpdateScene();
     }
 
@@ -121,14 +123,14 @@ public class ModeData : MonoBehaviour
         // show that the current force of no atom is known anymore
         PythonExecuter.lastAtomForceId = -1;
 
-        // stop the currently running animation
-        OTP.RunAnim(false);
-
         if (modes[activeMode].showInfo)
             OTP.RequestAllForces();
         // deactivate the structure if it shouldn't be shown, else activate it
         AtomStructure.SetActive(!modes[activeMode].hideAtoms);
         PossiblePythonScripts.SetActive(modes[activeMode].showPossibleStructures);
+
+        if (modes[activeMode].showPossibleStructures)
+            ChooseStructure.shouldShowPossibleStructures = true;
 
         foreach (GameObject controller in controllers)
             if (controller.activeSelf)

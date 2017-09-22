@@ -87,8 +87,7 @@ public class PythonExecuter : MonoBehaviour {
             return;
 
         //IS = GameObject.Find("AtomStructure").GetComponent<ImportStructure>();
-        print("cd " + pythonPath + " && python " + pythonFileName + ".py");
-        LoadPythonScript();
+        //LoadPythonScript();
         
     }
 
