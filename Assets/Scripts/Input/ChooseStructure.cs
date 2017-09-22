@@ -29,7 +29,7 @@ public class ChooseStructure : MonoBehaviour
         // get the reference to the transform of the headset
         HeadTransform = GameObject.Find("[CameraRig]/Camera (head)").transform;
 
-        lastButtonPos = new Vector3(-ButtonDistance.x, -ButtonDistance.y, 8);
+        lastButtonPos = new Vector3(-ButtonDistance.x, -ButtonDistance.y, 15);
         GetPythonScripts();
     }
 
@@ -112,9 +112,9 @@ public class ChooseStructure : MonoBehaviour
         if (direction == 0)
             Button.localPosition = newPosition;
         else if (direction == 1)
-            Button.localPosition = new Vector3(newPosition.z, newPosition.y, newPosition.x);
+            Button.localPosition = new Vector3(newPosition.z, newPosition.y, - newPosition.x);
         else if (direction == 2)
-            Button.localPosition = new Vector3(newPosition.x, newPosition.y, -newPosition.z);
+            Button.localPosition = new Vector3(- newPosition.x, newPosition.y, -newPosition.z);
         else if (direction == 3)
             Button.localPosition = new Vector3(- newPosition.z, newPosition.y, newPosition.x);
     }
