@@ -18,9 +18,11 @@ public class ChooseStructure : MonoBehaviour
 
     public GameObject PythonFileButtonPrefab;
 
-    private Vector3 lastButtonPos;
+    private int buttonNr;
 
-    private Vector2 ButtonDistance = new Vector2(4, 1);
+    private Vector3 ButtonDistance = new Vector3(4, 1, 13);
+
+    private int buttonRowLength = 6;
 
     public static bool shouldShowPossibleStructures;
 
@@ -29,8 +31,13 @@ public class ChooseStructure : MonoBehaviour
         // get the reference to the transform of the headset
         HeadTransform = GameObject.Find("[CameraRig]/Camera (head)").transform;
 
-        lastButtonPos = new Vector3(-ButtonDistance.x, -ButtonDistance.y, 15);
         GetPythonScripts();
+    }
+
+    private Vector3 GetFirstButtonPos()
+    {
+        print(-(float)buttonRowLength / 2 * ButtonDistance.x);
+        return new Vector3(-(float)(buttonRowLength - 1) / 2 * ButtonDistance.x, ButtonDistance.y, ButtonDistance.z);
     }
 
     private void GetPythonScripts()
@@ -79,7 +86,7 @@ public class ChooseStructure : MonoBehaviour
                         newButtons[buttonNr] = Instantiate(newButtons[0]);
                         SetButtonTransform(newButtons[buttonNr].transform, buttonNr);
                     }
-                    lastButtonPos = newButtons[0].transform.localPosition;
+                    buttonNr ++;
                 }
     }
 
@@ -108,7 +115,7 @@ public class ChooseStructure : MonoBehaviour
         Button.localEulerAngles = Vector3.up * direction * 90;
         Button.GetChild(0).localScale = new Vector3(ButtonDistance.x - 0.5f, ButtonDistance.y - 0.5f, 0.2f);
         //Button.localPosition = lastButtonPos + Vector3.right * ButtonDistance.x;
-        Vector3 newPosition = lastButtonPos + Vector3.right * ButtonDistance.x;
+        Vector3 newPosition = GetFirstButtonPos() + (Vector3.right * (buttonNr % buttonRowLength) * ButtonDistance.x);
         if (direction == 0)
             Button.localPosition = newPosition;
         else if (direction == 1)
