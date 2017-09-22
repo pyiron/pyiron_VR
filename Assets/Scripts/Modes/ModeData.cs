@@ -20,6 +20,8 @@ public class ModeData : MonoBehaviour
     private OrdersToPython OTP;
     // the reference to the atomstructure
     private GameObject AtomStructure;
+    // the reference to the PossiblePythonScripts
+    private GameObject PossiblePythonScripts;
 
     [Header("Modes")]
     // get the textmesh from the 3D Text which shows the current mode
@@ -64,6 +66,8 @@ public class ModeData : MonoBehaviour
         OTP = Settings.GetComponent<OrdersToPython>();
         // get the reference to the atomstructure
         AtomStructure = GameObject.Find("AtomStructure");
+        // get the reference to PossiblePythonScripts
+        PossiblePythonScripts = GameObject.Find("PossiblePythonScripts");
     }
 
     void Start()
@@ -124,6 +128,7 @@ public class ModeData : MonoBehaviour
             OTP.RequestAllForces();
         // deactivate the structure if it shouldn't be shown, else activate it
         AtomStructure.SetActive(!modes[activeMode].hideAtoms);
+        PossiblePythonScripts.SetActive(modes[activeMode].showPossibleStructures);
 
         foreach (GameObject controller in controllers)
             if (controller.activeSelf)
