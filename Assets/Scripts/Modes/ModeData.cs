@@ -18,6 +18,8 @@ public class ModeData : MonoBehaviour
     private GameObject Thermometer;
     // the script that stores the possible orders which can be send to Python
     private OrdersToPython OTP;
+    // the reference to the atomstructure
+    private GameObject AtomStructure;
 
     [Header("Modes")]
     // get the textmesh from the 3D Text which shows the current mode
@@ -60,6 +62,8 @@ public class ModeData : MonoBehaviour
         Thermometer = GameObject.Find("MyObjects/Thermometer");
         // get the reference to the script that stores the possible orders which can be send to Python
         OTP = Settings.GetComponent<OrdersToPython>();
+        // get the reference to the atomstructure
+        AtomStructure = GameObject.Find("AtomStructure");
     }
 
     void Start()
@@ -109,8 +113,10 @@ public class ModeData : MonoBehaviour
         // stop the currently running animation
         OTP.RunAnim(false);
 
-        if (modes[activeMode].name == "Info Mode")
+        if (modes[activeMode].showInfo)
             OTP.RequestAllForces();
+        // deactivate the structure if it shouldn't be shown, else activate it
+        AtomStructure.SetActive(!modes[activeMode].hideAtoms);
 
         foreach (GameObject controller in controllers)
             if (controller.activeSelf)

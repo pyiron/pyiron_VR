@@ -58,7 +58,6 @@ public class ChooseStructure : MonoBehaviour {
     private void OnApplicationQuit()
     {
         // be sure the process is closed
-        myProcess.StandardInput.Close();
         myProcess.Close();
     }
 }
