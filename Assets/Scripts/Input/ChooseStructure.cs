@@ -64,12 +64,23 @@ public class ChooseStructure : MonoBehaviour
             print(scriptName);
     }
 
-    private void ShowPossibleStructures(Vector3 direction)
+    private void ShowPossibleStructures()
     {
+        GameObject[] newButtons = new GameObject[4];
         if (PythonFileNames.Count > 0)
             foreach (string scriptName in PythonFileNames)
                 if (ValidFileName(scriptName))
-                    InstantiatePossibleStructurButton(scriptName, direction);
+                {
+                    newButtons[0] = InstantiatePossibleStructurButton(scriptName);
+                    SetButtonTransform(newButtons[0].transform, 0);
+                    for (int i = 0; i < 3; i++)
+                    {
+                        int buttonNr = i + 1;
+                        newButtons[buttonNr] = Instantiate(newButtons[0]);
+                        SetButtonTransform(newButtons[buttonNr].transform, buttonNr);
+                    }
+                    lastButtonPos = newButtons[0].transform.localPosition;
+                }
     }
 
     private static bool ValidFileName(string scriptName)
@@ -77,14 +88,9 @@ public class ChooseStructure : MonoBehaviour
         return scriptName.Contains(".py");
     }
 
-    private void InstantiatePossibleStructurButton(string scriptName, Vector3 direction)
+    private GameObject InstantiatePossibleStructurButton(string scriptName)
     {
         GameObject NewButton = Instantiate(PythonFileButtonPrefab);
-        NewButton.transform.parent = transform;
-        NewButton.transform.localEulerAngles = direction * 90;
-        NewButton.transform.localPosition = lastButtonPos + direction * ButtonDistance.x;
-        NewButton.transform.GetChild(0).localScale = new Vector3(ButtonDistance.x - 0.5f, ButtonDistance.y - 0.5f, 0.2f);
-        lastButtonPos = NewButton.transform.localPosition;
         TextMesh ButtonText = NewButton.GetComponentInChildren<TextMesh>();
         ButtonText.transform.localScale = Vector3.one * 0.2f;
         // position the text in the middle of the button
@@ -92,6 +98,25 @@ public class ChooseStructure : MonoBehaviour
         ButtonText.anchor = TextAnchor.MiddleCenter;
         // set the text of the button to the name of the Python Script
         ButtonText.text = scriptName;
+
+        return NewButton;
+    }
+
+    private void SetButtonTransform(Transform Button, int direction)
+    {
+        Button.parent = transform;
+        Button.localEulerAngles = Vector3.up * direction * 90;
+        Button.GetChild(0).localScale = new Vector3(ButtonDistance.x - 0.5f, ButtonDistance.y - 0.5f, 0.2f);
+        //Button.localPosition = lastButtonPos + Vector3.right * ButtonDistance.x;
+        Vector3 newPosition = lastButtonPos + Vector3.right * ButtonDistance.x;
+        if (direction == 0)
+            Button.localPosition = newPosition;
+        else if (direction == 1)
+            Button.localPosition = new Vector3(newPosition.z, newPosition.y, newPosition.x);
+        else if (direction == 2)
+            Button.localPosition = new Vector3(newPosition.x, newPosition.y, -newPosition.z);
+        else if (direction == 3)
+            Button.localPosition = new Vector3(- newPosition.z, newPosition.y, newPosition.x);
     }
 
     void Update()
@@ -103,8 +128,7 @@ public class ChooseStructure : MonoBehaviour
         }
         if (shouldShowPossibleStructures)
         {
-            for (int i = 0; i < 4; i++)
-                ShowPossibleStructures(Vector3.up * i);
+            ShowPossibleStructures();
             PythonFileNames.Clear();
         }
     }
