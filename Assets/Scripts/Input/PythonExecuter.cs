@@ -117,6 +117,7 @@ public class PythonExecuter : MonoBehaviour {
 
     private static void ReadOutput(object sender, DataReceivedEventArgs e) 
     {
+        print(e.Data + " " + currentAtomLine);
         string[] splittedData = e.Data.Split();
         if (e.Data.Contains("print"))
             print(e.Data);

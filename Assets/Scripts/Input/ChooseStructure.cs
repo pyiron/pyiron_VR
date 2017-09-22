@@ -11,7 +11,7 @@ public class ChooseStructure : MonoBehaviour {
 
     private void Awake()
     {
-        GetPythonScripts();
+        //GetPythonScripts();
     }
 
     private void GetPythonScripts()
@@ -39,8 +39,8 @@ public class ChooseStructure : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        foreach (string scriptName in PythonFileNames)
-            print(scriptName);
+        //foreach (string scriptName in PythonFileNames)
+          //  print(scriptName);
 	}
 	
 	// Update is called once per frame
