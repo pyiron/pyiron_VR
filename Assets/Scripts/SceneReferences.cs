@@ -23,6 +23,14 @@ public class SceneReferences : MonoBehaviour {
     // the reference to the LaserGrabber script of the controllers
     protected LaserGrabber[] LGs = new LaserGrabber[2];
 
+    [Header("Tools")]
+    // the reference to the Hourglass
+    public GameObject Hourglass;
+
+    [Header("Choose a structure")]
+    // the reference to the Script that handles the mode in which the user can choose the structure he wants to see
+    protected ChooseStructure CS;
+
     // get the reference to this script, but as component of Settings, so first it has to get the reference to the Settings
     protected void GetReferenceToReferences()
     {
@@ -45,7 +53,7 @@ public class SceneReferences : MonoBehaviour {
         PE = Settings.GetComponent<PythonExecuter>();
         // get the reference to the script that stores the possible orders which can be send to Python
         OTP = Settings.GetComponent<OrdersToPython>();
-    }
+}
 
     // get the references to the controllers. Has to be called on the first frame of the Update function!!!
     protected void GetControllerReferences()
@@ -70,5 +78,11 @@ public class SceneReferences : MonoBehaviour {
             }
         }
         //}
+    }
+
+    protected void GetChooseStructureReferences()
+    {
+        // the reference to the Script that handles the mode in which the user can choose the structure he wants to see
+        CS = GameObject.Find("PossiblePythonScripts").GetComponent<ChooseStructure>();
     }
 }

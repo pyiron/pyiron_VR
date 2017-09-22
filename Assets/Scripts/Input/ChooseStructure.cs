@@ -20,9 +20,9 @@ public class ChooseStructure : MonoBehaviour
 
     private int buttonNr;
 
-    private Vector3 ButtonDistance = new Vector3(4, 1, 13);
+    private Vector3 ButtonDistance = new Vector3(4, 1, 10.5f);
 
-    private int buttonRowLength = 6;
+    private int buttonRowLength = 5;
 
     public static bool shouldShowPossibleStructures;
 
@@ -36,7 +36,6 @@ public class ChooseStructure : MonoBehaviour
 
     private Vector3 GetFirstButtonPos()
     {
-        print(-(float)buttonRowLength / 2 * ButtonDistance.x);
         return new Vector3(-(float)(buttonRowLength - 1) / 2 * ButtonDistance.x, ButtonDistance.y, ButtonDistance.z);
     }
 
@@ -64,7 +63,6 @@ public class ChooseStructure : MonoBehaviour
                 PythonFileNames.Add(dataFragment);
     }
 
-    // Use this for initialization
     void Start()
     {
         foreach (string scriptName in PythonFileNames)
@@ -88,6 +86,7 @@ public class ChooseStructure : MonoBehaviour
                     }
                     buttonNr ++;
                 }
+        myProcess.Close();
     }
 
     private static bool ValidFileName(string scriptName)
@@ -139,6 +138,13 @@ public class ChooseStructure : MonoBehaviour
             ShowPossibleStructures();
             PythonFileNames.Clear();
         }
+    }
+
+    public void HairTriggerDown(Transform trackedObj)
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(trackedObj.position, trackedObj.forward, out hit, LaserGrabber.laserMaxDistance))
+            print(hit.transform.name);
     }
 
     private void OnApplicationQuit()

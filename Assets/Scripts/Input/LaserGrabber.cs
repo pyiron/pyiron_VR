@@ -48,7 +48,7 @@ public class LaserGrabber : SceneReferences
     // the length of the laser
     private float laserLength;
     // the max distance when the laser still detects an object to attach
-    private int laserMaxDistance = 100;
+    public static int laserMaxDistance = 100;
 
     [Header("Thermometer")]
     // shows if the user hitted the thermometer with the laser when he pressed the hair trigger down the last time
@@ -85,6 +85,7 @@ public class LaserGrabber : SceneReferences
     // the size the text should have
     private float textSize = 1f;
 
+
     [Header("Controller")]
     // the start touch point from when the player lays his finger on the touchpad
     private Vector2 startTouchPoint;
@@ -115,9 +116,13 @@ public class LaserGrabber : SceneReferences
         catch { TrashCanScript = otherCtrl.GetComponent<LaserGrabber>().TrashCanScript; }
         // get the data of the controller
         trackedObj = GetComponent<SteamVR_TrackedObject>();
-        
+
         // get the Script of the Hourglass, which indicates that the structure is currently loading
-        HourglassScript = GameObject.Find("HourglassRotator").transform.GetChild(0).gameObject.GetComponent<Hourglass>();
+        HourglassScript = SR.Hourglass.GetComponent<Hourglass>();
+        // HourglassScript = GameObject.Find("HourglassRotator").transform.GetChild(0).gameObject.GetComponent<Hourglass>();
+
+        // get the reference to the Script that handles the mode in which the user can choose the structure he wants to see
+        GetChooseStructureReferences();
 }
 
     void Start()
@@ -213,6 +218,9 @@ public class LaserGrabber : SceneReferences
                 // send out a raycast to detect objects in front of the controller
                 SendRaycast();
         }
+        if (MD.modes[MD.activeMode].showPossibleStructures)
+            CS.HairTriggerDown(trackedObj.transform);
+
         //if (MD.modes[MD.activeMode].showTemp)
         //    SendRaycast(thermometerMask);
     }
