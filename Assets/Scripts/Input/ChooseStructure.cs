@@ -115,7 +115,8 @@ public class ChooseStructure : MonoBehaviour
         Button.localEulerAngles = Vector3.up * direction * 90;
         Button.GetChild(0).localScale = new Vector3(ButtonDistance.x - 0.5f, ButtonDistance.y - 0.5f, 0.2f);
         //Button.localPosition = lastButtonPos + Vector3.right * ButtonDistance.x;
-        Vector3 newPosition = GetFirstButtonPos() + (Vector3.right * (buttonNr % buttonRowLength) * ButtonDistance.x);
+        Vector3 newPosition = GetFirstButtonPos() + Vector3.right * (buttonNr % buttonRowLength) * ButtonDistance.x
+            + Vector3.up * (buttonNr / buttonRowLength);
         if (direction == 0)
             Button.localPosition = newPosition;
         else if (direction == 1)
