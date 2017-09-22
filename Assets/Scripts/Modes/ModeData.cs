@@ -71,6 +71,9 @@ public class ModeData : MonoBehaviour
         textSize = textSize / ProgramSettings.textResolution * 10;
         transform.localScale = Vector3.one * textSize;
         gameObject.GetComponent<TextMesh>().fontSize = (int)ProgramSettings.textResolution;
+
+        UpdateScene();
+        gameObject.SetActive(false);
     }
 
     void Update()
@@ -90,6 +93,10 @@ public class ModeData : MonoBehaviour
     {
         // raise the mode nr by one, except it reached the highest mode, then set it to 0
         activeMode = (activeMode + 1) % modes.Count;
+        UpdateScene();
+    }
+
+    private void UpdateScene() { 
         gameObject.GetComponent<TextMesh>().text = modes[activeMode].name;
         gameObject.SetActive(true);
         modeTextTimer = 3;
