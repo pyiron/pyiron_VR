@@ -19,7 +19,7 @@ public class PythonExecuter : MonoBehaviour {
 
     [Header("Start Python")]
     // the file to where the python script file is located
-    public static string pythonPath = "C:/Users/pneugebauer/PycharmProjects/pyiron/tests";
+    public static string pythonPath = "C:/Users/pneugebauer/PycharmProjects/pyiron/tests/Structures";
     // the name of the python file which creates the structure for Unity
     public string pythonFileName;
     // start a process which executes the commands in the shell to start the python script
@@ -86,9 +86,17 @@ public class PythonExecuter : MonoBehaviour {
         if (ProgramSettings.transMode == "file")
             return;
 
-    //IS = GameObject.Find("AtomStructure").GetComponent<ImportStructure>();
-    var pyPathThread = new Thread(delegate () {
-            Command("cd " + pythonPath + " && python " + pythonFileName + ".py", myProcess); });
+        //IS = GameObject.Find("AtomStructure").GetComponent<ImportStructure>();
+        print("cd " + pythonPath + " && python " + pythonFileName + ".py");
+        LoadPythonScript();
+        
+    }
+
+    public void LoadPythonScript()
+    {
+        var pyPathThread = new Thread(delegate () {
+            Command("cd " + pythonPath + " && python " + pythonFileName + ".py", myProcess);
+        });
         pyPathThread.Start();
         //Command("cd " + pythonPath + " && python " + pythonFileName + ".py", myProcess);
     }

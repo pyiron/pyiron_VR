@@ -41,10 +41,10 @@ public class ModeData : MonoBehaviour
     // attention: the trashcan will just be shown if m_playerCanMoveAtoms is true, even if m_showTrashcan is true
     // attention: the mode will just be accessable, if m_playerCanMoveAtoms, m_showInfo or m_canDuplicate is true
     public readonly Dictionary<int, Mode> modes = new Dictionary<int, Mode> {
-        { 0, new Mode(m_name:"Temperature Mode", m_playerCanMoveAtoms:true, m_playerCanResizeAtoms:true, m_showTemp:true, m_showTrashcan:true) },
-        { 1, new Mode(m_name:"Relaxation Mode", m_playerCanMoveAtoms:true, m_playerCanResizeAtoms:true, m_showRelaxation:true, m_showTrashcan:true) },
-        { 2, new Mode(m_name:"Info Mode", m_showInfo:true) },
-        {3, new Mode(m_name:"Choose a Structure!", m_hideAtoms:true, m_showPossibleStructures:true) }
+        { 0, new Mode(m_name:"Choose a Structure!", m_hideAtoms:true, m_showPossibleStructures:true) },
+        { 1, new Mode(m_name:"Temperature Mode", m_playerCanMoveAtoms:true, m_playerCanResizeAtoms:true, m_showTemp:true, m_showTrashcan:true) },
+        { 2, new Mode(m_name:"Relaxation Mode", m_playerCanMoveAtoms:true, m_playerCanResizeAtoms:true, m_showRelaxation:true, m_showTrashcan:true) },
+        { 3, new Mode(m_name:"Info Mode", m_showInfo:true) }
         //{ 3, new Mode(m_name:"Edit Mode", m_canDuplicate:true) },
         };
 

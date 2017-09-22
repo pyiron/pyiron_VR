@@ -11,7 +11,7 @@ public class ChooseStructure : MonoBehaviour {
 
     private void Awake()
     {
-        //GetPythonScripts();
+        GetPythonScripts();
     }
 
     private void GetPythonScripts()
@@ -27,11 +27,12 @@ public class ChooseStructure : MonoBehaviour {
         myProcess.EnableRaisingEvents = true;
         myProcess.Start();
         myProcess.BeginOutputReadLine();
-        myProcess.WaitForExit();
+        //myProcess.WaitForExit();
     }
 
     private static void ReadOutput(object sender, DataReceivedEventArgs e)
     {
+        print(e.Data);
         foreach (string dataFragment in e.Data.Split())
             if (dataFragment.Contains("Structure"))
                 PythonFileNames.Add(dataFragment);
@@ -39,12 +40,19 @@ public class ChooseStructure : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        //foreach (string scriptName in PythonFileNames)
-          //  print(scriptName);
+        foreach (string scriptName in PythonFileNames)
+            print(scriptName);
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		
 	}
+
+    private void OnApplicationQuit()
+    {
+        // be sure the process is closed
+        myProcess.StandardInput.Close();
+        myProcess.Close();
+    }
 }
