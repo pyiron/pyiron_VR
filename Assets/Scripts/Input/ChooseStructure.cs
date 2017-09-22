@@ -26,6 +26,13 @@ public class ChooseStructure : MonoBehaviour
 
     public static bool shouldShowPossibleStructures;
 
+    private Dictionary<string, Color> Colors = new Dictionary<string, Color>()
+    {
+        { "Idle", new Color(0, 1, 0) },
+        { "clicked", new Color(0, 0.6f, 0) },
+        { "clickedButMovedAway", new Color(0, 0.8f, 0) }
+    };
+
     private void Awake()
     {
         // get the reference to the transform of the headset
@@ -144,7 +151,11 @@ public class ChooseStructure : MonoBehaviour
     {
         RaycastHit hit;
         if (Physics.Raycast(trackedObj.position, trackedObj.forward, out hit, LaserGrabber.laserMaxDistance))
-            print(hit.transform.name);
+        {
+            if (!hit.transform.parent.name.Contains("PythonScript")) return;
+            print(hit.transform.parent.GetComponentInChildren<TextMesh>().text);
+            hit.transform.GetComponent<Renderer>().material.color = Colors["clicked"];
+        }
     }
 
     private void OnApplicationQuit()
