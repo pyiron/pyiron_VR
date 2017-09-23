@@ -10,6 +10,8 @@ public class Hourglass : MonoBehaviour
     private Animator anim;
     // the Transform of the Headset
     private Transform HeadTransform;
+    // the Script of the HourglassRotator
+    private HourglassActivator HA;
 
     private void Awake()
     {
@@ -17,6 +19,8 @@ public class Hourglass : MonoBehaviour
         anim = gameObject.GetComponent<Animator>();
         // get the reference to the transform of the headset
         HeadTransform = GameObject.Find("[CameraRig]/Camera (head)").transform;
+        // 
+        HA = GameObject.Find("AtomStructure/HourglassRotator").GetComponent<HourglassActivator>();
     }
 
     void Start()
@@ -42,6 +46,7 @@ public class Hourglass : MonoBehaviour
         {
             // start the rotation animation
             anim.Play("Rotate");
+            HA.ResetTimer();
         }
     }
 }

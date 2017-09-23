@@ -19,6 +19,12 @@ public class HourglassActivator : MonoBehaviour {
 
     void Start () {
         // set the timer
+        ResetTimer();
+    }
+
+    public void ResetTimer()
+    {
+        // set the timer
         timer = timeUntilHourglassGetsShown;
     }
 	

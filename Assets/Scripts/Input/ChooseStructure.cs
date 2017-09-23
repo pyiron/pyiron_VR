@@ -38,7 +38,7 @@ public class ChooseStructure : MonoBehaviour
     private void Awake()
     {
         // get the reference to the transform of the headset
-        HeadTransform = GameObject.Find("[CameraRig]/Camera (head)").transform;
+        //HeadTransform = GameObject.Find("[CameraRig]/Camera (head)").transform;
 
         GetPythonScripts();
     }
