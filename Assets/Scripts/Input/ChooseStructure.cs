@@ -203,6 +203,7 @@ public class ChooseStructure : SceneReferences
                 hittedButtons[Controller.transform] = null;
             }
             MD.RaiseMode();
+            Settings.GetComponent<ProgramSettings>().ResetScene();
         }
     }
 

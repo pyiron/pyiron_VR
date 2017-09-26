@@ -70,4 +70,9 @@ public class ProgramSettings : MonoBehaviour {
     {
         return (int)Mathf.Log(layer.value, 2);
     }
+
+    public void ResetScene()
+    {
+        LaserGrabber.firstAnimStart = true;
+    }
 }

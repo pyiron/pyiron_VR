@@ -63,7 +63,7 @@ public class LaserGrabber : SceneReferences
     [Header("Change Animation")]
     // shows whether it is the first time an animation should be played,
     // so that the python program knows whether to load a new animation or not
-    private bool firstAnimStart = true;
+    public static bool firstAnimStart = true;
     // shows if the current lammps is a calc_md or calc_minimize
     private bool lammpsIsMd;
     // shows whether the positions of the atoms are still the same es they were when the last ham_lammps was created
