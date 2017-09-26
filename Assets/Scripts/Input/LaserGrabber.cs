@@ -170,7 +170,7 @@ public class LaserGrabber : SceneReferences
     {
         printer.Ctrl_print(PythonExecuter.outgoingChanges.ToString(), 120);
         printer.Ctrl_print(PythonExecuter.incomingChanges.ToString(), 120, false);
-        if (MD.modes[MD.activeMode].playerCanMoveAtoms)
+        if (ModeData.currentMode.playerCanMoveAtoms)
         {
             // move the grabbed object
             if (attachedObject)
@@ -179,7 +179,7 @@ public class LaserGrabber : SceneReferences
                 if (ctrlMaskName.Contains("Atom"))
                 {
                     // update the trashcan, if it is shown in the current mode
-                    if (MD.modes[MD.activeMode].showTrashcan)
+                    if (ModeData.currentMode.showTrashcan)
                         TrashCanScript.UpdateTrashCan(attachedObject);
                     // let the controller printer print the atom ID of the current attached atom
                     printer.Ctrl_print(attachedObject.GetComponent<AtomID>().ID.ToString(), 101);
@@ -197,7 +197,7 @@ public class LaserGrabber : SceneReferences
     public void HairTriggerDown()
     {
         // if the controller gets pressed, it should try to attach an object to it
-        if (MD.modes[MD.activeMode].playerCanMoveAtoms)
+        if (ModeData.currentMode.playerCanMoveAtoms)
         {
             // test if the other controller is ready for a resize
             if (otherCtrl.GetComponent<LaserGrabber>().readyForResize)
@@ -218,7 +218,7 @@ public class LaserGrabber : SceneReferences
                 // send out a raycast to detect objects in front of the controller
                 SendRaycast();
         }
-        if (MD.modes[MD.activeMode].showPossibleStructures)
+        if (ModeData.currentMode.showPossibleStructures)
             CS.HairTriggerDown(trackedObj.transform);
 
         //if (MD.modes[MD.activeMode].showTemp)
@@ -229,15 +229,15 @@ public class LaserGrabber : SceneReferences
     {
         if (laserOnThermometer)
             SendRaycast();
-        else if (!MD.modes[MD.activeMode].playerCanMoveAtoms)
+        else if (!ModeData.currentMode.playerCanMoveAtoms)
         {
             SendRaycast();
-            if (MD.modes[MD.activeMode].showInfo)
+            if (ModeData.currentMode.showInfo)
                 ShowInfo();
         }
         else
             InfoText.gameObject.SetActive(false);
-        if (MD.modes[MD.activeMode].showPossibleStructures)
+        if (ModeData.currentMode.showPossibleStructures)
             CS.WhileHairTriggerDown(trackedObj.transform);
     }
 
@@ -299,7 +299,7 @@ public class LaserGrabber : SceneReferences
             laser.SetActive(false);
         }
             // check that the move mode is currently active
-            if (MD.modes[MD.activeMode].playerCanMoveAtoms)
+            if (ModeData.currentMode.playerCanMoveAtoms)
         {
             // set the state of the controller to not ready for resizeStructure
             readyForResize = false;
@@ -329,14 +329,14 @@ public class LaserGrabber : SceneReferences
             attachedObject = null;
             laser.SetActive(false);
         }
-        if (MD.modes[MD.activeMode].showPossibleStructures)
+        if (ModeData.currentMode.showPossibleStructures)
             CS.HairTriggerUp(trackedObj.transform);
     }
 
     // show that the laser is currently active and it's possible in the current move to move atoms, and that the laser doesn't point on the thermometer
     private bool ScaleAbleLaser()
     {
-        return (MD.modes[MD.activeMode].playerCanMoveAtoms && laser.activeSelf && !laserOnThermometer);
+        return (ModeData.currentMode.playerCanMoveAtoms && laser.activeSelf && !laserOnThermometer);
     }
 
     public void TouchpadTouchDown()
@@ -385,10 +385,10 @@ public class LaserGrabber : SceneReferences
 
     public void TouchpadPressDown()
     {
-        if (MD.modes[MD.activeMode].canDuplicate)
+        if (ModeData.currentMode.canDuplicate)
             DuplicateStructure();
         // look if an animation should be started or stopped
-        else if (MD.modes[MD.activeMode].showTemp || MD.modes[MD.activeMode].showRelaxation)
+        else if (ModeData.currentMode.showTemp || ModeData.currentMode.showRelaxation)
             // check that the player isn't currently trying to change the length of the laser
             if (!laser.activeSelf)
                 ControllAnimation();
@@ -494,7 +494,7 @@ public class LaserGrabber : SceneReferences
             }
 
             // check if the positions of any atom has been changed since the last animation has been started
-            if (PythonExecuter.frame != 0 || positionsHaveChanged || lammpsIsMd != MD.modes[MD.activeMode].showTemp)
+            if (PythonExecuter.frame != 0 || positionsHaveChanged || lammpsIsMd != ModeData.currentMode.showTemp)
             {
                 // send the new positions to Python
                 positionsHaveChanged = true;
@@ -537,11 +537,11 @@ public class LaserGrabber : SceneReferences
 
     private void LoadNewLammps(string loadOrder)
     {
-        if (MD.modes[MD.activeMode].showTemp)
+        if (ModeData.currentMode.showTemp)
             PE.SendOrder(loadOrder + "('md')");
-        else if (MD.modes[MD.activeMode].showRelaxation)
+        else if (ModeData.currentMode.showRelaxation)
             PE.SendOrder(loadOrder + "('minimize')");
-        lammpsIsMd = MD.modes[MD.activeMode].showTemp;
+        lammpsIsMd = ModeData.currentMode.showTemp;
     }
 
     // checks if the laser hits an object, which it should hit (an atom or a structure)
@@ -552,7 +552,7 @@ public class LaserGrabber : SceneReferences
         {
             RaycastHit hit;
 
-            if (!attachedObject || !MD.modes[MD.activeMode].playerCanMoveAtoms || laserOnThermometer)
+            if (!attachedObject || !ModeData.currentMode.playerCanMoveAtoms || laserOnThermometer)
                 // send out a raycast to detect if there is an object in front of the laser 
                 if (Physics.Raycast(trackedObj.transform.position, transform.forward, out hit, laserMaxDistance, ctrlMask))
                 {
@@ -583,7 +583,7 @@ public class LaserGrabber : SceneReferences
                             OTP.RunAnim(false);
                     }
                     else if (!laserOnThermometer)
-                        if (MD.modes[MD.activeMode].playerCanMoveAtoms)
+                        if (ModeData.currentMode.playerCanMoveAtoms)
                             AttachObject(hittedObject);
                         else
                             attachedObject = hittedObject;
@@ -596,7 +596,7 @@ public class LaserGrabber : SceneReferences
                     thermometerScript.ChangeLiquidColor("clickedButMovedAway");
                 }
                 // show that the controller is ready to resize the structure, if it is the AtomLayer controller
-                else if (MD.modes[MD.activeMode].playerCanResizeAtoms)
+                else if (ModeData.currentMode.playerCanResizeAtoms)
                     if (ctrlMaskName == "AtomLayer")
                         readyForResize = true;
                     else;
@@ -677,7 +677,7 @@ public class LaserGrabber : SceneReferences
             collidingObject = col.gameObject;
             // disable the laser if the controller is colliding when the player can't move the atoms 
             // (because the lasr already disables itself in this mode)
-            if (!MD.modes[MD.activeMode].playerCanMoveAtoms)
+            if (!ModeData.currentMode.playerCanMoveAtoms)
                 laser.SetActive(false);
         }
     }
@@ -759,7 +759,7 @@ public class LaserGrabber : SceneReferences
 
     private void ReleaseObject()
     {
-        if (MD.modes[MD.activeMode].showTrashcan)
+        if (ModeData.currentMode.showTrashcan)
         {
             if (TrashCanScript.atomInCan && ctrlMaskName == "AtomLayer")
                 // check that there isn't just one atom left, because this atom would have no temperature/force/velocity,

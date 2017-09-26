@@ -69,7 +69,7 @@ public class ControllerSymbols : MonoBehaviour {
 
             objectCounter += 1;
         }
-        if (MD.modes[MD.activeMode].showRelaxation || MD.modes[MD.activeMode].showTemp)
+        if (ModeData.currentMode.showRelaxation || ModeData.currentMode.showTemp)
             // activate the symbols that have to be activated and deactivate the remaining symbols
             SetSymbol();
         else

@@ -123,7 +123,7 @@ public class InputManager : SceneReferences
     private void CheckapplicationMenu(int ctrlNr)
     {
         if (ControllerDevices[ctrlNr].GetTouchDown(SteamVR_Controller.ButtonMask.ApplicationMenu))
-            if (!MD.modes[MD.activeMode].showPossibleStructures)
+            if (!ModeData.currentMode.showPossibleStructures || PythonExecuter.loadedStructure)
                 MD.RaiseMode();
 
     }

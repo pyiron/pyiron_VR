@@ -16,12 +16,16 @@ public class PythonExecuter : MonoBehaviour {
     public InGamePrinter printer;
     // the reference to the ProgressBar
     private GameObject ProgressBar;
+    // the reference to the thermometer
+    public GameObject ThermometerObject;
 
     [Header("Start Python")]
     // the file to where the python script file is located
     public static string pythonPath = "C:/Users/pneugebauer/PycharmProjects/pyiron/tests/Structures";
     // start a process which executes the commands in the shell to start the python script
-    Process myProcess = new Process();
+    private Process myProcess = new Process();
+    // shows whether the program has loaded a structure or not
+    public static bool loadedStructure;
 
     [Header("Receive data from Python")]
     // the data send from Python before all data of the structure is there.
@@ -45,20 +49,16 @@ public class PythonExecuter : MonoBehaviour {
     // the amount of atoms the new structure posseses
     public static int structureSize = 99999;
     // the temperature Python sends to Unity when sending the first structure data
-    public static int temperature;
+    public static int temperature = -1;
     // the frame Python sends to Unity this frame
     public static int frame = -1;
     // the amount of frames the current ham_lammps has
     public static int frameAmount = -1;
     // the amount of changes the Python program did after the Unity program requested it
-    public static int incomingChanges = -1;
+    public static int incomingChanges;
     // the data how the cellbox can be build
     public static Vector3[] cellBorderVecs = new Vector3[3];
 
-    // the force the atom the player requested the force from has
-    public static float[] atomForces = new float[3];
-    // the atom ID from the atom which force was sent the last time a force was requested
-    public static int lastAtomForceId = -1;
     // the forces of all the atoms
     public static float[][] allForces;
 
@@ -86,11 +86,27 @@ public class PythonExecuter : MonoBehaviour {
 
         //IS = GameObject.Find("AtomStructure").GetComponent<ImportStructure>();
         //LoadPythonScript();
-        
+
+        ResetTransferData();
     }
+
+    private void ResetTransferData()
+    {
+        // the amount of changes the Python program did after the Unity program requested it
+        incomingChanges = -1;
+        // the amount of changes the Unity program requested the Python program to do
+        outgoingChanges = 0;
+}
 
     public void LoadPythonScript(string fileName)
     {
+        if (loadedStructure)
+        {
+            ClosePythonProgress();
+            ResetTransferData();
+        }
+        print("myProgress: " + myProcess);
+        myProcess = new Process();
         var pyPathThread = new Thread(delegate () {
             Command("cd " + pythonPath + " && python " + fileName, myProcess);
         });
@@ -113,6 +129,7 @@ public class PythonExecuter : MonoBehaviour {
             myProcess.EnableRaisingEvents = true;
             myProcess.Start();
             myProcess.BeginOutputReadLine();
+            loadedStructure = true;
             //myProcess.WaitForExit();
             //myProcess.OutputDataReceived -= OutputDataReceived;
             //int ExitCode = myProcess.ExitCode;
@@ -120,9 +137,15 @@ public class PythonExecuter : MonoBehaviour {
         catch (Exception e) { print(e); }
     }
 
+    private void Update()
+    {
+        if (temperature != -1)
+            // activate the thermometer when changing into temperature mode, else deactivate it
+            ThermometerObject.SetActive(ModeData.currentMode.showTemp);
+    }
+
     private static void ReadOutput(object sender, DataReceivedEventArgs e) 
     {
-        print(e.Data + " " + currentAtomLine);
         string[] splittedData = e.Data.Split();
         if (e.Data.Contains("print"))
             print(e.Data);
@@ -256,7 +279,7 @@ public class PythonExecuter : MonoBehaviour {
         pythonsAnimSpeed += speedChange;
     }
 
-    public void OnApplicationQuit()
+    private void ClosePythonProgress()
     {
         // close the python script
         print("Application ending after " + Time.time + " seconds");
@@ -265,5 +288,10 @@ public class PythonExecuter : MonoBehaviour {
         myProcess.StandardInput.WriteLine("Stop!");
         myProcess.StandardInput.Close();
         myProcess.Close();
+    }
+
+    public void OnApplicationQuit()
+    {
+        ClosePythonProgress();
     }
 }
