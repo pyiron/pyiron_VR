@@ -91,7 +91,7 @@ public class ChooseStructure : SceneReferences
         GameObject[] newButtons = new GameObject[4];
         if (PythonFileNames.Count > 0)
             foreach (string scriptName in PythonFileNames)
-                if (ValidFileName(scriptName))
+                if (true) //(ValidFileName(scriptName))
                 {
                     newButtons[0] = InstantiatePossibleStructurButton(scriptName);
                     SetButtonTransform(newButtons[0].transform, 0);
@@ -108,7 +108,7 @@ public class ChooseStructure : SceneReferences
 
     private static bool ValidFileName(string scriptName)
     {
-        return scriptName.Contains(".py");
+        return scriptName.Contains(".py") && !scriptName.Contains(".txt");
     }
 
     private GameObject InstantiatePossibleStructurButton(string scriptName)
@@ -198,7 +198,7 @@ public class ChooseStructure : SceneReferences
             PE.LoadPythonScript(hittedButtons[trackedObj].transform.parent.GetComponentInChildren<TextMesh>().text);
             foreach (GameObject Controller in Controllers)
             {
-                //if (Controller.GetComponent<LaserGrabber>().laser != null)
+                if (Controller.GetComponent<LaserGrabber>().laser != null)
                     Controller.GetComponent<LaserGrabber>().laser.SetActive(false);
                 hittedButtons[Controller.transform] = null;
             }

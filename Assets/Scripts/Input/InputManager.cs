@@ -123,10 +123,9 @@ public class InputManager : SceneReferences
     private void CheckapplicationMenu(int ctrlNr)
     {
         if (ControllerDevices[ctrlNr].GetTouchDown(SteamVR_Controller.ButtonMask.ApplicationMenu))
-        {
-            MD.RaiseMode();
-            printer.Ctrl_print(MD.activeMode.ToString(), 40);
-        }
+            if (!MD.modes[MD.activeMode].showPossibleStructures)
+                MD.RaiseMode();
+
     }
 
     private void CheckKeyboard()

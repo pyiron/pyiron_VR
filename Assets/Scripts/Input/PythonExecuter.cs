@@ -102,7 +102,6 @@ public class PythonExecuter : MonoBehaviour {
     {
         try
         {
-            print(order);
             myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             myProcess.StartInfo.CreateNoWindow = true;  // should be true, just false for debugging purposes
             myProcess.StartInfo.UseShellExecute = false;
