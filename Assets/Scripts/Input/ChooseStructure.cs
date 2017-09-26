@@ -198,7 +198,7 @@ public class ChooseStructure : SceneReferences
             PE.LoadPythonScript(hittedButtons[trackedObj].transform.parent.GetComponentInChildren<TextMesh>().text);
             foreach (GameObject Controller in Controllers)
             {
-                if (Controller.GetComponent<LaserGrabber>().laser != null)
+                //if (Controller.GetComponent<LaserGrabber>().laser != null)
                     Controller.GetComponent<LaserGrabber>().laser.SetActive(false);
                 hittedButtons[Controller.transform] = null;
             }

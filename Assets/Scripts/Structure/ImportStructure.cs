@@ -8,13 +8,11 @@ using System.Reflection;
 
 // component of AtomStructure
 // loads the data from the files to create the structure or to animate the structure
-public class ImportStructure : MonoBehaviour {
+public class ImportStructure : SceneReferences {
     // name of the data file which contains the information about the atom structure
     public string strucFileName;
 
     [Header("Scene")]
-    // get the reference to the programm which handles the execution of python
-    public PythonExecuter PE;
     // the script of thermometer which shows which temperature the structure has
     private GameObject ThermometerObject;
 
@@ -22,8 +20,6 @@ public class ImportStructure : MonoBehaviour {
     public GameObject AtomPrefab;
     // gameobject to hold the new instance of an atom
     private GameObject currentAtom;
-    // the gameobject which holds the global settings for the program
-    public GameObject Settings;
     // script which stores the properties of each element, to give each atom it's properties
     private LocalElementData LED;
     // the data of the structure the atoms are in
@@ -88,15 +84,9 @@ public class ImportStructure : MonoBehaviour {
 
     private void Awake()
     {
-        // get the reference to the programm which handles the execution of python
-        PE = Settings.GetComponent<PythonExecuter>();
         // get the script of thermometer which shows which temperature the structure has
         ThermometerObject = GameObject.Find("MyObjects/Thermometer");
         ThermometerObject.SetActive(false);
-        // get the path to the transmitter file which holds the data pyiron send to unity
-        pathName = ProgramSettings.GetFilePath(strucFileName);
-        LED = Settings.GetComponent<LocalElementData>();
-        SD = gameObject.GetComponent<StructureData>();
         //Cellbox = GameObject.Find("AtomStructure/Cellbox");
         //Cellbox.SetActive(false);
         HourglassRotator = GameObject.Find("AtomStructure/HourglassRotator");
@@ -107,6 +97,14 @@ public class ImportStructure : MonoBehaviour {
                 fps_display = text;
 
         try { File.Delete(pathName); } catch { } // print("couldn't delete file");}
+        GetReferenceToReferences();
+        GetSettingsReferences();
+        GetControllerReferences();
+
+        // get the path to the transmitter file which holds the data pyiron send to unity
+        pathName = ProgramSettings.GetFilePath(strucFileName);
+        LED = Settings.GetComponent<LocalElementData>();
+        SD = gameObject.GetComponent<StructureData>();
     }
 
     void Start()
@@ -212,6 +210,10 @@ public class ImportStructure : MonoBehaviour {
             // create the instance of the boundingbox
             SD.boundingbox = Instantiate(BoundingboxPrefab);
             SD.boundingbox.transform.parent = gameObject.transform;
+
+            // show the controllers the reference to the boundingbox
+            foreach (LaserGrabber LG in LGs)
+                LG.boundingbox = SD.boundingbox.transform;
 
             // create the cubes for the cell box and the parent cellBox
             Cellbox = new GameObject();

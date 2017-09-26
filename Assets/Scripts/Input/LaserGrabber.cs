@@ -34,7 +34,7 @@ public class LaserGrabber : SceneReferences
     // the Vector between the controller rotation and the grabbed object rotation
     // private Vector3 objToHandRot; // might be needed to rotate the atom
     // the vector between the positions of the boundingbox and it's parent
-    private Transform boundingbox;
+    public Transform boundingbox;
 
     [Header("Laser")]
     // the prefab for the laser
@@ -123,12 +123,12 @@ public class LaserGrabber : SceneReferences
 
         // get the reference to the Script that handles the mode in which the user can choose the structure he wants to see
         GetChooseStructureReferences();
-}
+
+        InitLaser();
+    }
 
     void Start()
     {
-        InitLaser();
-
         // set the variable to the name of the mask
         ctrlMaskName = ProgramSettings.GetLayerName(ctrlMask);
         // get the script StructureData from AtomStructure
