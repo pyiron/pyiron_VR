@@ -20,8 +20,6 @@ public class PythonExecuter : MonoBehaviour {
     [Header("Start Python")]
     // the file to where the python script file is located
     public static string pythonPath = "C:/Users/pneugebauer/PycharmProjects/pyiron/tests/Structures";
-    // the name of the python file which creates the structure for Unity
-    public string pythonFileName;
     // start a process which executes the commands in the shell to start the python script
     Process myProcess = new Process();
 
@@ -91,10 +89,10 @@ public class PythonExecuter : MonoBehaviour {
         
     }
 
-    public void LoadPythonScript()
+    public void LoadPythonScript(string fileName)
     {
         var pyPathThread = new Thread(delegate () {
-            Command("cd " + pythonPath + " && python " + pythonFileName + ".py", myProcess);
+            Command("cd " + pythonPath + " && python " + fileName, myProcess);
         });
         pyPathThread.Start();
         //Command("cd " + pythonPath + " && python " + pythonFileName + ".py", myProcess);
@@ -104,6 +102,7 @@ public class PythonExecuter : MonoBehaviour {
     {
         try
         {
+            print(order);
             myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             myProcess.StartInfo.CreateNoWindow = true;  // should be true, just false for debugging purposes
             myProcess.StartInfo.UseShellExecute = false;

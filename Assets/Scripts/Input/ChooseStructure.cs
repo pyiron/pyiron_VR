@@ -8,6 +8,8 @@ public class ChooseStructure : SceneReferences
     [Header("Scene")]
     // the Transform of the Headset
     private Transform HeadTransform;
+    // get the data about the modes
+    public ModeData MD;
 
     // start a process which executes the commands in the shell to start the python script
     Process myProcess = new Process();
@@ -25,8 +27,7 @@ public class ChooseStructure : SceneReferences
     private int buttonRowLength = 5;
 
     public static bool shouldShowPossibleStructures;
-
-    private GameObject hittedButton;
+    // the keys are the controllers transforms, the values the buttons the controllers currently point to
     private Dictionary<Transform, GameObject> hittedButtons = new Dictionary<Transform, GameObject>();
 
     private Dictionary<string, Color> Colors = new Dictionary<string, Color>()
@@ -42,6 +43,7 @@ public class ChooseStructure : SceneReferences
         //HeadTransform = GameObject.Find("[CameraRig]/Camera (head)").transform;
         GetReferenceToReferences();
         GetControllerReferences();
+        GetSettingsReferences();
         // look which Python Scripts can be executed
         GetPythonScripts();
 
@@ -193,9 +195,14 @@ public class ChooseStructure : SceneReferences
         if (hittedButtons[trackedObj] != null)
         {
             hittedButtons[trackedObj].GetComponent<Renderer>().material.color = Colors["Idle"];
-            hittedButtons[trackedObj] = null;
+            PE.LoadPythonScript(hittedButtons[trackedObj].transform.parent.GetComponentInChildren<TextMesh>().text);
             foreach (GameObject Controller in Controllers)
-                Controller.GetComponent<LaserGrabber>().laser.SetActive(false);
+            {
+                if (Controller.GetComponent<LaserGrabber>().laser != null)
+                    Controller.GetComponent<LaserGrabber>().laser.SetActive(false);
+                hittedButtons[Controller.transform] = null;
+            }
+            MD.RaiseMode();
         }
     }
 

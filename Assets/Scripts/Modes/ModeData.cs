@@ -95,10 +95,11 @@ public class ModeData : MonoBehaviour
 
     public void RaiseMode()
     {
+        if (!modes[activeMode].showPossibleStructures)
+            // stop the currently running animation
+            OTP.RunAnim(false);
         // raise the mode nr by one, except it reached the highest mode, then set it to 0
         activeMode = (activeMode + 1) % modes.Count;
-        // stop the currently running animation
-        OTP.RunAnim(false);
         UpdateScene();
     }
 
