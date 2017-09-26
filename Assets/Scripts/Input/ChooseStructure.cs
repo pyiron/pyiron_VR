@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
 
-public class ChooseStructure : MonoBehaviour
+public class ChooseStructure : SceneReferences
 {
     [Header("Scene")]
     // the Transform of the Headset
@@ -39,7 +39,9 @@ public class ChooseStructure : MonoBehaviour
     {
         // get the reference to the transform of the headset
         //HeadTransform = GameObject.Find("[CameraRig]/Camera (head)").transform;
-
+        GetReferenceToReferences();
+        GetControllerReferences();
+        // look which Python Scripts can be executed
         GetPythonScripts();
     }
 
@@ -170,13 +172,16 @@ public class ChooseStructure : MonoBehaviour
             hittedButton = hit.transform.gameObject;
             print(hit.transform.parent.GetComponentInChildren<TextMesh>().text);
             hit.transform.GetComponent<Renderer>().material.color = Colors["clicked"];
+            trackedObj.GetComponent<LaserGrabber>().laser.SetActive(true);
+            trackedObj.GetComponent<LaserGrabber>().ShowLaser(hit);
         }
         else
             if (hittedButton != null)
             {
                 hittedButton.GetComponent<Renderer>().material.color = Colors["Idle"];
                 hittedButton = null;
-            }   
+                trackedObj.GetComponent<LaserGrabber>().laser.SetActive(true);
+        }   
     }
 
     public void HairTriggerUp(Transform trackedObj)
@@ -185,6 +190,8 @@ public class ChooseStructure : MonoBehaviour
         {
             hittedButton.GetComponent<Renderer>().material.color = Colors["Idle"];
             hittedButton = null;
+            foreach (GameObject Controller in Controllers)
+                Controller.GetComponent<LaserGrabber>().laser.SetActive(false);
         }
     }
 

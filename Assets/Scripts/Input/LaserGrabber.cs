@@ -775,12 +775,12 @@ public class LaserGrabber : SceneReferences
         attachedObject = null;
     }
     
-    private void ShowLaser(RaycastHit hit) 
+    public void ShowLaser(RaycastHit hit) 
     {
         // set the laserposition in the middle between the controller and the hitpoint
-        laserTransform.position = Vector3.Lerp(trackedObj.transform.position, hitPoint, .5f);
+        laserTransform.position = Vector3.Lerp(trackedObj.transform.position, hit.point, .5f);
         // rotate the laser
-        laserTransform.LookAt(hitPoint);
+        laserTransform.LookAt(hit.point);
         // scale the vector
         laserTransform.localScale = new Vector3(laserTransform.localScale.x, laserTransform.localScale.y,
             hit.distance);
