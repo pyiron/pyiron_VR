@@ -27,6 +27,7 @@ public class ChooseStructure : SceneReferences
     public static bool shouldShowPossibleStructures;
 
     private GameObject hittedButton;
+    private Dictionary<Transform, GameObject> hittedButtons = new Dictionary<Transform, GameObject>();
 
     private Dictionary<string, Color> Colors = new Dictionary<string, Color>()
     {
@@ -43,6 +44,9 @@ public class ChooseStructure : SceneReferences
         GetControllerReferences();
         // look which Python Scripts can be executed
         GetPythonScripts();
+
+        foreach (GameObject Controller in Controllers)
+            hittedButtons.Add(Controller.transform, null);
     }
 
     private Vector3 GetFirstButtonPos()
@@ -76,8 +80,8 @@ public class ChooseStructure : SceneReferences
 
     void Start()
     {
-        foreach (string scriptName in PythonFileNames)
-            print(scriptName);
+        //foreach (string scriptName in PythonFileNames)
+        //    print(scriptName);
     }
 
     private void ShowPossibleStructures()
@@ -153,14 +157,14 @@ public class ChooseStructure : SceneReferences
 
     public void HairTriggerDown(Transform trackedObj)
     {
-        RaycastHit hit;
+        /*RaycastHit hit;
         if (Physics.Raycast(trackedObj.position, trackedObj.forward, out hit, LaserGrabber.laserMaxDistance))
         {
             if (!hit.transform.parent.name.Contains("PythonScript")) return;
             hittedButton = hit.transform.gameObject;
             print(hit.transform.parent.GetComponentInChildren<TextMesh>().text);
             hit.transform.GetComponent<Renderer>().material.color = Colors["clicked"];
-        }
+        }*/
     }
 
     public void WhileHairTriggerDown(Transform trackedObj)
@@ -169,27 +173,27 @@ public class ChooseStructure : SceneReferences
         if (Physics.Raycast(trackedObj.position, trackedObj.forward, out hit, LaserGrabber.laserMaxDistance))
         {
             if (!hit.transform.parent.name.Contains("PythonScript")) return;
-            hittedButton = hit.transform.gameObject;
-            print(hit.transform.parent.GetComponentInChildren<TextMesh>().text);
+            hittedButtons[trackedObj] = hit.transform.gameObject;
+            //hittedButton = hit.transform.gameObject;
             hit.transform.GetComponent<Renderer>().material.color = Colors["clicked"];
             trackedObj.GetComponent<LaserGrabber>().laser.SetActive(true);
             trackedObj.GetComponent<LaserGrabber>().ShowLaser(hit);
         }
         else
-            if (hittedButton != null)
+            if (hittedButtons[trackedObj] != null)
             {
-                hittedButton.GetComponent<Renderer>().material.color = Colors["Idle"];
-                hittedButton = null;
+                hittedButtons[trackedObj].GetComponent<Renderer>().material.color = Colors["Idle"];
+                hittedButtons[trackedObj] = null;
                 trackedObj.GetComponent<LaserGrabber>().laser.SetActive(true);
         }   
     }
 
     public void HairTriggerUp(Transform trackedObj)
     {
-        if (hittedButton != null)
+        if (hittedButtons[trackedObj] != null)
         {
-            hittedButton.GetComponent<Renderer>().material.color = Colors["Idle"];
-            hittedButton = null;
+            hittedButtons[trackedObj].GetComponent<Renderer>().material.color = Colors["Idle"];
+            hittedButtons[trackedObj] = null;
             foreach (GameObject Controller in Controllers)
                 Controller.GetComponent<LaserGrabber>().laser.SetActive(false);
         }

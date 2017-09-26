@@ -329,6 +329,8 @@ public class LaserGrabber : SceneReferences
             attachedObject = null;
             laser.SetActive(false);
         }
+        if (MD.modes[MD.activeMode].showPossibleStructures)
+            CS.HairTriggerUp(trackedObj.transform);
     }
 
     // show that the laser is currently active and it's possible in the current move to move atoms, and that the laser doesn't point on the thermometer
