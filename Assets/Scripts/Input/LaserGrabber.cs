@@ -65,7 +65,7 @@ public class LaserGrabber : SceneReferences
     // so that the python program knows whether to load a new animation or not
     public static bool firstAnimStart = true;
     // shows if the current lammps is a calc_md or calc_minimize
-    private bool lammpsIsMd;
+    private static bool lammpsIsMd;
     // shows whether the positions of the atoms are still the same es they were when the last ham_lammps was created
     private static bool positionsHaveChanged;
     // a timer, which counts when the program should go a frame forward or backwards, when keeping the one frame forward button pressed
@@ -452,6 +452,8 @@ public class LaserGrabber : SceneReferences
                 else;
             else
             {
+                LoadNewLammps();
+
                 // go one frame forward
                 PE.SendOrder("self.move_one_frame(True)");
                 // show that the user pressed the button to go one step forward
@@ -467,6 +469,8 @@ public class LaserGrabber : SceneReferences
                 else;
             else
             {
+                LoadNewLammps();
+
                 // go one frame back
                 //PE.SendOrder("self.frame = (len(self.all_positions) - ((len(self.all_positions) - self.frame) " +
                 //    "% len(self.all_positions))) - 1");
@@ -477,51 +481,7 @@ public class LaserGrabber : SceneReferences
             OTP.RunAnim(false);
         else
         {
-            bool temperatureHasChanged = false;
-            // check if the thermometer has been initialised yet and is currently active
-            if (thermometerScript != null)
-            {
-
-                // send Python the order to change the temperature if the user has changed the temperature on the thermometer
-                if (thermometerScript.lastTemperature != ProgramSettings.temperature)
-                {
-                    PE.SendOrder("self.temperature = " + ProgramSettings.temperature);
-                    // remember that a new ham_lammps has to be loaded
-                    temperatureHasChanged = true;
-                    // remember that the last ham_lammps has been created with the current temperature
-                    thermometerScript.lastTemperature = ProgramSettings.temperature;
-                }
-            }
-
-            // check if the positions of any atom has been changed since the last animation has been started
-            if (positionsHaveChanged || lammpsIsMd != ModeData.currentMode.showTemp) // add this: || PythonExecuter.frame != 0    to let the program load a new anima if the frame has changed
-            {
-                // send the new positions to Python
-                positionsHaveChanged = true;
-                // send Python the new positions of all atoms
-                OTP.SetNewPositions();
-            }
-            print("positionsHaveChanged" + positionsHaveChanged);
-            print(" and " + (lammpsIsMd != ModeData.currentMode.showTemp));
-            print(" and2 " + firstAnimStart);
-
-            // when loading the first animation, show Python that it's the first time, so that it can check if there is already a loaded ham_lammps
-            if (firstAnimStart)
-            {
-                LoadNewLammps("self.calculate");
-                firstAnimStart = false;
-                positionsHaveChanged = false;
-            }
-            // tell Python to create a new ham_lammps because the structure or it's temperature has changed
-            else if (temperatureHasChanged || positionsHaveChanged)
-            {
-                LoadNewLammps("self.create_new_lammps");
-                // remember that the ham_lammps is now according to the current structure
-                positionsHaveChanged = false;
-            }
-            // load a new ham_lammps if the current ham_lammps is for md and the animation for minimize is needed or vice versa
-            //else if (lammpsIsMd != MD.modes[MD.activeMode].showTemp)
-            //    LoadNewLammps("self.create_new_lammps");
+            LoadNewLammps();
 
             // tell Python to start sending the dataframes from the current ham_lammps
             OTP.RunAnim(true);
@@ -529,6 +489,53 @@ public class LaserGrabber : SceneReferences
 
         // update the symbols on on all active controllers
         UpdateSymbols();
+    }
+
+    // send an Order to Python that it should create a new ham_lammps
+    private void LoadNewLammps()
+    {
+        bool temperatureHasChanged = false;
+        // check if the thermometer has been initialised yet and is currently active
+        if (thermometerScript != null)
+        {
+
+            // send Python the order to change the temperature if the user has changed the temperature on the thermometer
+            if (thermometerScript.lastTemperature != ProgramSettings.temperature)
+            {
+                PE.SendOrder("self.temperature = " + ProgramSettings.temperature);
+                // remember that a new ham_lammps has to be loaded
+                temperatureHasChanged = true;
+                // remember that the last ham_lammps has been created with the current temperature
+                thermometerScript.lastTemperature = ProgramSettings.temperature;
+            }
+        }
+
+        // check if the positions of any atom has been changed since the last animation has been started
+        if (positionsHaveChanged || lammpsIsMd != ModeData.currentMode.showTemp) // add this: || PythonExecuter.frame != 0    to let the program load a new anima if the frame has changed
+        {
+            // send the new positions to Python
+            positionsHaveChanged = true;
+            // send Python the new positions of all atoms
+            OTP.SetNewPositions();
+        }
+
+        // when loading the first animation, show Python that it's the first time, so that it can check if there is already a loaded ham_lammps
+        if (firstAnimStart)
+        {
+            LoadNewLammps("self.calculate");
+            firstAnimStart = false;
+            positionsHaveChanged = false;
+        }
+        // tell Python to create a new ham_lammps because the structure or it's temperature has changed
+        else if (temperatureHasChanged || positionsHaveChanged)
+        {
+            LoadNewLammps("self.create_new_lammps");
+            // remember that the ham_lammps is now according to the current structure
+            positionsHaveChanged = false;
+        }
+        // load a new ham_lammps if the current ham_lammps is for md and the animation for minimize is needed or vice versa
+        //else if (lammpsIsMd != MD.modes[MD.activeMode].showTemp)
+        //    LoadNewLammps("self.create_new_lammps");
     }
 
     // update the symbols on all active controllers
