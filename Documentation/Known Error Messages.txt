@@ -1,0 +1,10 @@
+InvalidOperationException: StandardIn has not been redirected.
+System.Diagnostics.Process.get_StandardInput () (at <f044fe2c9e7e4b8e91984b41f0cf0b04>:0)
+(wrapper remoting-invoke-with-check) System.Diagnostics.Process:get_StandardInput ()
+PythonExecuter.ClosePythonProgress () (at Assets/Scripts/Input/PythonExecuter.cs:294)
+PythonExecuter.OnApplicationQuit () (at Assets/Scripts/Input/PythonExecuter.cs:301)
+
+
+This error should be no problem, because it just happened to me when trying to exit the program. It means that the program wants to close the shell opening python, but this shell/progress isn't instantiated yet.
+
+Could be solved by just making a try/catch phrase or testing whether myProgress is initialised.

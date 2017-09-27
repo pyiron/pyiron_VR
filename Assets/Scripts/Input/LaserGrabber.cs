@@ -494,19 +494,23 @@ public class LaserGrabber : SceneReferences
             }
 
             // check if the positions of any atom has been changed since the last animation has been started
-            if (PythonExecuter.frame != 0 || positionsHaveChanged || lammpsIsMd != ModeData.currentMode.showTemp)
+            if (positionsHaveChanged || lammpsIsMd != ModeData.currentMode.showTemp) // add this: || PythonExecuter.frame != 0    to let the program load a new anima if the frame has changed
             {
                 // send the new positions to Python
                 positionsHaveChanged = true;
                 // send Python the new positions of all atoms
                 OTP.SetNewPositions();
             }
+            print("positionsHaveChanged" + positionsHaveChanged);
+            print(" and " + (lammpsIsMd != ModeData.currentMode.showTemp));
+            print(" and2 " + firstAnimStart);
 
             // when loading the first animation, show Python that it's the first time, so that it can check if there is already a loaded ham_lammps
             if (firstAnimStart)
             {
                 LoadNewLammps("self.calculate");
                 firstAnimStart = false;
+                positionsHaveChanged = false;
             }
             // tell Python to create a new ham_lammps because the structure or it's temperature has changed
             else if (temperatureHasChanged || positionsHaveChanged)

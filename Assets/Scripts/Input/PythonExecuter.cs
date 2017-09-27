@@ -105,7 +105,6 @@ public class PythonExecuter : MonoBehaviour {
             ClosePythonProgress();
             ResetTransferData();
         }
-        print("myProgress: " + myProcess);
         myProcess = new Process();
         var pyPathThread = new Thread(delegate () {
             Command("cd " + pythonPath + " && python " + fileName, myProcess);
@@ -140,8 +139,10 @@ public class PythonExecuter : MonoBehaviour {
     private void Update()
     {
         if (temperature != -1)
+        {
             // activate the thermometer when changing into temperature mode, else deactivate it
             ThermometerObject.SetActive(ModeData.currentMode.showTemp);
+        }
     }
 
     private static void ReadOutput(object sender, DataReceivedEventArgs e) 
@@ -203,7 +204,10 @@ public class PythonExecuter : MonoBehaviour {
                     }
                 }
             if (ContainsValue(splittedData[2]))
+            {
                 temperature = int.Parse(splittedData[2]);
+                print(temperature);
+            }
             if (ContainsValue(splittedData[3]))
                 frame = int.Parse(splittedData[3]);
             if (ContainsValue(splittedData[4]))
