@@ -142,6 +142,7 @@ public class PythonExecuter : MonoBehaviour {
         {
             // activate the thermometer when changing into temperature mode, else deactivate it
             ThermometerObject.SetActive(ModeData.currentMode.showTemp);
+            ThermometerObject.GetComponent<Thermometer>().UpdateTemperature();
         }
     }
 

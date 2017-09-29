@@ -35,7 +35,7 @@ public class Thermometer : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        UpdateTemperature();
+        //UpdateTemperature();
         ThermometerText.transform.localScale = Vector3.one * TextSize;
         
         // get the reference to the Renderer of the thermometer

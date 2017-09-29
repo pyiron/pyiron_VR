@@ -12,6 +12,8 @@ public class ProgramSettings : MonoBehaviour {
     public Transform HeadTransform;
     // the HeadTransform but as a static variable
     private static Transform StaticHeadTransform;
+    // the reference to the Thermometer object
+    private GameObject ThermometerObject;
 
     [Header("Settings")]
     // the global size multiplikator
@@ -40,6 +42,8 @@ public class ProgramSettings : MonoBehaviour {
         
         // make the Headtransform static
         StaticHeadTransform = HeadTransform;
+        // the reference to the Thermometer object
+        ThermometerObject = GameObject.Find("MyObjects/Thermometer");
     }
 
     // just a little function that returns the whole path to a text file from its components
@@ -71,5 +75,6 @@ public class ProgramSettings : MonoBehaviour {
     {
         LaserGrabber.firstAnimStart = true;
         PythonExecuter.temperature = -1;
+        ThermometerObject.SetActive(false);
     }
 }
