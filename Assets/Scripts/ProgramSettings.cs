@@ -76,5 +76,8 @@ public class ProgramSettings : MonoBehaviour {
         LaserGrabber.firstAnimStart = true;
         PythonExecuter.temperature = -1;
         ThermometerObject.SetActive(false);
+        StructureData SD = GetComponent<StructureData>();
+        SD.atomCtrlPos = new List<Vector3>(SD.atomCtrlPos.Count);  // seems not to work
+        SD.structureCtrlPos = Vector3.zero;  // seems not to work
     }
 }

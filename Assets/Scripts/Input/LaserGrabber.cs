@@ -168,8 +168,8 @@ public class LaserGrabber : SceneReferences
 
     void Update()
     {
-        printer.Ctrl_print(PythonExecuter.outgoingChanges.ToString(), 120);
-        printer.Ctrl_print(PythonExecuter.incomingChanges.ToString(), 120, false);
+        printer.Ctrl_print("Send: " + PythonExecuter.outgoingChanges.ToString(), 120);
+        printer.Ctrl_print("Received: " + PythonExecuter.incomingChanges.ToString(), 120, false);
         if (ModeData.currentMode.playerCanMoveAtoms)
         {
             // move the grabbed object
@@ -460,8 +460,6 @@ public class LaserGrabber : SceneReferences
                 // show that the user pressed the button to go one step forward
                 moveOneFrameTimer = 0;
             }
-        // PE.SendOrder("self.frame = (self.frame + 1) % len(self.all_positions)");
-        //PE.SendOrder(runAnim: true);
         else if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).x < -0.5)
             if (OrdersToPython.pythonRunsAnim)
                 // send Python the order to play the animation faster. if it isn't already at it's fastest speed
@@ -473,8 +471,6 @@ public class LaserGrabber : SceneReferences
                 LoadNewLammps();
 
                 // go one frame back
-                //PE.SendOrder("self.frame = (len(self.all_positions) - ((len(self.all_positions) - self.frame) " +
-                //    "% len(self.all_positions))) - 1");
                 PE.SendOrder("self.move_one_frame(False)");
                 moveOneFrameTimer = 0;
             }

@@ -163,19 +163,6 @@ public class OrdersToPython : SceneReferences
                 Controller.GetComponent<ControllerSymbols>().SetSymbol();
     }
 
-    // outdated by RequestForces
-    public void RequestForceOrder(string order)
-    {
-        // TODO: Check if the Input is valid
-        RequestForce(int.Parse(order.Split()[4]));
-    }
-
-    // outdated by RequestForces
-    public void RequestForce(int atomNr)
-    {
-        PE.SendOrder("self.send_forces(" + atomNr + ")");
-    }
-
     // request the forces of all atoms from Python
     public void RequestAllForces()
     {

@@ -1,0 +1,58 @@
+- bring the python program to PEP-8 standard and fix TODOs
+(- try to set the position of the atoms to 0 when they are at pos 0,0000000001 in Python (or give them in numpy units))
+- set the size of MyObjects to 0.3, not the size of the atomStructure
+(- implement extracting compressed position data in Unity)
+- fix bug that the awake of the lasergrabber is called after the start function of the other scripts 
+  -> let the trashcan deactivate itself, instead of letting the lasergrabber do so 
+- fix bug that just one controller (the left) can activate both ctrl_printers and that just the left controller can change the modes, but backwards, which happens sometimes if not both controllers are activated at the same time
+- set always the same controller to right and left
+(- after the structure has been duplicated the whole structure gets moved away one time.)
+- bug: false position of the cellbox after it has been moved a bit before the structure has loaded
+- implement that the animation can be controlled by the player
+- fix bug that sometimes there are error messages "MissingReferenceException: The object of type 'Transform' has been destroyed but you are still trying to access it." after deleting atoms, most likely because the wrong atom has been destroyed
+(- check what happens if an controller deactivates itself after not being used for too long (could maybe happen in a presentation))
+
+- fix bug that the houglass vanishes after a tenth of a second
+- fix bug that the trigger Input of one controller gets sometimes send to both controllers, while the other controller can't do anything (not even use the touchpad I think), if they are initialised in the wrong order
+- Make Unity send an order to Python when at least one atom has been removed
+- make functions in Unity for each order which can be send to Python (other functions than DestroyAtom have to be implemented)
+- Let Unity send an order to Python with the current frame requesting the force data (of one atom or all) when being in info mode, else let it not send the force data
+- Let Python send the amount of frames in the beginning
+- Let Unity show in a time bar which frame is currently shown.
+- try to create a script, from which most other scripts are children from, and which gives them the important references to some (or maybe all) scripts
+- stop the 3D text from shining through other objects
+(- Stop the error messages which pop up if the program has been started while one of the controllers was inactive.)
+
+
+Here are some ideas of what would be nice to be implemented in VA, but I hadn't time to implement it:
+(the first ones might be a bit nasty, but I think it should help to understand the program and will help later on, also if there is no real visible difference)
+e: easy, m: medium, h: hard
+- e: bring the python program to PEP-8 standard
+- e: look at Bug Nr 1!
+- e: let more scripts derive from SceneReferences, and let SceneReferences get Access to more variables
+- e: make a new Material, that the laser should have if the HairTrigger got pressed but it isn't hitting anything. Then implement that the laser should not be deactivated if not pointing towards anything, but have the new Material. And it has to turn back when hitting something (except maybe in temperature and relaxation mode, see next line).
+- e: when in temperature or relaxtion mode, it's sometimes hard to grab the right atom. This will be better if the laser is still there if it doesn't hit, but it can still be made better. My idea would be that an atom would just be appended to the controller if the controller points on it for a second. This way, it wouldn't matter if the user managed to hit an atom when starting to press the HairTrigger down. 
+	just a crazy idea how to indicate the user can take the atom if he holds it down for a while, not a must have:
+	- let the atom make a perlin shake (ask youtube tutorials about it, it's easy) if the laser is on it 
+- e/m: try to increase the number of how many atoms can be shown. I think there might be a bug in the Pythonscript, making it too slow when sending more than 100 atoms, but the Unity program could be too slow either. In Unity might be many things could get reworked to increase the performance. Most of them are in ImportStructure, because this script iterates over all atoms, maybe some are also in the PythonExecuter when it receives the data from Python. Try for example to just set new values (f.g. a new color) if the old ones have changed, although I can't guarantee this will help. Or try to get the min and max position data in the same loop as when initialising all new attoms and setting the new positions, also no guarantee that it helps.
+- try to fix errors, some are more important, some less, some easier to fix and some harder
+- e: try to simplify the code, f.g. by combining two almost similar functions to one
+- implement the animation of the trashcan (some information for this are in the documentation), instead of having the top of the can just being moved to the side. Is not so important, but might look better. You can try this out by just playing a bit with the animationController in the Inspector (make sure you have clicked on the trashcanobject before)
+- h: Add a Python Parser that takes files as input and feeds Unity the same data as my Python Script does, and which also can handle some Input from Unity, as Start/Stop. For that, you should just look how it is done in my script and copy some parts. Also I would recommend adding a new mode for this.
+- m: add a periodic system to add new atoms to the structure. I would recommend adding a new mode for this.
+- m/h: implement that either the Python program (easier) or the Unity program (a bit more efficient) uses polarisation. This way, loading time of PyIron and performance can be increased greatly!
+- m/h: try to load the PyIron data "live", so for example let it first just load half the animation and while displaying it load the other half, or 
+- h: make PyIron load faster then how fast the animation gets displayed. If this is achieved somehow (maybe by polaristation), let the new animation load while simultaneously displaying the new loaded frames
+- h: add a new mode, in which it is possible to stretch the structure or to press it together. I would recommend adding a new mode for this. Ask Jörg for further information.
+- (h): add that grain boundaries can be shown. For further information, ask somebody else than me. I would recommend adding a new mode for this.
+- m: change, that the mode can be changed by releasing the Application Menu button, instead of pressing it. Then implement, that the user can press the application for a second to get into a mode or receive some kind of UI where he can choose the next mode where he wants to be in. This might be needed after more modes got added.
+- m/h (depending on what you implement of these): make it possible to change the remaining factors concerning a ham_lammps, the n_ionic_steps, the n_prints and the potential, and maybe something I miss. I don't what the best way to do this is, so just be creative!
+- h: show the periodic boundary condition. So not just one cell should be shown, but also other cells. Maybe this shouldn't be always the case, but just when you move an atom, or when an atom leaves the structure due to the ham_lammps animation. You can maybe ask Ali for some details, but I'm not completely sure if he told me this or not.
+- Use the 3D Beamer (See CreateBuilds for more Info) or the 3D Screen to show what the one with the HTC Vive sees in 3D
+
+
+Known bugs:
+- e: when loading a new structure for the second (or higher) time, some values don't get resetted, f.g. how the player has moved an atom or the structure. This should be resetted. Also, it would look better if the old structure wouldn't be visible while loading the new one. Maybe all atoms can just be deleted.
+- m/h: all kind of bugs when not having the controllers activated beore starting the program. Try just to send a message like: "Press Escape!" and deactivate everything else if not both controllers are activated. My problem was, that I didn't get how to test if a controller is active or not.
+- there is an error that the Python program sometimes crashes when destroying an atom in Unity.
+e: When resizing the structure, the structure moves away. This could be changed relatively easy I think, but it's not so important.
