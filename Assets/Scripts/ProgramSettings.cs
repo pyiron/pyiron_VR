@@ -27,10 +27,6 @@ public class ProgramSettings : MonoBehaviour {
     // the width the borders of the cellbox should have
     public static float cellboxWidth = 0.1f;
 
-    [Header("Data")]
-    // the temperature each structure in the Scene has
-    public static int temperature;
-
     private void Awake()
     {
         // defines where the file is stored which holds the data about the structure 
@@ -74,5 +70,6 @@ public class ProgramSettings : MonoBehaviour {
     public void ResetScene()
     {
         LaserGrabber.firstAnimStart = true;
+        PythonExecuter.temperature = -1;
     }
 }

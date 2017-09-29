@@ -307,7 +307,6 @@ public class ImportStructure : SceneReferences {
         if (firstImport)
         {
             firstImport = false;
-            ProgramSettings.temperature = PythonExecuter.temperature;
             ThermometerObject.SetActive(true);
         }
         newImport = false;

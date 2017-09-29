@@ -47,7 +47,7 @@ public class Thermometer : MonoBehaviour {
         ChangeLiquidColor();
 
         // set lastTemperature to the value the thermometer has been initialised with
-        lastTemperature = ProgramSettings.temperature;
+        lastTemperature = PythonExecuter.temperature;
     }
 	
 	// Update is called once per frame
@@ -59,14 +59,14 @@ public class Thermometer : MonoBehaviour {
     public void UpdateTemperature(int exactTemperature = -1)
     {
         // set the current temperature on the text field
-        ThermometerText.text = ProgramSettings.temperature.ToString();
+        ThermometerText.text = PythonExecuter.temperature.ToString();
         // set the red liquid to the right state / up to the right height
         if (exactTemperature != -1)
             anim.SetFloat("Temperature", (float)exactTemperature / maxTemperature);
         else
             // set the temperature to an exact value, although the temperature is rounded,
             // to make it look smooth how the temperature gets scaled
-            anim.SetFloat("Temperature", (float)ProgramSettings.temperature / maxTemperature);
+            anim.SetFloat("Temperature", (float)PythonExecuter.temperature / maxTemperature);
     }
 
     // change the color if the user interacts with the thermometer
@@ -95,12 +95,12 @@ public class Thermometer : MonoBehaviour {
             newTemperatureGradient = 1;
 
         // set the temperature to the new value
-        ProgramSettings.temperature = (int)(precision * newTemperatureGradient) * maxTemperature / precision;
+        PythonExecuter.temperature = (int)(precision * newTemperatureGradient) * maxTemperature / precision;
 
         // if the temperature would be less or equal 0, the program will set it to 1, because PyIron would crash if it would get the temperature 0
-        if (ProgramSettings.temperature <= 0)
+        if (PythonExecuter.temperature <= 0)
         {
-            ProgramSettings.temperature = 1;
+            PythonExecuter.temperature = 1;
             // if the user points to a point lower than 0, the temperature will still be shown as 0 and not a negative value
             if (newTemperatureGradient <= 0)
                 newTemperatureGradient = 0;

@@ -501,13 +501,13 @@ public class LaserGrabber : SceneReferences
         {
 
             // send Python the order to change the temperature if the user has changed the temperature on the thermometer
-            if (thermometerScript.lastTemperature != ProgramSettings.temperature)
+            if (thermometerScript.lastTemperature != PythonExecuter.temperature)
             {
-                PE.SendOrder("self.temperature = " + ProgramSettings.temperature);
+                PE.SendOrder("self.temperature = " + PythonExecuter.temperature);
                 // remember that a new ham_lammps has to be loaded
                 temperatureHasChanged = true;
                 // remember that the last ham_lammps has been created with the current temperature
-                thermometerScript.lastTemperature = ProgramSettings.temperature;
+                thermometerScript.lastTemperature = PythonExecuter.temperature;
             }
         }
 
