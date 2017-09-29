@@ -39,12 +39,14 @@ public class InGamePrinter : MonoBehaviour {
 
     public void Ctrl_print(string text, int importance=0, bool rightCtrl = true)
     {
-        if (!rightCtrl)
-            if (importance >= currentImportance[0])
-                printText[0] = text;
-            else;
-        else
-            if (importance >= currentImportance[1])
-                printText[1] = text;
+        int ctrlNr = 0;
+        if (rightCtrl)
+            ctrlNr = 1;
+
+        if (importance >= currentImportance[ctrlNr])
+        {
+            printText[ctrlNr] = text;
+            currentImportance[ctrlNr] = importance;
+        }
     }
 }

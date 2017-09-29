@@ -144,6 +144,7 @@ public class PythonExecuter : MonoBehaviour {
             ThermometerObject.SetActive(ModeData.currentMode.showTemp);
             ThermometerObject.GetComponent<Thermometer>().UpdateTemperature();
         }
+        printer.Ctrl_print("YAY", 200);
     }
 
     private static void ReadOutput(object sender, DataReceivedEventArgs e) 

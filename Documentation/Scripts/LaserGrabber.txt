@@ -8,7 +8,7 @@ If something is connected by the laser, and the controller got moved, the object
 
 If a single atom gets moved into the trashcan, the script will call the DestroyAtom function of OrdersToPython Script.
 
-If a controller points towards the thermometer, the Hairtrigger gets pressed and there is nothing in front of the thermometer, both controllers can set a new temperature. By pressing the Touchpad up or down while having the laser on the thermometer, the scale how the temperature can be changed gets changed. The LG does al that.
+If a controller points towards the thermometer, the Hairtrigger gets pressed and there is nothing in front of the thermometer, both controllers can set a new temperature. By pressing the Touchpad up or down while having the laser on the thermometer, the scale how the temperature can be changed gets changed. The LG does all that.
 
 In "Choose a structure" mode, the LG script mainly just sends the call that a button is pressed to the ChooseStructure Script, which will then still use some public functions of the LG, f.g. the ShowLaser function.
 
