@@ -329,6 +329,7 @@ public class LaserGrabber : SceneReferences
             attachedObject = null;
             laser.SetActive(false);
         }
+
         if (ModeData.currentMode.showPossibleStructures)
             CS.HairTriggerUp(trackedObj.transform);
     }

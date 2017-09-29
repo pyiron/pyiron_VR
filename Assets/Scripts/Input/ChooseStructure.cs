@@ -159,14 +159,7 @@ public class ChooseStructure : SceneReferences
 
     public void HairTriggerDown(Transform trackedObj)
     {
-        /*RaycastHit hit;
-        if (Physics.Raycast(trackedObj.position, trackedObj.forward, out hit, LaserGrabber.laserMaxDistance))
-        {
-            if (!hit.transform.parent.name.Contains("PythonScript")) return;
-            hittedButton = hit.transform.gameObject;
-            print(hit.transform.parent.GetComponentInChildren<TextMesh>().text);
-            hit.transform.GetComponent<Renderer>().material.color = Colors["clicked"];
-        }*/
+        
     }
 
     public void WhileHairTriggerDown(Transform trackedObj)
