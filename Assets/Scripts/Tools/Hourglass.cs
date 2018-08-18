@@ -6,6 +6,7 @@ using UnityEngine;
 // Handles the actions of the Hourglass, which shows when the structure is currently loading
 public class Hourglass : MonoBehaviour
 {
+    public static Hourglass inst;
     // the animationController of the Hourglass
     private Animator anim;
     // the Transform of the Headset
@@ -15,6 +16,7 @@ public class Hourglass : MonoBehaviour
 
     private void Awake()
     {
+        inst = this;
         // get the reference to the animationController of the Hourglass
         anim = gameObject.GetComponent<Animator>();
         // get the reference to the transform of the headset

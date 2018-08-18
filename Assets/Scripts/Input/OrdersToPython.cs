@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Reflection;
 
-public class OrdersToPython : SceneReferences
+public class OrdersToPython : MonoBehaviour
 {
     [Header("Scene")]
     // the data about the structure
@@ -31,17 +31,14 @@ public class OrdersToPython : SceneReferences
         {"Set new positions", "SetNewPositions" }
     };
 
-    private void Awake()
+    private void Start()
     {
-        // get the reference to the script that stores most references
-        GetReferenceToReferences();
-        // get the reference to the controllers
-        GetControllerReferences();
         // the data about the structure
         // get the script StructureData from AtomStructure
-        SD = GameObject.Find("AtomStructure").GetComponent<StructureData>();
+        //SD = GameObject.Find("AtomStructure").GetComponent<StructureData>();
+        SD = SceneReferences.inst.structureData;
         // get the reference to the programm which handles the execution of python
-        PE = gameObject.GetComponent<PythonExecuter>();
+        //SceneReferences.inst.PE = gameObject.GetComponent<PythonExecuter>();
         // get the reference to the LaserGrabber script of the controller that can move single atoms
         GetReferenceToAtomLayerLG();
     }
@@ -55,11 +52,6 @@ public class OrdersToPython : SceneReferences
             else
                 BoundingboxLayerLG = LG;
 
-    }
-
-    void Start () {
-        //if (!ExecuteOrder("Destroy Atom 0"))
-        //    print("Invalid Input!");
     }
 
     private void Update()
@@ -130,7 +122,7 @@ public class OrdersToPython : SceneReferences
         }
 
         // send Python/Pyiron the order to destroy the atom
-        PE.SendOrder("self.destroy_atom(" + atomId + ")");
+        SceneReferences.inst.PE.SendOrder("self.destroy_atom(" + atomId + ")");
         // delete the atom and send python/pyiron that the atom should be excluded in the structure
         SD.waitForDestroyedAtom = true;
         // remove the atom in the list of the properties of each atom
@@ -153,12 +145,12 @@ public class OrdersToPython : SceneReferences
     public void RunAnim(bool shouldRun=false)
     {
         if (shouldRun)
-            PE.SendOrder("self.start_anim(True)");
+            SceneReferences.inst.PE.SendOrder("self.start_anim(True)");
         else
-            PE.SendOrder("self.start_anim(False)");
+            SceneReferences.inst.PE.SendOrder("self.start_anim(False)");
         pythonRunsAnim = shouldRun;
         // update the symbols on all active controllers
-        foreach (GameObject Controller in Controllers)
+        foreach (GameObject Controller in SceneReferences.inst.Controllers)
             if (Controller.activeSelf)
                 Controller.GetComponent<ControllerSymbols>().SetSymbol();
     }
@@ -166,7 +158,7 @@ public class OrdersToPython : SceneReferences
     // request the forces of all atoms from Python
     public void RequestAllForces()
     {
-        PE.SendOrder("self.send_all_forces()");
+        SceneReferences.inst.PE.SendOrder("self.send_all_forces()");
     }
 
     public void SetNewPositions()
@@ -180,7 +172,7 @@ public class OrdersToPython : SceneReferences
                 newPosition += atomPosition[i] + " ";
             newPosition += atomInfo.m_ID;
             // send the local position of the current atom to Python
-            PE.SendOrder("self.set_new_base_position('" + newPosition + "')");
+            SceneReferences.inst.PE.SendOrder("self.set_new_base_position('" + newPosition + "')");
             // set the atom back to the position where it was before the player moved it
             atomPosition -= SD.atomCtrlPos[atomInfo.m_ID];
             // show that the player hasn't moved an atom since the last creation of an ham_lammps

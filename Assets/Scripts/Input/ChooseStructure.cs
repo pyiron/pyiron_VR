@@ -3,13 +3,17 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
 
-public class ChooseStructure : SceneReferences
+public class ChooseStructure : MonoBehaviour
 {
+    public static ChooseStructure inst;
+
     [Header("Scene")]
     // the Transform of the Headset
     private Transform HeadTransform;
     // get the data about the modes
     public ModeData MD;
+    // the parent of the instantiated buttons
+    public Transform StructButtons;
 
     // start a process which executes the commands in the shell to start the python script
     Process myProcess = new Process();
@@ -39,15 +43,16 @@ public class ChooseStructure : SceneReferences
 
     private void Awake()
     {
+        inst = this;
+    }
+
+    private void Start()
+    {
         // get the reference to the transform of the headset
         //HeadTransform = GameObject.Find("[CameraRig]/Camera (head)").transform;
-        GetReferenceToReferences();
-        GetControllerReferences();
-        GetSettingsReferences();
         // look which Python Scripts can be executed
         GetPythonScripts();
-
-        foreach (GameObject Controller in Controllers)
+        foreach (GameObject Controller in SceneReferences.inst.Controllers)
             hittedButtons.Add(Controller.transform, null);
     }
 
@@ -80,12 +85,6 @@ public class ChooseStructure : SceneReferences
                 PythonFileNames.Add(dataFragment);
     }
 
-    void Start()
-    {
-        //foreach (string scriptName in PythonFileNames)
-        //    print(scriptName);
-    }
-
     private void ShowPossibleStructures()
     {
         GameObject[] newButtons = new GameObject[4];
@@ -93,7 +92,7 @@ public class ChooseStructure : SceneReferences
             foreach (string scriptName in PythonFileNames)
                 if (true) //(ValidFileName(scriptName))
                 {
-                    newButtons[0] = InstantiatePossibleStructurButton(scriptName);
+                    newButtons[0] = InstantiatePossibleStructButton(scriptName);
                     SetButtonTransform(newButtons[0].transform, 0);
                     for (int i = 0; i < 3; i++)
                     {
@@ -111,7 +110,7 @@ public class ChooseStructure : SceneReferences
         return scriptName.Contains(".py") && !scriptName.Contains(".txt");
     }
 
-    private GameObject InstantiatePossibleStructurButton(string scriptName)
+    private GameObject InstantiatePossibleStructButton(string scriptName)
     {
         GameObject NewButton = Instantiate(PythonFileButtonPrefab);
         TextMesh ButtonText = NewButton.GetComponentInChildren<TextMesh>();
@@ -127,7 +126,7 @@ public class ChooseStructure : SceneReferences
 
     private void SetButtonTransform(Transform Button, int direction)
     {
-        Button.parent = transform;
+        Button.parent = StructButtons;
         Button.localEulerAngles = Vector3.up * direction * 90;
         Button.GetChild(0).localScale = new Vector3(ButtonDistance.x - 0.5f, ButtonDistance.y - 0.5f, 0.2f);
         //Button.localPosition = lastButtonPos + Vector3.right * ButtonDistance.x;
@@ -141,6 +140,7 @@ public class ChooseStructure : SceneReferences
             Button.localPosition = new Vector3(- newPosition.x, newPosition.y, -newPosition.z);
         else if (direction == 3)
             Button.localPosition = new Vector3(- newPosition.z, newPosition.y, newPosition.x);
+        //SceneReferences.inst.PossiblePythonScripts = gameObject;
     }
 
     void Update()
@@ -188,15 +188,15 @@ public class ChooseStructure : SceneReferences
         if (hittedButtons[trackedObj] != null)
         {
             hittedButtons[trackedObj].GetComponent<Renderer>().material.color = Colors["Idle"];
-            PE.LoadPythonScript(hittedButtons[trackedObj].transform.parent.GetComponentInChildren<TextMesh>().text);
-            foreach (GameObject Controller in Controllers)
+            SceneReferences.inst.PE.LoadPythonScript(hittedButtons[trackedObj].transform.parent.GetComponentInChildren<TextMesh>().text);
+            foreach (GameObject Controller in SceneReferences.inst.Controllers)
             {
                 if (Controller.GetComponent<LaserGrabber>().laser != null)
                     Controller.GetComponent<LaserGrabber>().laser.SetActive(false);
                 hittedButtons[Controller.transform] = null;
             }
             MD.RaiseMode();
-            Settings.GetComponent<ProgramSettings>().ResetScene();
+            SceneReferences.inst.Settings.GetComponent<ProgramSettings>().ResetScene();
         }
     }
 

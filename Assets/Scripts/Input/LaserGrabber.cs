@@ -4,7 +4,7 @@ using UnityEngine;
 using System.IO;
 
 // Component of both controllers
-public class LaserGrabber : SceneReferences
+public class LaserGrabber : MonoBehaviour
 {
     [Header("Scene Data")]
     // the data about the structure
@@ -17,6 +17,10 @@ public class LaserGrabber : SceneReferences
     public InGamePrinter printer;
     // the Script of the Hourglass, which indicates that the structure is currently loading
     private Hourglass HourglassScript;
+
+    private PythonExecuter PE;
+    private ChooseStructure CS;
+    private OrdersToPython OTP;
 
     // all data about the modes, f.e. which mode is currently active
     public ModeData MD;
@@ -85,7 +89,6 @@ public class LaserGrabber : SceneReferences
     // the size the text should have
     private float textSize = 1f;
 
-
     [Header("Controller")]
     // the start touch point from when the player lays his finger on the touchpad
     private Vector2 startTouchPoint;
@@ -107,8 +110,6 @@ public class LaserGrabber : SceneReferences
 
     void Awake()
     {
-        // get the references to all objects and scripts related to the Settings
-        GetSettingsReferences();
         try {
             // find the trash can
             TrashCanScript = GameObject.Find("Trash Can").GetComponent<TrashCan>();
@@ -118,17 +119,17 @@ public class LaserGrabber : SceneReferences
         trackedObj = GetComponent<SteamVR_TrackedObject>();
 
         // get the Script of the Hourglass, which indicates that the structure is currently loading
-        HourglassScript = SR.Hourglass.GetComponent<Hourglass>();
+        HourglassScript = Hourglass.inst;
         // HourglassScript = GameObject.Find("HourglassRotator").transform.GetChild(0).gameObject.GetComponent<Hourglass>();
-
-        // get the reference to the Script that handles the mode in which the user can choose the structure he wants to see
-        GetChooseStructureReferences();
 
         InitLaser();
     }
 
     void Start()
     {
+        PE = SceneReferences.inst.PE;
+        CS = SceneReferences.inst.CS;
+        OTP = SceneReferences.inst.OTP;
         // set the variable to the name of the mask
         ctrlMaskName = ProgramSettings.GetLayerName(ctrlMask);
         // get the script StructureData from AtomStructure

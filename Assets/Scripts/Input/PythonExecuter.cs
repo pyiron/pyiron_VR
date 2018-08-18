@@ -207,7 +207,6 @@ public class PythonExecuter : MonoBehaviour {
             if (ContainsValue(splittedData[2]))
             {
                 temperature = int.Parse(splittedData[2]);
-                print(temperature);
             }
             if (ContainsValue(splittedData[3]))
                 frame = int.Parse(splittedData[3]);

@@ -32,7 +32,7 @@ public class ControllerSymbols : MonoBehaviour {
     private void Awake()
     {
         // get the reference to the programm which handles the execution of python
-        PE = GameObject.Find("Settings").GetComponent<PythonExecuter>();
+        PE = SceneReferences.inst.PE;//GameObject.Find("Settings").GetComponent<PythonExecuter>();
     }
 
     // Use this for initialization

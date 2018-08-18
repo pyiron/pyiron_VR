@@ -8,7 +8,7 @@ using System.Reflection;
 
 // component of AtomStructure
 // loads the data from the files to create the structure or to animate the structure
-public class ImportStructure : SceneReferences {
+public class ImportStructure : MonoBehaviour {
     // name of the data file which contains the information about the atom structure
     public string strucFileName;
 
@@ -97,13 +97,10 @@ public class ImportStructure : SceneReferences {
                 fps_display = text;
 
         try { File.Delete(pathName); } catch { } // print("couldn't delete file");}
-        GetReferenceToReferences();
-        GetSettingsReferences();
-        GetControllerReferences();
 
         // get the path to the transmitter file which holds the data pyiron send to unity
         pathName = ProgramSettings.GetFilePath(strucFileName);
-        LED = Settings.GetComponent<LocalElementData>();
+        LED = SceneReferences.inst.Settings.GetComponent<LocalElementData>();
         SD = gameObject.GetComponent<StructureData>();
     }
 
@@ -212,7 +209,7 @@ public class ImportStructure : SceneReferences {
             SD.boundingbox.transform.parent = gameObject.transform;
 
             // show the controllers the reference to the boundingbox
-            foreach (LaserGrabber LG in LGs)
+            foreach (LaserGrabber LG in SceneReferences.inst.LGs)
                 LG.boundingbox = SD.boundingbox.transform;
 
             // create the cubes for the cell box and the parent cellBox

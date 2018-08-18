@@ -14,14 +14,12 @@ public class ModeData : MonoBehaviour
     private GameObject Settings;
     // get the reference to the programm which handles the execution of python
     private PythonExecuter PE;
-    // the thermometer, needed to handle the temperature of the structure
-    private GameObject ThermometerObject;
     // the script that stores the possible orders which can be send to Python
     private OrdersToPython OTP;
     // the reference to the atomstructure
     private GameObject AtomStructure;
     // the reference to the PossiblePythonScripts
-    private GameObject PossiblePythonScripts;
+    //private GameObject PossiblePythonScripts;
 
     [Header("Modes")]
     // get the textmesh from the 3D Text which shows the current mode
@@ -53,28 +51,23 @@ public class ModeData : MonoBehaviour
         //{ 3, new Mode(m_name:"Edit Mode", m_canDuplicate:true) },
         };
 
-    private void Awake()
+    private void Start()
     {
         // get the reference to the transform of the headset
         HeadTransform = GameObject.Find("[CameraRig]/Camera (eye)/Camera (head)").transform;
         // get the reference to the Settings
-        Settings = GameObject.Find("Settings");
+        Settings = SceneReferences.inst.Settings;
         // get the reference to the script that handles the connection to python
-        PE = Settings.GetComponent<PythonExecuter>();
-        // get the reference to the thermometer
-        ThermometerObject = GameObject.Find("MyObjects/Thermometer");
+        PE = SceneReferences.inst.PE;
         // get the reference to the script that stores the possible orders which can be send to Python
-        OTP = Settings.GetComponent<OrdersToPython>();
+        OTP = SceneReferences.inst.OTP;
         // get the reference to the atomstructure
-        AtomStructure = GameObject.Find("AtomStructure");
+        AtomStructure = SceneReferences.inst.structureData.gameObject;
         // get the reference to PossiblePythonScripts
-        PossiblePythonScripts = GameObject.Find("PossiblePythonScripts");
+        //PossiblePythonScripts  = GameObject.Find("PossiblePythonScripts");
         // set the current mode to the mode according to the currentModeNr
         currentMode = modes[currentModeNr];
-    }
 
-    void Start()
-    {
         textSize = textSize / ProgramSettings.textResolution * 10;
         transform.localScale = Vector3.one * textSize;
         gameObject.GetComponent<TextMesh>().fontSize = (int)ProgramSettings.textResolution;
@@ -124,13 +117,13 @@ public class ModeData : MonoBehaviour
 
         if (PythonExecuter.temperature != -1)
             // activate the thermometer when changing into temperature mode, else deactivate it
-            ThermometerObject.SetActive(modes[currentModeNr].showTemp);
+            Thermometer.inst.gameObject.SetActive(modes[currentModeNr].showTemp);
 
         if (modes[currentModeNr].showInfo)
             OTP.RequestAllForces();
         // deactivate the structure if it shouldn't be shown, else activate it
         AtomStructure.SetActive(!modes[currentModeNr].hideAtoms);
-        PossiblePythonScripts.SetActive(modes[currentModeNr].showPossibleStructures);
+        ChooseStructure.inst.StructButtons.gameObject.SetActive(modes[currentModeNr].showPossibleStructures);
 
         if (modes[currentModeNr].showPossibleStructures)
             ChooseStructure.shouldShowPossibleStructures = true;

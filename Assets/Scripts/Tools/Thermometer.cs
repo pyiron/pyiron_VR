@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Thermometer : MonoBehaviour {
+    // reference to the Thermometer
+    public static Thermometer inst;
     // the reference to the animationController of the thermometer
     private Animator anim;
     // the text on the thermometer how high the temperature currently is
@@ -27,6 +29,8 @@ public class Thermometer : MonoBehaviour {
 
     private void Awake()
     {
+        // instantiate the reference to the thermometer
+        inst = this;
         // get the reference to the animationController of the thermometer
         anim = gameObject.GetComponent<Animator>();
         // get the reference to the TextMesh of the temperature

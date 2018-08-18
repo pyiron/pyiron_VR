@@ -46,3 +46,9 @@ Seems to be gone:
 - when having something attached to both controllers the atom in the left hand flickers when moving the structure
 - after moving the structure with the laser and the touchpad it sometimes teleports a bit
 - fix bug atoms get added each frame (not much known about this bug yet, except that there are many atoms at one place where just one atom should be. might be stretched somehow
+
+TODO
+Repair my program
+Optimize code
+Implement Ulrichs code
+Testscript for Python File
