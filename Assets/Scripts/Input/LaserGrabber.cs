@@ -60,9 +60,9 @@ public class LaserGrabber : MonoBehaviour
     // shows whether the laser is currently pointing at the thermometer
     private bool laserCurrentlyOnThermometer = false;
     // the reference to the thermometer
-    private GameObject ThermometerObject;
+    //private GameObject ThermometerObject;
     // the script of the thermometer
-    private Thermometer thermometerScript;
+    //private Thermometer thermometerScript;
 
     [Header("Change Animation")]
     // shows whether it is the first time an animation should be played,
@@ -118,15 +118,13 @@ public class LaserGrabber : MonoBehaviour
         // get the data of the controller
         trackedObj = GetComponent<SteamVR_TrackedObject>();
 
-        // get the Script of the Hourglass, which indicates that the structure is currently loading
-        HourglassScript = Hourglass.inst;
-        // HourglassScript = GameObject.Find("HourglassRotator").transform.GetChild(0).gameObject.GetComponent<Hourglass>();
-
         InitLaser();
     }
 
     void Start()
     {
+        // get the Script of the Hourglass, which indicates that the structure is currently loading
+        HourglassScript = Hourglass.inst;
         PE = SceneReferences.inst.PE;
         CS = SceneReferences.inst.CS;
         OTP = SceneReferences.inst.OTP;
@@ -146,12 +144,13 @@ public class LaserGrabber : MonoBehaviour
         InfoText.transform.localScale = Vector3.one * textSize;
         InfoText.fontSize = (int)ProgramSettings.textResolution;
 
+
         // get the references to the thermometer related objects from the other controller, if it is active and knows them
-        if (otherCtrl.activeSelf)
-        {
-            ThermometerObject = otherCtrl.GetComponent<LaserGrabber>().ThermometerObject;
-            thermometerScript = otherCtrl.GetComponent<LaserGrabber>().thermometerScript;
-        }
+        //if (otherCtrl.activeSelf)
+        //{
+        //    ThermometerObject = otherCtrl.GetComponent<LaserGrabber>().ThermometerObject;
+        //    thermometerScript = otherCtrl.GetComponent<LaserGrabber>().thermometerScript;
+        //}
 
         // deactivate the trashcan
         TrashCanScript.gameObject.SetActive(false);
@@ -295,7 +294,7 @@ public class LaserGrabber : MonoBehaviour
             laserOnThermometer = false;
             laserCurrentlyOnThermometer = false;
             // turn the color of the thermometer back to it's usual color
-            thermometerScript.ChangeLiquidColor();
+            Thermometer.inst.ChangeLiquidColor();
             // deactivate the laser
             laser.SetActive(false);
         }
@@ -397,10 +396,10 @@ public class LaserGrabber : MonoBehaviour
         if (laserOnThermometer)
             // increases the maxTemperature by a factor of 10 when pressing on the upper half of the touchpad
             if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).y > 0)
-                thermometerScript.SetMaxTemperature(10);
+                Thermometer.inst.SetMaxTemperature(10);
             // decreases the maxTemperature by a factor of 10 when pressing on the lower half of the touchpad, if possible
             else
-                thermometerScript.SetMaxTemperature(0.1f);
+                Thermometer.inst.SetMaxTemperature(0.1f);
     }
 
     public void WhileTouchpadPressDown()
@@ -494,17 +493,17 @@ public class LaserGrabber : MonoBehaviour
     {
         bool temperatureHasChanged = false;
         // check if the thermometer has been initialised yet and is currently active
-        if (thermometerScript != null)
+        if (Thermometer.inst != null)
         {
 
             // send Python the order to change the temperature if the user has changed the temperature on the thermometer
-            if (thermometerScript.lastTemperature != PythonExecuter.temperature)
+            if (Thermometer.inst.lastTemperature != PythonExecuter.temperature)
             {
                 PE.SendOrder("self.temperature = " + PythonExecuter.temperature);
                 // remember that a new ham_lammps has to be loaded
                 temperatureHasChanged = true;
                 // remember that the last ham_lammps has been created with the current temperature
-                thermometerScript.lastTemperature = PythonExecuter.temperature;
+                Thermometer.inst.lastTemperature = PythonExecuter.temperature;
             }
         }
 
@@ -572,19 +571,19 @@ public class LaserGrabber : MonoBehaviour
 
                     if (hittedObject.name.Contains("Thermometer"))
                     {
-                        GetThermometerReference(hittedObject);
+                        //GetThermometerReference(hittedObject);
                         // set the references for the other controller as well, if the controller is activated yet
-                        if (otherCtrl.activeSelf)
-                            otherCtrl.GetComponent<LaserGrabber>().GetThermometerReference(hittedObject);
+                        //if (otherCtrl.activeSelf)
+                        //    otherCtrl.GetComponent<LaserGrabber>().GetThermometerReference(hittedObject);
 
-                        thermometerScript.ChangeThemperature(hitPoint.y);
+                        Thermometer.inst.ChangeThemperature(hitPoint.y);
 
                         if (!laserOnThermometer || !laserCurrentlyOnThermometer)
                         {
                             laserOnThermometer = true;
                             laserCurrentlyOnThermometer = true;
                             // set the color to a dark red to show that the user currently clicks on the thermometer
-                            thermometerScript.ChangeLiquidColor("clicked");
+                            Thermometer.inst.ChangeLiquidColor("clicked");
                         }
 
                         if (OrdersToPython.pythonRunsAnim)
@@ -602,7 +601,7 @@ public class LaserGrabber : MonoBehaviour
                 {
                     laserCurrentlyOnThermometer = false;
                     laser.SetActive(false);
-                    thermometerScript.ChangeLiquidColor("clickedButMovedAway");
+                    Thermometer.inst.ChangeLiquidColor("clickedButMovedAway");
                 }
                 // show that the controller is ready to resize the structure, if it is the AtomLayer controller
                 else if (ModeData.currentMode.playerCanResizeAtoms)
@@ -618,18 +617,18 @@ public class LaserGrabber : MonoBehaviour
         }
     }
 
-    public void GetThermometerReference(GameObject hittedObject)
-    {
+    /*public void GetThermometerReference(GameObject hittedObject)
+    //{
         // get the reference to the thermometer, if it is not yet defined
-        if (ThermometerObject == null)
-        {
-            if (hittedObject.name == "Thermometer")
-                ThermometerObject = hittedObject;
-            else
-                ThermometerObject = hittedObject.transform.parent.gameObject;
-            thermometerScript = ThermometerObject.GetComponent<Thermometer>();
-        }
-    }
+        //if (Thermometer.inst == null)
+        //{
+            //if (hittedObject.name == "Thermometer")
+            //    ThermometerObject = hittedObject;
+            //else
+            //    ThermometerObject = hittedObject.transform.parent.gameObject;
+            //thermometerScript = ThermometerObject.GetComponent<Thermometer>();
+        //}
+    }*/
 
     private void MoveGrabbedObject()
     {

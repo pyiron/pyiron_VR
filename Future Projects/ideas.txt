@@ -9,6 +9,7 @@
 - show the periodic boundary condition, and think of the details (show it just when moving an atom?)
 
 IMPORTANT:
+- possible structures sometimes not loading
 - bug: false positioning of structure after duplicating and when resizing
 (- try to get better performance when having many atoms)
 - try to avoid large iterations

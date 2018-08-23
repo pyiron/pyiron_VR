@@ -3,6 +3,8 @@
 // component of Trash Can
 public class TrashCan : MonoBehaviour
 {
+    // a reference to the one object which contains this script
+    TrashCan inst;
     // the upper part of the trashcan
     private GameObject TrashCanTop;
     // the Transform of the Headset
@@ -18,6 +20,7 @@ public class TrashCan : MonoBehaviour
 
     private void Awake()
     {
+        inst = this;
         // get the reference to the transform of the headset
         HeadTransform = GameObject.Find("[CameraRig]/Camera (eye)/Camera (head)").transform;
         // find the upper part of the trash can
@@ -27,16 +30,10 @@ public class TrashCan : MonoBehaviour
         transform.localScale = Vector3.one * ProgramSettings.size;
     }
 
-    // Use this for initialization
-    void Start()
+    // a method to set the state of the trash can object to see which scripts change the state
+    public void SetState(bool newState)
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        gameObject.SetActive(newState);
     }
 
     public void UpdateTrashCan(GameObject attachedObject)

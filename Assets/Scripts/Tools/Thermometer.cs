@@ -53,11 +53,12 @@ public class Thermometer : MonoBehaviour {
         // set lastTemperature to the value the thermometer has been initialised with
         lastTemperature = PythonExecuter.temperature;
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+    // a method to set the state of the thermometer object to see which scripts  change the state
+    public void SetState(bool newState)
+    {
+        gameObject.SetActive(newState);
+    }
 
     // show the current temperature data on the thermometer
     public void UpdateTemperature(int exactTemperature = -1)
