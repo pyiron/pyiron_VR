@@ -23,18 +23,15 @@ IMPORTANT:
 - set always the same controller to right and left
 (- after the structure has been duplicated the whole structure gets moved away one time.)
 - bug: false position of the cellbox after it has been moved a bit before the structure has loaded
-- implement that the animation can be controlled by the player
 - fix bug that sometimes there are error messages "MissingReferenceException: The object of type 'Transform' has been destroyed but you are still trying to access it." after deleting atoms, most likely because the wrong atom has been destroyed
 (- check what happens if an controller deactivates itself after not being used for too long (could maybe happen in a presentation))
 
-- fix bug that the houglass vanishes after a tenth of a second
+- fix bug that the hourglass vanishes after a tenth of a second
 - fix bug that the trigger Input of one controller gets sometimes send to both controllers, while the other controller can't do anything (not even use the touchpad I think), if they are initialised in the wrong order
 - Make Unity send an order to Python when at least one atom has been removed
 - make functions in Unity for each order which can be send to Python (other functions than DestroyAtom have to be implemented)
 - Let Unity send an order to Python with the current frame requesting the force data (of one atom or all) when being in info mode, else let it not send the force data
 - Let Python send the amount of frames in the beginning
-- Let Unity show in a time bar which frame is currently shown.
-- try to create a script, from which most other scripts are children from, and which gives them the important references to some (or maybe all) scripts
 - stop the 3D text from shining through other objects
 (- Stop the error messages which pop up if the program has been started while one of the controllers was inactive.)
 

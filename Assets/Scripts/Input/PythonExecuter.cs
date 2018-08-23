@@ -22,7 +22,8 @@ public class PythonExecuter : MonoBehaviour {
     [Header("Start Python")]
     // the file to where the python script file is located
     // old Path: C:/Users/pneugebauer/PycharmProjects/pyiron/tests/Structures
-    public static string pythonPath = "C:/Users/pneugebauer/PycharmProjects/pyiron/vrplugin/Structures";
+    // old Path: C:/Users/pneugebauer/PycharmProjects/pyiron/vrplugin/Structures
+    public static string pythonPath = "C:/Users/pneugebauer/PyIron_data/projects/Structures";
     // start a process which executes the commands in the shell to start the python script
     private Process myProcess = new Process();
     // shows whether the program has loaded a structure or not
