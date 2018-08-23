@@ -41,7 +41,6 @@ public class InputManager : MonoBehaviour
 
     void Update()
     {
-        print("update");
         for (int ctrlNr = 0; ctrlNr < 2; ctrlNr++)
             if (SceneReferences.inst.Controllers[ctrlNr].activeSelf)
                 if (ControllerDevices[ctrlNr] == null)
@@ -61,7 +60,6 @@ public class InputManager : MonoBehaviour
         CheckGripButton(ctrlNr);
         // check if the applicationMenu button is down to switch the mode
         CheckapplicationMenu(ctrlNr);
-        print("checked Controller");
     }
 
     public void CheckHairTrigger(int ctrlNr)

@@ -70,7 +70,10 @@ public class Thermometer : MonoBehaviour {
         else
             // set the temperature to an exact value, although the temperature is rounded,
             // to make it look smooth how the temperature gets scaled
+            if (anim.gameObject.activeSelf)
+        {
             anim.SetFloat("Temperature", (float)PythonExecuter.temperature / maxTemperature);
+        }
     }
 
     // change the color if the user interacts with the thermometer

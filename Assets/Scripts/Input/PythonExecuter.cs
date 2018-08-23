@@ -21,7 +21,8 @@ public class PythonExecuter : MonoBehaviour {
 
     [Header("Start Python")]
     // the file to where the python script file is located
-    public static string pythonPath = "C:/Users/pneugebauer/PycharmProjects/pyiron/tests/Structures";
+    // old Path: C:/Users/pneugebauer/PycharmProjects/pyiron/tests/Structures
+    public static string pythonPath = "C:/Users/pneugebauer/PycharmProjects/pyiron/vrplugin/Structures";
     // start a process which executes the commands in the shell to start the python script
     private Process myProcess = new Process();
     // shows whether the program has loaded a structure or not
@@ -107,6 +108,7 @@ public class PythonExecuter : MonoBehaviour {
         }
         myProcess = new Process();
         var pyPathThread = new Thread(delegate () {
+            print("Executing: cd " + pythonPath + " && python " + fileName);
             Command("cd " + pythonPath + " && python " + fileName, myProcess);
         });
         pyPathThread.Start();

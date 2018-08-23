@@ -1,0 +1,12 @@
+Workprogress on Virtual Atoms
+by Philip Neugebauer, 1.8.2018 - 30.9.2018
+
+8.9.2018: The program is now working again the same way I left it.
+
+18.8.2018: Optimized the code written in C#. By using static references to a script which gets just deployed once in the scene, these scripts can be referenced easier.
+
+21.8.2018: Finished a testing program for the Python script of Virtual Atoms.
+
+23.8.2018: Updated PyIron to the latest version.
+
+TODO: Implement Ulrichs code
