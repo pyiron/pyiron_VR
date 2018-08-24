@@ -22,8 +22,8 @@ public class PythonExecuter : MonoBehaviour {
     [Header("Start Python")]
     // the file to where the python script file is located
     // old Path: C:/Users/pneugebauer/PycharmProjects/pyiron/tests/Structures
-    // old Path: C:/Users/pneugebauer/PycharmProjects/pyiron/vrplugin/Structures
-    public static string pythonPath = "C:/Users/pneugebauer/PyIron_data/projects/Structures";
+    public static string pythonPath = "C:/Users/pneugebauer/PycharmProjects/pyiron/vrplugin/Structures";
+    // public static string pythonPath = "C:/Users/pneugebauer/PyIron_data/projects/Structures";
     // start a process which executes the commands in the shell to start the python script
     private Process myProcess = new Process();
     // shows whether the program has loaded a structure or not
@@ -161,6 +161,29 @@ public class PythonExecuter : MonoBehaviour {
             // show that Unity received the change from Python
             PythonExecuter.incomingChanges += 1;
             return;
+        }
+        else if (splittedData[0].Contains("mode"))
+        {
+            if (splittedData[1] == "view")
+            {
+                ModeData.inst.SetMode("View Mode");
+            }
+            else
+            {
+                print(splittedData + " is not yet implemented!");
+            }
+        }
+        else if (splittedData[0] == "groups")
+        {
+
+        }
+        else if (splittedData[0] == "nodes")
+        {
+
+        }
+        else if (splittedData[0] == "files")
+        {
+
         }
         else if (splittedData[0] == "force")
         {

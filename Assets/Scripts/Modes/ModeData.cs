@@ -6,6 +6,8 @@ using UnityEngine;
 public class ModeData : MonoBehaviour
 {
     [Header("Scene")]
+    // reference to the deployed instance of this script
+    public static ModeData inst;
     // get the references of the controllers
     public GameObject[] controllers = new GameObject[2];
     // the Transform of the Headset
@@ -51,6 +53,11 @@ public class ModeData : MonoBehaviour
         //{ 3, new Mode(m_name:"Edit Mode", m_canDuplicate:true) },
         };
 
+    private void Awake()
+    {
+        inst = this;
+    }
+
     private void Start()
     {
         // get the reference to the transform of the headset
@@ -87,6 +94,23 @@ public class ModeData : MonoBehaviour
                 transform.localScale -= Vector3.one * textSize * Time.deltaTime;
             modeTextTimer -= Time.deltaTime;
         }
+    }
+
+    public void SetMode(string newMode)
+    {
+        if (!currentMode.showPossibleStructures)
+            // stop the currently running animation
+            OTP.RunAnim(false);
+        // get the id of the new mode
+        foreach (int key in modes.Keys)
+        {
+            if (modes[key].name == newMode)
+            {
+                currentModeNr = key;
+            }
+        }
+        currentMode = modes[currentModeNr];
+        UpdateScene();
     }
 
     public void RaiseMode()
