@@ -9,4 +9,6 @@ by Philip Neugebauer, 1.8.2018 - 30.9.2018
 
 23.8.2018: Updated PyIron to the latest version.
 
+24.8.2018: Wrote the PyIron Script FindStructure which allows to choose an executed Job or a Python File in a Folder and start it with the Sender Script. Unity Support is pending.
+
 TODO: Implement Ulrichs code

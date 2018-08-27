@@ -4,11 +4,9 @@
 public class TrashCan : MonoBehaviour
 {
     // a reference to the one object which contains this script
-    TrashCan inst;
+    public static TrashCan inst;
     // the upper part of the trashcan
     private GameObject TrashCanTop;
-    // the Transform of the Headset
-    private Transform HeadTransform;
 
     // the distance between the upper part of the trashbin and the main part
     Vector3 topToCan;
@@ -21,8 +19,6 @@ public class TrashCan : MonoBehaviour
     private void Awake()
     {
         inst = this;
-        // get the reference to the transform of the headset
-        HeadTransform = GameObject.Find("[CameraRig]/Camera (eye)/Camera (head)").transform;
         // find the upper part of the trash can
         TrashCanTop = GameObject.Find("Trash Can/Top");
 

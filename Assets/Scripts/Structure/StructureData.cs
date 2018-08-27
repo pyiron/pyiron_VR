@@ -5,6 +5,7 @@ using UnityEngine;
 // component of AtomStructure
 public class StructureData : MonoBehaviour
 {
+    public static StructureData inst;
     // the boundingbox which defines where you can grab the structure. It will be created in importStructure
     public GameObject boundingbox;
     // the min and max value of the structure in each axis, needed for the boundingbox
@@ -34,6 +35,7 @@ public class StructureData : MonoBehaviour
 
     public void Awake()
     {
+        inst = this;
         // load the settings from the GameObject Settings
         programSettings = Settings.GetComponent<ProgramSettings>();
         // create a new empty Instance which holds the data, how the structure has been relocated by the player

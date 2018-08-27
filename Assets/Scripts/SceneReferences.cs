@@ -18,7 +18,9 @@ public class SceneReferences : MonoBehaviour {
     // the script that stores the possible orders which can be send to Python
     public OrdersToPython OTP;
 
-    [Header("Controllers")]
+    [Header("User")]
+    // reference to the Head GO
+    public GameObject HeadGO;
     // the reference to the controllers
     public GameObject[] Controllers = new GameObject[2];
     // the reference to the LaserGrabber script of the controllers
@@ -27,7 +29,6 @@ public class SceneReferences : MonoBehaviour {
     [Header("Structure")]
     // the reference to the Script that handles the mode in which the user can choose the structure he wants to see
     public ChooseStructure CS;
-    public StructureData structureData;
 
     public GameObject PossiblePythonScripts;
 

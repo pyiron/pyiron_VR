@@ -6,8 +6,6 @@ using System.Reflection;
 public class OrdersToPython : MonoBehaviour
 {
     [Header("Scene")]
-    // the data about the structure
-    private StructureData SD;
     // the reference to the programm which handles the execution of python
     //private PythonExecuter PE;
     // the reference to the LaserGrabber script of the controller that can move single atoms
@@ -33,10 +31,6 @@ public class OrdersToPython : MonoBehaviour
 
     private void Start()
     {
-        // the data about the structure
-        // get the script StructureData from AtomStructure
-        //SD = GameObject.Find("AtomStructure").GetComponent<StructureData>();
-        SD = SceneReferences.inst.structureData;
         // get the reference to the programm which handles the execution of python
         //SceneReferences.inst.PE = gameObject.GetComponent<PythonExecuter>();
         // get the reference to the LaserGrabber script of the controller that can move single atoms
@@ -46,7 +40,7 @@ public class OrdersToPython : MonoBehaviour
     private void GetReferenceToAtomLayerLG()
     {
         // get the reference to the LaserGrabber script of the controller that can move single atoms
-        foreach (LaserGrabber LG in GameObject.Find("[CameraRig]").GetComponentsInChildren<LaserGrabber>())
+        foreach (LaserGrabber LG in SceneReferences.inst.LGs)
             if (LG.ctrlMaskName.Contains("Atom"))
                 AtomLayerLG = LG;
             else
@@ -124,14 +118,14 @@ public class OrdersToPython : MonoBehaviour
         // send Python/Pyiron the order to destroy the atom
         SceneReferences.inst.PE.SendOrder("self.destroy_atom(" + atomId + ")");
         // delete the atom and send python/pyiron that the atom should be excluded in the structure
-        SD.waitForDestroyedAtom = true;
+        StructureData.inst.waitForDestroyedAtom = true;
         // remove the atom in the list of the properties of each atom
-        SD.atomInfos.RemoveAt(AtomLayerLG.attachedObject.GetComponent<AtomID>().ID);
+        StructureData.inst.atomInfos.RemoveAt(AtomLayerLG.attachedObject.GetComponent<AtomID>().ID);
         // decrease the atomId of the atoms which have a higher ID than the deleted one by one
         for (int i = AtomLayerLG.attachedObject.GetComponent<AtomID>().ID; i < PythonExecuter.structureSize - 2; i++)
-            SD.atomInfos[i + 1].m_ID -= 1;
+            StructureData.inst.atomInfos[i + 1].m_ID -= 1;
         // remove the atom in the list which stores the data how the player has removed each atom
-        SD.atomCtrlPos.RemoveAt(AtomLayerLG.attachedObject.GetComponent<AtomID>().ID);
+        StructureData.inst.atomCtrlPos.RemoveAt(AtomLayerLG.attachedObject.GetComponent<AtomID>().ID);
         // destroy the gameobject of the destroyed atom. This way, importStructure won't destroy all atoms and load them new
         Destroy(AtomLayerLG.attachedObject);
     }
@@ -164,7 +158,7 @@ public class OrdersToPython : MonoBehaviour
     public void SetNewPositions()
     {
         string newPosition;
-        foreach (AtomInfos atomInfo in SD.atomInfos)
+        foreach (AtomInfos atomInfo in StructureData.inst.atomInfos)
         {
             newPosition = "";
             Vector3 atomPosition = atomInfo.m_transform.localPosition;
@@ -174,9 +168,9 @@ public class OrdersToPython : MonoBehaviour
             // send the local position of the current atom to Python
             SceneReferences.inst.PE.SendOrder("self.set_new_base_position('" + newPosition + "')");
             // set the atom back to the position where it was before the player moved it
-            atomPosition -= SD.atomCtrlPos[atomInfo.m_ID];
+            atomPosition -= StructureData.inst.atomCtrlPos[atomInfo.m_ID];
             // show that the player hasn't moved an atom since the last creation of an ham_lammps
-            SD.atomCtrlPos[atomInfo.m_ID] = Vector3.zero;
+            StructureData.inst.atomCtrlPos[atomInfo.m_ID] = Vector3.zero;
         }
     }
 }

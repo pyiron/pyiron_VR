@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class InGamePrinter : MonoBehaviour {
+    // TODO: let each controller have its own script
+    public static InGamePrinter[] inst = new InGamePrinter[2];
+
     [Header("Scene")]
     public GameObject[] printers;
     public LaserGrabber[] LG;
@@ -10,6 +13,14 @@ public class InGamePrinter : MonoBehaviour {
     private int[] currentImportance = new int[2];
     // the size the text should have
     private float textSize = 0.2f;
+
+    private void Awake()
+    {
+        if (inst[0] == null)
+            inst[0] = this;
+        else
+            inst[1] = this;
+    }
 
     // Use this for initialization
     void Start () {

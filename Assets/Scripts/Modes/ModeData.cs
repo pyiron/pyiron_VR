@@ -9,17 +9,13 @@ public class ModeData : MonoBehaviour
     // reference to the deployed instance of this script
     public static ModeData inst;
     // get the references of the controllers
-    public GameObject[] controllers = new GameObject[2];
-    // the Transform of the Headset
-    private Transform HeadTransform;
+    //public GameObject[] controllers = new GameObject[2];
     // the reference to the settings
     private GameObject Settings;
     // get the reference to the programm which handles the execution of python
     private PythonExecuter PE;
     // the script that stores the possible orders which can be send to Python
     private OrdersToPython OTP;
-    // the reference to the atomstructure
-    private GameObject AtomStructure;
     // the reference to the PossiblePythonScripts
     //private GameObject PossiblePythonScripts;
 
@@ -56,20 +52,18 @@ public class ModeData : MonoBehaviour
     private void Awake()
     {
         inst = this;
+        currentMode = modes[currentModeNr];
     }
 
     private void Start()
     {
-        // get the reference to the transform of the headset
-        HeadTransform = GameObject.Find("[CameraRig]/Camera (eye)/Camera (head)").transform;
+        SetMode(modes[currentModeNr].name);
         // get the reference to the Settings
         Settings = SceneReferences.inst.Settings;
         // get the reference to the script that handles the connection to python
         PE = SceneReferences.inst.PE;
         // get the reference to the script that stores the possible orders which can be send to Python
         OTP = SceneReferences.inst.OTP;
-        // get the reference to the atomstructure
-        AtomStructure = SceneReferences.inst.structureData.gameObject;
         // get the reference to PossiblePythonScripts
         //PossiblePythonScripts  = GameObject.Find("PossiblePythonScripts");
         // set the current mode to the mode according to the currentModeNr
@@ -98,7 +92,7 @@ public class ModeData : MonoBehaviour
 
     public void SetMode(string newMode)
     {
-        if (!currentMode.showPossibleStructures)
+        if (currentMode != null && !currentMode.showPossibleStructures)
             // stop the currently running animation
             OTP.RunAnim(false);
         // get the id of the new mode
@@ -130,10 +124,10 @@ public class ModeData : MonoBehaviour
         modeTextTimer = 3;
         // set the text to it's original size
         transform.localScale =  Vector3.one * textSize;
-        transform.eulerAngles = new Vector3(0, HeadTransform.eulerAngles.y, 0);
+        transform.eulerAngles = new Vector3(0, SceneReferences.inst.HeadGO.transform.eulerAngles.y, 0);
         Vector3 newTextPosition = Vector3.zero;
-        newTextPosition.x += Mathf.Sin(HeadTransform.eulerAngles.y / 360 * 2 * Mathf.PI);
-        newTextPosition.z += Mathf.Cos(HeadTransform.eulerAngles.y / 360 * 2 * Mathf.PI);
+        newTextPosition.x += Mathf.Sin(SceneReferences.inst.HeadGO.transform.eulerAngles.y / 360 * 2 * Mathf.PI);
+        newTextPosition.z += Mathf.Cos(SceneReferences.inst.HeadGO.transform.eulerAngles.y / 360 * 2 * Mathf.PI);
         CurrentModeText.transform.position = newTextPosition * 5;
         // CurrentModeText.transform.position = HeadTransform.position + Vector3.forward * 5;
         // let the CurrentModeText always look in the direction of the player
@@ -146,13 +140,13 @@ public class ModeData : MonoBehaviour
         if (modes[currentModeNr].showInfo)
             OTP.RequestAllForces();
         // deactivate the structure if it shouldn't be shown, else activate it
-        AtomStructure.SetActive(!modes[currentModeNr].hideAtoms);
+        StructureData.inst.gameObject.SetActive(!modes[currentModeNr].hideAtoms);
         ChooseStructure.inst.StructButtons.gameObject.SetActive(modes[currentModeNr].showPossibleStructures);
 
         if (modes[currentModeNr].showPossibleStructures)
             ChooseStructure.shouldShowPossibleStructures = true;
 
-        foreach (GameObject controller in controllers)
+        foreach (GameObject controller in SceneReferences.inst.Controllers)
             if (controller.activeSelf)
             {
                 // activate the symbols of the controller, if changing into a mode which can play an animation, else deactivate them
@@ -161,8 +155,11 @@ public class ModeData : MonoBehaviour
                     controller.GetComponent<ControllerSymbols>().Symbols.SetActive(true);
                     controller.GetComponent<ControllerSymbols>().SetSymbol();
                 }
-                else
-                    controller.GetComponent<ControllerSymbols>().Symbols.SetActive(false);
+                else {
+                    GameObject symbols = controller.GetComponent<ControllerSymbols>().Symbols;
+                    if (symbols!= null)
+                        symbols.SetActive(false);
+                }
 
                 // detach the currently attached object from the laser and deactivate the laser
                 LaserGrabber LG = controller.GetComponent<LaserGrabber>();

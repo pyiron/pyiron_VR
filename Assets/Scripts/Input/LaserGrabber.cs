@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using HTC.UnityPlugin.Vive;
 
 // Component of both controllers
 public class LaserGrabber : MonoBehaviour
@@ -14,19 +15,15 @@ public class LaserGrabber : MonoBehaviour
     // the gameobject of the structure
     public GameObject AtomStructure;
     // the script of the controller printer
-    public InGamePrinter printer;
+    //public InGamePrinter printer;
     // the Script of the Hourglass, which indicates that the structure is currently loading
     private Hourglass HourglassScript;
 
     private PythonExecuter PE;
-    private ChooseStructure CS;
     private OrdersToPython OTP;
 
     // all data about the modes, f.e. which mode is currently active
     public ModeData MD;
-
-    // the script of the trashcan in which atoms can be thrown
-    private TrashCan TrashCanScript;
 
     [Header("Move Objects")]
     // the object the controller is currently colliding with
@@ -99,25 +96,17 @@ public class LaserGrabber : MonoBehaviour
     public LayerMask ctrlMask;
     public string ctrlMaskName;
 
-    private SteamVR_TrackedObject trackedObj;
+    //private SteamVR_TrackedObject trackedObj;
     // get the device of the controller
-    public SteamVR_Controller.Device Controller
+    /*public SteamVR_Controller.Device Controller
     {
         get { return SteamVR_Controller.Input((int)trackedObj.index); }
-    }
+    }*/
     // the other controller
     public GameObject otherCtrl;
 
     void Awake()
     {
-        try {
-            // find the trash can
-            TrashCanScript = GameObject.Find("Trash Can").GetComponent<TrashCan>();
-        }
-        catch { TrashCanScript = otherCtrl.GetComponent<LaserGrabber>().TrashCanScript; }
-        // get the data of the controller
-        trackedObj = GetComponent<SteamVR_TrackedObject>();
-
         InitLaser();
     }
 
@@ -126,7 +115,6 @@ public class LaserGrabber : MonoBehaviour
         // get the Script of the Hourglass, which indicates that the structure is currently loading
         HourglassScript = Hourglass.inst;
         PE = SceneReferences.inst.PE;
-        CS = SceneReferences.inst.CS;
         OTP = SceneReferences.inst.OTP;
         // set the variable to the name of the mask
         ctrlMaskName = ProgramSettings.GetLayerName(ctrlMask);
@@ -153,7 +141,7 @@ public class LaserGrabber : MonoBehaviour
         //}
 
         // deactivate the trashcan
-        TrashCanScript.gameObject.SetActive(false);
+        TrashCan.inst.SetState(false);
     }
 
     private void InitLaser()
@@ -168,8 +156,8 @@ public class LaserGrabber : MonoBehaviour
 
     void Update()
     {
-        printer.Ctrl_print("Send: " + PythonExecuter.outgoingChanges.ToString(), 120);
-        printer.Ctrl_print("Received: " + PythonExecuter.incomingChanges.ToString(), 120, false);
+        InGamePrinter.inst[0].Ctrl_print("Send: " + PythonExecuter.outgoingChanges.ToString(), 120);
+        InGamePrinter.inst[0].Ctrl_print("Received: " + PythonExecuter.incomingChanges.ToString(), 120, false);
         if (ModeData.currentMode.playerCanMoveAtoms)
         {
             // move the grabbed object
@@ -180,9 +168,9 @@ public class LaserGrabber : MonoBehaviour
                 {
                     // update the trashcan, if it is shown in the current mode
                     if (ModeData.currentMode.showTrashcan)
-                        TrashCanScript.UpdateTrashCan(attachedObject);
+                        TrashCan.inst.UpdateTrashCan(attachedObject);
                     // let the controller printer print the atom ID of the current attached atom
-                    printer.Ctrl_print(attachedObject.GetComponent<AtomID>().ID.ToString(), 101);
+                    InGamePrinter.inst[0].Ctrl_print(attachedObject.GetComponent<AtomID>().ID.ToString(), 101);
                 }
                 else
                     // update the rotation of the Hourglass
@@ -191,7 +179,12 @@ public class LaserGrabber : MonoBehaviour
         }
 
         // show the white rect if this controller is ready for a resize of the structure
-        resizeableRect.SetActive(readyForResize);
+        if (resizeableRect != null)
+            resizeableRect.SetActive(readyForResize);
+        else
+        {
+            //print("Resizable Rect should not be null!");
+        }
     }
 
     public void HairTriggerDown()
@@ -219,7 +212,7 @@ public class LaserGrabber : MonoBehaviour
                 SendRaycast();
         }
         if (ModeData.currentMode.showPossibleStructures)
-            CS.HairTriggerDown(trackedObj.transform);
+            ChooseStructure.inst.HairTriggerDown();
 
         //if (MD.modes[MD.activeMode].showTemp)
         //    SendRaycast(thermometerMask);
@@ -238,7 +231,7 @@ public class LaserGrabber : MonoBehaviour
         else
             InfoText.gameObject.SetActive(false);
         if (ModeData.currentMode.showPossibleStructures)
-            CS.WhileHairTriggerDown(trackedObj.transform);
+            ChooseStructure.inst.WhileHairTriggerDown(transform);
     }
 
     private void ShowInfo()
@@ -331,7 +324,7 @@ public class LaserGrabber : MonoBehaviour
         }
 
         if (ModeData.currentMode.showPossibleStructures)
-            CS.HairTriggerUp(trackedObj.transform);
+            ChooseStructure.inst.HairTriggerUp(transform);
     }
 
     // show that the laser is currently active and it's possible in the current move to move atoms, and that the laser doesn't point on the thermometer
@@ -340,7 +333,7 @@ public class LaserGrabber : MonoBehaviour
         return (ModeData.currentMode.playerCanMoveAtoms && laser.activeSelf && !laserOnThermometer);
     }
 
-    public void TouchpadTouchDown()
+    /*public void TouchpadTouchDown() TODO!
     {
         if (ScaleAbleLaser())
             // mark the start touchpoint
@@ -421,7 +414,7 @@ public class LaserGrabber : MonoBehaviour
     public void TouchpadPressUp()
     {
         moveOneFrameTimer = -1;
-    }
+    }*/
 
     // initialize the resize if both controllers are ready, else just set the controller to ready
     private void SetControllerToReady()
@@ -431,7 +424,7 @@ public class LaserGrabber : MonoBehaviour
         else
             readyForResize = true;
     }
-
+    /* TODO!
     private void DuplicateStructure()
     {
         if (ctrlMaskName.Contains("BoundingboxLayer"))
@@ -486,7 +479,7 @@ public class LaserGrabber : MonoBehaviour
 
         // update the symbols on on all active controllers
         UpdateSymbols();
-    }
+    }*/
 
     // send an Order to Python that it should create a new ham_lammps
     private void LoadNewLammps()
@@ -562,7 +555,7 @@ public class LaserGrabber : MonoBehaviour
 
             if (!attachedObject || !ModeData.currentMode.playerCanMoveAtoms || laserOnThermometer)
                 // send out a raycast to detect if there is an object in front of the laser 
-                if (Physics.Raycast(trackedObj.transform.position, transform.forward, out hit, laserMaxDistance, ctrlMask))
+                if (Physics.Raycast(transform.position, transform.forward, out hit, laserMaxDistance, ctrlMask))
                 {
                     GameObject hittedObject = hit.transform.gameObject;
                     laser.SetActive(true);
@@ -750,7 +743,7 @@ public class LaserGrabber : MonoBehaviour
             //and the object should be at the same distance before and after the start of the grab
             laserLength = (attachedObject.transform.position - transform.position).magnitude;
             // spawn the trashcan
-            TrashCanScript.ActivateCan();
+            TrashCan.inst.ActivateCan();
 
             positionsHaveChanged = true;
             // deactivate the animation
@@ -769,7 +762,7 @@ public class LaserGrabber : MonoBehaviour
     {
         if (ModeData.currentMode.showTrashcan)
         {
-            if (TrashCanScript.atomInCan && ctrlMaskName == "AtomLayer")
+            if (TrashCan.inst.atomInCan && ctrlMaskName == "AtomLayer")
                 // check that there isn't just one atom left, because this atom would have no temperature/force/velocity,
                 // so it can't build a ham_lammps function
                 if (SD.atomInfos.Count >= 3)
@@ -778,7 +771,7 @@ public class LaserGrabber : MonoBehaviour
 
             if (ctrlMaskName == "AtomLayer")
                 // deactivate the trash can
-                TrashCanScript.gameObject.SetActive(false);
+                TrashCan.inst.gameObject.SetActive(false);
         }
 
         // detach the attached object
@@ -788,7 +781,7 @@ public class LaserGrabber : MonoBehaviour
     public void ShowLaser(RaycastHit hit) 
     {
         // set the laserposition in the middle between the controller and the hitpoint
-        laserTransform.position = Vector3.Lerp(trackedObj.transform.position, hit.point, .5f);
+        laserTransform.position = Vector3.Lerp(transform.position, hit.point, .5f);
         // rotate the laser
         laserTransform.LookAt(hit.point);
         // scale the vector

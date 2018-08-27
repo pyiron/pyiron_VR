@@ -157,7 +157,7 @@ public class ChooseStructure : MonoBehaviour
         }
     }
 
-    public void HairTriggerDown(Transform trackedObj)
+    public void HairTriggerDown()
     {
         
     }

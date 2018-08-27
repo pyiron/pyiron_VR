@@ -29,14 +29,10 @@ public class ControllerSymbols : MonoBehaviour {
         {"TimelapsBackward 0", new Symbol(new Vector3(-0.012f, 0.0035f, -0.049f), new Vector3(-90, 0 -90), 0.008f, new Color(1, 1, 1, 1), true, 2, 0.028f) }
     };
 
-    private void Awake()
-    {
-        // get the reference to the programm which handles the execution of python
-        PE = SceneReferences.inst.PE;//GameObject.Find("Settings").GetComponent<PythonExecuter>();
-    }
-
     // Use this for initialization
     void Start () {
+        // get the reference to the programm which handles the execution of python
+        PE = SceneReferences.inst.PE;//GameObject.Find("Settings").GetComponent<PythonExecuter>();
         // create an empty GameObject which holds the symbols
         Symbols = new GameObject();
         // rename the new GameObject to Symbols
@@ -69,12 +65,15 @@ public class ControllerSymbols : MonoBehaviour {
 
             objectCounter += 1;
         }
-        if (ModeData.currentMode.showRelaxation || ModeData.currentMode.showTemp)
-            // activate the symbols that have to be activated and deactivate the remaining symbols
-            SetSymbol();
-        else
-            // deactivate the symbols, if the mode is already without possible animation when starting
-            Symbols.SetActive(false);
+        if (ModeData.currentMode != null)
+        {
+            if (ModeData.currentMode.showRelaxation || ModeData.currentMode.showTemp)
+                // activate the symbols that have to be activated and deactivate the remaining symbols
+                SetSymbol();
+            else
+                // deactivate the symbols, if the mode is already without possible animation when starting
+                Symbols.SetActive(false);
+        }
     }
 
     // activate the symbols that have to be activated and deactivate the remaining symbols

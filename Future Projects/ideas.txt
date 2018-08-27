@@ -46,9 +46,10 @@ Seems to be gone:
 - fix bug atoms get added each frame (not much known about this bug yet, except that there are many atoms at one place where just one atom should be. might be stretched somehow
 
 To take from Ulrichs Code:
-- get paths from environment variables
+(- get paths from environment variables)
 - the UI
 - Observer Pattern
 - Rotate the structure
 - Controller Management
 - Periodic System
+- internal
