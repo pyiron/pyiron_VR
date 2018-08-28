@@ -51,9 +51,9 @@ public class ChooseStructure : MonoBehaviour
         // get the reference to the transform of the headset
         //HeadTransform = GameObject.Find("[CameraRig]/Camera (head)").transform;
         // look which Python Scripts can be executed
-        GetPythonScripts();
-        foreach (GameObject Controller in SceneReferences.inst.Controllers)
-            hittedButtons.Add(Controller.transform, null);
+        //GetPythonScripts();
+        //foreach (GameObject Controller in SceneReferences.inst.Controllers)
+        //    hittedButtons.Add(Controller.transform, null);
     }
 
     private Vector3 GetFirstButtonPos()
@@ -61,7 +61,7 @@ public class ChooseStructure : MonoBehaviour
         return new Vector3(-(float)(buttonRowLength - 1) / 2 * ButtonDistance.x, ButtonDistance.y, ButtonDistance.z);
     }
 
-    private void GetPythonScripts()
+    /*private void GetPythonScripts()
     {
         myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
         myProcess.StartInfo.CreateNoWindow = true;  // should be true, just false for debugging purposes
@@ -75,7 +75,7 @@ public class ChooseStructure : MonoBehaviour
         myProcess.Start();
         myProcess.BeginOutputReadLine();
         //myProcess.WaitForExit();
-    }
+    }*/
 
     private static void ReadOutput(object sender, DataReceivedEventArgs e)
     {
@@ -102,7 +102,7 @@ public class ChooseStructure : MonoBehaviour
                     }
                     buttonNr ++;
                 }
-        myProcess.Close();
+        //myProcess.Close(); TODO or deleate
     }
 
     private static bool ValidFileName(string scriptName)
@@ -147,7 +147,7 @@ public class ChooseStructure : MonoBehaviour
     {
         if (shouldGetPythonScripts)
         {
-            GetPythonScripts();
+            //GetPythonScripts();
             shouldGetPythonScripts = false;
         }
         if (shouldShowPossibleStructures)
@@ -188,7 +188,7 @@ public class ChooseStructure : MonoBehaviour
         if (hittedButtons[trackedObj] != null)
         {
             hittedButtons[trackedObj].GetComponent<Renderer>().material.color = Colors["Idle"];
-            SceneReferences.inst.PE.LoadPythonScript(hittedButtons[trackedObj].transform.parent.GetComponentInChildren<TextMesh>().text);
+            //SceneReferences.inst.PE.LoadPythonScript(hittedButtons[trackedObj].transform.parent.GetComponentInChildren<TextMesh>().text);
             foreach (GameObject Controller in SceneReferences.inst.Controllers)
             {
                 if (Controller.GetComponent<LaserGrabber>().laser != null)
@@ -203,6 +203,6 @@ public class ChooseStructure : MonoBehaviour
     private void OnApplicationQuit()
     {
         // be sure the process is closed
-        myProcess.Close();
+        //myProcess.Close();
     }
 }

@@ -141,7 +141,8 @@ public class ModeData : MonoBehaviour
             OTP.RequestAllForces();
         // deactivate the structure if it shouldn't be shown, else activate it
         StructureData.inst.gameObject.SetActive(!modes[currentModeNr].hideAtoms);
-        ChooseStructure.inst.StructButtons.gameObject.SetActive(modes[currentModeNr].showPossibleStructures);
+        // TODO! activate the new UI
+        //ChooseStructure.inst.StructButtons.gameObject.SetActive(modes[currentModeNr].showPossibleStructures);
 
         if (modes[currentModeNr].showPossibleStructures)
             ChooseStructure.shouldShowPossibleStructures = true;

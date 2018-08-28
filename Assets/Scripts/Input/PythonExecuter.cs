@@ -9,20 +9,18 @@ using System.IO;
 // component of Settings
 // this script handles everything related to Python, e.g. it receives the data from Python, formats it and can send data to Python
 public class PythonExecuter : MonoBehaviour {
+    internal static PythonExecuter inst;
+
     [Header("Scene")]
-    // the Settings of the program
-    private ProgramSettings Settings;
     // the script of the controller printer
     public InGamePrinter printer;
     // the reference to the ProgressBar
     private GameObject ProgressBar;
-    // the reference to the thermometer
-    public GameObject ThermometerObject;
 
     [Header("Start Python")]
     // the file to where the python script file is located
     // old Path: C:/Users/pneugebauer/PycharmProjects/pyiron/tests/Structures
-    public static string pythonPath = "C:/Users/pneugebauer/PycharmProjects/pyiron/vrplugin/Structures";
+    public static string pythonPath = "C:/Users/pneugebauer/PycharmProjects/pyiron/vrplugin";///Structures";
     // public static string pythonPath = "C:/Users/pneugebauer/PyIron_data/projects/Structures";
     // start a process which executes the commands in the shell to start the python script
     private Process myProcess = new Process();
@@ -78,8 +76,7 @@ public class PythonExecuter : MonoBehaviour {
 
     private void Awake()
     {
-        // get the scripts from the gameobjects to get their data
-        Settings = GameObject.Find("Settings").GetComponent<ProgramSettings>();
+        inst = this;
         // the reference to the ProgressBar
         ProgressBar = GameObject.Find("MyObjects/ProgressBar");
         // return if the data of the structure should be received by an file or files
@@ -87,7 +84,7 @@ public class PythonExecuter : MonoBehaviour {
             return;
 
         //IS = GameObject.Find("AtomStructure").GetComponent<ImportStructure>();
-        //LoadPythonScript();
+        LoadPythonScript();
 
         ResetTransferData();
     }
@@ -98,9 +95,9 @@ public class PythonExecuter : MonoBehaviour {
         incomingChanges = -1;
         // the amount of changes the Unity program requested the Python program to do
         outgoingChanges = 0;
-}
+    }
 
-    public void LoadPythonScript(string fileName)
+    public void LoadPythonScript()
     {
         if (loadedStructure)
         {
@@ -109,8 +106,9 @@ public class PythonExecuter : MonoBehaviour {
         }
         myProcess = new Process();
         var pyPathThread = new Thread(delegate () {
-            print("Executing: cd " + pythonPath + " && python " + fileName);
-            Command("cd " + pythonPath + " && python " + fileName, myProcess);
+            string executedOrder = "cd " + pythonPath + " && python StructureFinder.py"; // "Executing: cd " + pythonPath + " && python " + fileName
+            print("executed: " + executedOrder);
+            Command(executedOrder, myProcess);
         });
         pyPathThread.Start();
         //Command("cd " + pythonPath + " && python " + pythonFileName + ".py", myProcess);
@@ -120,8 +118,8 @@ public class PythonExecuter : MonoBehaviour {
     {
         try
         {
-            myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            myProcess.StartInfo.CreateNoWindow = true;  // should be true, just false for debugging purposes
+            /*myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            myProcess.StartInfo.CreateNoWindow = true;
             myProcess.StartInfo.UseShellExecute = false;
             myProcess.StartInfo.RedirectStandardInput = true;
             myProcess.StartInfo.RedirectStandardOutput = true;
@@ -131,6 +129,22 @@ public class PythonExecuter : MonoBehaviour {
             myProcess.EnableRaisingEvents = true;
             myProcess.Start();
             myProcess.BeginOutputReadLine();
+            loadedStructure = true;*/
+
+            myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            myProcess.StartInfo.CreateNoWindow = true;
+            myProcess.StartInfo.UseShellExecute = false;
+            myProcess.StartInfo.RedirectStandardInput = true;
+            myProcess.StartInfo.RedirectStandardOutput = true;
+            myProcess.StartInfo.RedirectStandardError = true;
+            myProcess.OutputDataReceived += new DataReceivedEventHandler(ReadOutput);
+            myProcess.ErrorDataReceived += new DataReceivedEventHandler(ErrorDataReceived);
+            myProcess.StartInfo.FileName = "C:\\Windows\\system32\\cmd.exe";
+            myProcess.StartInfo.Arguments = "/c" + order;
+            myProcess.EnableRaisingEvents = true;
+            myProcess.Start();
+            myProcess.BeginOutputReadLine();
+            myProcess.BeginErrorReadLine();
             loadedStructure = true;
             //myProcess.WaitForExit();
             //myProcess.OutputDataReceived -= OutputDataReceived;
@@ -139,13 +153,17 @@ public class PythonExecuter : MonoBehaviour {
         catch (Exception e) { print(e); }
     }
 
+    private static void ErrorDataReceived(object sender, DataReceivedEventArgs e) {
+        print(e.Data);
+    }
+
     private void Update()
     {
         if (temperature != -1)
         {
             // activate the thermometer when changing into temperature mode, else deactivate it
-            ThermometerObject.SetActive(ModeData.currentMode.showTemp);
-            ThermometerObject.GetComponent<Thermometer>().UpdateTemperature();
+            Thermometer.inst.SetState(ModeData.currentMode.showTemp);
+            Thermometer.inst.UpdateTemperature();
         }
     }
 
@@ -175,15 +193,15 @@ public class PythonExecuter : MonoBehaviour {
         }
         else if (splittedData[0] == "groups")
         {
-
+            StructureMenuController.inst.AddOption(OptionType.Folder, splittedData[1]);
         }
         else if (splittedData[0] == "nodes")
         {
-
+            StructureMenuController.inst.AddOption(OptionType.Job, splittedData[1]);
         }
         else if (splittedData[0] == "files")
         {
-
+            StructureMenuController.inst.AddOption(OptionType.Script, splittedData[1]);
         }
         else if (splittedData[0] == "force")
         {

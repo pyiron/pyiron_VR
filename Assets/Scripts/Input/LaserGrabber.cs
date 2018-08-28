@@ -103,7 +103,7 @@ public class LaserGrabber : MonoBehaviour
         get { return SteamVR_Controller.Input((int)trackedObj.index); }
     }*/
     // the other controller
-    public GameObject otherCtrl;
+    private GameObject otherCtrl;
 
     void Awake()
     {
@@ -122,6 +122,12 @@ public class LaserGrabber : MonoBehaviour
         SD = AtomStructure.GetComponent<StructureData>();
         // get the script StructureResizer from AtomStructure
         StrucResizer = AtomStructure.GetComponent<StructureResizer>();
+        // get the reference to the other controller
+        foreach (GameObject ctrl in SceneReferences.inst.Controllers)
+        {
+            if (ctrl.GetComponent<LaserGrabber>() != this) // TODO might be wrong
+                otherCtrl = ctrl;
+        }
 
         // get the transform of the boundingbox
         foreach (Transform tr in AtomStructure.GetComponentsInChildren<Transform>())
@@ -211,8 +217,8 @@ public class LaserGrabber : MonoBehaviour
                 // send out a raycast to detect objects in front of the controller
                 SendRaycast();
         }
-        if (ModeData.currentMode.showPossibleStructures)
-            ChooseStructure.inst.HairTriggerDown();
+        //if (ModeData.currentMode.showPossibleStructures)
+        //    ChooseStructure.inst.HairTriggerDown();
 
         //if (MD.modes[MD.activeMode].showTemp)
         //    SendRaycast(thermometerMask);
@@ -230,8 +236,8 @@ public class LaserGrabber : MonoBehaviour
         }
         else
             InfoText.gameObject.SetActive(false);
-        if (ModeData.currentMode.showPossibleStructures)
-            ChooseStructure.inst.WhileHairTriggerDown(transform);
+        //if (ModeData.currentMode.showPossibleStructures)
+        //    ChooseStructure.inst.WhileHairTriggerDown(transform);
     }
 
     private void ShowInfo()
@@ -323,8 +329,8 @@ public class LaserGrabber : MonoBehaviour
             laser.SetActive(false);
         }
 
-        if (ModeData.currentMode.showPossibleStructures)
-            ChooseStructure.inst.HairTriggerUp(transform);
+        //if (ModeData.currentMode.showPossibleStructures)
+        //    ChooseStructure.inst.HairTriggerUp(transform);
     }
 
     // show that the laser is currently active and it's possible in the current move to move atoms, and that the laser doesn't point on the thermometer

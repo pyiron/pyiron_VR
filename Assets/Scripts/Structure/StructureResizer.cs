@@ -6,7 +6,7 @@ using UnityEngine;
 public class StructureResizer : MonoBehaviour
 {
     // the scripts of the two ctrls
-    public GameObject[] Controllers = new GameObject[2];
+    public GameObject[] Controllers;// = new GameObject[2];
     // the data about the structure
     private StructureData SD;
 
@@ -28,6 +28,11 @@ public class StructureResizer : MonoBehaviour
     {
         // get the script StructureData from AtomStructure
         SD = GetComponent<StructureData>();
+    }
+
+    private void Start()
+    {
+        Controllers = SceneReferences.inst.Controllers;
     }
 
     void Update()
