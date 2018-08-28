@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class StructureMenu : MonoBehaviour {
+public class StructureMenuButton : MonoBehaviour, IButton
+{
     public OptionType type;
 
     public void WhenClickDown()

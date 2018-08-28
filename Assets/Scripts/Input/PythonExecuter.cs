@@ -193,15 +193,23 @@ public class PythonExecuter : MonoBehaviour {
         }
         else if (splittedData[0] == "groups")
         {
-            StructureMenuController.inst.AddOption(OptionType.Folder, splittedData[1]);
+            StructureMenuController.inst.AddOption(OptionType.Folder, e.Data.Substring(7));
         }
         else if (splittedData[0] == "nodes")
         {
-            StructureMenuController.inst.AddOption(OptionType.Job, splittedData[1]);
+            StructureMenuController.inst.AddOption(OptionType.Job, e.Data.Substring(6));
         }
         else if (splittedData[0] == "files")
         {
-            StructureMenuController.inst.AddOption(OptionType.Script, splittedData[1]);
+            StructureMenuController.inst.AddOption(OptionType.Script, e.Data.Substring(6));
+        }
+        else if (splittedData[0] == "path")
+        {
+            if (StructureMenuController.currPath != splittedData[1])
+            {
+                StructureMenuController.currPath = splittedData[1];
+                StructureMenuController.pathHasChanged = true;
+            }
         }
         else if (splittedData[0] == "force")
         {
@@ -299,6 +307,7 @@ public class PythonExecuter : MonoBehaviour {
     // send the given order to Python, where it will be executed with the exec() command
     public void SendOrder(string order)
     {
+        print(order);
         // show that the Unity program has send the Python program an order
         outgoingChanges += 1;
 
