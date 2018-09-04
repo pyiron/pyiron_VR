@@ -179,7 +179,7 @@ public class PythonExecuter : MonoBehaviour {
         {
             if (splittedData[1] == "view")
             {
-                ModeData.inst.SetMode("View Mode");
+                ModeData.inst.newMode = "View Mode";
             }
             else
             {

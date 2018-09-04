@@ -105,7 +105,9 @@ public class InputManager : MonoBehaviour
             ViveInput.TriggerHapticPulse(handRole);
             print(PythonExecuter.loadedStructure);
             if (!ModeData.currentMode.showPossibleStructures || PythonExecuter.loadedStructure)
+            {
                 MD.RaiseMode();
+            }
         }
     }
 

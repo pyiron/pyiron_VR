@@ -30,6 +30,8 @@ public class ModeData : MonoBehaviour
     private float modeTextTimer;
     // the size the text should have
     private float textSize = 1f;
+    // remember the new mode which should be set with the main thread
+    internal string newMode = "";
 
     /*public readonly Dictionary<int, Mode> modes = new Dictionary<int, Mode> {
         { 0, new Mode(m_name:"Move Mode", m_playerCanMoveAtoms:true, m_playerCanResizeAtoms:true, m_showTemp:true, m_showTrashcan:true) },
@@ -79,6 +81,10 @@ public class ModeData : MonoBehaviour
 
     void Update()
     {
+        if (newMode != "") { 
+            SetMode(newMode);
+            newMode = "";
+            }
         if (modeTextTimer > 0)
         {
             if (modeTextTimer - Time.deltaTime <= 0)

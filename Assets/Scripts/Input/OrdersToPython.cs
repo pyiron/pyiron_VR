@@ -126,8 +126,8 @@ public class OrdersToPython : MonoBehaviour
 
     public void RunAnimOrder(string order)
     {
-        if (order != "")
-            RunAnim(order.Contains("Run"));
+        //if (order != "")
+        //    RunAnim(order.Contains("Run"));
     }
 
     public void RunAnim(bool shouldRun=false)
