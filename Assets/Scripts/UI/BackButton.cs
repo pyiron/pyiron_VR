@@ -8,6 +8,6 @@ public class BackButton : MonoBehaviour, IButton
     {
         StructureMenuController.shouldDelete = true;
         StructureMenuController.inst.ClearOptions();
-        PythonExecuter.inst.SendOrder("back");
+        PythonExecuter.inst.SendOrder("ProjectExplorer pr_input ..");
     }
 }

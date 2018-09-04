@@ -498,7 +498,7 @@ public class LaserGrabber : MonoBehaviour
             // send Python the order to change the temperature if the user has changed the temperature on the thermometer
             if (Thermometer.inst.lastTemperature != PythonExecuter.temperature)
             {
-                PE.SendOrder("self.temperature = " + PythonExecuter.temperature);
+                PE.SendOrder("Executer exec self.temperature = " + PythonExecuter.temperature);
                 // remember that a new ham_lammps has to be loaded
                 temperatureHasChanged = true;
                 // remember that the last ham_lammps has been created with the current temperature
@@ -545,9 +545,9 @@ public class LaserGrabber : MonoBehaviour
     private void LoadNewLammps(string loadOrder)
     {
         if (ModeData.currentMode.showTemp)
-            PE.SendOrder(loadOrder + "('md')");
+            PE.SendOrder("Executer exec " + loadOrder + "('md')");
         else if (ModeData.currentMode.showRelaxation)
-            PE.SendOrder(loadOrder + "('minimize')");
+            PE.SendOrder("Executer exec " + loadOrder + "('minimize')");
         lammpsIsMd = ModeData.currentMode.showTemp;
     }
 

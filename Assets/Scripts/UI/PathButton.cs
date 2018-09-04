@@ -9,7 +9,7 @@ public class PathButton : MonoBehaviour, IButton
     {
         StructureMenuController.shouldDelete = true;
         StructureMenuController.inst.ClearOptions();
-        PythonExecuter.inst.SendOrder("path " + GetCurrPath());
+        PythonExecuter.inst.SendOrder("ProjectExplorer path " + GetCurrPath());
     }
 
     private string GetCurrPath()

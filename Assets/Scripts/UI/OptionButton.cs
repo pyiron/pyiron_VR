@@ -10,6 +10,6 @@ public class OptionButton : MonoBehaviour, IButton {
         StructureMenuController.inst.ClearOptions();
         if (StructureMenuController.inst.ActiveType().type != OptionType.Folder)
             ModeData.inst.SetMode("Temperature Mode");
-        PythonExecuter.inst.SendOrder(GetComponentInChildren<Text>().text);
+        PythonExecuter.inst.SendOrder("ProjectExplorer pr_input " + GetComponentInChildren<Text>().text);
     }
 }

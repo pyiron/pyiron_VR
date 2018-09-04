@@ -53,3 +53,11 @@ To take from Ulrichs Code:
 - Controller Management
 - Periodic System
 - internal
+
+TODO:
+Implement new Enum for Modes
+Maybe implement ENUM for Lasergrabbers
+Implement new View Mode
+Fix Bugs
+Write Comments and Docu
+Delete unnecessary code

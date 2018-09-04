@@ -1,0 +1,12 @@
+Choose Structure Mode
+
+In the "Choose Structure Mode", short CSM, the user can choose which Structure or already executed ham_lammps job he wants to use.
+
+How-to-use:
+All Buttons on the UI can be clicked by pointing on it and pressing down the Trigger, located on the backside of the controller.
+The user can choose whether he wants to see the possible Python Scripts, the possible executed jobs or the folders in the currently active folder, by clicking the corresponding button.
+The button(s) top-left will show the currently active path. The user can click any of these Buttons to go back to the parent directory he clicked on. Alternatively he can click on the back button to go the the parent directory directly above.
+
+How it is coded:
+There is a class for each button type and an instance of these classes for each button. Each button script needs a function to deal with the pressDown event, this is forced by the IButton Interface. This function determines what will happen when the button is pressed.
+There is also the StructureMenuController Script, located on the StructureMenu GameObject, which handles the Input from Python, e.g. by deleting the old buttons and creating new ones.

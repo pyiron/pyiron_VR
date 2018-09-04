@@ -11,4 +11,11 @@ by Philip Neugebauer, 1.8.2018 - 30.9.2018
 
 24.8.2018: Wrote the PyIron Script FindStructure which allows to choose an executed Job or a Python File in a Folder and start it with the Sender Script. Unity Support is pending.
 
+27.8.2018: The headset and controller Management System has been changed from SteamVR to ViveInputUtility. No errors get thrown, but the program down't work either. The Simulator can already be used, so that it is possible to modify the program without a VR Headset.
+
+28.8.2018: Implemented a new UI to let the user choose which structure should be shown. Program crashes when choosing a structure, due to the new Management System.
+
+29.8.2018: Cleaned up unnecessary code from the Sender.py script, without being able to test it.
+
+03.09.2018: Solved issues invoked through the clean-up. Added a test script for the StructureFinder.
 TODO: Implement Ulrichs code

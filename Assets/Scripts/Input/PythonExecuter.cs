@@ -64,9 +64,6 @@ public class PythonExecuter : MonoBehaviour {
 
 
     [Header("Send Data to Python")]
-    // the filename of the file which will send orders from unity to pyiron
-    private string fileName = "orders";
-
     // the speed with which Python currently runs the animation
     public int pythonsAnimSpeed = 4;
 
@@ -79,9 +76,6 @@ public class PythonExecuter : MonoBehaviour {
         inst = this;
         // the reference to the ProgressBar
         ProgressBar = GameObject.Find("MyObjects/ProgressBar");
-        // return if the data of the structure should be received by an file or files
-        if (ProgramSettings.transMode == "file")
-            return;
 
         //IS = GameObject.Find("AtomStructure").GetComponent<ImportStructure>();
         LoadPythonScript();
@@ -106,7 +100,7 @@ public class PythonExecuter : MonoBehaviour {
         }
         myProcess = new Process();
         var pyPathThread = new Thread(delegate () {
-            string executedOrder = "cd " + pythonPath + " && python StructureFinder.py"; // "Executing: cd " + pythonPath + " && python " + fileName
+            string executedOrder = "cd " + pythonPath + " && python UnityManager.py"; // "Executing: cd " + pythonPath + " && python " + fileName
             print("executed: " + executedOrder);
             Command(executedOrder, myProcess);
         });
@@ -169,6 +163,7 @@ public class PythonExecuter : MonoBehaviour {
 
     private static void ReadOutput(object sender, DataReceivedEventArgs e) 
     {
+        print(e.Data);
         string[] splittedData = e.Data.Split();
         if (e.Data.Contains("print"))
             print(e.Data);
@@ -177,7 +172,7 @@ public class PythonExecuter : MonoBehaviour {
         else if (e.Data.Contains("Order executed"))
         {
             // show that Unity received the change from Python
-            PythonExecuter.incomingChanges += 1;
+            incomingChanges += 1;
             return;
         }
         else if (splittedData[0].Contains("mode"))
@@ -311,28 +306,14 @@ public class PythonExecuter : MonoBehaviour {
         // show that the Unity program has send the Python program an order
         outgoingChanges += 1;
 
-        if (ProgramSettings.transMode == "file")
-            // write an Order to Python via a file
-            WriteOrder(order);
-        else
-            // write the command in the input of Python
-            myProcess.StandardInput.WriteLine(order);
-    }
-
-    // write an Order to Python via a file
-    private void WriteOrder(string order)
-    {
-        StreamWriter sw = new StreamWriter(ProgramSettings.GetFilePath(fileName: fileName));
-        using (sw)
-        {
-            sw.WriteLine(order);
-        }
+        // write the command in the input of Python
+        myProcess.StandardInput.WriteLine(order);
     }
 
     public void ChangeAnimSpeed(int speedChange)
     {
         // send python the order to change the animation speed, but also remember what the new animation speed is in unity
-        SendOrder("self.animSpeed += " + speedChange);
+        SendOrder("Executer exec self.animSpeed += " + speedChange);
         pythonsAnimSpeed += speedChange;
     }
 
@@ -342,7 +323,7 @@ public class PythonExecuter : MonoBehaviour {
         print("Application ending after " + Time.time + " seconds");
         print("Sent  " + outgoingChanges + " Orders to PyIron");
         print("Received  " + incomingChanges + " Responses from PyIron");
-        myProcess.StandardInput.WriteLine("Stop!");
+        myProcess.StandardInput.WriteLine("stop!");
         myProcess.StandardInput.Close();
         myProcess.Close();
     }
