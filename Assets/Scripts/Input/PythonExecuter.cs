@@ -259,10 +259,10 @@ public class PythonExecuter : MonoBehaviour {
                 frame = int.Parse(splittedData[3]);
             if (ContainsValue(splittedData[4]))
                 frameAmount = int.Parse(splittedData[4]);
-            if (ContainsValue(splittedData[5]))
-                incomingChanges = int.Parse(splittedData[5]);
-            if (ContainsValue(splittedData[6]))
-                StructureData.structureName = splittedData[6];
+            //if (ContainsValue(splittedData[5]))
+            //    incomingChanges = int.Parse(splittedData[5]);
+            //if (ContainsValue(splittedData[6]))
+            //    StructureData.structureName = splittedData[6];
 
             currentAtomLine += 1;
 
