@@ -163,7 +163,7 @@ public class PythonExecuter : MonoBehaviour {
 
     private static void ReadOutput(object sender, DataReceivedEventArgs e) 
     {
-        //print(e.Data);
+        print(e.Data);
         string[] splittedData = e.Data.Split();
         if (e.Data.Contains("print"))
             print(e.Data);
@@ -255,6 +255,7 @@ public class PythonExecuter : MonoBehaviour {
             {
                 temperature = int.Parse(splittedData[2]);
             }
+            print(int.Parse(splittedData[3]));
             if (ContainsValue(splittedData[3]))
                 frame = int.Parse(splittedData[3]);
             if (ContainsValue(splittedData[4]))
@@ -300,20 +301,21 @@ public class PythonExecuter : MonoBehaviour {
     }
 
     // send the given order to Python, where it will be executed with the exec() command
-    public void SendOrder(string order)
+    public void SendOrder(PythonScript script, PythonCommandType type, string order)
     {
-        print(order);
+        string full_order = script.ToString() + " " + type.ToString() + " " + order;
+        print(full_order);
         // show that the Unity program has send the Python program an order
         outgoingChanges += 1;
 
         // write the command in the input of Python
-        myProcess.StandardInput.WriteLine(order);
+        myProcess.StandardInput.WriteLine(full_order);
     }
 
     public void ChangeAnimSpeed(int speedChange)
     {
         // send python the order to change the animation speed, but also remember what the new animation speed is in unity
-        SendOrder("Executer exec self.animSpeed += " + speedChange);
+        SendOrder(PythonScript.Executor, PythonCommandType.exec, "self.animSpeed += " + speedChange);
         pythonsAnimSpeed += speedChange;
     }
 
@@ -332,4 +334,14 @@ public class PythonExecuter : MonoBehaviour {
     {
         ClosePythonProgress();
     }
+}
+
+public enum PythonScript
+{
+    UnityManager, Executor, ProjectExplorer
+}
+
+public enum PythonCommandType
+{
+    path, pr_input, exec
 }

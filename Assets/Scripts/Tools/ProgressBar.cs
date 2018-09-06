@@ -24,9 +24,9 @@ public class ProgressBar : MonoBehaviour {
         {5, "2x" }
     };
 
-	void Awake () {
+	void Start () {
         // the reference to the PythonExecuter
-        PE = GameObject.Find("Settings").GetComponent<PythonExecuter>();
+        PE = SceneReferences.inst.PE;
         // get the reference to the ProgressBar
         ProgressBarObject = GameObject.Find("MyObjects/ProgressBar");
         // get the reference to the animationController of the ProgressBar

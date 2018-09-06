@@ -18,4 +18,8 @@ by Philip Neugebauer, 1.8.2018 - 30.9.2018
 29.8.2018: Cleaned up unnecessary code from the Sender.py script, without being able to test it.
 
 03.09.2018: Solved issues invoked through the clean-up. Added a test script for the StructureFinder.
+
+04.09.2018: Rewrote the python scripts, to increase readability and understandability. The UnityManager handles sending and receiving messages from and to Unity, the ProjectExplorer executes the commands needed to explore the project to start a structure, and the Executer handles all commands for the structure/job.
+
+05.09.2018 Added a simple test for the new PythonScripts, which can be easily extended with the old tests.
 TODO: Implement Ulrichs code
