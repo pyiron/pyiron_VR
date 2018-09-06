@@ -339,19 +339,19 @@ public class LaserGrabber : MonoBehaviour
         return (ModeData.currentMode.playerCanMoveAtoms && laser.activeSelf && !laserOnThermometer);
     }
 
-    /*public void TouchpadTouchDown() TODO!
+    public void TouchpadTouchDown(Vector2 touchPos)
     {
         if (ScaleAbleLaser())
             // mark the start touchpoint
-            startTouchPoint = Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0);
+            startTouchPoint = touchPos;
     }
 
-    public void WhileTouchpadTouchDown()
+    public void WhileTouchpadTouchDown(Vector2 touchPos)
     {
         if (ScaleAbleLaser())
         {
             // scale the laser
-            currentTouch = Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0);
+            currentTouch = touchPos;
             ScaleLaser(currentTouch.y - startTouchPoint.y);
 
             // set the max distance the laser should have to exist and not grab the object
@@ -383,32 +383,32 @@ public class LaserGrabber : MonoBehaviour
         }
     }
 
-    public void TouchpadPressDown()
+    public void TouchpadPressDown(Vector2 touchPos)
     {
-        if (ModeData.currentMode.canDuplicate)
-            DuplicateStructure();
+        //if (ModeData.currentMode.canDuplicate)
+        //    DuplicateStructure();
         // look if an animation should be started or stopped
-        else if (ModeData.currentMode.showTemp || ModeData.currentMode.showRelaxation)
+        if (ModeData.currentMode.showTemp || ModeData.currentMode.showRelaxation)
             // check that the player isn't currently trying to change the length of the laser
             if (!laser.activeSelf)
-                ControllAnimation();
+                ControllAnimation(touchPos);
         if (laserOnThermometer)
             // increases the maxTemperature by a factor of 10 when pressing on the upper half of the touchpad
-            if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).y > 0)
+            if (touchPos.y > 0)
                 Thermometer.inst.SetMaxTemperature(10);
             // decreases the maxTemperature by a factor of 10 when pressing on the lower half of the touchpad, if possible
             else
                 Thermometer.inst.SetMaxTemperature(0.1f);
     }
 
-    public void WhileTouchpadPressDown()
+    public void WhileTouchpadPressDown(Vector2 touchPos)
     {
         if (moveOneFrameTimer >= 0)
         {
             moveOneFrameTimer += Time.deltaTime;
             if (moveOneFrameTimer >= timeUntilMoveOneFrame)
             {
-                if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).x > 0)
+                if (touchPos.x > 0)
                     PE.SendOrder("self.move_one_frame(True)");
                 else
                     PE.SendOrder("self.move_one_frame(False)");
@@ -420,7 +420,7 @@ public class LaserGrabber : MonoBehaviour
     public void TouchpadPressUp()
     {
         moveOneFrameTimer = -1;
-    }*/
+    }
 
     // initialize the resize if both controllers are ready, else just set the controller to ready
     private void SetControllerToReady()
@@ -440,11 +440,11 @@ public class LaserGrabber : MonoBehaviour
                 else
                     if (SD.atomInfos.Count * 0.5 * 0.5 * 0.5 >= 1)
                         PE.SendOrder("self.duplicate(0.5)");
-    }
+    }*/
 
-    private void ControllAnimation()
+    private void ControllAnimation(Vector2 touchPos)
     {
-        if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).x > 0.5)
+        if (touchPos.x > 0.5)
             if (OrdersToPython.pythonRunsAnim)
                 // send Python the order to play the animation faster. if it isn't already at it's fastest speed
                 if (PE.pythonsAnimSpeed < 5)
@@ -459,7 +459,7 @@ public class LaserGrabber : MonoBehaviour
                 // show that the user pressed the button to go one step forward
                 moveOneFrameTimer = 0;
             }
-        else if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).x < -0.5)
+        else if (touchPos.x < -0.5)
             if (OrdersToPython.pythonRunsAnim)
                 // send Python the order to play the animation faster. if it isn't already at it's fastest speed
                 if (PE.pythonsAnimSpeed > 0)
@@ -485,7 +485,7 @@ public class LaserGrabber : MonoBehaviour
 
         // update the symbols on on all active controllers
         UpdateSymbols();
-    }*/
+    }
 
     // send an Order to Python that it should create a new ham_lammps
     private void LoadNewLammps()

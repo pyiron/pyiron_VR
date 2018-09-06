@@ -36,7 +36,7 @@ public class InputManager : MonoBehaviour
         // check the state of the button on the back of the controller and perform following actions
         CheckHairTrigger(handRole);
         // check the state of the touchpad and perform following actions
-        //CheckTouchpad(ctrlNr); TODO!
+        CheckTouchpad(handRole);
         // check if the application menu button is down to print before the controller
         CheckGripButton(handRole);
         // check if the applicationMenu button is down to switch the mode
@@ -56,26 +56,27 @@ public class InputManager : MonoBehaviour
             SceneReferences.inst.LGs[(int)handRole].HairTriggerUp();
     }
 
-    /*private void CheckTouchpad(HandRole handRole) TODO!
+    private void CheckTouchpad(HandRole handRole)
     {
-        if (ControllerDevices[ctrlNr].GetTouchDown(SteamVR_Controller.ButtonMask.Touchpad))
-            SceneReferences.inst.LGs[ctrlNr].TouchpadTouchDown();
+        Vector2 touchPos = ViveInput.GetPadTouchVector(handRole);
+        if (ViveInput.GetPressDown(handRole, ControllerButton.PadTouch))
+            SceneReferences.inst.LGs[(int)handRole].TouchpadTouchDown(touchPos);
 
-        if (ControllerDevices[ctrlNr].GetTouch(SteamVR_Controller.ButtonMask.Touchpad))
-            SceneReferences.inst.LGs[ctrlNr].WhileTouchpadTouchDown();
+        if (ViveInput.GetPress(handRole, ControllerButton.PadTouch))
+            SceneReferences.inst.LGs[(int)handRole].WhileTouchpadTouchDown(touchPos);
 
-        if (ControllerDevices[ctrlNr].GetTouchUp(SteamVR_Controller.ButtonMask.Touchpad))
-            SceneReferences.inst.LGs[ctrlNr].TouchpadTouchUp();
+        if (ViveInput.GetPressUp(handRole, ControllerButton.PadTouch))
+            SceneReferences.inst.LGs[(int)handRole].TouchpadTouchUp();
 
-        if (ControllerDevices[ctrlNr].GetPressDown(SteamVR_Controller.ButtonMask.Touchpad))
-            SceneReferences.inst.LGs[ctrlNr].TouchpadPressDown();
+        if (ViveInput.GetPressDown(handRole, ControllerButton.Pad))
+            SceneReferences.inst.LGs[(int)handRole].TouchpadPressDown(touchPos);
 
-        if (ControllerDevices[ctrlNr].GetPress(SteamVR_Controller.ButtonMask.Touchpad))
-            SceneReferences.inst.LGs[ctrlNr].WhileTouchpadPressDown();
+        if (ViveInput.GetPress(handRole, ControllerButton.Pad))
+            SceneReferences.inst.LGs[(int)handRole].WhileTouchpadPressDown(touchPos);
 
-        if (ControllerDevices[ctrlNr].GetPressUp(SteamVR_Controller.ButtonMask.Touchpad))
-            SceneReferences.inst.LGs[ctrlNr].TouchpadPressUp();
-    }*/
+        if (ViveInput.GetPressUp(handRole, ControllerButton.Pad))
+            SceneReferences.inst.LGs[(int)handRole].TouchpadPressUp();
+    }
 
     private void CheckGripButton(HandRole handRole)
     { // TODO
