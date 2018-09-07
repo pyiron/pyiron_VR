@@ -26,10 +26,6 @@ public class SceneReferences : MonoBehaviour {
     // the reference to the LaserGrabber script of the controllers
     public LaserGrabber[] LGs = new LaserGrabber[2];
 
-    [Header("Structure")]
-    // the reference to the Script that handles the mode in which the user can choose the structure he wants to see
-    public ChooseStructure CS;
-
     public GameObject PossiblePythonScripts;
 
     private void Awake()
@@ -44,8 +40,5 @@ public class SceneReferences : MonoBehaviour {
         {
             LGs[i] = Controllers[i].GetComponent<LaserGrabber>();
         }
-
-        // the reference to the Script that handles the mode in which the user can choose the structure he wants to see
-        GetComponent<ChooseStructure>();
     }
 }

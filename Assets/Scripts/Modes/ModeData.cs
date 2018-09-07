@@ -150,9 +150,6 @@ public class ModeData : MonoBehaviour
         // TODO! activate the new UI
         //ChooseStructure.inst.StructButtons.gameObject.SetActive(modes[currentModeNr].showPossibleStructures);
 
-        if (modes[currentModeNr].showPossibleStructures)
-            ChooseStructure.shouldShowPossibleStructures = true;
-
         StructureMenuController.inst.transform.parent.gameObject.SetActive(modes[currentModeNr].showPossibleStructures);
 
         foreach (GameObject controller in SceneReferences.inst.Controllers)

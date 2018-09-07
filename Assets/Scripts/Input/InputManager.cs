@@ -58,7 +58,7 @@ public class InputManager : MonoBehaviour
 
     private void CheckTouchpad(HandRole handRole)
     {
-        Vector2 touchPos = ViveInput.GetPadTouchVector(handRole);
+        Vector2 touchPos = ViveInput.GetPadTouchAxis(handRole);
         if (ViveInput.GetPressDown(handRole, ControllerButton.PadTouch))
             SceneReferences.inst.LGs[(int)handRole].TouchpadTouchDown(touchPos);
 
