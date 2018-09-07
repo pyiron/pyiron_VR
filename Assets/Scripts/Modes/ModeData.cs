@@ -153,6 +153,8 @@ public class ModeData : MonoBehaviour
         if (modes[currentModeNr].showPossibleStructures)
             ChooseStructure.shouldShowPossibleStructures = true;
 
+        StructureMenuController.inst.transform.parent.gameObject.SetActive(modes[currentModeNr].showPossibleStructures);
+
         foreach (GameObject controller in SceneReferences.inst.Controllers)
             if (controller.activeSelf)
             {

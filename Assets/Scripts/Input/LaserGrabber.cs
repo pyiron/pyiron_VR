@@ -385,8 +385,6 @@ public class LaserGrabber : MonoBehaviour
 
     public void TouchpadPressDown(Vector2 touchPos)
     {
-        //if (ModeData.currentMode.canDuplicate)
-        //    DuplicateStructure();
         // look if an animation should be started or stopped
         if (ModeData.currentMode.showTemp || ModeData.currentMode.showRelaxation)
             // check that the player isn't currently trying to change the length of the laser
@@ -430,26 +428,16 @@ public class LaserGrabber : MonoBehaviour
         else
             readyForResize = true;
     }
-    /* TODO!
-    private void DuplicateStructure()
-    {
-        if (ctrlMaskName.Contains("BoundingboxLayer"))
-            if (collidingObject || laser.activeSelf)
-                if (Controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).y > 0)
-                    PE.SendOrder("self.duplicate(2)");
-                else
-                    if (SD.atomInfos.Count * 0.5 * 0.5 * 0.5 >= 1)
-                        PE.SendOrder("self.duplicate(0.5)");
-    }*/
 
     private void ControllAnimation(Vector2 touchPos)
     {
+        print(touchPos.x);
         if (touchPos.x > 0.5)
             if (OrdersToPython.pythonRunsAnim)
                 // send Python the order to play the animation faster. if it isn't already at it's fastest speed
                 if (PE.pythonsAnimSpeed < 5)
                     PE.ChangeAnimSpeed(1);
-                else;
+                else { }
             else
             {
                 LoadNewLammps();
@@ -464,7 +452,7 @@ public class LaserGrabber : MonoBehaviour
                 // send Python the order to play the animation faster. if it isn't already at it's fastest speed
                 if (PE.pythonsAnimSpeed > 0)
                     PE.ChangeAnimSpeed(-1);
-                else;
+                else { }
             else
             {
                 LoadNewLammps();
@@ -518,7 +506,7 @@ public class LaserGrabber : MonoBehaviour
         // when loading the first animation, show Python that it's the first time, so that it can check if there is already a loaded ham_lammps
         if (firstAnimStart)
         {
-            LoadNewLammps("self.calculate");
+            LoadNewLammps("self.create_new_lammps");// self.calculate");
             firstAnimStart = false;
             positionsHaveChanged = false;
         }
@@ -615,19 +603,6 @@ public class LaserGrabber : MonoBehaviour
                 }
         }
     }
-
-    /*public void GetThermometerReference(GameObject hittedObject)
-    //{
-        // get the reference to the thermometer, if it is not yet defined
-        //if (Thermometer.inst == null)
-        //{
-            //if (hittedObject.name == "Thermometer")
-            //    ThermometerObject = hittedObject;
-            //else
-            //    ThermometerObject = hittedObject.transform.parent.gameObject;
-            //thermometerScript = ThermometerObject.GetComponent<Thermometer>();
-        //}
-    }*/
 
     private void MoveGrabbedObject()
     {
