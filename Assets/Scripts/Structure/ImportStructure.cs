@@ -344,8 +344,6 @@ public class ImportStructure : MonoBehaviour {
                     GetStructureExpansion();
                 else if (action == "initAtoms")
                     InitAtoms();
-
-
                 atomCounter++;
                 //}
             }
@@ -396,10 +394,10 @@ public class ImportStructure : MonoBehaviour {
     {
         for (int i = 0; i < 3; i++) // searches for the min and max expansion of the cluster of each axis 
         {
-            if (float.Parse(data[i]) - LED.getSize(data[3]) / 2 < minPositions[i])
-                minPositions[i] = float.Parse(data[i]) - LED.getSize(data[3]) / 2;
-            if (float.Parse(data[i]) + LED.getSize(data[3]) / 2 > maxPositions[i])
-                maxPositions[i] = float.Parse(data[i]) + LED.getSize(data[3]) / 2;
+            if (float.Parse(data[i + 1]) - LED.getSize(data[4]) / 2 < minPositions[i])
+                minPositions[i] = float.Parse(data[i + 1]) - LED.getSize(data[4]) / 2;
+            if (float.Parse(data[i + 1]) + LED.getSize(data[4]) / 2 > maxPositions[i])
+                maxPositions[i] = float.Parse(data[i + 1]) + LED.getSize(data[4]) / 2;
         }
     }
 
@@ -418,32 +416,32 @@ public class ImportStructure : MonoBehaviour {
         if (newImport)
         {
             // Set the new atom position to the pos from the file and adjust it, so that the clusters middle is in the origin
-            currentAtom.transform.position = new Vector3(float.Parse(data[0]), float.Parse(data[1]),
-                float.Parse(data[2])); // - (maxPositions + minPositions) / 2;
+            currentAtom.transform.position = new Vector3(float.Parse(data[1]), float.Parse(data[2]),
+                float.Parse(data[3])); // - (maxPositions + minPositions) / 2;
             if (animState == "new" || (!firstImport && ProgramSettings.transMode == "shell"))
                 currentAtom.transform.position *= ProgramSettings.size;
             SD.atomCtrlPos.Add(Vector3.zero);
         }
         else
         {
-            currentAtom.transform.position = (new Vector3(float.Parse(data[0]), float.Parse(data[1]),
-                float.Parse(data[2]))) * ProgramSettings.size; // - (maxPositions + minPositions) / 2);
+            currentAtom.transform.position = (new Vector3(float.Parse(data[1]), float.Parse(data[2]),
+                float.Parse(data[3]))) * ProgramSettings.size; // - (maxPositions + minPositions) / 2);
             currentAtom.transform.position += SD.atomCtrlPos[atomCounter] + transform.position;
         }
         // set the atom colour to the colour this type of atom has
-        currentAtom.GetComponent<Renderer>().material.color = LED.getColour(data[3]);
+        currentAtom.GetComponent<Renderer>().material.color = LED.getColour(data[4]);
         // set the atoms size to the size this type of atom has 
-        currentAtom.transform.localScale = Vector3.one * LED.getSize(data[3]);
+        currentAtom.transform.localScale = Vector3.one * LED.getSize(data[4]);
         if (newImport || SD.waitForDestroyedAtom)
         {
             // give the atom an ID
             currentAtom.GetComponent<AtomID>().ID = atomCounter;
             if (SD.waitForDestroyedAtom)
-                SD.atomInfos[atomCounter] = new AtomInfos(atomCounter, data[3], currentAtom.transform);
+                SD.atomInfos[atomCounter] = new AtomInfos(atomCounter, data[4], currentAtom.transform);
             else
             {
                 // register the atom in the overwiev of StructureData
-                SD.atomInfos.Add(new AtomInfos(atomCounter, data[3], currentAtom.transform));
+                SD.atomInfos.Add(new AtomInfos(atomCounter, data[4], currentAtom.transform));
             }
         }
     }

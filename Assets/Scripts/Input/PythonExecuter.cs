@@ -34,8 +34,6 @@ public class PythonExecuter : MonoBehaviour {
     public static string collectedData = "";
     // shows whether there is some new data about the structure which has to be used in ImportStructure
     public static bool newData;
-    // shows for which atom the data is currently transmitted from Python
-    private static int currentAtomLine;
 
     // shows whether python has send some data about the force/temperature/etc. already or not
     //public static bool extendedData;
@@ -112,19 +110,6 @@ public class PythonExecuter : MonoBehaviour {
     {
         try
         {
-            /*myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            myProcess.StartInfo.CreateNoWindow = true;
-            myProcess.StartInfo.UseShellExecute = false;
-            myProcess.StartInfo.RedirectStandardInput = true;
-            myProcess.StartInfo.RedirectStandardOutput = true;
-            myProcess.OutputDataReceived += new DataReceivedEventHandler(ReadOutput);
-            myProcess.StartInfo.FileName = "C:\\Windows\\system32\\cmd.exe";
-            myProcess.StartInfo.Arguments = "/c" + order;
-            myProcess.EnableRaisingEvents = true;
-            myProcess.Start();
-            myProcess.BeginOutputReadLine();
-            loadedStructure = true;*/
-
             myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             myProcess.StartInfo.CreateNoWindow = true;
             myProcess.StartInfo.UseShellExecute = false;
@@ -140,9 +125,6 @@ public class PythonExecuter : MonoBehaviour {
             myProcess.BeginOutputReadLine();
             myProcess.BeginErrorReadLine();
             loadedStructure = true;
-            //myProcess.WaitForExit();
-            //myProcess.OutputDataReceived -= OutputDataReceived;
-            //int ExitCode = myProcess.ExitCode;
         }
         catch (Exception e) { print(e); }
     }
@@ -161,7 +143,7 @@ public class PythonExecuter : MonoBehaviour {
         }
     }
 
-    private static void ReadOutput(object sender, DataReceivedEventArgs e) 
+    private static void ReadOutput(object sender, DataReceivedEventArgs e)
     {
         print(e.Data);
         string[] splittedData = e.Data.Split();
@@ -215,14 +197,45 @@ public class PythonExecuter : MonoBehaviour {
                     allForces[int.Parse(splittedData[4])][i] = float.Parse(splittedData[i + 1]);
             }
         }
+        else if (splittedData[0] == "StructureDataStart")
+        {
+            if (splittedData.Length < 6)
+            {
+                print("First Line of Structure Data should have 6 parameters!");
+                return;
+            }
+            if (ContainsValue(splittedData[1]))
+                animKind = splittedData[1];
+            if (ContainsValue(splittedData[2]))
+                if (int.Parse(splittedData[2]) != structureSize)
+                {
+                    structureSize = int.Parse(splittedData[2]);
+                    allForces = new float[structureSize][];
+                    for (int atomNr = 0; atomNr < structureSize; atomNr++)
+                    {
+                        allForces[atomNr] = new float[3];
+                        allForces[atomNr][0] = -1;
+                    }
+                }
+            if (ContainsValue(splittedData[3]))
+            {
+                temperature = int.Parse(splittedData[3]);
+            }
+            if (ContainsValue(splittedData[4]))
+                frame = int.Parse(splittedData[4]);
+            if (ContainsValue(splittedData[5]))
+                frameAmount = int.Parse(splittedData[5]);
+        }
+        else if (splittedData[0] == "StructureDataMid")
+            StoreData(e.Data);
         // this is the line where Python sends the data about the cellbox
-        else if (currentAtomLine == structureSize + 1)
+        else if (splittedData[0] == "StructureDataEnd")
         {
             float[] cellboxData = new float[9];
             if (ContainsValue(e.Data))
             {
                 for (int i = 0; i < 9; i++)
-                    cellboxData[i] = float.Parse(splittedData[i]);
+                    cellboxData[i] = float.Parse(splittedData[i + 1]);
 
                 // save the data for the cellbox in 3 Vector3s
                 cellBorderVecs[0] = new Vector3(cellboxData[0], cellboxData[1], cellboxData[2]);
@@ -234,59 +247,9 @@ public class PythonExecuter : MonoBehaviour {
             // print(collectedData);
             currentData = "";
             newData = true;
-            currentAtomLine = 0;
-        }
-        else if (currentAtomLine == 0)
-        {
-            if (ContainsValue(splittedData[0]))
-                animKind = splittedData[0];
-            if (ContainsValue(splittedData[1]))
-                if (int.Parse(splittedData[1]) != structureSize)
-                {
-                    structureSize = int.Parse(splittedData[1]);
-                    allForces = new float[structureSize][];
-                    for (int atomNr = 0; atomNr < structureSize; atomNr++)
-                    {
-                        allForces[atomNr] = new float[3];
-                        allForces[atomNr][0] = -1;
-                    }
-                }
-            if (ContainsValue(splittedData[2]))
-            {
-                temperature = int.Parse(splittedData[2]);
-            }
-            print(int.Parse(splittedData[3]));
-            if (ContainsValue(splittedData[3]))
-                frame = int.Parse(splittedData[3]);
-            if (ContainsValue(splittedData[4]))
-                frameAmount = int.Parse(splittedData[4]);
-            //if (ContainsValue(splittedData[5]))
-            //    incomingChanges = int.Parse(splittedData[5]);
-            //if (ContainsValue(splittedData[6]))
-            //    StructureData.structureName = splittedData[6];
-
-            currentAtomLine += 1;
-
-            /*
-            if (e.Data.Split()[0].Contains("new"))
-            {
-                // remember the temperature with which the structure has been initialised
-                if (e.Data.Split()[0] == "newTemperature")
-                    temperature = int.Parse(e.Data.Split()[4]);
-                // remember the frame which Python will send to Unity next
-                frame = int.Parse(e.Data.Split()[3]);
-                // remember the size of the structure
-                if (int.Parse(e.Data.Split()[2]) != structureSize)
-                {
-                    structureSize = int.Parse(e.Data.Split()[2]);
-                    currentStructureForce = new float[structureSize];
-                }
-                // remember if the structure is static (irrelevant when sending data this way), has a changed size or will be send normally
-                StoreData(e.Data.Split()[1]);
-            }*/
         }
         else
-            StoreData(e.Data);
+            print("Warning: Unknown Data!");
     }
 
     private static bool ContainsValue(string data)
@@ -297,7 +260,6 @@ public class PythonExecuter : MonoBehaviour {
     private static void StoreData(string data)
     {
         currentData += data + "\n";
-        currentAtomLine += 1;
     }
 
     // send the given order to Python, where it will be executed with the exec() command
@@ -325,7 +287,7 @@ public class PythonExecuter : MonoBehaviour {
         print("Application ending after " + Time.time + " seconds");
         print("Sent  " + outgoingChanges + " Orders to PyIron");
         print("Received  " + incomingChanges + " Responses from PyIron");
-        myProcess.StandardInput.WriteLine("stop!");
+        myProcess.StandardInput.WriteLine("stop");
         myProcess.StandardInput.Close();
         myProcess.Close();
     }
