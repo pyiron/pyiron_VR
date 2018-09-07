@@ -9,7 +9,7 @@ public class OptionButton : MonoBehaviour, IButton {
         StructureMenuController.shouldDelete = true;
         StructureMenuController.inst.ClearOptions();
         if (StructureMenuController.inst.ActiveType().type != OptionType.Folder)
-            ModeData.inst.SetMode("Temperature Mode");
+            ModeData.inst.SetMode(Modes.Temperature);
         PythonExecuter.inst.SendOrder(PythonScript.ProjectExplorer, PythonCommandType.pr_input, GetComponentInChildren<Text>().text);
     }
 }

@@ -160,7 +160,7 @@ public class PythonExecuter : MonoBehaviour {
         {
             if (splittedData[1] == "view")
             {
-                ModeData.inst.newMode = "View Mode";
+                ModeData.inst.newMode = Modes.View;
             }
             else
             {
@@ -278,6 +278,11 @@ public class PythonExecuter : MonoBehaviour {
         // send python the order to change the animation speed, but also remember what the new animation speed is in unity
         SendOrder(PythonScript.Executor, PythonCommandType.exec, "self.animSpeed += " + speedChange);
         pythonsAnimSpeed += speedChange;
+    }
+
+    public bool IsLoading()
+    {
+        return outgoingChanges != incomingChanges;
     }
 
     private void ClosePythonProgress()

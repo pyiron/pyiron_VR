@@ -22,16 +22,13 @@ public class ModeData : MonoBehaviour
     [Header("Modes")]
     // get the textmesh from the 3D Text which shows the current mode
     public TextMesh CurrentModeText;
-    // the current mode in the game:
-    // 1: move, 2: show infos, 3: edit
-    private static int currentModeNr = 0;
     public static Mode currentMode;
     // a timer which will disable the text after a few seconds
     private float modeTextTimer;
     // the size the text should have
     private float textSize = 1f;
     // remember the new mode which should be set with the main thread
-    internal string newMode = "";
+    internal Modes newMode = Modes.None;
 
     /*public readonly Dictionary<int, Mode> modes = new Dictionary<int, Mode> {
         { 0, new Mode(m_name:"Move Mode", m_playerCanMoveAtoms:true, m_playerCanResizeAtoms:true, m_showTemp:true, m_showTrashcan:true) },
@@ -44,22 +41,22 @@ public class ModeData : MonoBehaviour
     // attention: the trashcan will just be shown if m_playerCanMoveAtoms is true, even if m_showTrashcan is true
     // attention: the mode will just be accessable, if m_playerCanMoveAtoms, m_showInfo or m_canDuplicate is true
     private static readonly Dictionary<int, Mode> modes = new Dictionary<int, Mode> {
-        { 0, new Mode(m_name:"Choose a Structure!", m_hideAtoms:true, m_showPossibleStructures:true) },
-        { 1, new Mode(m_name:"Temperature Mode", m_playerCanMoveAtoms:true, m_playerCanResizeAtoms:true, m_showTemp:true, m_showTrashcan:true) },
-        { 2, new Mode(m_name:"Relaxation Mode", m_playerCanMoveAtoms:true, m_playerCanResizeAtoms:true, m_showRelaxation:true, m_showTrashcan:true) },
-        { 3, new Mode(m_name:"Info Mode", m_showInfo:true) }
+        { 0, new Mode(mode:Modes.Explorer, hideAtoms:true, showPossibleStructures:true) },
+        { 1, new Mode(mode:Modes.Temperature, playerCanMoveAtoms:true, playerCanResizeAtoms:true, showTemp:true, showTrashcan:true) },
+        { 2, new Mode(mode:Modes.Minimize, playerCanMoveAtoms:true, playerCanResizeAtoms:true, showRelaxation:true, showTrashcan:true) },
+        { 3, new Mode(mode:Modes.Info, showInfo:true) }
         //{ 3, new Mode(m_name:"Edit Mode", m_canDuplicate:true) },
         };
 
     private void Awake()
     {
         inst = this;
-        currentMode = modes[currentModeNr];
+        currentMode = modes[0];
     }
 
     private void Start()
     {
-        SetMode(modes[currentModeNr].name);
+        SetMode(modes[(int)currentMode.mode].mode);
         // get the reference to the Settings
         Settings = SceneReferences.inst.Settings;
         // get the reference to the script that handles the connection to python
@@ -69,7 +66,7 @@ public class ModeData : MonoBehaviour
         // get the reference to PossiblePythonScripts
         //PossiblePythonScripts  = GameObject.Find("PossiblePythonScripts");
         // set the current mode to the mode according to the currentModeNr
-        currentMode = modes[currentModeNr];
+        //currentMode = modes[(int)currentMode.mode];
 
         textSize = textSize / ProgramSettings.textResolution * 10;
         transform.localScale = Vector3.one * textSize;
@@ -81,9 +78,9 @@ public class ModeData : MonoBehaviour
 
     void Update()
     {
-        if (newMode != "") { 
+        if (newMode != Modes.None) { 
             SetMode(newMode);
-            newMode = "";
+            newMode = Modes.None;
             }
         if (modeTextTimer > 0)
         {
@@ -96,20 +93,12 @@ public class ModeData : MonoBehaviour
         }
     }
 
-    public void SetMode(string newMode)
+    public void SetMode(Modes newMode)
     {
         if (currentMode != null && !currentMode.showPossibleStructures)
             // stop the currently running animation
             OTP.RunAnim(false);
-        // get the id of the new mode
-        foreach (int key in modes.Keys)
-        {
-            if (modes[key].name == newMode)
-            {
-                currentModeNr = key;
-            }
-        }
-        currentMode = modes[currentModeNr];
+        currentMode = modes[(int)currentMode.mode];
         UpdateScene();
     }
 
@@ -118,14 +107,13 @@ public class ModeData : MonoBehaviour
         if (!currentMode.showPossibleStructures)
             // stop the currently running animation
             OTP.RunAnim(false);
-        // raise the mode nr by one, except it reached the highest mode, then set it to 0
-        currentModeNr = (currentModeNr + 1) % modes.Count;
-        currentMode = modes[currentModeNr];
+        // raise the mode nr by one, except it reached the highest mode, then set it to 0. Ignore None Mode
+        currentMode = modes[(int)currentMode.mode % (modes.Count - 1)];
         UpdateScene();
     }
 
     private void UpdateScene() { 
-        gameObject.GetComponent<TextMesh>().text = modes[currentModeNr].name;
+        gameObject.GetComponent<TextMesh>().text = currentMode.mode.ToString();
         gameObject.SetActive(true);
         modeTextTimer = 3;
         // set the text to it's original size
@@ -141,22 +129,22 @@ public class ModeData : MonoBehaviour
 
         if (PythonExecuter.temperature != -1)
             // activate the thermometer when changing into temperature mode, else deactivate it
-            Thermometer.inst.gameObject.SetActive(modes[currentModeNr].showTemp);
+            Thermometer.inst.gameObject.SetActive(modes[(int)currentMode.mode].showTemp);
 
-        if (modes[currentModeNr].showInfo)
+        if (modes[(int)currentMode.mode].showInfo)
             OTP.RequestAllForces();
         // deactivate the structure if it shouldn't be shown, else activate it
-        StructureData.inst.gameObject.SetActive(!modes[currentModeNr].hideAtoms);
+        StructureData.inst.gameObject.SetActive(!modes[(int)currentMode.mode].hideAtoms);
         // TODO! activate the new UI
         //ChooseStructure.inst.StructButtons.gameObject.SetActive(modes[currentModeNr].showPossibleStructures);
 
-        StructureMenuController.inst.transform.parent.gameObject.SetActive(modes[currentModeNr].showPossibleStructures);
+        StructureMenuController.inst.transform.parent.gameObject.SetActive(modes[(int)currentMode.mode].showPossibleStructures);
 
         foreach (GameObject controller in SceneReferences.inst.Controllers)
             if (controller.activeSelf)
             {
                 // activate the symbols of the controller, if changing into a mode which can play an animation, else deactivate them
-                if (modes[currentModeNr].showTemp || modes[currentModeNr].showRelaxation)
+                if (modes[(int)currentMode.mode].showTemp || modes[(int)currentMode.mode].showRelaxation)
                 {
                     controller.GetComponent<ControllerSymbols>().Symbols.SetActive(true);
                     controller.GetComponent<ControllerSymbols>().SetSymbol();

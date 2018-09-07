@@ -4,7 +4,7 @@
 public class Mode
 {
     // create the variables, which hold the data of the properties of an element
-    public readonly string name;
+    public readonly Modes mode;
     public readonly bool playerCanMoveAtoms;
     public readonly bool playerCanResizeAtoms;
     public readonly bool showTemp;
@@ -15,19 +15,23 @@ public class Mode
     public readonly bool hideAtoms;
     public readonly bool showPossibleStructures;
 
-    // create an object which holds the infos of a mode
-    public Mode(string m_name, bool m_playerCanMoveAtoms = false, bool m_playerCanResizeAtoms = false, bool m_showTemp = false, bool m_showRelaxation = false,
-        bool m_showInfo = false, bool m_canDuplicate = false, bool m_showTrashcan=false, bool m_hideAtoms=false, bool m_showPossibleStructures = false)
+    public Mode(Modes mode, bool playerCanMoveAtoms=false, bool playerCanResizeAtoms = false, bool showTemp = false, bool showRelaxation = false,
+        bool showInfo = false, bool canDuplicate = false, bool showTrashcan = false, bool hideAtoms = false, bool showPossibleStructures = false)
     {
-        name = m_name;
-        playerCanMoveAtoms = m_playerCanMoveAtoms;
-        playerCanResizeAtoms = m_playerCanResizeAtoms;
-        showTemp = m_showTemp;
-        showRelaxation = m_showRelaxation;
-        showInfo = m_showInfo;
-        canDuplicate = m_canDuplicate;
-        showTrashcan = m_showTrashcan;
-        hideAtoms = m_hideAtoms;
-        showPossibleStructures = m_showPossibleStructures;
+        this.mode = mode;
+        this.playerCanMoveAtoms = playerCanMoveAtoms;
+        this.playerCanResizeAtoms = playerCanResizeAtoms;
+        this.showTemp = showTemp;
+        this.showRelaxation = showRelaxation;
+        this.showInfo = showInfo;
+        this.canDuplicate = canDuplicate;
+        this.showTrashcan = showTrashcan;
+        this.hideAtoms = hideAtoms;
+        this.showPossibleStructures = showPossibleStructures;
     }
+}
+
+public enum Modes
+{
+    Explorer, Temperature, Minimize, View, Info, None
 }

@@ -97,6 +97,9 @@ public class StructureMenuController : MonoBehaviour {
             }
             shouldRefresh = false;
         }
+
+        //foreach (Button btn in transform.parent.GetComponentsInChildren<Button>())
+        //    btn.interactable = !PythonExecuter.inst.IsLoading();
     }
 
     public void AddOption(OptionType t, string opt)
