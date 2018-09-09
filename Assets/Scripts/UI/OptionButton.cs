@@ -4,6 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class OptionButton : MonoBehaviour, IButton {
+    public void Update()
+    {
+        transform.localEulerAngles = Vector3.zero;
+    }
+
     public void WhenClickDown()
     {
         StructureMenuController.shouldDelete = true;

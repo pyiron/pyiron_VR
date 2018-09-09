@@ -88,7 +88,7 @@ public class InputManager : MonoBehaviour
     // check if the application menu button has been pressed. If that's the case, go to the next mode
     private void CheckapplicationMenu(HandRole handRole)
     {
-        if (ViveInput.GetPressDown(handRole, ControllerButton.Menu))
+        if (ViveInput.GetPressDown(handRole, ControllerButton.System))
         {
             ViveInput.TriggerHapticPulse(handRole, 5000);
             print(PythonExecuter.loadedStructure);
