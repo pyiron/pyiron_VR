@@ -68,6 +68,9 @@ public class PythonExecuter : MonoBehaviour {
     // the amount of changes the Unity program requested the Python program to do
     public static int outgoingChanges;
 
+    private static float timeLastStrucRec;
+    private static float currTime;
+
 
     private void Awake()
     {
@@ -141,9 +144,26 @@ public class PythonExecuter : MonoBehaviour {
             Thermometer.inst.SetState(ModeData.currentMode.showTemp);
             Thermometer.inst.UpdateTemperature();
         }
+        
+        InGamePrinter.inst[0].Ctrl_print("Send: " + PythonExecuter.outgoingChanges.ToString());
+        InGamePrinter.inst[1].Ctrl_print("Received: " + PythonExecuter.incomingChanges.ToString());
+
+        currTime = Time.time;
     }
 
     private static void ReadOutput(object sender, DataReceivedEventArgs e)
+    {
+        try
+        {
+            HandleInp(e);
+        }
+        catch(Exception exc)
+        {
+            print(exc);
+        }
+    }
+
+    private static void HandleInp(DataReceivedEventArgs e)
     {
         string[] splittedData = e.Data.Split();
         if (e.Data.Contains("print"))
@@ -198,6 +218,8 @@ public class PythonExecuter : MonoBehaviour {
         }
         else if (splittedData[0] == "StructureDataStart")
         {
+            print(timeLastStrucRec - currTime);
+            timeLastStrucRec = currTime;
             if (splittedData.Length < 6)
             {
                 print("First Line of Structure Data should have 6 parameters!");

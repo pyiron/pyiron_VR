@@ -162,8 +162,6 @@ public class LaserGrabber : MonoBehaviour
 
     void Update()
     {
-        InGamePrinter.inst[0].Ctrl_print("Send: " + PythonExecuter.outgoingChanges.ToString(), 120);
-        InGamePrinter.inst[0].Ctrl_print("Received: " + PythonExecuter.incomingChanges.ToString(), 120, false);
         if (ModeData.currentMode.playerCanMoveAtoms)
         {
             // move the grabbed object
@@ -175,8 +173,6 @@ public class LaserGrabber : MonoBehaviour
                     // update the trashcan, if it is shown in the current mode
                     if (ModeData.currentMode.showTrashcan)
                         TrashCan.inst.UpdateTrashCan(attachedObject);
-                    // let the controller printer print the atom ID of the current attached atom
-                    InGamePrinter.inst[0].Ctrl_print(attachedObject.GetComponent<AtomID>().ID.ToString(), 101);
                 }
                 else
                     // update the rotation of the Hourglass

@@ -40,13 +40,20 @@ public class ModeData : MonoBehaviour
     // the dictionary which defines what properties each mode has
     // attention: the trashcan will just be shown if m_playerCanMoveAtoms is true, even if m_showTrashcan is true
     // attention: the mode will just be accessable, if m_playerCanMoveAtoms, m_showInfo or m_canDuplicate is true
-    private static readonly Dictionary<int, Mode> modes = new Dictionary<int, Mode> {
+    /*private static readonly Dictionary<int, Mode> modes = new Dictionary<int, Mode> {
         { 0, new Mode(mode:Modes.Explorer, hideAtoms:true, showPossibleStructures:true) },
         { 1, new Mode(mode:Modes.Temperature, playerCanMoveAtoms:true, playerCanResizeAtoms:true, showTemp:true, showTrashcan:true) },
         { 2, new Mode(mode:Modes.Minimize, playerCanMoveAtoms:true, playerCanResizeAtoms:true, showRelaxation:true, showTrashcan:true) },
         { 3, new Mode(mode:Modes.Info, showInfo:true) }
         //{ 3, new Mode(m_name:"Edit Mode", m_canDuplicate:true) },
-        };
+        };*/
+    private static List<Mode> modes = new List<Mode>() {
+        new Mode(mode:Modes.Explorer, hideAtoms: true, showPossibleStructures: true),
+        new Mode(mode:Modes.Temperature, playerCanMoveAtoms:true, playerCanResizeAtoms:true, showTemp:true, showTrashcan:true),
+        new Mode(mode:Modes.Minimize, playerCanMoveAtoms:true, playerCanResizeAtoms:true, showRelaxation:true, showTrashcan:true),
+        new Mode(mode:Modes.View, playerCanMoveAtoms:true),
+        new Mode(mode:Modes.Info, showInfo:true)
+    };
 
     private void Awake()
     {
@@ -98,7 +105,7 @@ public class ModeData : MonoBehaviour
         if (currentMode != null && !currentMode.showPossibleStructures)
             // stop the currently running animation
             OTP.RunAnim(false);
-        currentMode = modes[(int)currentMode.mode];
+        currentMode = modes[(int)newMode];
         UpdateScene();
     }
 
@@ -131,6 +138,7 @@ public class ModeData : MonoBehaviour
             // activate the thermometer when changing into temperature mode, else deactivate it
             Thermometer.inst.gameObject.SetActive(modes[(int)currentMode.mode].showTemp);
 
+        print((int)currentMode.mode);
         if (modes[(int)currentMode.mode].showInfo)
             OTP.RequestAllForces();
         // deactivate the structure if it shouldn't be shown, else activate it

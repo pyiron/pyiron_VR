@@ -19,7 +19,7 @@ public class Mode
         bool showInfo = false, bool canDuplicate = false, bool showTrashcan = false, bool hideAtoms = false, bool showPossibleStructures = false)
     {
         this.mode = mode;
-        this.playerCanMoveAtoms = playerCanMoveAtoms;
+        this.playerCanMoveAtoms = playerCanMoveAtoms;  // switch to type handrole
         this.playerCanResizeAtoms = playerCanResizeAtoms;
         this.showTemp = showTemp;
         this.showRelaxation = showRelaxation;

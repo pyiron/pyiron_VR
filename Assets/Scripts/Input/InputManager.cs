@@ -10,8 +10,6 @@ using HTC.UnityPlugin.Vive;
 public class InputManager : MonoBehaviour
 {
     [Header("Scene Data")]
-    // the script of the controller printer
-    public InGamePrinter printer;
     // get the data about the modes
     public ModeData MD;
 
@@ -79,29 +77,18 @@ public class InputManager : MonoBehaviour
     }
 
     private void CheckGripButton(HandRole handRole)
-    { // TODO
+    {
         if (ViveInput.GetPressDown(handRole, ControllerButton.Grip))
-            //if (ControllerDevices[ctrlNr].GetPressDown(SteamVR_Controller.ButtonMask.Grip))
-            if (SceneReferences.inst.LGs[(int)handRole].ctrlMaskName.Contains("Atom"))
-                printer.printers[0].gameObject.SetActive(true);
-            else
-                printer.printers[1].gameObject.SetActive(true);
+            InGamePrinter.inst[(int)handRole].SetState(true);
 
         if (ViveInput.GetPressUp(handRole, ControllerButton.Grip))
-            //if (ControllerDevices[ctrlNr].GetPressUp(SteamVR_Controller.ButtonMask.Grip))
-            if (SceneReferences.inst.LGs[(int)handRole].ctrlMaskName.Contains("Atom"))
-                printer.printers[0].gameObject.SetActive(false);
-            else
-                printer.printers[1].gameObject.SetActive(false);
+            InGamePrinter.inst[(int)handRole].SetState(false);
     }
-
-    
 
     // check if the application menu button has been pressed. If that's the case, go to the next mode
     private void CheckapplicationMenu(HandRole handRole)
     {
         if (ViveInput.GetPressDown(handRole, ControllerButton.Menu))
-            //if (ControllerDevices[ctrlNr].GetPressDown(SteamVR_Controller.ButtonMask.ApplicationMenu))
         {
             ViveInput.TriggerHapticPulse(handRole);
             print(PythonExecuter.loadedStructure);

@@ -7,10 +7,7 @@ public class InGamePrinter : MonoBehaviour {
     public static InGamePrinter[] inst = new InGamePrinter[2];
 
     [Header("Scene")]
-    public GameObject[] printers;
-    public LaserGrabber[] LG;
-    private string[] printText = new string[2];
-    private int[] currentImportance = new int[2];
+    TextMesh textMesh;
     // the size the text should have
     private float textSize = 0.2f;
 
@@ -24,40 +21,23 @@ public class InGamePrinter : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        for (int i = 0; i < 2; i++)
-        {
-            printText[i] = "";
-            currentImportance[i] = 0;
-        }
+        textMesh = GetComponentInChildren<TextMesh>();
 
         textSize = textSize / ProgramSettings.textResolution * 10;
-        foreach (GameObject printerText in printers)
-        {
-            printerText.transform.localScale = Vector3.one * textSize;
-            printerText.GetComponent<TextMesh>().fontSize = (int)ProgramSettings.textResolution;
-        }
-    }
-	
-    
-	// Update is called once per frame
-	void LateUpdate () {
-        for (int i = 0; i < 2; i++)
-        {
-            printers[i].GetComponent<TextMesh>().text = printText[i];
-            currentImportance[i] = 0;
-        }
+        textMesh.transform.localScale = Vector3.one * textSize;
+        textMesh.fontSize = (int)ProgramSettings.textResolution;
+        SetState(false);
     }
 
-    public void Ctrl_print(string text, int importance=0, bool rightCtrl = true)
+    public void SetState(bool active)
     {
-        int ctrlNr = 0;
-        if (rightCtrl)
-            ctrlNr = 1;
+        textMesh.gameObject.SetActive(active);
+    }
 
-        if (importance >= currentImportance[ctrlNr])
-        {
-            printText[ctrlNr] = text;
-            currentImportance[ctrlNr] = importance;
-        }
+    public void Ctrl_print(string text)
+    {
+        // test if the controller has already been active
+        if (textMesh != null)
+            textMesh.text = text;
     }
 }
