@@ -427,7 +427,6 @@ public class LaserGrabber : MonoBehaviour
 
     private void ControllAnimation(Vector2 touchPos)
     {
-        print(touchPos.x);
         if (touchPos.x > 0.5)
             if (OrdersToPython.pythonRunsAnim)
                 // send Python the order to play the animation faster. if it isn't already at it's fastest speed

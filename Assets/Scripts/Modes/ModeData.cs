@@ -114,8 +114,7 @@ public class ModeData : MonoBehaviour
         if (!currentMode.showPossibleStructures)
             // stop the currently running animation
             OTP.RunAnim(false);
-        // raise the mode nr by one, except it reached the highest mode, then set it to 0. Ignore None Mode
-        currentMode = modes[(int)currentMode.mode % (modes.Count - 1)];
+        currentMode = modes[((int)currentMode.mode + 1) % modes.Count];
         UpdateScene();
     }
 

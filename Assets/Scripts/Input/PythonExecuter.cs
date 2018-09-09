@@ -153,6 +153,7 @@ public class PythonExecuter : MonoBehaviour {
 
     private static void ReadOutput(object sender, DataReceivedEventArgs e)
     {
+        print(e.Data);
         try
         {
             foreach (String partInp in e.Data.Split('%'))
@@ -287,7 +288,7 @@ public class PythonExecuter : MonoBehaviour {
     public void SendOrder(PythonScript script, PythonCommandType type, string order)
     {
         string full_order = script.ToString() + " " + type.ToString() + " " + order;
-        print(full_order);
+        //print(full_order);
         // show that the Unity program has send the Python program an order
         outgoingChanges += 1;
 
