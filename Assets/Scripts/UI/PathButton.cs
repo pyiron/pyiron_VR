@@ -5,6 +5,11 @@ using UnityEngine.UI;
 
 public class PathButton : MonoBehaviour, IButton
 {
+    public void Update()
+    {
+        transform.localEulerAngles = Vector3.zero;
+    }
+
     public void WhenClickDown()
     {
         StructureMenuController.shouldDelete = true;

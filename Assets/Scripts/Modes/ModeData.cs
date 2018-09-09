@@ -137,7 +137,6 @@ public class ModeData : MonoBehaviour
             // activate the thermometer when changing into temperature mode, else deactivate it
             Thermometer.inst.gameObject.SetActive(modes[(int)currentMode.mode].showTemp);
 
-        print((int)currentMode.mode);
         if (modes[(int)currentMode.mode].showInfo)
             OTP.RequestAllForces();
         // deactivate the structure if it shouldn't be shown, else activate it
@@ -145,7 +144,8 @@ public class ModeData : MonoBehaviour
         // TODO! activate the new UI
         //ChooseStructure.inst.StructButtons.gameObject.SetActive(modes[currentModeNr].showPossibleStructures);
 
-        StructureMenuController.inst.transform.parent.gameObject.SetActive(modes[(int)currentMode.mode].showPossibleStructures);
+        //StructureMenuController.inst.transform.parent.gameObject.SetActive();
+        StructureMenuController.inst.SetState(modes[(int)currentMode.mode].showPossibleStructures);
 
         foreach (GameObject controller in SceneReferences.inst.Controllers)
             if (controller.activeSelf)

@@ -68,8 +68,6 @@ public class ImportStructure : MonoBehaviour {
     private int min_fps;
 
     [Header("Reading Tools")]
-    // the path to the file which holds the data of the current frame
-    private string pathName;
     // stores the data of each read line in a file
     private string line;
     // the individual properties announced in the line
@@ -95,11 +93,7 @@ public class ImportStructure : MonoBehaviour {
                 min_fps_display = text;
             else if (text.name.Contains("fps_display"))
                 fps_display = text;
-
-        try { File.Delete(pathName); } catch { } // print("couldn't delete file");}
-
-        // get the path to the transmitter file which holds the data pyiron send to unity
-        pathName = ProgramSettings.GetFilePath(strucFileName);
+        
         LED = SceneReferences.inst.Settings.GetComponent<LocalElementData>();
         SD = gameObject.GetComponent<StructureData>();
     }
@@ -144,59 +138,13 @@ public class ImportStructure : MonoBehaviour {
                 if (PythonExecuter.structureSize != SD.atomInfos.Count)
                     return;
             }
-
-            if (ProgramSettings.transMode == "file")
-            {
-                // the max amount of tries this program has to get the script, else it will just go on
-                int maxTries;
-                maxTries = 1000;
-
-                while (maxTries > 0)
-                    if (File.Exists(pathName))
-                    {
-                        while (maxTries > 0)
-                            try
-                            {
-                                LoadStructure();
-                                // print(1 / (Time.time - lastTime));
-                                cumulated_fps += (int)(1 / (Time.time - lastTime));
-                                if ((int)(1 / (Time.time - lastTime)) < min_fps)
-                                    min_fps = (int)(1 / (Time.time - lastTime));
-                                fps_count += 1;
-                                lastTime = Time.time;
-                                newImport = false;
-                                break;
-                            }
-                            catch
-                            {
-                                if (maxTries == 1)
-                                    if (ProgramSettings.showErrors)
-                                        print("No Input!");
-                                maxTries -= 1;
-                                // print("error, probably because both programs want to simultaniously use the file");
-                            }
-                        break;
-                    }
-                    else
-                    {
-                        if (animState == "static")
-                            break;
-                        if (maxTries == 1)
-                            if (ProgramSettings.showErrors)
-                                print("No Input!");
-                        maxTries -= 1;
-                    }
-                //print("python too slow");
-            }
-            else
-            {
-                LoadStructure();
-                cumulated_fps += (int)(1 / (Time.time - lastTime));
-                if ((int)(1 / (Time.time - lastTime)) < min_fps)
-                    min_fps = (int)(1 / (Time.time - lastTime));
-                fps_count += 1;
-                lastTime = Time.time;
-            }
+            
+            LoadStructure();
+            cumulated_fps += (int)(1 / (Time.time - lastTime));
+            if ((int)(1 / (Time.time - lastTime)) < min_fps)
+                min_fps = (int)(1 / (Time.time - lastTime));
+            fps_count += 1;
+            lastTime = Time.time;
         }
     }
 
@@ -225,29 +173,8 @@ public class ImportStructure : MonoBehaviour {
             }
         }
 
-        //if (programSettings.transMode == "file")
-        //    currentFrame = (currentFrame + 1) % 477;  // insert the amount of frames here
-
-        int maxTries;
-        maxTries = 1000;
         input_file_data = "";
-        if (ProgramSettings.transMode == "file")
-            while (maxTries > 0 || firstImport)
-                try
-                {
-                    // save the data of the input file as a string, so that the file is just read as short as possible
-                    StreamReader sr = new StreamReader(pathName, Encoding.Default);
-                    using (sr)
-                    {
-                        input_file_data = sr.ReadToEnd();
-                        break;
-                    }
-                }
-                catch
-                {
-                    maxTries -= 1;
-                }
-        else if (PythonExecuter.newData)
+        if (PythonExecuter.newData)
         {
             input_file_data = PythonExecuter.collectedData;
             // print(input_file_data);
@@ -278,9 +205,6 @@ public class ImportStructure : MonoBehaviour {
         }
         // create the atoms
         ReadFile("initAtoms");
-
-        if (animState != "static")
-            try { File.Delete(pathName); } catch { } // print("couldn't delete file");}
 
         if (newImport)
         {
@@ -418,8 +342,8 @@ public class ImportStructure : MonoBehaviour {
             // Set the new atom position to the pos from the file and adjust it, so that the clusters middle is in the origin
             currentAtom.transform.position = new Vector3(float.Parse(data[1]), float.Parse(data[2]),
                 float.Parse(data[3])); // - (maxPositions + minPositions) / 2;
-            if (animState == "new" || (!firstImport && ProgramSettings.transMode == "shell"))
-                currentAtom.transform.position *= ProgramSettings.size;
+            //if (animState == "new" || (!firstImport && ProgramSettings.transMode == "shell"))
+            //    currentAtom.transform.position *= ProgramSettings.size;
             SD.atomCtrlPos.Add(Vector3.zero);
         }
         else

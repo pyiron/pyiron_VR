@@ -21,6 +21,8 @@ public class SceneReferences : MonoBehaviour {
     [Header("User")]
     // reference to the Head GO
     public GameObject HeadGO;
+    // a Point in short distance before the head of the user
+    public GameObject CenterPoint;
     // the reference to the controllers
     public GameObject[] Controllers = new GameObject[2];
     // the reference to the LaserGrabber script of the controllers

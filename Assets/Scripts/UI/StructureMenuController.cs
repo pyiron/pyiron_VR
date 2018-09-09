@@ -24,6 +24,11 @@ public class StructureMenuController : MonoBehaviour {
         ClearOptions();
     }
 
+    internal void SetState(bool active)
+    {
+        ProgramSettings.MoveToCenter(transform.parent.parent.gameObject);
+    }
+
     internal void ClearOptions()
     {
         options.Clear();
@@ -45,6 +50,8 @@ public class StructureMenuController : MonoBehaviour {
 
     private void Update()
     {
+        //transform.parent.parent.position = SceneReferences.inst.CenterPoint.transform.position;
+        //ProgramSettings.Face_Player(transform.parent.parent.gameObject);
         if (shouldDelete)
         {
             foreach (Button btn in OptionFolder.GetComponentsInChildren<Button>())
