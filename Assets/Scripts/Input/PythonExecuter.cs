@@ -145,8 +145,8 @@ public class PythonExecuter : MonoBehaviour {
             Thermometer.inst.UpdateTemperature();
         }
         
-        InGamePrinter.inst[0].Ctrl_print("Send: " + PythonExecuter.outgoingChanges.ToString());
-        InGamePrinter.inst[1].Ctrl_print("Received: " + PythonExecuter.incomingChanges.ToString());
+        InGamePrinter.inst[0].Ctrl_print("Send: " + outgoingChanges.ToString());
+        InGamePrinter.inst[1].Ctrl_print("Received: " + incomingChanges.ToString());
 
         currTime = Time.time;
     }
@@ -155,7 +155,8 @@ public class PythonExecuter : MonoBehaviour {
     {
         try
         {
-            HandleInp(e);
+            foreach (String partInp in e.Data.Split('%'))
+                HandleInp(partInp);
         }
         catch(Exception exc)
         {
@@ -163,14 +164,14 @@ public class PythonExecuter : MonoBehaviour {
         }
     }
 
-    private static void HandleInp(DataReceivedEventArgs e)
+    private static void HandleInp(String inp)
     {
-        string[] splittedData = e.Data.Split();
-        if (e.Data.Contains("print"))
-            print(e.Data);
-        else if (e.Data.Contains("job"))
+        string[] splittedData = inp.Split();
+        if (inp.Contains("print"))
+            print(inp);
+        else if (inp.Contains("job"))
             return;
-        else if (e.Data.Contains("Order executed"))
+        else if (inp.Contains("Order executed"))
         {
             // show that Unity received the change from Python
             incomingChanges += 1;
@@ -189,15 +190,15 @@ public class PythonExecuter : MonoBehaviour {
         }
         else if (splittedData[0] == "groups")
         {
-            StructureMenuController.inst.AddOption(OptionType.Folder, e.Data.Substring(7));
+            StructureMenuController.inst.AddOption(OptionType.Folder, inp.Substring(7));
         }
         else if (splittedData[0] == "nodes")
         {
-            StructureMenuController.inst.AddOption(OptionType.Job, e.Data.Substring(6));
+            StructureMenuController.inst.AddOption(OptionType.Job, inp.Substring(6));
         }
         else if (splittedData[0] == "files")
         {
-            StructureMenuController.inst.AddOption(OptionType.Script, e.Data.Substring(6));
+            StructureMenuController.inst.AddOption(OptionType.Script, inp.Substring(6));
         }
         else if (splittedData[0] == "path")
         {
@@ -218,7 +219,6 @@ public class PythonExecuter : MonoBehaviour {
         }
         else if (splittedData[0] == "StructureDataStart")
         {
-            print(timeLastStrucRec - currTime);
             timeLastStrucRec = currTime;
             if (splittedData.Length < 6)
             {
@@ -248,12 +248,12 @@ public class PythonExecuter : MonoBehaviour {
                 frameAmount = int.Parse(splittedData[5]);
         }
         else if (splittedData[0] == "StructureDataMid")
-            StoreData(e.Data);
+            StoreData(inp);
         // this is the line where Python sends the data about the cellbox
         else if (splittedData[0] == "StructureDataEnd")
         {
             float[] cellboxData = new float[9];
-            if (ContainsValue(e.Data))
+            if (ContainsValue(inp))
             {
                 for (int i = 0; i < 9; i++)
                     cellboxData[i] = float.Parse(splittedData[i + 1]);
