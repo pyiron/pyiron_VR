@@ -5,7 +5,7 @@ using UnityEngine;
 public class AnimationController : MonoBehaviour {
     [Header("Animation")]
     public static bool run_anim;
-    public static int animSpeed = 3;
+    public static int animSpeed = 4;
     public static int frame;
     private static float next_time;
     private static bool shouldLoad;
@@ -40,7 +40,6 @@ public class AnimationController : MonoBehaviour {
         }
         else if (shouldLoad && GetCurrFrameData().cellbox != null)
         {
-            print("should now load");
             ImportStructure.inst.LoadStructure();
             shouldLoad = false;
         }

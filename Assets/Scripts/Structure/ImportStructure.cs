@@ -58,7 +58,6 @@ public class ImportStructure : MonoBehaviour {
 
     public void LoadStructure()
     {
-        print("loading");
         if (!SD.boundingbox)
         {
             // create the instance of the boundingbox
