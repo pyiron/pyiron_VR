@@ -90,14 +90,14 @@ public class ControllerSymbols : MonoBehaviour {
                     if (symbolProperties.m_animSpeed == -1)
                         AnimSymbol.SetActive(true);
                     // activate the symbol which show which animation speed will come when clicking on the left side
-                    else if (symbolProperties.m_animSpeed == PE.pythonsAnimSpeed - 1)
+                    else if (symbolProperties.m_animSpeed == AnimationController.animSpeed - 1)
                     {
                         AnimSymbol.SetActive(true);
                         // set the symbol on the left side of the touchpad
                         AnimSymbol.transform.localPosition = symbolProperties.m_position;
                     }
                     // activate the symbols which show which animation speed will come when clicking on the right side
-                    else if (symbolProperties.m_animSpeed == PE.pythonsAnimSpeed + 1)
+                    else if (symbolProperties.m_animSpeed == AnimationController.animSpeed + 1)
                     {
                         AnimSymbol.SetActive(true);
                         // set the symbol on the right side of the touchpad

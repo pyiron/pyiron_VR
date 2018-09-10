@@ -83,3 +83,52 @@ public class StructureData : MonoBehaviour
     }*/
 }
 
+public class AtomData
+{
+    internal Vector3 pos;
+    internal string type;
+    internal int id;
+
+    public AtomData(Vector3 pos, string type)
+    {
+        this.pos = pos;
+        this.type = type;
+    }
+}
+
+public class FrameData
+{
+    internal int size;
+    internal int frame;
+    internal int frames;
+    internal List<AtomData> atoms = new List<AtomData>();
+    internal Vector3[] cellbox;
+
+    public FrameData(int size, int frame, int frames, List<AtomData> atoms, Vector3[] cellbox)
+    {
+        this.size = size;
+        this.frame = frame;
+        this.frames = frames;
+        this.atoms = atoms;
+        this.cellbox = cellbox;
+    }
+
+    public FrameData(int size, int frame, int frames)
+    {
+        this.size = size;
+        this.frame = frame;
+        this.frames = frames;
+    }
+
+    public void AddAtom(AtomData atom)
+    {
+        atom.id = atoms.Count;
+        atoms.Add(atom);
+    }
+
+    public void AddCellbox(Vector3[] newCellbox)
+    {
+        cellbox = newCellbox;
+    }
+}
+

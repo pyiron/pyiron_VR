@@ -4,6 +4,7 @@ using UnityEngine;
 
 // Component of HourglassRotator
 public class HourglassActivator : MonoBehaviour {
+    public static HourglassActivator inst;
     // the reference to the Hourglass
     private GameObject Hourglass;
     // the hourglass will just be activated, if this timer is <= 0
@@ -13,6 +14,7 @@ public class HourglassActivator : MonoBehaviour {
 
     private void Awake()
     {
+        inst = this;
         // get the reference to the Hourglass
         Hourglass = transform.GetChild(0).gameObject;
     }

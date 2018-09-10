@@ -46,9 +46,6 @@ public class PythonExecuter : MonoBehaviour {
 
 
     [Header("Send Data to Python")]
-    // the speed with which Python currently runs the animation
-    public int pythonsAnimSpeed = 4;
-
     // the amount of changes the Unity program requested the Python program to do
     public static int outgoingChanges;
 
@@ -282,9 +279,7 @@ public class PythonExecuter : MonoBehaviour {
 
     public void ChangeAnimSpeed(int speedChange)
     {
-        // send python the order to change the animation speed, but also remember what the new animation speed is in unity
-        SendOrder(PythonScript.Executor, PythonCommandType.exec, "self.animSpeed += " + speedChange);
-        pythonsAnimSpeed += speedChange;
+        AnimationController.animSpeed += speedChange;
     }
 
     public bool IsLoading()

@@ -66,7 +66,7 @@ public class ProgressBar : MonoBehaviour {
 
                     // update the text of how fast the anim speed is
                     if (OrdersToPython.pythonRunsAnim)
-                        TM.text = animationSpeedLabels[PE.pythonsAnimSpeed];
+                        TM.text = animationSpeedLabels[AnimationController.animSpeed];
                 }
         }
     }

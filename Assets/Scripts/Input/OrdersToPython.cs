@@ -110,7 +110,7 @@ public class OrdersToPython : MonoBehaviour
         }
 
         // send Python/Pyiron the order to destroy the atom
-        SceneReferences.inst.PE.SendOrder(PythonScript.Executor, PythonCommandType.exec, "self.destroy_atom(" + atomId + ")");
+        SceneReferences.inst.PE.SendOrder(PythonScript.Executor, PythonCommandType.exec, "self.destroy_atom(" + atomId + ", " + AnimationController.frame + ")");
         // delete the atom and send python/pyiron that the atom should be excluded in the structure
         StructureData.inst.waitForDestroyedAtom = true;
         // remove the atom in the list of the properties of each atom
@@ -133,9 +133,9 @@ public class OrdersToPython : MonoBehaviour
     public void RunAnim(bool shouldRun=false)
     {
         if (shouldRun)
-            SceneReferences.inst.PE.SendOrder(PythonScript.Executor, PythonCommandType.exec, "self.run_anim()");
+            AnimationController.run_anim = true;
         else
-            SceneReferences.inst.PE.SendOrder(PythonScript.Executor, PythonCommandType.exec, "self.stop_anim()");
+            AnimationController.run_anim = false;
         pythonRunsAnim = shouldRun;
         // update the symbols on all active controllers
         foreach (GameObject Controller in SceneReferences.inst.Controllers)
@@ -146,7 +146,7 @@ public class OrdersToPython : MonoBehaviour
     // request the forces of all atoms from Python
     public void RequestAllForces()
     {
-        SceneReferences.inst.PE.SendOrder(PythonScript.Executor, PythonCommandType.exec, "self.send_all_forces()");
+        SceneReferences.inst.PE.SendOrder(PythonScript.Executor, PythonCommandType.exec, "self.send_all_forces(" + AnimationController.frame + ")");
     }
 
     public void SetNewPositions()
@@ -160,7 +160,8 @@ public class OrdersToPython : MonoBehaviour
                 newPosition += atomPosition[i] + " ";
             newPosition += atomInfo.m_ID;
             // send the local position of the current atom to Python
-            SceneReferences.inst.PE.SendOrder(PythonScript.Executor, PythonCommandType.exec, "self.set_new_base_position('" + newPosition + "')");
+            SceneReferences.inst.PE.SendOrder(PythonScript.Executor, PythonCommandType.exec,
+                "self.set_new_base_position('" + newPosition + "', " + AnimationController.frame + ")");
             // set the atom back to the position where it was before the player moved it
             atomPosition -= StructureData.inst.atomCtrlPos[atomInfo.m_ID];
             // show that the player hasn't moved an atom since the last creation of an ham_lammps

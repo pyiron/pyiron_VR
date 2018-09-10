@@ -18,10 +18,6 @@ public class ImportStructure : MonoBehaviour {
     private LocalElementData LED;
     // the data of the structure the atoms are in
     private StructureData SD;
-    // the script of the controller printer
-    public InGamePrinter printer;
-    // the reference to the hourglass
-    private GameObject HourglassRotator;
 
     [Header("Cellbox")]
     private GameObject Cellbox;
@@ -50,11 +46,6 @@ public class ImportStructure : MonoBehaviour {
         SD = gameObject.GetComponent<StructureData>();
     }
 
-    void Start()
-    {
-        //LoadStructure();
-    }
-
     void Update()
     {    
         if (SD.waitForDestroyedAtom)
@@ -63,12 +54,11 @@ public class ImportStructure : MonoBehaviour {
             if (AnimationController.structureSize != SD.atomInfos.Count)
                 return;
         }
-            
-        //LoadStructure();
     }
 
     public void LoadStructure()
     {
+        print("loading");
         if (!SD.boundingbox)
         {
             // create the instance of the boundingbox
@@ -107,10 +97,10 @@ public class ImportStructure : MonoBehaviour {
         foreach (AtomData atom in AnimationController.GetCurrFrameData().atoms)
         {
             InitAtoms(atom);
-            if (!firstImport)
-                if (atom.id != SD.atomInfos.Count)
-                    if (!SD.waitForDestroyedAtom)
-                        newImport = true;
+            //if (!firstImport)
+            //    if (atom.id != SD.atomInfos.Count)
+            //        if (!SD.waitForDestroyedAtom)
+            //            newImport = true;
         }
 
         if (newImport)
@@ -203,11 +193,11 @@ public class ImportStructure : MonoBehaviour {
             }
 
         // set the position of the Hourglass to the middle of the cellbox
-        HourglassRotator.transform.localPosition = Vector3.zero;
+        HourglassActivator.inst.transform.localPosition = Vector3.zero;
         for (int i = 0; i < 3; i++)
-            HourglassRotator.transform.localPosition += cellboxData[i] / 2;
+            HourglassActivator.inst.transform.localPosition += cellboxData[i] / 2;
         // set the size of the Hourglass to the size it should have
-        HourglassRotator.transform.GetChild(0).localScale = Vector3.one;
+        HourglassActivator.inst.transform.GetChild(0).localScale = Vector3.one;
     }
 
     private void InitAtoms(AtomData atom)
@@ -252,6 +242,7 @@ public class ImportStructure : MonoBehaviour {
                 SD.atomInfos.Add(new AtomInfos(atom.id, atom.type, currentAtom.transform));
             }
         }
+
     }
 }
 

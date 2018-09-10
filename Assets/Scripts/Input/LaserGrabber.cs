@@ -400,9 +400,9 @@ public class LaserGrabber : MonoBehaviour
             if (moveOneFrameTimer >= timeUntilMoveOneFrame)
             {
                 if (touchPos.x > 0)
-                    PE.SendOrder(PythonScript.Executor, PythonCommandType.exec, "self.move_one_frame(True)");
+                    AnimationController.move_one_frame(true);
                 else
-                    PE.SendOrder(PythonScript.Executor, PythonCommandType.exec, "self.move_one_frame(False)");
+                    AnimationController.move_one_frame(false);
                 moveOneFrameTimer = 0;
             }
         }
@@ -427,30 +427,30 @@ public class LaserGrabber : MonoBehaviour
         if (touchPos.x > 0.5)
             if (OrdersToPython.pythonRunsAnim)
                 // send Python the order to play the animation faster. if it isn't already at it's fastest speed
-                if (PE.pythonsAnimSpeed < 5)
-                    PE.ChangeAnimSpeed(1);
+                if (AnimationController.animSpeed < 5)
+                    AnimationController.animSpeed += 1;
                 else { }
             else
             {
                 LoadNewLammps();
 
                 // go one frame forward
-                PE.SendOrder(PythonScript.Executor, PythonCommandType.exec, "self.move_one_frame(True)");
+                AnimationController.move_one_frame(true);
                 // show that the user pressed the button to go one step forward
                 moveOneFrameTimer = 0;
             }
         else if (touchPos.x < -0.5)
             if (OrdersToPython.pythonRunsAnim)
                 // send Python the order to play the animation faster. if it isn't already at it's fastest speed
-                if (PE.pythonsAnimSpeed > 0)
-                    PE.ChangeAnimSpeed(-1);
+                if (AnimationController.animSpeed > 0)
+                    AnimationController.animSpeed -= 1;
                 else { }
             else
             {
                 LoadNewLammps();
 
                 // go one frame back
-                PE.SendOrder(PythonScript.Executor, PythonCommandType.exec, "self.move_one_frame(False)");
+                AnimationController.move_one_frame(true);
                 moveOneFrameTimer = 0;
             }
         else if (OrdersToPython.pythonRunsAnim)
@@ -525,9 +525,9 @@ public class LaserGrabber : MonoBehaviour
     private void LoadNewLammps(string loadOrder)
     {
         if (ModeData.currentMode.showTemp)
-            PE.SendOrder(PythonScript.Executor, PythonCommandType.exec, loadOrder + "('md')");
+            PE.SendOrder(PythonScript.Executor, PythonCommandType.exec, loadOrder + "('md'" + ", " + AnimationController.frame + ")");
         else if (ModeData.currentMode.showRelaxation)
-            PE.SendOrder(PythonScript.Executor, PythonCommandType.exec, loadOrder + "('minimize')");
+            PE.SendOrder(PythonScript.Executor, PythonCommandType.exec, loadOrder + "('minimize', " + ", " + AnimationController.frame + ")");
         lammpsIsMd = ModeData.currentMode.showTemp;
     }
 
