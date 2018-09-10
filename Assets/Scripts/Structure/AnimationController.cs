@@ -9,6 +9,7 @@ public class AnimationController : MonoBehaviour {
     public static int frame;
     private static float next_time;
     private static bool shouldLoad;
+    public static bool waitForLoadedStruc;
     
     [Header("Structure Data")]
     public static List<FrameData> animation_data = new List<FrameData>();
@@ -18,7 +19,7 @@ public class AnimationController : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        if (run_anim)
+        if (run_anim && !waitForLoadedStruc)
         {
             if (Time.time >= next_time)
             {
@@ -26,6 +27,7 @@ public class AnimationController : MonoBehaviour {
                 if (change_frame())
                 {
                     float delta_time = 1f / 90;
+                    next_time = Time.time;
                     if (2 <= animSpeed && animSpeed <= 3)
                     {
                         next_time += delta_time;
@@ -84,6 +86,7 @@ public class AnimationController : MonoBehaviour {
     {
         currFrame.AddCellbox(newCellbox);
         animation_data.Add(currFrame);
+        waitForLoadedStruc = false;
     }
 
     public static FrameData GetCurrFrameData()

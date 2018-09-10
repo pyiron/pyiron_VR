@@ -277,12 +277,7 @@ public class PythonExecuter : MonoBehaviour {
         myProcess.StandardInput.WriteLine(full_order);
     }
 
-    public void ChangeAnimSpeed(int speedChange)
-    {
-        AnimationController.animSpeed += speedChange;
-    }
-
-    public bool IsLoading()
+    public static bool IsLoading()
     {
         return outgoingChanges != incomingChanges;
     }

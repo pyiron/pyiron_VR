@@ -8,10 +8,6 @@ public class ModeData : MonoBehaviour
     [Header("Scene")]
     // reference to the deployed instance of this script
     public static ModeData inst;
-    // get the references of the controllers
-    //public GameObject[] controllers = new GameObject[2];
-    // the reference to the settings
-    private GameObject Settings;
     // get the reference to the programm which handles the execution of python
     private PythonExecuter PE;
     // the script that stores the possible orders which can be send to Python
@@ -64,16 +60,10 @@ public class ModeData : MonoBehaviour
     private void Start()
     {
         SetMode(modes[(int)currentMode.mode].mode);
-        // get the reference to the Settings
-        Settings = SceneReferences.inst.Settings;
         // get the reference to the script that handles the connection to python
         PE = SceneReferences.inst.PE;
         // get the reference to the script that stores the possible orders which can be send to Python
         OTP = SceneReferences.inst.OTP;
-        // get the reference to PossiblePythonScripts
-        //PossiblePythonScripts  = GameObject.Find("PossiblePythonScripts");
-        // set the current mode to the mode according to the currentModeNr
-        //currentMode = modes[(int)currentMode.mode];
 
         textSize = textSize / ProgramSettings.textResolution * 10;
         transform.localScale = Vector3.one * textSize;

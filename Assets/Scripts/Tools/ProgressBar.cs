@@ -5,8 +5,6 @@ using UnityEngine;
 // Component of MyObjects
 // Activates the Progressbar when the current frame and the amount of frames in the animation is known and updates the bar
 public class ProgressBar : MonoBehaviour {
-    // the reference to the PythonExecuter
-    private PythonExecuter PE;
     // the reference to the ProgressBar
     private GameObject ProgressBarObject;
     // the reference to the animationController of the ProgressBar
@@ -25,8 +23,6 @@ public class ProgressBar : MonoBehaviour {
     };
 
 	void Start () {
-        // the reference to the PythonExecuter
-        PE = SceneReferences.inst.PE;
         // get the reference to the ProgressBar
         ProgressBarObject = GameObject.Find("MyObjects/ProgressBar");
         // get the reference to the animationController of the ProgressBar

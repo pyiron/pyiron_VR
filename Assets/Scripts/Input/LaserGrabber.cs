@@ -394,7 +394,7 @@ public class LaserGrabber : MonoBehaviour
 
     public void WhileTouchpadPressDown(Vector2 touchPos)
     {
-        if (moveOneFrameTimer >= 0)
+        if (moveOneFrameTimer >= 0 && !PythonExecuter.IsLoading())
         {
             moveOneFrameTimer += Time.deltaTime;
             if (moveOneFrameTimer >= timeUntilMoveOneFrame)
@@ -424,47 +424,50 @@ public class LaserGrabber : MonoBehaviour
 
     private void ControllAnimation(Vector2 touchPos)
     {
-        if (touchPos.x > 0.5)
-            if (OrdersToPython.pythonRunsAnim)
-                // send Python the order to play the animation faster. if it isn't already at it's fastest speed
-                if (AnimationController.animSpeed < 5)
-                    AnimationController.animSpeed += 1;
-                else { }
-            else
-            {
-                LoadNewLammps();
-
-                // go one frame forward
-                AnimationController.move_one_frame(true);
-                // show that the user pressed the button to go one step forward
-                moveOneFrameTimer = 0;
-            }
-        else if (touchPos.x < -0.5)
-            if (OrdersToPython.pythonRunsAnim)
-                // send Python the order to play the animation faster. if it isn't already at it's fastest speed
-                if (AnimationController.animSpeed > 0)
-                    AnimationController.animSpeed -= 1;
-                else { }
-            else
-            {
-                LoadNewLammps();
-
-                // go one frame back
-                AnimationController.move_one_frame(true);
-                moveOneFrameTimer = 0;
-            }
-        else if (OrdersToPython.pythonRunsAnim)
-            OTP.RunAnim(false);
-        else
+        if (!PythonExecuter.IsLoading())
         {
-            LoadNewLammps();
+            if (touchPos.x > 0.5)
+                if (OrdersToPython.pythonRunsAnim)
+                    // send Python the order to play the animation faster. if it isn't already at it's fastest speed
+                    if (AnimationController.animSpeed < 5)
+                        AnimationController.animSpeed += 1;
+                    else { }
+                else
+                {
+                    LoadNewLammps();
 
-            // tell Python to start sending the dataframes from the current ham_lammps
-            OTP.RunAnim(true);
+                    // go one frame forward
+                    AnimationController.move_one_frame(true);
+                    // show that the user pressed the button to go one step forward
+                    moveOneFrameTimer = 0;
+                }
+            else if (touchPos.x < -0.5)
+                if (OrdersToPython.pythonRunsAnim)
+                    // send Python the order to play the animation faster. if it isn't already at it's fastest speed
+                    if (AnimationController.animSpeed > 0)
+                        AnimationController.animSpeed -= 1;
+                    else { }
+                else
+                {
+                    LoadNewLammps();
+
+                    // go one frame back
+                    AnimationController.move_one_frame(false);
+                    moveOneFrameTimer = 0;
+                }
+            else if (OrdersToPython.pythonRunsAnim)
+                OTP.RunAnim(false);
+            else
+            {
+                LoadNewLammps();
+
+                // tell Python to start sending the dataframes from the current ham_lammps
+                OTP.RunAnim(true);
+            }
+
+            // update the symbols on on all active controllers
+            UpdateSymbols();
         }
-
-        // update the symbols on on all active controllers
-        UpdateSymbols();
     }
 
     // send an Order to Python that it should create a new ham_lammps
@@ -528,6 +531,7 @@ public class LaserGrabber : MonoBehaviour
             PE.SendOrder(PythonScript.Executor, PythonCommandType.exec, loadOrder + "('md'" + ", " + AnimationController.frame + ")");
         else if (ModeData.currentMode.showRelaxation)
             PE.SendOrder(PythonScript.Executor, PythonCommandType.exec, loadOrder + "('minimize', " + ", " + AnimationController.frame + ")");
+        AnimationController.waitForLoadedStruc = true;
         lammpsIsMd = ModeData.currentMode.showTemp;
     }
 
