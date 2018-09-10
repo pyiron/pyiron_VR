@@ -42,8 +42,6 @@ public class LaserGrabber : MonoBehaviour
     public GameObject LaserPrefab;
     // the instance of the laser in the game
     public GameObject laser;
-    // the transform of the laser gameobject
-    private Transform laserTransform;
     // the hitpoint where the laser met an object
     private Vector3 hitPoint;
     // the length of the laser
@@ -154,10 +152,9 @@ public class LaserGrabber : MonoBehaviour
     {
         // create an instance of the laser
         laser = Instantiate(LaserPrefab);
-
-        laserTransform = laser.transform;
+        
         // set the controller as the parent of the laser
-        laserTransform.parent = gameObject.transform;
+        laser.transform.parent = gameObject.transform;
     }
 
     void Update()
@@ -757,11 +754,11 @@ public class LaserGrabber : MonoBehaviour
     public void ShowLaser(RaycastHit hit) 
     {
         // set the laserposition in the middle between the controller and the hitpoint
-        laserTransform.position = Vector3.Lerp(transform.position, hit.point, .5f);
+        laser.transform.position = Vector3.Lerp(transform.position, hit.point, .5f);
         // rotate the laser
-        laserTransform.LookAt(hit.point);
+        laser.transform.LookAt(hit.point);
         // scale the vector
-        laserTransform.localScale = new Vector3(laserTransform.localScale.x, laserTransform.localScale.y,
+        laser.transform.localScale = new Vector3(laser.transform.localScale.x, laser.transform.localScale.y,
             hit.distance);
     }
 }
