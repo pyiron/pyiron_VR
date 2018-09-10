@@ -28,12 +28,6 @@ public class PythonExecuter : MonoBehaviour {
     public static bool loadedStructure;
 
     [Header("Receive data from Python")]
-    // the data send from Python before all data of the structure is there.
-    private static string currentData = "";
-    // the collected data of what Python sent to Unity for one frame
-    public static string collectedData = "";
-    // shows whether there is some new data about the structure which has to be used in ImportStructure
-    public static bool newData;
 
     // shows whether python has send some data about the force/temperature/etc. already or not
     //public static bool extendedData;
@@ -41,21 +35,11 @@ public class PythonExecuter : MonoBehaviour {
     //private static float[] currentStructureForce;
     // the force the structure currently posseses
     //public static float[] structureForce;
-
-    // stores the data how the data of the animation changes (if it changes and if the amount of atoms is the same or a new one)
-    public static string animKind = "";
-    // the amount of atoms the new structure posseses
-    public static int structureSize = 99999;
+    
     // the temperature Python sends to Unity when sending the first structure data
     public static int temperature = -1;
-    // the frame Python sends to Unity this frame
-    public static int frame = -1;
-    // the amount of frames the current ham_lammps has
-    public static int frameAmount = -1;
     // the amount of changes the Python program did after the Unity program requested it
     public static int incomingChanges;
-    // the data how the cellbox can be build
-    public static Vector3[] cellBorderVecs = new Vector3[3];
 
     // the forces of all the atoms
     public static float[][] allForces;
@@ -67,9 +51,6 @@ public class PythonExecuter : MonoBehaviour {
 
     // the amount of changes the Unity program requested the Python program to do
     public static int outgoingChanges;
-
-    private static float timeLastStrucRec;
-    private static float currTime;
 
 
     private void Awake()
@@ -147,8 +128,6 @@ public class PythonExecuter : MonoBehaviour {
         
         InGamePrinter.inst[0].Ctrl_print("Send: " + outgoingChanges.ToString());
         InGamePrinter.inst[1].Ctrl_print("Received: " + incomingChanges.ToString());
-
-        currTime = Time.time;
     }
 
     private static void ReadOutput(object sender, DataReceivedEventArgs e)
@@ -220,20 +199,24 @@ public class PythonExecuter : MonoBehaviour {
         }
         else if (splittedData[0] == "StructureDataStart")
         {
-            timeLastStrucRec = currTime;
             if (splittedData.Length < 6)
             {
                 print("First Line of Structure Data should have 6 parameters!");
                 return;
             }
-            if (ContainsValue(splittedData[1]))
-                animKind = splittedData[1];
+
+            int strucSize = -1;
+            int frame = -1;
+            int frames = -1;
+
+            //if (ContainsValue(splittedData[1]))
+            //    animKind = splittedData[1];
             if (ContainsValue(splittedData[2]))
-                if (int.Parse(splittedData[2]) != structureSize)
+                if (int.Parse(splittedData[2]) != strucSize)
                 {
-                    structureSize = int.Parse(splittedData[2]);
-                    allForces = new float[structureSize][];
-                    for (int atomNr = 0; atomNr < structureSize; atomNr++)
+                    strucSize = int.Parse(splittedData[2]);
+                    allForces = new float[strucSize][];
+                    for (int atomNr = 0; atomNr < strucSize; atomNr++)
                     {
                         allForces[atomNr] = new float[3];
                         allForces[atomNr][0] = -1;
@@ -245,30 +228,36 @@ public class PythonExecuter : MonoBehaviour {
             }
             if (ContainsValue(splittedData[4]))
                 frame = int.Parse(splittedData[4]);
+            else
+                print("Warning: Current Frame is missing!");
+
             if (ContainsValue(splittedData[5]))
-                frameAmount = int.Parse(splittedData[5]);
+                frames = int.Parse(splittedData[5]);
+            else
+                print("Warning: Frame Amount is missing!");
+
+            AnimationController.AddFrameDataStart(strucSize, frame, frames);
         }
         else if (splittedData[0] == "StructureDataMid")
-            StoreData(inp);
+            AnimationController.AddFrameDataMid(new AtomData(new Vector3(float.Parse(splittedData[1]), float.Parse(splittedData[2]), float.Parse(splittedData[3])),
+                splittedData[4]));
+        //StoreData(inp);
         // this is the line where Python sends the data about the cellbox
         else if (splittedData[0] == "StructureDataEnd")
         {
             float[] cellboxData = new float[9];
+            Vector3[] cellboxVecs = new Vector3[3];
             if (ContainsValue(inp))
             {
                 for (int i = 0; i < 9; i++)
                     cellboxData[i] = float.Parse(splittedData[i + 1]);
 
                 // save the data for the cellbox in 3 Vector3s
-                cellBorderVecs[0] = new Vector3(cellboxData[0], cellboxData[1], cellboxData[2]);
-                cellBorderVecs[1] = new Vector3(cellboxData[3], cellboxData[4], cellboxData[5]);
-                cellBorderVecs[2] = new Vector3(cellboxData[6], cellboxData[7], cellboxData[8]);
+                cellboxVecs[0] = new Vector3(cellboxData[0], cellboxData[1], cellboxData[2]);
+                cellboxVecs[1] = new Vector3(cellboxData[3], cellboxData[4], cellboxData[5]);
+                cellboxVecs[2] = new Vector3(cellboxData[6], cellboxData[7], cellboxData[8]);
             }
-
-            collectedData = currentData;
-            // print(collectedData);
-            currentData = "";
-            newData = true;
+            AnimationController.AddFrameDataEnd(cellboxVecs);
         }
         else
             print("Warning: Unknown Data!");
@@ -277,11 +266,6 @@ public class PythonExecuter : MonoBehaviour {
     private static bool ContainsValue(string data)
     {
         return (data != "empty");
-    }
-
-    private static void StoreData(string data)
-    {
-        currentData += data + "\n";
     }
 
     // send the given order to Python, where it will be executed with the exec() command

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
  
+// might be deprecated
 public class AtomInfos
 {
     // the individual ID each atom has

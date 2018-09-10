@@ -91,7 +91,7 @@ public class OrdersToPython : MonoBehaviour
     private void DestroyAtom(int atomId)
     {
         // check if the given atomId is less big than the maximum amount of atoms in the structure
-        if (atomId >= PythonExecuter.structureSize)
+        if (atomId >= AnimationController.structureSize)
         {
             SendError("The Atom ID has to be less big than the maximum amount of atoms in the structure!");
             return;
@@ -116,7 +116,7 @@ public class OrdersToPython : MonoBehaviour
         // remove the atom in the list of the properties of each atom
         StructureData.inst.atomInfos.RemoveAt(AtomLayerLG.attachedObject.GetComponent<AtomID>().ID);
         // decrease the atomId of the atoms which have a higher ID than the deleted one by one
-        for (int i = AtomLayerLG.attachedObject.GetComponent<AtomID>().ID; i < PythonExecuter.structureSize - 2; i++)
+        for (int i = AtomLayerLG.attachedObject.GetComponent<AtomID>().ID; i < AnimationController.structureSize - 2; i++)
             StructureData.inst.atomInfos[i + 1].m_ID -= 1;
         // remove the atom in the list which stores the data how the player has removed each atom
         StructureData.inst.atomCtrlPos.RemoveAt(AtomLayerLG.attachedObject.GetComponent<AtomID>().ID);

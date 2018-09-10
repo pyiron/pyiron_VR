@@ -5,8 +5,6 @@ using UnityEngine;
 // component of AtomStructure
 public class StructureResizer : MonoBehaviour
 {
-    // the scripts of the two ctrls
-    public GameObject[] Controllers;// = new GameObject[2];
     // the data about the structure
     private StructureData SD;
 
@@ -30,11 +28,6 @@ public class StructureResizer : MonoBehaviour
         SD = GetComponent<StructureData>();
     }
 
-    private void Start()
-    {
-        Controllers = SceneReferences.inst.Controllers;
-    }
-
     void Update()
     {
         // test if the structure has to be resized
@@ -44,7 +37,7 @@ public class StructureResizer : MonoBehaviour
     public void InitResize()
     {
         // set the distance of the controllers when the resizeStructure begins
-        startCtrlDistance = (Controllers[0].transform.position - Controllers[1].transform.position).magnitude;
+        startCtrlDistance = (SceneReferences.inst.Controllers[0].transform.position - SceneReferences.inst.Controllers[1].transform.position).magnitude;
         // remember the size the structure had before the resize
         oldStructureSize = ProgramSettings.size;
     }
@@ -52,7 +45,7 @@ public class StructureResizer : MonoBehaviour
     private void TestForResize()
     {
         // return if one of the controllers isn't ready
-        foreach (GameObject ctrl in Controllers)
+        foreach (GameObject ctrl in SceneReferences.inst.Controllers)
             if (!ctrl.GetComponent<LaserGrabber>().readyForResize)
                 return;
 
@@ -63,7 +56,7 @@ public class StructureResizer : MonoBehaviour
     {
         // the data how far the distance between the controllers is currently
         float currentCtrlDistance;
-        currentCtrlDistance = (Controllers[0].transform.position - Controllers[1].transform.position).magnitude;
+        currentCtrlDistance = (SceneReferences.inst.Controllers[0].transform.position - SceneReferences.inst.Controllers[1].transform.position).magnitude;
         // the new size the structure should have
         newStrucSize = oldStructureSize + (currentCtrlDistance - startCtrlDistance) * resizeMultiplikator;
         // test if the new size for the structure is allowed

@@ -9,17 +9,11 @@ using System.Reflection;
 // component of AtomStructure
 // loads the data from the files to create the structure or to animate the structure
 public class ImportStructure : MonoBehaviour {
-    // name of the data file which contains the information about the atom structure
-    public string strucFileName;
+    public static ImportStructure inst;
 
     [Header("Scene")]
-    // the script of thermometer which shows which temperature the structure has
-    private GameObject ThermometerObject;
-
     // the prefab for the atoms
     public GameObject AtomPrefab;
-    // gameobject to hold the new instance of an atom
-    private GameObject currentAtom;
     // script which stores the properties of each element, to give each atom it's properties
     private LocalElementData LED;
     // the data of the structure the atoms are in
@@ -35,64 +29,22 @@ public class ImportStructure : MonoBehaviour {
     GameObject[] CellBorders = new GameObject[12];
 
     // the min expansion of the cluster of each axis
-    Vector3 minPositions = Vector3.one * Mathf.Infinity;
+    //Vector3 minPositions = Vector3.one * Mathf.Infinity;
     // the max expansion of the atoms of each axis
-    Vector3 maxPositions = Vector3.one * Mathf.Infinity * -1;
+    //Vector3 maxPositions = Vector3.one * Mathf.Infinity * -1;
     // the prefab for the boundingbox
     public GameObject BoundingboxPrefab;
     // checks whether all the instances in the scene have to be created or if the scene just has to be updated
     private bool newImport = true;
     // shows whether it is the first import or just a new amount of atoms
     private bool firstImport = true;
-    // time when the last Update() was called
-    private float lastTime;
-    // shows whether the input data is an animation at the moment (could be also a static structure)
-    private string animState;
-
-    [Header("Show Animation FPS")]
-    // the canvas of this program
-    public Canvas MyCanvas;
-    // the display for the fps count
-    private UnityEngine.UI.Text fps_display;
-    // the cumulated fps in the time before the average count is displayed
-    private UnityEngine.UI.Text min_fps_display;
-    // the cumulated fps in the time before the average count is displayed
-    private int cumulated_fps;
-    //the count of how many frames have been cumulated in the time before the average count is displayed
-    private int fps_count;
-    // the time how often the average fps count should be displayed
-    private float time_between_fps_updates = 1;
-    // the timer for when the next average fps count should be displayed
-    private float fps_timer;
-    // the minimum fps rate in the last frames
-    private int min_fps;
-
-    [Header("Reading Tools")]
-    // stores the data of each read line in a file
-    private string line;
-    // the individual properties announced in the line
-    private string[] data;
-    // enumerates the atoms
-    private int atomCounter = 0;
-    // the input file data as a string
-    private string input_file_data;
-
-    private int currentFrame;
+    
 
 
     private void Awake()
     {
-        // get the script of thermometer which shows which temperature the structure has
-        ThermometerObject = GameObject.Find("MyObjects/Thermometer");
-        ThermometerObject.SetActive(false);
-        //Cellbox = GameObject.Find("AtomStructure/Cellbox");
-        //Cellbox.SetActive(false);
-        HourglassRotator = GameObject.Find("AtomStructure/HourglassRotator");
-        foreach (UnityEngine.UI.Text text in MyCanvas.GetComponentsInChildren<UnityEngine.UI.Text>())
-            if (text.name.Contains("min_fps_display"))
-                min_fps_display = text;
-            else if (text.name.Contains("fps_display"))
-                fps_display = text;
+        inst = this;
+        Thermometer.inst.SetState(false);
         
         LED = SceneReferences.inst.Settings.GetComponent<LocalElementData>();
         SD = gameObject.GetComponent<StructureData>();
@@ -100,55 +52,22 @@ public class ImportStructure : MonoBehaviour {
 
     void Start()
     {
-        LoadStructure();
-        //newImport = false;
-        //firstImport = false;
-        lastTime = Time.time - 1;
-        fps_timer = time_between_fps_updates;
-        min_fps = 9999;
+        //LoadStructure();
     }
 
-        void Update()
+    void Update()
     {    
-        // the old path/way
-        //pathName = "AtomStructures/New Folder/new_MD_hydrogen_" + currentFrame + ".dat";  // path + strucFileName + "/" + currentFrame
-        // the path to the file which holds all the data for the current frome
-
-        if (fps_timer <= 0)
+        if (SD.waitForDestroyedAtom)
         {
-            if (fps_count > 0)
-                fps_display.text = "Animation FPS: " + ((int)(cumulated_fps / fps_count)).ToString();
-            else
-                fps_display.text = "Animation FPS: 0";
-            min_fps_display.text = "Animation min FPS: " + min_fps.ToString();
-            fps_timer = time_between_fps_updates;
-            //printer.Ctrl_print("Animation min FPS: " + min_fps.ToString(), 2, false);
-            cumulated_fps = 0;
-            min_fps = 9999;
-            fps_count = 0;
+            //print(PythonExecuter.structureSize + " and " + SD.atomInfos.Count);
+            if (AnimationController.structureSize != SD.atomInfos.Count)
+                return;
         }
-        else
-            fps_timer -= Time.deltaTime;
-
-        if (Time.time - lastTime + Time.deltaTime > 1 / 90)
-        {
-            if (SD.waitForDestroyedAtom)
-            {
-                //print(PythonExecuter.structureSize + " and " + SD.atomInfos.Count);
-                if (PythonExecuter.structureSize != SD.atomInfos.Count)
-                    return;
-            }
             
-            LoadStructure();
-            cumulated_fps += (int)(1 / (Time.time - lastTime));
-            if ((int)(1 / (Time.time - lastTime)) < min_fps)
-                min_fps = (int)(1 / (Time.time - lastTime));
-            fps_count += 1;
-            lastTime = Time.time;
-        }
+        //LoadStructure();
     }
 
-    private void LoadStructure()
+    public void LoadStructure()
     {
         if (!SD.boundingbox)
         {
@@ -173,26 +92,6 @@ public class ImportStructure : MonoBehaviour {
             }
         }
 
-        input_file_data = "";
-        if (PythonExecuter.newData)
-        {
-            input_file_data = PythonExecuter.collectedData;
-            // print(input_file_data);
-            PythonExecuter.newData = false;
-        }
-
-        if (input_file_data == "")
-        {
-            //if (Time.time > 15)
-            //    print("something is too slow");
-            return;
-        }
-
-        // check how big the structure is
-        ReadFile("getStructureExpansion");
-        if (animState == "static" && !newImport)
-            return;
-
         if (newImport)
         {
             if (!firstImport)
@@ -204,7 +103,15 @@ public class ImportStructure : MonoBehaviour {
             SD.atomCtrlPos.Clear();
         }
         // create the atoms
-        ReadFile("initAtoms");
+        //ReadFile("initAtoms");
+        foreach (AtomData atom in AnimationController.GetCurrFrameData().atoms)
+        {
+            InitAtoms(atom);
+            if (!firstImport)
+                if (atom.id != SD.atomInfos.Count)
+                    if (!SD.waitForDestroyedAtom)
+                        newImport = true;
+        }
 
         if (newImport)
         {
@@ -221,53 +128,45 @@ public class ImportStructure : MonoBehaviour {
             // set the Boundingbox, so that it equals the expansion of the cluster
             SD.UpdateBoundingbox();
         }
-        if (animState == "new")
-            transform.position += SD.structureCtrlPos;
 
         SD.waitForDestroyedAtom = false;
         if (firstImport)
         {
             firstImport = false;
-            ThermometerObject.SetActive(true);
+            Thermometer.inst.SetState(true);
         }
         newImport = false;
     }
 
-    private void ReadFile(string action)
+    /*private void GetStructureExpansion(FrameData frame)
     {
-        //using (sr = new StringReader(structureFile.text)) // reader to read the input data file
-        StringReader sr = new StringReader(input_file_data);
+        for (int i = 0; i < 3; i++) // searches for the min and max expansion of the cluster of each axis 
+        {
+            if (float.Parse(data[i + 1]) - LED.getSize(data[4]) / 2 < minPositions[i])
+                minPositions[i] = float.Parse(data[i + 1]) - LED.getSize(data[4]) / 2;
+            if (float.Parse(data[i + 1]) + LED.getSize(data[4]) / 2 > maxPositions[i])
+                maxPositions[i] = float.Parse(data[i + 1]) + LED.getSize(data[4]) / 2;
+        }
+    }*/
+
+    /*private void ReadFile(string action)
+    {
+        StringReader sr = new StringReader("input_file_data");
         using (sr)
         {
             // (re)set the counter to 0
             atomCounter = 0;
-            // shows if the current read line is the first line of the file/string
-            //bool firstLine;
-            //firstLine = true;
             while (true)
             {
                 line = sr.ReadLine();
-                /*if (false) // (firstLine && programSettings.transMode == "file")
-                {
-                    if (programSettings.transMode == "file")
-                        animState = line;
-                    else
-                        animState = "anim";
-                    if (animState == "static" && !firstImport)
-                        return;
-                    firstLine = false;
-                }
-                else
-                {*/
                 // split the data into the position (data[0 - 2]) and it's type (data[3]) or in the cell data
                 if (line == null)
                     break;
                 data = line.Split(' ');
-                //if (line != null) // reads line for line, until the end is reached
-                if (action == "getStructureExpansion")
-                    GetStructureExpansion();
-                else if (action == "initAtoms")
-                    InitAtoms();
+                //if (action == "getStructureExpansion")
+                //    GetStructureExpansion();
+                //if (action == "initAtoms")
+                //    InitAtoms();
                 atomCounter++;
                 //}
             }
@@ -276,7 +175,7 @@ public class ImportStructure : MonoBehaviour {
             if (atomCounter != SD.atomInfos.Count)
                 if (!SD.waitForDestroyedAtom)
                     newImport = true;
-    }
+    }*/
 
     // set the cellbox according to the data given from Python
     private void SetCellbox()
@@ -287,46 +186,33 @@ public class ImportStructure : MonoBehaviour {
         // reset the positions of the cellbox
         Cellbox.transform.localPosition = Vector3.zero;
 
+        Vector3[] cellboxData = AnimationController.GetCurrFrameData().cellbox;
         //set the position and length for each part of the cellbox
         for (int i = 0; i < 4; i++)
             for (int j = 0; j < 3; j++)
             {
                 Vector3 cellBorderSize = CellBorders[j * 4 + i].transform.localScale;
-                cellBorderSize[j] = PythonExecuter.cellBorderVecs[j].magnitude + ProgramSettings.cellboxWidth;
+                cellBorderSize[j] = cellboxData[j].magnitude + ProgramSettings.cellboxWidth;
                 CellBorders[j * 4 + i].transform.localScale = cellBorderSize;
 
-                CellBorders[j * 4 + i].transform.localPosition = PythonExecuter.cellBorderVecs[j] * 0.5f;
+                CellBorders[j * 4 + i].transform.localPosition = cellboxData[j] * 0.5f;
                 if (i == 1 || i == 3)
-                    CellBorders[j * 4 + i].transform.localPosition += PythonExecuter.cellBorderVecs[(j + 1) % 3];
+                    CellBorders[j * 4 + i].transform.localPosition += cellboxData[(j + 1) % 3];
                 if (i == 2 || i == 3)
-                    CellBorders[j * 4 + i].transform.localPosition += PythonExecuter.cellBorderVecs[(j + 2) % 3];
+                    CellBorders[j * 4 + i].transform.localPosition += cellboxData[(j + 2) % 3];
             }
-
-        // set the position for the cellbox
-        //for (int i = 0; i < 3; i++)
-        //    SD.cellbox.transform.position -= cellBorderVecs[i] / 2 * ProgramSettings.size;
 
         // set the position of the Hourglass to the middle of the cellbox
         HourglassRotator.transform.localPosition = Vector3.zero;
         for (int i = 0; i < 3; i++)
-            HourglassRotator.transform.localPosition += PythonExecuter.cellBorderVecs[i] / 2;
+            HourglassRotator.transform.localPosition += cellboxData[i] / 2;
         // set the size of the Hourglass to the size it should have
         HourglassRotator.transform.GetChild(0).localScale = Vector3.one;
     }
 
-    private void GetStructureExpansion()
+    private void InitAtoms(AtomData atom)
     {
-        for (int i = 0; i < 3; i++) // searches for the min and max expansion of the cluster of each axis 
-        {
-            if (float.Parse(data[i + 1]) - LED.getSize(data[4]) / 2 < minPositions[i])
-                minPositions[i] = float.Parse(data[i + 1]) - LED.getSize(data[4]) / 2;
-            if (float.Parse(data[i + 1]) + LED.getSize(data[4]) / 2 > maxPositions[i])
-                maxPositions[i] = float.Parse(data[i + 1]) + LED.getSize(data[4]) / 2;
-        }
-    }
-
-    private void InitAtoms()
-    {
+        GameObject currentAtom;
         if (newImport && !SD.waitForDestroyedAtom)
         {
             // create a new instance of an atom
@@ -335,37 +221,35 @@ public class ImportStructure : MonoBehaviour {
             currentAtom.transform.parent = gameObject.transform;
         }
         else
-            currentAtom = SD.atomInfos[atomCounter].m_transform.gameObject;
+            currentAtom = SD.atomInfos[atom.id].m_transform.gameObject;
 
         if (newImport)
         {
             // Set the new atom position to the pos from the file and adjust it, so that the clusters middle is in the origin
-            currentAtom.transform.position = new Vector3(float.Parse(data[1]), float.Parse(data[2]),
-                float.Parse(data[3])); // - (maxPositions + minPositions) / 2;
+            currentAtom.transform.position = atom.pos;
             //if (animState == "new" || (!firstImport && ProgramSettings.transMode == "shell"))
             //    currentAtom.transform.position *= ProgramSettings.size;
             SD.atomCtrlPos.Add(Vector3.zero);
         }
         else
         {
-            currentAtom.transform.position = (new Vector3(float.Parse(data[1]), float.Parse(data[2]),
-                float.Parse(data[3]))) * ProgramSettings.size; // - (maxPositions + minPositions) / 2);
-            currentAtom.transform.position += SD.atomCtrlPos[atomCounter] + transform.position;
+            currentAtom.transform.position = atom.pos * ProgramSettings.size;
+            currentAtom.transform.position += SD.atomCtrlPos[atom.id] + transform.position;
         }
         // set the atom colour to the colour this type of atom has
-        currentAtom.GetComponent<Renderer>().material.color = LED.getColour(data[4]);
+        currentAtom.GetComponent<Renderer>().material.color = LED.getColour(atom.type);
         // set the atoms size to the size this type of atom has 
-        currentAtom.transform.localScale = Vector3.one * LED.getSize(data[4]);
+        currentAtom.transform.localScale = Vector3.one * LED.getSize(atom.type);
         if (newImport || SD.waitForDestroyedAtom)
         {
             // give the atom an ID
-            currentAtom.GetComponent<AtomID>().ID = atomCounter;
+            currentAtom.GetComponent<AtomID>().ID = atom.id;
             if (SD.waitForDestroyedAtom)
-                SD.atomInfos[atomCounter] = new AtomInfos(atomCounter, data[4], currentAtom.transform);
+                SD.atomInfos[atom.id] = new AtomInfos(atom.id, atom.type, currentAtom.transform);
             else
             {
                 // register the atom in the overwiev of StructureData
-                SD.atomInfos.Add(new AtomInfos(atomCounter, data[4], currentAtom.transform));
+                SD.atomInfos.Add(new AtomInfos(atom.id, atom.type, currentAtom.transform));
             }
         }
     }
