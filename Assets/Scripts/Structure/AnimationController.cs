@@ -8,14 +8,9 @@ public class AnimationController : MonoBehaviour {
     public static int animSpeed = 4;
     public static int frame;
     private static float next_time;
-    private static bool shouldLoad;
-    public static bool waitForLoadedStruc;
     
-    [Header("Structure Data")]
-    public static List<FrameData> animation_data = new List<FrameData>();
-    private static FrameData currFrame;
-    public static int structureSize;
-    public static int frame_amount = 0;
+    internal static bool waitForLoadedStruc;
+    internal static bool shouldLoad;
 
     // Update is called once per frame
     void Update () {
@@ -38,7 +33,7 @@ public class AnimationController : MonoBehaviour {
                     next_time += 2 - (0.5f + Mathf.Abs(animSpeed - 2.5f)) / 2;
             }
         }
-        else if (shouldLoad && GetCurrFrameData() != null && GetCurrFrameData().cellbox != null)
+        else if (shouldLoad && StructureData.GetCurrFrameData() != null && StructureData.GetCurrFrameData().cellbox != null)
         {
             ImportStructure.inst.LoadStructure();
             shouldLoad = false;
@@ -47,10 +42,10 @@ public class AnimationController : MonoBehaviour {
 
     public static void move_one_frame(bool forward=true) {
         if (forward)
-            frame = Mod((frame + 1), GetCurrFrameData().frames);
+            frame = Mod((frame + 1), StructureData.GetCurrFrameData().frames);
         else
             //frame = (GetCurrFrameData().frames - (Mod(GetCurrFrameData().frames - frame, GetCurrFrameData().frames))) - 1;
-            frame = Mod((frame - 1), GetCurrFrameData().frames);
+            frame = Mod((frame - 1), StructureData.GetCurrFrameData().frames);
         ImportStructure.inst.LoadStructure();
     }
 
@@ -60,41 +55,9 @@ public class AnimationController : MonoBehaviour {
             frame_step = 2;
         if (animSpeed < 3)
             frame_step *= -1;
-        int newFrame = Mod((frame + frame_step), GetCurrFrameData().frames);
+        int newFrame = Mod((frame + frame_step), StructureData.GetCurrFrameData().frames);
         frame = newFrame;
-        return Mod((frame + frame_step), GetCurrFrameData().frames) == frame + frame_step;
-    }
-
-    public static void AddFrameDataStart(int size, int frame, int frames)
-    {
-        if (frame == 0)
-            animation_data.Clear();
-        currFrame = new FrameData(size, frame, frames);
-        structureSize = size;
-        frame_amount = frames;
-        if (frame == 0)
-            shouldLoad = true;
-    }
-
-    public static void AddFrameDataMid(AtomData atom)
-    {
-        currFrame.AddAtom(atom);
-    }
-
-    public static void AddFrameDataEnd(Vector3[] newCellbox)
-    {
-        currFrame.AddCellbox(newCellbox);
-        animation_data.Add(currFrame);
-        waitForLoadedStruc = false;
-    }
-
-    public static FrameData GetCurrFrameData()
-    {
-        if (animation_data.Count != 0)
-        {
-            return animation_data[Mod(frame, animation_data.Count)];
-        }
-        return null;
+        return Mod((frame + frame_step), StructureData.GetCurrFrameData().frames) == frame + frame_step;
     }
 
     private static int Mod(int a, int b)

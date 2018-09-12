@@ -42,17 +42,17 @@ public class ProgressBar : MonoBehaviour {
 	
 	void Update () {
         // if the ProgressBar is activated while it should be deactivated deaktivate  it and vice versa
-        if ((AnimationController.frame != -1 && AnimationController.frame_amount > 0) != ProgressBarObject.activeSelf)
+        if ((AnimationController.frame != -1 && StructureData.frame_amount > 0) != ProgressBarObject.activeSelf)
             ProgressBarObject.SetActive(!ProgressBarObject.activeSelf);
 
-        if (ProgressBarObject.activeSelf && AnimationController.GetCurrFrameData() != null)
+        if (ProgressBarObject.activeSelf && StructureData.GetCurrFrameData() != null)
         {
             // update the progress of the ProgressBar
-            anim.SetFloat("Progress", 1f * AnimationController.frame / AnimationController.GetCurrFrameData().frames);
+            anim.SetFloat("Progress", 1f * AnimationController.frame / StructureData.GetCurrFrameData().frames);
             foreach (TextMesh TM in TextMeshes)
                 // update the text which shows the progress
                 if (TM.name.Contains("Progress"))
-                    TM.text = AnimationController.frame + " / " + AnimationController.GetCurrFrameData().frames;
+                    TM.text = AnimationController.frame + " / " + StructureData.GetCurrFrameData().frames;
                 // update the text which shows how fast the animation is being played
                 else if (TM.name.Contains("AnimationSpeed"))
                 {

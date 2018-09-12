@@ -47,7 +47,7 @@ public class ImportStructure : MonoBehaviour {
         if (SD.waitForDestroyedAtom)
         {
             //print(PythonExecuter.structureSize + " and " + SD.atomInfos.Count);
-            if (AnimationController.structureSize != SD.atomInfos.Count)
+            if (StructureData.structureSize != SD.atomInfos.Count)
                 return;
         }
     }
@@ -88,7 +88,7 @@ public class ImportStructure : MonoBehaviour {
             SD.atomCtrlPos.Clear();
         }
         // create the atoms or change their data
-        foreach (AtomData atom in AnimationController.GetCurrFrameData().atoms)
+        foreach (AtomData atom in StructureData.GetCurrFrameData().atoms)
         {
             InitAtoms(atom);
         }
@@ -127,7 +127,7 @@ public class ImportStructure : MonoBehaviour {
         // reset the positions of the cellbox
         Cellbox.transform.localPosition = Vector3.zero;
 
-        Vector3[] cellboxData = AnimationController.GetCurrFrameData().cellbox;
+        Vector3[] cellboxData = StructureData.GetCurrFrameData().cellbox;
         //set the position and length for each part of the cellbox
         for (int i = 0; i < 4; i++)
             for (int j = 0; j < 3; j++)

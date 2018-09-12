@@ -33,6 +33,12 @@ public class StructureData : MonoBehaviour
     // shows whether the structure should check if Pyiron send a structure without the destroyed atom
     public bool waitForDestroyedAtom;
 
+    [Header("Structure Data")]
+    public static List<FrameData> animation_data = new List<FrameData>();
+    private static FrameData currFrame;
+    public static int structureSize;
+    public static int frame_amount = 0;
+
     public void Awake()
     {
         inst = this;
@@ -81,6 +87,38 @@ public class StructureData : MonoBehaviour
                 minPositions[i] = testTransform.position[i] - testTransform.localScale[i]/2;
         }
     }*/
+
+    public static void AddFrameDataStart(int size, int frame_id, int frames)
+    {
+        if (frame_id == 0)
+            animation_data.Clear();
+        currFrame = new FrameData(size, frame_id, frames);
+        structureSize = size;
+        frame_amount = frames;
+        if (frame_id == 0)
+            AnimationController.shouldLoad = true;
+    }
+
+    public static void AddFrameDataMid(AtomData atom)
+    {
+        currFrame.AddAtom(atom);
+    }
+
+    public static void AddFrameDataEnd(Vector3[] newCellbox)
+    {
+        currFrame.AddCellbox(newCellbox);
+        animation_data.Add(currFrame);
+        AnimationController.waitForLoadedStruc = false;
+    }
+
+    public static FrameData GetCurrFrameData()
+    {
+        if (animation_data.Count != 0)
+        {
+            return animation_data[AnimationController.frame];
+        }
+        return null;
+    }
 }
 
 // TODO: combine with AtomInfos.

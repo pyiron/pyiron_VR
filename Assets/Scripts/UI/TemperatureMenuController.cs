@@ -27,7 +27,7 @@ public class TemperatureMenuController : MenuController {
 
     public void OnTemperatureChange()
     {
-        print(GetComponentInChildren<Slider>().value);
+        Thermometer.temperature = (int)temp_slider.value;
         Thermometer.inst.UpdateTemperature((int)temp_slider.value);
     }
 

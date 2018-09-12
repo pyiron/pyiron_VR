@@ -164,5 +164,6 @@ public class ModeData : MonoBehaviour
     {
         StructureMenuController.inst.SetState(modes[(int)currentMode.mode].showExplorer);
         TemperatureMenuController.inst.SetState(modes[(int)currentMode.mode].showTemp);
+        ModeMenuController.inst.SetState(currentMode.mode != Modes.Explorer);
     }
 }

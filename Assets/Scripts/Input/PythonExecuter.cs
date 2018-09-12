@@ -119,7 +119,6 @@ public class PythonExecuter : MonoBehaviour {
 
     private static void ReadOutput(object sender, DataReceivedEventArgs e)
     {
-        print(e.Data);
         try
         {
             foreach (String partInp in e.Data.Split('%'))
@@ -221,12 +220,11 @@ public class PythonExecuter : MonoBehaviour {
             else
                 print("Warning: Frame Amount is missing!");
 
-            AnimationController.AddFrameDataStart(strucSize, frame, frames);
+            StructureData.AddFrameDataStart(strucSize, frame, frames);
         }
         else if (splittedData[0] == "StructureDataMid")
-            AnimationController.AddFrameDataMid(new AtomData(new Vector3(float.Parse(splittedData[1]), float.Parse(splittedData[2]), float.Parse(splittedData[3])),
+            StructureData.AddFrameDataMid(new AtomData(new Vector3(float.Parse(splittedData[1]), float.Parse(splittedData[2]), float.Parse(splittedData[3])),
                 splittedData[4]));
-        //StoreData(inp);
         // this is the line where Python sends the data about the cellbox
         else if (splittedData[0] == "StructureDataEnd")
         {
@@ -242,7 +240,7 @@ public class PythonExecuter : MonoBehaviour {
                 cellboxVecs[1] = new Vector3(cellboxData[3], cellboxData[4], cellboxData[5]);
                 cellboxVecs[2] = new Vector3(cellboxData[6], cellboxData[7], cellboxData[8]);
             }
-            AnimationController.AddFrameDataEnd(cellboxVecs);
+            StructureData.AddFrameDataEnd(cellboxVecs);
         }
         else
             print("Warning: Unknown Data: " + inp);
@@ -257,7 +255,7 @@ public class PythonExecuter : MonoBehaviour {
     public void SendOrder(PythonScript script, PythonCommandType type, string order)
     {
         string full_order = script.ToString() + " " + type.ToString() + " " + order;
-        //print(full_order);
+        print(full_order);
         // show that the Unity program has send the Python program an order
         outgoingChanges += 1;
 
