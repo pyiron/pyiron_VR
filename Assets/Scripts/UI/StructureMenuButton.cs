@@ -9,13 +9,7 @@ public class StructureMenuButton : MonoBehaviour, IButton
 
     public void WhenClickDown()
     {
-        foreach (Button b in transform.parent.GetComponentsInChildren<Button>())
-        {
-            b.interactable = true;
-        }
-        GetComponent<Button>().interactable = false;
-        StructureMenuController.shouldDelete = true;
-        StructureMenuController.shouldRefresh = true;
+        StructureMenuController.inst.SetOptiontype(GetComponentInChildren<Text>().text);
     }
 
     

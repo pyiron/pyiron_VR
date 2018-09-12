@@ -24,10 +24,6 @@ public class ImportStructure : MonoBehaviour {
     public GameObject CellboxBorderPrefab;
     GameObject[] CellBorders = new GameObject[12];
 
-    // the min expansion of the cluster of each axis
-    //Vector3 minPositions = Vector3.one * Mathf.Infinity;
-    // the max expansion of the atoms of each axis
-    //Vector3 maxPositions = Vector3.one * Mathf.Infinity * -1;
     // the prefab for the boundingbox
     public GameObject BoundingboxPrefab;
     // checks whether all the instances in the scene have to be created or if the scene just has to be updated
@@ -91,15 +87,10 @@ public class ImportStructure : MonoBehaviour {
             //SD.atomInfos = new List<AtomInfos>();
             SD.atomCtrlPos.Clear();
         }
-        // create the atoms
-        //ReadFile("initAtoms");
+        // create the atoms or change their data
         foreach (AtomData atom in AnimationController.GetCurrFrameData().atoms)
         {
             InitAtoms(atom);
-            //if (!firstImport)
-            //    if (atom.id != SD.atomInfos.Count)
-            //        if (!SD.waitForDestroyedAtom)
-            //            newImport = true;
         }
 
         if (newImport)
@@ -126,45 +117,6 @@ public class ImportStructure : MonoBehaviour {
         }
         newImport = false;
     }
-
-    /*private void GetStructureExpansion(FrameData frame)
-    {
-        for (int i = 0; i < 3; i++) // searches for the min and max expansion of the cluster of each axis 
-        {
-            if (float.Parse(data[i + 1]) - LED.getSize(data[4]) / 2 < minPositions[i])
-                minPositions[i] = float.Parse(data[i + 1]) - LED.getSize(data[4]) / 2;
-            if (float.Parse(data[i + 1]) + LED.getSize(data[4]) / 2 > maxPositions[i])
-                maxPositions[i] = float.Parse(data[i + 1]) + LED.getSize(data[4]) / 2;
-        }
-    }*/
-
-    /*private void ReadFile(string action)
-    {
-        StringReader sr = new StringReader("input_file_data");
-        using (sr)
-        {
-            // (re)set the counter to 0
-            atomCounter = 0;
-            while (true)
-            {
-                line = sr.ReadLine();
-                // split the data into the position (data[0 - 2]) and it's type (data[3]) or in the cell data
-                if (line == null)
-                    break;
-                data = line.Split(' ');
-                //if (action == "getStructureExpansion")
-                //    GetStructureExpansion();
-                //if (action == "initAtoms")
-                //    InitAtoms();
-                atomCounter++;
-                //}
-            }
-        }
-        if (!firstImport)
-            if (atomCounter != SD.atomInfos.Count)
-                if (!SD.waitForDestroyedAtom)
-                    newImport = true;
-    }*/
 
     // set the cellbox according to the data given from Python
     private void SetCellbox()

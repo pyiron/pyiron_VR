@@ -90,8 +90,7 @@ public class InputManager : MonoBehaviour
     {
         if (ViveInput.GetPressDown(handRole, ControllerButton.Menu))
         {
-            ViveInput.TriggerHapticPulse(handRole, 5000);
-            print(PythonExecuter.loadedStructure);
+            ViveInput.TriggerHapticPulse(handRole, ushort.MaxValue);
             //if (!ModeData.currentMode.showPossibleStructures || PythonExecuter.loadedStructure)
             //{
             MD.RaiseMode();

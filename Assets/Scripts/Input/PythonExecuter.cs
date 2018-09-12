@@ -205,9 +205,7 @@ public class PythonExecuter : MonoBehaviour {
             int strucSize = -1;
             int frame = -1;
             int frames = -1;
-
-            //if (ContainsValue(splittedData[1]))
-            //    animKind = splittedData[1];
+            
             if (ContainsValue(splittedData[2]))
                 if (int.Parse(splittedData[2]) != strucSize)
                 {
@@ -244,7 +242,7 @@ public class PythonExecuter : MonoBehaviour {
         {
             float[] cellboxData = new float[9];
             Vector3[] cellboxVecs = new Vector3[3];
-            if (ContainsValue(inp))
+            if (ContainsValue(splittedData[1]))
             {
                 for (int i = 0; i < 9; i++)
                     cellboxData[i] = float.Parse(splittedData[i + 1]);
@@ -257,7 +255,7 @@ public class PythonExecuter : MonoBehaviour {
             AnimationController.AddFrameDataEnd(cellboxVecs);
         }
         else
-            print("Warning: Unknown Data!");
+            print("Warning: Unknown Data: " + inp);
     }
 
     private static bool ContainsValue(string data)

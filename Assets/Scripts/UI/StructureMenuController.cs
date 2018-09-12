@@ -38,7 +38,7 @@ public class StructureMenuController : MonoBehaviour {
         }
     }
 
-    private void InstantiateNewBtn(GameObject Pref, GameObject parent, string txt)
+    private void InstantiateNewBtn(GameObject Pref, GameObject parent, string txt, Color col)
     {
         GameObject newButton = Instantiate(Pref);
         newButton.transform.SetParent(parent.transform);
@@ -46,6 +46,7 @@ public class StructureMenuController : MonoBehaviour {
         newButton.transform.eulerAngles = Vector3.up * 90;
         newButton.transform.localScale = Vector3.one;
         newButton.GetComponentInChildren<Text>().text = txt;
+        newButton.GetComponent<Image>().color = col;
     }
 
     private void Update()
@@ -82,7 +83,7 @@ public class StructureMenuController : MonoBehaviour {
             }
             for (int i = pathButtons.Length; i < splittedPath.Length; i++)
             {
-                InstantiateNewBtn(PathPrefab, PathFolder, splittedPath[i]);
+                InstantiateNewBtn(PathPrefab, PathFolder, splittedPath[i], Color.white);
             }
             pathHasChanged = false;
         }
@@ -98,7 +99,13 @@ public class StructureMenuController : MonoBehaviour {
                         if (txt.text == opt)
                             goto next;
                     }
-                    InstantiateNewBtn(OptionPrefab, OptionFolder, opt);
+                    Color btn_col;
+                    if (sm.type == OptionType.Job)
+                        btn_col = Color.cyan;
+                    else
+                        btn_col = Color.yellow;
+                    InstantiateNewBtn(OptionPrefab, OptionFolder, opt, btn_col);
+
                     next:;
                 }
             }
@@ -107,6 +114,16 @@ public class StructureMenuController : MonoBehaviour {
 
         //foreach (Button btn in transform.parent.GetComponentsInChildren<Button>())
         //    btn.interactable = !PythonExecuter.inst.IsLoading();
+    }
+
+    public void SetOptiontype(string active_type)
+    {
+        foreach (Button b in transform.GetComponentsInChildren<Button>())
+        {
+            b.interactable = b.GetComponentInChildren<Text>().text != active_type;
+        }
+        StructureMenuController.shouldDelete = true;
+        StructureMenuController.shouldRefresh = true;
     }
 
     public void AddOption(OptionType t, string opt)

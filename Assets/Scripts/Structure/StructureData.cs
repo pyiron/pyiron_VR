@@ -83,6 +83,7 @@ public class StructureData : MonoBehaviour
     }*/
 }
 
+// TODO: combine with AtomInfos.
 public class AtomData
 {
     internal Vector3 pos;
