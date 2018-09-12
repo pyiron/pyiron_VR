@@ -1,0 +1,4 @@
+Tasks that can be easily done:
+	Change the way "Folders" and "ExecutedJobs" gets shown. At the moment they are useless Buttons. I tried making them 	plain Text, but that doesn't look nice (look yourself by activating these two GameObjects). I think Background should 	be added to the plain Text.
+
+Add more stuff to the menu

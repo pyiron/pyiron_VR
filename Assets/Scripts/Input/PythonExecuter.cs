@@ -173,10 +173,10 @@ public class PythonExecuter : MonoBehaviour {
         {
             StructureMenuController.inst.AddOption(OptionType.Job, inp.Substring(6));
         }
-        else if (splittedData[0] == "files")
+        /*else if (splittedData[0] == "files")
         {
             StructureMenuController.inst.AddOption(OptionType.Script, inp.Substring(6));
-        }
+        }*/
         else if (splittedData[0] == "path")
         {
             if (StructureMenuController.currPath != splittedData[1])

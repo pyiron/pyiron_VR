@@ -38,7 +38,7 @@ public class StructureMenuController : MonoBehaviour {
         }
     }
 
-    private void InstantiateNewBtn(GameObject Pref, GameObject parent, string txt, Color col)
+    private GameObject InstantiateNewBtn(GameObject Pref, GameObject parent, string txt, Color col)
     {
         GameObject newButton = Instantiate(Pref);
         newButton.transform.SetParent(parent.transform);
@@ -47,6 +47,7 @@ public class StructureMenuController : MonoBehaviour {
         newButton.transform.localScale = Vector3.one;
         newButton.GetComponentInChildren<Text>().text = txt;
         newButton.GetComponent<Image>().color = col;
+        return newButton;
     }
 
     private void Update()
@@ -89,10 +90,10 @@ public class StructureMenuController : MonoBehaviour {
         }
         if (shouldRefresh)
         {
-            StructureMenuButton sm = ActiveType();
-            if (sm != null)
+            for (int i = 0; i < 2; i++)
             {
-                foreach (string opt in options[sm.type])
+                OptionType sm = (OptionType)(i);
+                foreach (string opt in options[sm])
                 {
                     foreach (Text txt in OptionFolder.GetComponentsInChildren<Text>())
                     {
@@ -100,12 +101,12 @@ public class StructureMenuController : MonoBehaviour {
                             goto next;
                     }
                     Color btn_col;
-                    if (sm.type == OptionType.Job)
+                    if (sm == OptionType.Job)
                         btn_col = Color.cyan;
                     else
                         btn_col = Color.yellow;
-                    InstantiateNewBtn(OptionPrefab, OptionFolder, opt, btn_col);
-
+                    GameObject btn = InstantiateNewBtn(OptionPrefab, OptionFolder, opt, btn_col);
+                    btn.GetComponent<OptionButton>().isJob = sm == OptionType.Job;
                     next:;
                 }
             }
@@ -122,8 +123,8 @@ public class StructureMenuController : MonoBehaviour {
         {
             b.interactable = b.GetComponentInChildren<Text>().text != active_type;
         }
-        StructureMenuController.shouldDelete = true;
-        StructureMenuController.shouldRefresh = true;
+        shouldDelete = true;
+        shouldRefresh = true;
     }
 
     public void AddOption(OptionType t, string opt)
@@ -145,5 +146,5 @@ public class StructureMenuController : MonoBehaviour {
 
 public enum OptionType
 {
-    Folder, Script, Job
+    Folder, Job
 }
