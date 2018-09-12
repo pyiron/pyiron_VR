@@ -28,16 +28,6 @@ public class PythonExecuter : MonoBehaviour {
     public static bool loadedStructure;
 
     [Header("Receive data from Python")]
-
-    // shows whether python has send some data about the force/temperature/etc. already or not
-    //public static bool extendedData;
-    // the force the structure currently posseses, but when the data is incomplete
-    //private static float[] currentStructureForce;
-    // the force the structure currently posseses
-    //public static float[] structureForce;
-    
-    // the temperature Python sends to Unity when sending the first structure data
-    public static int temperature = -1;
     // the amount of changes the Python program did after the Unity program requested it
     public static int incomingChanges;
 
@@ -116,7 +106,7 @@ public class PythonExecuter : MonoBehaviour {
 
     private void Update()
     {
-        if (temperature != -1)
+        if (Thermometer.temperature != -1)
         {
             // activate the thermometer when changing into temperature mode, else deactivate it
             Thermometer.inst.SetState(ModeData.currentMode.showTemp);
@@ -219,7 +209,7 @@ public class PythonExecuter : MonoBehaviour {
                 }
             if (ContainsValue(splittedData[3]))
             {
-                temperature = int.Parse(splittedData[3]);
+                Thermometer.temperature = int.Parse(splittedData[3]);
             }
             if (ContainsValue(splittedData[4]))
                 frame = int.Parse(splittedData[4]);

@@ -45,7 +45,7 @@ public class ProgressBar : MonoBehaviour {
         if ((AnimationController.frame != -1 && AnimationController.frame_amount > 0) != ProgressBarObject.activeSelf)
             ProgressBarObject.SetActive(!ProgressBarObject.activeSelf);
 
-        if (ProgressBarObject.activeSelf)
+        if (ProgressBarObject.activeSelf && AnimationController.GetCurrFrameData() != null)
         {
             // update the progress of the ProgressBar
             anim.SetFloat("Progress", 1f * AnimationController.frame / AnimationController.GetCurrFrameData().frames);

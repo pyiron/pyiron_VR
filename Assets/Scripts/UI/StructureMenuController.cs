@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 
-public class StructureMenuController : MonoBehaviour {
+public class StructureMenuController : MenuController {
     // reference to the deployed scripts
     internal static StructureMenuController inst;
     public GameObject OptionPrefab;
@@ -22,11 +22,6 @@ public class StructureMenuController : MonoBehaviour {
     {
         inst = this;
         ClearOptions();
-    }
-
-    internal void SetState(bool active)
-    {
-        ProgramSettings.MoveToCenter(transform.parent.parent.gameObject);
     }
 
     internal void ClearOptions()
@@ -62,7 +57,7 @@ public class StructureMenuController : MonoBehaviour {
         }
         if (pathHasChanged)
         {
-            PathButton[] pathButtons = transform.parent.GetComponentsInChildren<PathButton>();
+            PathButton[] pathButtons = GetComponentsInChildren<PathButton>();
             bool correctPath = true;
             string[] splittedPath = currPath.Split('/');
             for (int i = 0; i < pathButtons.Length; i++)
@@ -117,30 +112,10 @@ public class StructureMenuController : MonoBehaviour {
         //    btn.interactable = !PythonExecuter.inst.IsLoading();
     }
 
-    public void SetOptiontype(string active_type)
-    {
-        foreach (Button b in transform.GetComponentsInChildren<Button>())
-        {
-            b.interactable = b.GetComponentInChildren<Text>().text != active_type;
-        }
-        shouldDelete = true;
-        shouldRefresh = true;
-    }
-
     public void AddOption(OptionType t, string opt)
     {
         options[t].Add(opt);
         shouldRefresh = true;
-    }
-
-    internal StructureMenuButton ActiveType()
-    {
-        foreach (StructureMenuButton sm in inst.transform.GetComponentsInChildren<StructureMenuButton>())
-        {
-            if (!sm.GetComponent<Button>().interactable)
-                return sm;
-        }
-        return null;
     }
 }
 

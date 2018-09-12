@@ -11,10 +11,12 @@ public class Thermometer : MonoBehaviour {
     private TextMesh ThermometerText;
     // the renderer of the thermometer
     private Renderer ThermometerRenderer;
+    // the current temperature
+    public static int temperature = -1;
     // the size the text on the thermometer telling the temperature should have
     private float TextSize = 0.4f;
     // the max temperature you can set with the thermometer and when the thermometer won't show any higher temperatures
-    private int maxTemperature = 10000;
+    internal static int maxTemperature = 10000;
     // the color of the liquid of the thermometer
     private Color liquidColor = Color.red;
     // the height from where on the thermometer won't show any temperature changes any more, if the controller shows above
@@ -51,7 +53,7 @@ public class Thermometer : MonoBehaviour {
         ChangeLiquidColor();
 
         // set lastTemperature to the value the thermometer has been initialised with
-        lastTemperature = PythonExecuter.temperature;
+        lastTemperature = temperature;
     }
 
     // a method to set the state of the thermometer object to see which scripts  change the state
@@ -64,7 +66,7 @@ public class Thermometer : MonoBehaviour {
     public void UpdateTemperature(int exactTemperature = -1)
     {
         // set the current temperature on the text field
-        ThermometerText.text = PythonExecuter.temperature.ToString();
+        ThermometerText.text = temperature.ToString();
         // set the red liquid to the right state / up to the right height
         if (exactTemperature != -1)
             anim.SetFloat("Temperature", (float)exactTemperature / maxTemperature);
@@ -73,7 +75,7 @@ public class Thermometer : MonoBehaviour {
             // to make it look smooth how the temperature gets scaled
             if (anim.gameObject.activeSelf)
             {
-                anim.SetFloat("Temperature", (float)PythonExecuter.temperature / maxTemperature);
+                anim.SetFloat("Temperature", (float)temperature / maxTemperature);
             }
     }
 
@@ -103,12 +105,12 @@ public class Thermometer : MonoBehaviour {
             newTemperatureGradient = 1;
 
         // set the temperature to the new value
-        PythonExecuter.temperature = (int)(precision * newTemperatureGradient) * maxTemperature / precision;
+        temperature = (int)(precision * newTemperatureGradient) * maxTemperature / precision;
 
         // if the temperature would be less or equal 0, the program will set it to 1, because PyIron would crash if it would get the temperature 0
-        if (PythonExecuter.temperature <= 0)
+        if (temperature <= 0)
         {
-            PythonExecuter.temperature = 1;
+            temperature = 1;
             // if the user points to a point lower than 0, the temperature will still be shown as 0 and not a negative value
             if (newTemperatureGradient <= 0)
                 newTemperatureGradient = 0;
@@ -125,5 +127,19 @@ public class Thermometer : MonoBehaviour {
         if ((maxTemperature > 100 || change > 1) && (maxTemperature < 100000 || change < 1))
             // changes the current maxTemperature to the new value
             maxTemperature = (int)(maxTemperature * change);
+    }
+
+    internal bool SendTemp()
+    {
+        // send Python the order to change the temperature if the user has changed the temperature on the thermometer
+        if (lastTemperature != temperature && temperature > -1)
+        {
+            PythonExecuter.inst.SendOrder(PythonScript.Executor, PythonCommandType.exec, "self.temperature = " + temperature);
+            // remember that the last ham_lammps has been created with the current temperature
+            Thermometer.inst.lastTemperature = temperature;
+            // show that the temperature changed
+            return true;
+        }
+        return false;
     }
 }

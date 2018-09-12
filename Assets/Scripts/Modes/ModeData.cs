@@ -92,7 +92,7 @@ public class ModeData : MonoBehaviour
 
     public void SetMode(Modes newMode)
     {
-        if (currentMode != null && !currentMode.showPossibleStructures)
+        if (currentMode != null && !currentMode.showExplorer)
             // stop the currently running animation
             OTP.RunAnim(false);
         currentMode = modes[(int)newMode];
@@ -101,7 +101,7 @@ public class ModeData : MonoBehaviour
 
     public void RaiseMode()
     {
-        if (!currentMode.showPossibleStructures)
+        if (!currentMode.showExplorer)
             // stop the currently running animation
             OTP.RunAnim(false);
         currentMode = modes[((int)currentMode.mode + 1) % modes.Count];
@@ -123,7 +123,7 @@ public class ModeData : MonoBehaviour
         // let the CurrentModeText always look in the direction of the player
         //Face_Player(CurrentModeText.gameObject);
 
-        if (PythonExecuter.temperature != -1)
+        if (Thermometer.temperature != -1)
             // activate the thermometer when changing into temperature mode, else deactivate it
             Thermometer.inst.gameObject.SetActive(modes[(int)currentMode.mode].showTemp);
 
@@ -134,8 +134,7 @@ public class ModeData : MonoBehaviour
         // TODO! activate the new UI
         //ChooseStructure.inst.StructButtons.gameObject.SetActive(modes[currentModeNr].showPossibleStructures);
 
-        //StructureMenuController.inst.transform.parent.gameObject.SetActive();
-        StructureMenuController.inst.SetState(modes[(int)currentMode.mode].showPossibleStructures);
+        UpdateMenu();
 
         foreach (GameObject controller in SceneReferences.inst.Controllers)
             if (controller.activeSelf)
@@ -159,5 +158,11 @@ public class ModeData : MonoBehaviour
                 LG.readyForResize = false;
                 LG.InfoText.gameObject.SetActive(false);
         }
+    }
+
+    private void UpdateMenu()
+    {
+        StructureMenuController.inst.SetState(modes[(int)currentMode.mode].showExplorer);
+        TemperatureMenuController.inst.SetState(modes[(int)currentMode.mode].showTemp);
     }
 }

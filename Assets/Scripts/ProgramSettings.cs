@@ -49,7 +49,7 @@ public class ProgramSettings : MonoBehaviour {
     public void ResetScene()
     {
         LaserGrabber.firstAnimStart = true;
-        PythonExecuter.temperature = -1;
+        Thermometer.temperature = -1;
         Thermometer.inst.SetState(false); 
         StructureData SD = StructureData.inst;
         SD.atomCtrlPos = new List<Vector3>(SD.atomCtrlPos.Count);  // seems not to work

@@ -38,7 +38,7 @@ public class AnimationController : MonoBehaviour {
                     next_time += 2 - (0.5f + Mathf.Abs(animSpeed - 2.5f)) / 2;
             }
         }
-        else if (shouldLoad && GetCurrFrameData().cellbox != null)
+        else if (shouldLoad && GetCurrFrameData() != null && GetCurrFrameData().cellbox != null)
         {
             ImportStructure.inst.LoadStructure();
             shouldLoad = false;

@@ -33,8 +33,6 @@ public class LaserGrabber : MonoBehaviour
     // the Vector between the controller position and the grabbed object position
     private Vector3 objToHandPos;
     // the Vector between the controller rotation and the grabbed object rotation
-    // private Vector3 objToHandRot; // might be needed to rotate the atom
-    // the vector between the positions of the boundingbox and it's parent
     public Transform boundingbox;
 
     [Header("Laser")]
@@ -54,10 +52,6 @@ public class LaserGrabber : MonoBehaviour
     private bool laserOnThermometer = false;
     // shows whether the laser is currently pointing at the thermometer
     private bool laserCurrentlyOnThermometer = false;
-    // the reference to the thermometer
-    //private GameObject ThermometerObject;
-    // the script of the thermometer
-    //private Thermometer thermometerScript;
 
     [Header("Change Animation")]
     // shows whether it is the first time an animation should be played,
@@ -89,17 +83,10 @@ public class LaserGrabber : MonoBehaviour
     private Vector2 startTouchPoint;
     // the point where the player currently touches the touchpad
     private Vector2 currentTouch;
-    // the object of the controller
     // the controller mask and it's name
     public LayerMask ctrlMask;
     public string ctrlMaskName;
 
-    //private SteamVR_TrackedObject trackedObj;
-    // get the device of the controller
-    /*public SteamVR_Controller.Device Controller
-    {
-        get { return SteamVR_Controller.Input((int)trackedObj.index); }
-    }*/
     // the other controller
     private GameObject otherCtrl;
 
@@ -135,14 +122,6 @@ public class LaserGrabber : MonoBehaviour
         textSize = textSize / ProgramSettings.textResolution * 10;
         InfoText.transform.localScale = Vector3.one * textSize;
         InfoText.fontSize = (int)ProgramSettings.textResolution;
-
-
-        // get the references to the thermometer related objects from the other controller, if it is active and knows them
-        //if (otherCtrl.activeSelf)
-        //{
-        //    ThermometerObject = otherCtrl.GetComponent<LaserGrabber>().ThermometerObject;
-        //    thermometerScript = otherCtrl.GetComponent<LaserGrabber>().thermometerScript;
-        //}
 
         // deactivate the trashcan
         TrashCan.inst.SetState(false);
@@ -210,11 +189,6 @@ public class LaserGrabber : MonoBehaviour
                 // send out a raycast to detect objects in front of the controller
                 SendRaycast();
         }
-        //if (ModeData.currentMode.showPossibleStructures)
-        //    ChooseStructure.inst.HairTriggerDown();
-
-        //if (MD.modes[MD.activeMode].showTemp)
-        //    SendRaycast(thermometerMask);
     }
 
     public void WhileHairTriggerDown()
@@ -474,20 +448,8 @@ public class LaserGrabber : MonoBehaviour
     private void LoadNewLammps()
     {
         bool temperatureHasChanged = false;
-        // check if the thermometer has been initialised yet and is currently active
-        if (Thermometer.inst != null)
-        {
-
-            // send Python the order to change the temperature if the user has changed the temperature on the thermometer
-            if (Thermometer.inst.lastTemperature != PythonExecuter.temperature && PythonExecuter.temperature > -1)
-            {
-                PE.SendOrder(PythonScript.Executor, PythonCommandType.exec, "self.temperature = " + PythonExecuter.temperature);
-                // remember that a new ham_lammps has to be loaded
-                temperatureHasChanged = true;
-                // remember that the last ham_lammps has been created with the current temperature
-                Thermometer.inst.lastTemperature = PythonExecuter.temperature;
-            }
-        }
+        // remember that a new ham_lammps has to be loaded
+        temperatureHasChanged = Thermometer.inst.SendTemp();
 
         // check if the positions of any atom has been changed since the last animation has been started
         if (positionsHaveChanged || lammpsIsMd != ModeData.currentMode.showTemp) // add this: || PythonExecuter.frame != 0    to let the program load a new anima if the frame has changed
@@ -555,12 +517,8 @@ public class LaserGrabber : MonoBehaviour
 
                     if (hittedObject.name.Contains("Thermometer"))
                     {
-                        //GetThermometerReference(hittedObject);
-                        // set the references for the other controller as well, if the controller is activated yet
-                        //if (otherCtrl.activeSelf)
-                        //    otherCtrl.GetComponent<LaserGrabber>().GetThermometerReference(hittedObject);
-
                         Thermometer.inst.ChangeThemperature(hitPoint.y);
+                        TemperatureMenuController.inst.ChangeTemperature();
 
                         if (!laserOnThermometer || !laserCurrentlyOnThermometer)
                         {
