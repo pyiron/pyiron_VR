@@ -34,3 +34,4 @@ All progress is also represented by the commits on GitLab with some more details
 
 TODO:
 show dependencies in the program.
+ask Ulrich how and where he implemented the mode dropdown Menu.

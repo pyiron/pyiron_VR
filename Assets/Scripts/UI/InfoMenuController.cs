@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ModeMenuController : MenuController {
-    internal static ModeMenuController inst;
+public class InfoMenuController : MenuController {
+    internal static InfoMenuController inst;
 
     private void Awake()
     {
