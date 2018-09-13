@@ -43,7 +43,7 @@ public class ModeData : MonoBehaviour
         { 3, new Mode(mode:Modes.Info, showInfo:true) }
         //{ 3, new Mode(m_name:"Edit Mode", m_canDuplicate:true) },
         };*/
-    private static List<Mode> modes = new List<Mode>() {
+    internal static List<Mode> modes = new List<Mode>() {
         new Mode(mode:Modes.Explorer, hideAtoms: true, showPossibleStructures: true),
         new Mode(mode:Modes.Temperature, playerCanMoveAtoms:true, playerCanResizeAtoms:true, showTemp:true, showTrashcan:true),
         new Mode(mode:Modes.Minimize, playerCanMoveAtoms:true, playerCanResizeAtoms:true, showRelaxation:true, showTrashcan:true),
@@ -165,6 +165,7 @@ public class ModeData : MonoBehaviour
         StructureMenuController.inst.SetState(modes[(int)currentMode.mode].showExplorer);
         TemperatureMenuController.inst.SetState(modes[(int)currentMode.mode].showTemp);
         ModeMenuController.inst.SetState(currentMode.mode != Modes.Explorer);
+        ModeMenuController.inst.OnModeChange();
         AnimationMenuController.inst.SetState(currentMode.mode == Modes.Temperature || currentMode.mode == Modes.Minimize ||
             currentMode.mode == Modes.View);
     }

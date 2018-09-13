@@ -5,7 +5,9 @@ using UnityEngine.UI;
 
 public class ModeMenuController : MenuController {
     internal static ModeMenuController inst;
-    private DropDown dropDown;
+    public GameObject OptionFolder;
+    public GameObject OptionButtonPref;
+    private Dropdown dropDown;
 
     private void Awake()
     {
@@ -14,11 +16,53 @@ public class ModeMenuController : MenuController {
 
     private void Start()
     {
-        //dropDown.
+        /*dropDown = GetComponentInChildren<Dropdown>();
+        List<Dropdown.OptionData> options = new List<Dropdown.OptionData>();
+        foreach (Mode mode in ModeData.modes)
+        {
+            options.Add(new Dropdown.OptionData(mode.mode.ToString()));
+        }
+        dropDown.ClearOptions();
+        dropDown.AddOptions(options);*/
+
+        foreach (Mode mode in ModeData.modes)
+        {
+            GameObject newModeBtn = Instantiate(OptionButtonPref);
+            newModeBtn.transform.parent = OptionFolder.transform;
+            newModeBtn.GetComponentInChildren<Text>().text = mode.mode.ToString();
+            //newModeBtn.GetComponent<Button>().onClick.AddListener(OnButtonClicked);
+        }
     }
 
-    public void OnDropDownChange(int mode_nr)
+    private void Update()
     {
-        print(mode_nr);
+        foreach (Button btn in OptionFolder.GetComponentsInChildren<Button>())
+        {
+            btn.transform.localPosition -= new Vector3(0, 0, btn.transform.localPosition.z);
+            btn.transform.localEulerAngles = Vector3.zero;
+            btn.transform.localScale = Vector3.one;
+        }
+    }
+
+    //public void OnDropDownChange(int mode_nr)
+    //{
+    //    print(mode_nr);
+    //}
+
+    public void OnButtonClicked(Button btn)
+    {
+        print(btn.GetComponentInChildren<Text>().text);
+        ModeData.inst.SetMode((Modes)System.Enum.Parse(typeof(Modes), btn.GetComponentInChildren<Text>().text));
+    }
+
+    internal void OnModeChange()
+    {
+        foreach (Button btn in OptionFolder.GetComponentsInChildren<Button>())
+        {
+            if (ModeData.currentMode.mode.ToString() == btn.GetComponentInChildren<Text>().text)
+                btn.GetComponent<Image>().color = Color.green;
+            else
+                btn.GetComponent<Image>().color = Color.white;
+        }
     }
 }
