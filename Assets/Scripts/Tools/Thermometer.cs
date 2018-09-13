@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Thermometer : MonoBehaviour {
+public class Thermometer : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+{
     // reference to the Thermometer
     public static Thermometer inst;
     // the reference to the animationController of the thermometer
@@ -28,6 +30,11 @@ public class Thermometer : MonoBehaviour {
     // the temperature of last calculated ham_lammps
     public int lastTemperature;
 
+    // shows if the user hitted the thermometer with the laser when he pressed the hair trigger down the last time
+    internal static bool laserOnThermometer;
+    // shows whether the laser is currently pointing at the thermometer
+    internal static bool laserCurrentlyOnThermometer;
+
 
     private void Awake()
     {
@@ -38,8 +45,7 @@ public class Thermometer : MonoBehaviour {
         // get the reference to the TextMesh of the temperature
         ThermometerText = GetComponentInChildren<TextMesh>();
     }
-
-    // Use this for initialization
+    
     void Start () {
         //UpdateTemperature();
         ThermometerText.transform.localScale = Vector3.one * TextSize;
@@ -80,7 +86,7 @@ public class Thermometer : MonoBehaviour {
     }
 
     // change the color if the user interacts with the thermometer
-    public void ChangeLiquidColor(string state="")
+    public void ChangeLiquidColor(string state="idle")
     {
         // set the color to a dark red if the user currently clicks on the thermometer
         if (state == "clicked")
@@ -136,10 +142,59 @@ public class Thermometer : MonoBehaviour {
         {
             PythonExecuter.inst.SendOrder(PythonScript.Executor, PythonCommandType.exec, "self.temperature = " + temperature);
             // remember that the last ham_lammps has been created with the current temperature
-            Thermometer.inst.lastTemperature = temperature;
+            lastTemperature = temperature;
             // show that the temperature changed
             return true;
         }
         return false;
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        laserOnThermometer = true;
+        laserCurrentlyOnThermometer = true;
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        bool laserWasOnThermometer = laserCurrentlyOnThermometer;
+        laserCurrentlyOnThermometer = eventData.hovered.Contains(gameObject);
+        if (laserCurrentlyOnThermometer)
+        {
+            ChangeThemperature(eventData.pointerCurrentRaycast.worldPosition.y);
+            TemperatureMenuController.inst.ChangeTemperature();
+
+            if (!laserWasOnThermometer)
+            {
+                // set the color to a dark red to show that the user currently clicks on the thermometer
+                ChangeLiquidColor("clicked");
+            }
+
+            if (OrdersToPython.pythonRunsAnim)
+                // stop the animation
+                SceneReferences.inst.OTP.RunAnim(false);
+        }
+        else
+        {
+            ChangeLiquidColor("clickedButMovedAway");
+        }
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        laserOnThermometer = false;
+        laserCurrentlyOnThermometer = false;
+        ChangeLiquidColor("idle");
+    }
+
+    public void TouchpadPressDown(Vector2 touchPos)
+    {
+        if (laserOnThermometer)
+            // increases the maxTemperature by a factor of 10 when pressing on the upper half of the touchpad
+            if (touchPos.y > 0)
+                SetMaxTemperature(10);
+            // decreases the maxTemperature by a factor of 10 when pressing on the lower half of the touchpad, if possible
+            else
+                SetMaxTemperature(0.1f);
     }
 }

@@ -168,6 +168,7 @@ public class ModeData : MonoBehaviour
         ModeMenuController.inst.OnModeChange();
         AnimationMenuController.inst.SetState(currentMode.mode == Modes.Temperature || currentMode.mode == Modes.Minimize ||
             currentMode.mode == Modes.View);
+        InfoMenuController.inst.SetState(currentMode.mode == Modes.Info);
         //StructureMenuController.inst.transform.parent.gameObject.SetActive(currentMode.mode == Modes.Explorer);
     }
 }

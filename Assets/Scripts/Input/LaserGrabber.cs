@@ -47,12 +47,6 @@ public class LaserGrabber : MonoBehaviour
     // the max distance when the laser still detects an object to attach
     public static int laserMaxDistance = 100;
 
-    [Header("Thermometer")]
-    // shows if the user hitted the thermometer with the laser when he pressed the hair trigger down the last time
-    private bool laserOnThermometer = false;
-    // shows whether the laser is currently pointing at the thermometer
-    private bool laserCurrentlyOnThermometer = false;
-
     [Header("Change Animation")]
     // shows whether it is the first time an animation should be played,
     // so that the python program knows whether to load a new animation or not
@@ -86,6 +80,7 @@ public class LaserGrabber : MonoBehaviour
     // the controller mask and it's name
     public LayerMask ctrlMask;
     public string ctrlMaskName;
+    private int ctrl_nr;
 
     // the other controller
     private GameObject otherCtrl;
@@ -93,6 +88,7 @@ public class LaserGrabber : MonoBehaviour
     void Awake()
     {
         InitLaser();
+        ctrl_nr = GetComponent<VivePoseTracker>().viveRole.roleValue;
     }
 
     void Start()
@@ -193,9 +189,7 @@ public class LaserGrabber : MonoBehaviour
 
     public void WhileHairTriggerDown()
     {
-        if (laserOnThermometer)
-            SendRaycast();
-        else if (!ModeData.currentMode.playerCanMoveAtoms)
+        if (!ModeData.currentMode.playerCanMoveAtoms)
         {
             SendRaycast();
             if (ModeData.currentMode.showInfo)
@@ -203,8 +197,6 @@ public class LaserGrabber : MonoBehaviour
         }
         else
             InfoText.gameObject.SetActive(false);
-        //if (ModeData.currentMode.showPossibleStructures)
-        //    ChooseStructure.inst.WhileHairTriggerDown(transform);
     }
 
     private void ShowInfo()
@@ -253,19 +245,8 @@ public class LaserGrabber : MonoBehaviour
 
     public void HairTriggerUp()
     {
-        // check if the player has clicked on the thermometer
-        if (laserOnThermometer)
-        {
-            // show that the thermometer isn't being clicked anymore
-            laserOnThermometer = false;
-            laserCurrentlyOnThermometer = false;
-            // turn the color of the thermometer back to it's usual color
-            Thermometer.inst.ChangeLiquidColor();
-            // deactivate the laser
-            laser.SetActive(false);
-        }
-            // check that the move mode is currently active
-            if (ModeData.currentMode.playerCanMoveAtoms)
+        // check that the move mode is currently active
+        if (ModeData.currentMode.playerCanMoveAtoms)
         {
             // set the state of the controller to not ready for resizeStructure
             readyForResize = false;
@@ -303,7 +284,7 @@ public class LaserGrabber : MonoBehaviour
     // show that the laser is currently active and it's possible in the current move to move atoms, and that the laser doesn't point on the thermometer
     private bool ScaleAbleLaser()
     {
-        return (ModeData.currentMode.playerCanMoveAtoms && laser.activeSelf && !laserOnThermometer);
+        return (ModeData.currentMode.playerCanMoveAtoms && laser.activeSelf && !Thermometer.laserOnThermometer);
     }
 
     public void TouchpadTouchDown(Vector2 touchPos)
@@ -357,13 +338,6 @@ public class LaserGrabber : MonoBehaviour
             // check that the player isn't currently trying to change the length of the laser
             if (!laser.activeSelf)
                 ControllAnimation(touchPos);
-        if (laserOnThermometer)
-            // increases the maxTemperature by a factor of 10 when pressing on the upper half of the touchpad
-            if (touchPos.y > 0)
-                Thermometer.inst.SetMaxTemperature(10);
-            // decreases the maxTemperature by a factor of 10 when pressing on the lower half of the touchpad, if possible
-            else
-                Thermometer.inst.SetMaxTemperature(0.1f);
     }
 
     public void WhileTouchpadPressDown(Vector2 touchPos)
@@ -501,44 +475,22 @@ public class LaserGrabber : MonoBehaviour
         {
             RaycastHit hit;
 
-            if (!attachedObject || !ModeData.currentMode.playerCanMoveAtoms || laserOnThermometer)
+            if (!attachedObject || !ModeData.currentMode.playerCanMoveAtoms)
                 // send out a raycast to detect if there is an object in front of the laser 
                 if (Physics.Raycast(transform.position, transform.forward, out hit, laserMaxDistance, ctrlMask))
                 {
                     GameObject hittedObject = hit.transform.gameObject;
-                    laser.SetActive(true);
-                    hitPoint = hit.point;
-                    ShowLaser(hit);
+                    if (!hittedObject.name.Contains("Thermometer")) {
+                        laser.SetActive(true);
+                        hitPoint = hit.point;
+                        ShowLaser(hit);
 
-                    if (hittedObject.name.Contains("Thermometer"))
-                    {
-                        Thermometer.inst.ChangeThemperature(hitPoint.y);
-                        TemperatureMenuController.inst.ChangeTemperature();
-
-                        if (!laserOnThermometer || !laserCurrentlyOnThermometer)
-                        {
-                            laserOnThermometer = true;
-                            laserCurrentlyOnThermometer = true;
-                            // set the color to a dark red to show that the user currently clicks on the thermometer
-                            Thermometer.inst.ChangeLiquidColor("clicked");
-                        }
-
-                        if (OrdersToPython.pythonRunsAnim)
-                            // stop the animation
-                            OTP.RunAnim(false);
+                        if (!Thermometer.laserOnThermometer)
+                            if (ModeData.currentMode.playerCanMoveAtoms)
+                                AttachObject(hittedObject);
+                            else
+                                attachedObject = hittedObject;
                     }
-                    else if (!laserOnThermometer)
-                        if (ModeData.currentMode.playerCanMoveAtoms)
-                            AttachObject(hittedObject);
-                        else
-                            attachedObject = hittedObject;
-                }
-            // show that the laser no longer points on the thermometer
-                else if (laserOnThermometer)
-                {
-                    laserCurrentlyOnThermometer = false;
-                    laser.SetActive(false);
-                    Thermometer.inst.ChangeLiquidColor("clickedButMovedAway");
                 }
                 // show that the controller is ready to resize the structure, if it is the AtomLayer controller
                 else if (ModeData.currentMode.playerCanResizeAtoms)

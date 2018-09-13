@@ -63,7 +63,10 @@ public class InputManager : MonoBehaviour
             SceneReferences.inst.LGs[(int)handRole].TouchpadTouchUp();
 
         if (ViveInput.GetPressDown(handRole, ControllerButton.Pad))
+        {
             SceneReferences.inst.LGs[(int)handRole].TouchpadPressDown(touchPos);
+            Thermometer.inst.TouchpadPressDown(touchPos);
+        }
 
         if (ViveInput.GetPress(handRole, ControllerButton.Pad))
             SceneReferences.inst.LGs[(int)handRole].WhileTouchpadPressDown(touchPos);
