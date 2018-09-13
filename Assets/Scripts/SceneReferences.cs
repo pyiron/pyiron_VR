@@ -27,8 +27,7 @@ public class SceneReferences : MonoBehaviour {
     public GameObject[] Controllers = new GameObject[2];
     // the reference to the LaserGrabber script of the controllers
     public LaserGrabber[] LGs = new LaserGrabber[2];
-
-    public GameObject PossiblePythonScripts;
+    
 
     private void Awake()
     {

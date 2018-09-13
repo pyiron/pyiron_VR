@@ -40,6 +40,21 @@ public class AnimationController : MonoBehaviour {
         }
     }
 
+    static internal void ChangeAnimSpeed(int change)
+    {
+        // send Python the order to play the animation faster. if it isn't already at it's fastest speed
+        if (change > 0)
+            if (animSpeed + change <= 5)
+                animSpeed += change;
+            else
+                animSpeed = 5;
+        else
+            if (animSpeed + change >= 0)
+                animSpeed += change;
+            else
+                animSpeed = 0;
+    }
+
     public static void move_one_frame(bool forward=true) {
         if (forward)
             frame = Mod((frame + 1), StructureData.GetCurrFrameData().frames);
@@ -58,6 +73,13 @@ public class AnimationController : MonoBehaviour {
         int newFrame = Mod((frame + frame_step), StructureData.GetCurrFrameData().frames);
         frame = newFrame;
         return Mod((frame + frame_step), StructureData.GetCurrFrameData().frames) == frame + frame_step;
+    }
+
+    internal static void ResetAnimation()
+    {
+        frame = 0;
+        if (!run_anim)
+            ImportStructure.inst.LoadStructure();
     }
 
     private static int Mod(int a, int b)

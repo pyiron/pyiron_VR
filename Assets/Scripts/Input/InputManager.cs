@@ -13,20 +13,16 @@ public class InputManager : MonoBehaviour
     // get the data about the modes
     public ModeData MD;
 
-    //[Header("Controller")]
-    // the two controllers
-    //public GameObject[] Controllers = new GameObject[2];  // TODO: should be private
-    // get the reference of LaserGrabber
-    // LaserGrabber[] LGs = new LaserGrabber[2];
-    // get the device of the controller
-    //private SteamVR_Controller.Device[] ControllerDevices = new SteamVR_Controller.Device[2];
-
+    public GameObject Canvas;
 
     void Update()
     {
-        foreach (HandRole handRole in System.Enum.GetValues(typeof(HandRole)))
-            CheckViveController(handRole);
-        CheckKeyboard();
+        if (!PythonExecuter.IsLoading())
+        {
+            foreach (HandRole handRole in System.Enum.GetValues(typeof(HandRole)))
+                CheckViveController(handRole);
+            CheckKeyboard();
+        }
     }
 
     private void CheckViveController(HandRole handRole)
@@ -78,11 +74,14 @@ public class InputManager : MonoBehaviour
 
     private void CheckGripButton(HandRole handRole)
     {
-        if (ViveInput.GetPressDown(handRole, ControllerButton.Grip))
-            InGamePrinter.inst[(int)handRole].SetState(true);
+        //if (ViveInput.GetPressDown(handRole, ControllerButton.Grip))
+        //    InGamePrinter.inst[(int)handRole].SetState(true);
 
-        if (ViveInput.GetPressUp(handRole, ControllerButton.Grip))
-            InGamePrinter.inst[(int)handRole].SetState(false);
+        //if (ViveInput.GetPressUp(handRole, ControllerButton.Grip))
+        //    InGamePrinter.inst[(int)handRole].SetState(false);
+
+        if (ViveInput.GetPressDown(handRole, ControllerButton.Grip))
+            Canvas.SetActive(!Canvas.activeSelf);
     }
 
     // check if the application menu button has been pressed. If that's the case, go to the next mode
@@ -91,10 +90,7 @@ public class InputManager : MonoBehaviour
         if (ViveInput.GetPressDown(handRole, ControllerButton.Menu))
         {
             ViveInput.TriggerHapticPulse(handRole, ushort.MaxValue);
-            //if (!ModeData.currentMode.showPossibleStructures || PythonExecuter.loadedStructure)
-            //{
             MD.RaiseMode();
-            //}
         }
     }
 

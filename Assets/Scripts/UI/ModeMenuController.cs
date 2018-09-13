@@ -28,7 +28,7 @@ public class ModeMenuController : MenuController {
         foreach (Mode mode in ModeData.modes)
         {
             GameObject newModeBtn = Instantiate(OptionButtonPref);
-            newModeBtn.transform.parent = OptionFolder.transform;
+            newModeBtn.transform.SetParent(OptionFolder.transform);
             newModeBtn.GetComponentInChildren<Text>().text = mode.mode.ToString();
             //newModeBtn.GetComponent<Button>().onClick.AddListener(OnButtonClicked);
         }
@@ -59,10 +59,14 @@ public class ModeMenuController : MenuController {
     {
         foreach (Button btn in OptionFolder.GetComponentsInChildren<Button>())
         {
-            if (ModeData.currentMode.mode.ToString() == btn.GetComponentInChildren<Text>().text)
+            bool activeMode = ModeData.currentMode.mode.ToString() == btn.GetComponentInChildren<Text>().text;
+            if (activeMode)
+            {
                 btn.GetComponent<Image>().color = Color.green;
+            }
             else
                 btn.GetComponent<Image>().color = Color.white;
+            btn.interactable = !activeMode;
         }
     }
 }

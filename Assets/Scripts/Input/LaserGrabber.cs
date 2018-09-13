@@ -368,7 +368,7 @@ public class LaserGrabber : MonoBehaviour
 
     public void WhileTouchpadPressDown(Vector2 touchPos)
     {
-        if (moveOneFrameTimer >= 0 && !PythonExecuter.IsLoading())
+        if (moveOneFrameTimer >= 0)
         {
             moveOneFrameTimer += Time.deltaTime;
             if (moveOneFrameTimer >= timeUntilMoveOneFrame)
@@ -398,50 +398,44 @@ public class LaserGrabber : MonoBehaviour
 
     private void ControllAnimation(Vector2 touchPos)
     {
-        if (!PythonExecuter.IsLoading())
-        {
-            if (touchPos.x > 0.5)
-                if (OrdersToPython.pythonRunsAnim)
-                    // send Python the order to play the animation faster. if it isn't already at it's fastest speed
-                    if (AnimationController.animSpeed < 5)
-                        AnimationController.animSpeed += 1;
-                    else { }
-                else
-                {
-                    LoadNewLammps();
-
-                    // go one frame forward
-                    AnimationController.move_one_frame(true);
-                    // show that the user pressed the button to go one step forward
-                    moveOneFrameTimer = 0;
-                }
-            else if (touchPos.x < -0.5)
-                if (OrdersToPython.pythonRunsAnim)
-                    // send Python the order to play the animation faster. if it isn't already at it's fastest speed
-                    if (AnimationController.animSpeed > 0)
-                        AnimationController.animSpeed -= 1;
-                    else { }
-                else
-                {
-                    LoadNewLammps();
-
-                    // go one frame back
-                    AnimationController.move_one_frame(false);
-                    moveOneFrameTimer = 0;
-                }
-            else if (OrdersToPython.pythonRunsAnim)
-                OTP.RunAnim(false);
+        if (touchPos.x > 0.5)
+            if (OrdersToPython.pythonRunsAnim)
+                AnimationController.ChangeAnimSpeed(1);
             else
             {
                 LoadNewLammps();
 
-                // tell Python to start sending the dataframes from the current ham_lammps
-                OTP.RunAnim(true);
+                // go one frame forward
+                AnimationController.move_one_frame(true);
+                // show that the user pressed the button to go one step forward
+                moveOneFrameTimer = 0;
             }
+        else if (touchPos.x < -0.5)
+            if (OrdersToPython.pythonRunsAnim)
+                // send Python the order to play the animation faster. if it isn't already at it's fastest speed
+                if (AnimationController.animSpeed > 0)
+                    AnimationController.animSpeed -= 1;
+                else { }
+            else
+            {
+                LoadNewLammps();
 
-            // update the symbols on on all active controllers
-            UpdateSymbols();
+                // go one frame back
+                AnimationController.move_one_frame(false);
+                moveOneFrameTimer = 0;
+            }
+        else if (OrdersToPython.pythonRunsAnim)
+            OTP.RunAnim(false);
+        else
+        {
+            LoadNewLammps();
+
+            // tell Python to start sending the dataframes from the current ham_lammps
+            OTP.RunAnim(true);
         }
+
+        // update the symbols on on all active controllers
+        UpdateSymbols();
     }
 
     // send an Order to Python that it should create a new ham_lammps
@@ -574,13 +568,10 @@ public class LaserGrabber : MonoBehaviour
                 // sets the position of the structure to the end of the laser plus the Vector between the structure and the boundingbox
                 newPos = transform.position + (laser.transform.position - transform.position) * 2
                     + AtomStructure.transform.position - boundingbox.position;
-                //attachedObject.transform.position = transform.position + (laser.transform.position - transform.position) * 2
-                //        + AtomStructure.transform.position - boundingbox.position;
             }
             else
                 // sets the position of the grabbed object to the end of the laser
                 newPos = transform.position + (laser.transform.position - transform.position) * 2;
-            //attachedObject.transform.position = transform.position + (laser.transform.position - transform.position) * 2;
 
             // would keep always the same side to the viewer:
             //  objectInHand.transform.eulerAngles = new Vector3(0, transform.eulerAngles.y + objToHandRot.y, 0);
