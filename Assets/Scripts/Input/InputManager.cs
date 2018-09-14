@@ -10,10 +10,10 @@ using HTC.UnityPlugin.Vive;
 public class InputManager : MonoBehaviour
 {
     [Header("Scene Data")]
-    // get the data about the modes
-    public ModeData MD;
-
+    // the Canvas for the menus. Needed to dis/enable it.
     public GameObject Canvas;
+    // the pointers which contain the laser. Needed to dis/enable the laser.
+    public GameObject[] pointers;
 
     void Update()
     {
@@ -92,8 +92,8 @@ public class InputManager : MonoBehaviour
     {
         if (ViveInput.GetPressDown(handRole, ControllerButton.Menu))
         {
-            ViveInput.TriggerHapticPulse(handRole, ushort.MaxValue);
-            MD.RaiseMode();
+            // Switch the VIU laser on/off
+            pointers[(int)handRole].SetActive(!pointers[(int)handRole].activeSelf);
         }
     }
 

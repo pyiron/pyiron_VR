@@ -39,6 +39,9 @@ public class PythonExecuter : MonoBehaviour {
     // the amount of changes the Unity program requested the Python program to do
     public static int outgoingChanges;
 
+    /// <summary>
+    /// Start the connection to Python.
+    /// </summary>
 
     private void Awake()
     {
@@ -47,8 +50,7 @@ public class PythonExecuter : MonoBehaviour {
         ProgressBar = GameObject.Find("MyObjects/ProgressBar");
 
         //IS = GameObject.Find("AtomStructure").GetComponent<ImportStructure>();
-        LoadPythonScript();
-
+        LoadUnityManager();
         ResetTransferData();
     }
 
@@ -60,21 +62,21 @@ public class PythonExecuter : MonoBehaviour {
         outgoingChanges = 0;
     }
 
-    public void LoadPythonScript()
+    // start the UnityManager which will start the ProjectExplorer
+    public void LoadUnityManager()
     {
-        if (loadedStructure)
+        if (loadedStructure) // not needed at the moment
         {
             ClosePythonProgress();
             ResetTransferData();
         }
         myProcess = new Process();
         var pyPathThread = new Thread(delegate () {
-            string executedOrder = "cd " + pythonPath + " && python UnityManager.py"; // "Executing: cd " + pythonPath + " && python " + fileName
+            string executedOrder = "cd " + pythonPath + " && python UnityManager.py";
             print("executed: " + executedOrder);
             Command(executedOrder, myProcess);
         });
         pyPathThread.Start();
-        //Command("cd " + pythonPath + " && python " + pythonFileName + ".py", myProcess);
     }
 
     static void Command(string order, Process myProcess)
@@ -100,25 +102,17 @@ public class PythonExecuter : MonoBehaviour {
         catch (Exception e) { print(e); }
     }
 
+    /// <summary>
+    /// Receive the input from Python and handle it, e.g. by delegating it to other scripts.
+    /// </summary>
+
     private static void ErrorDataReceived(object sender, DataReceivedEventArgs e) {
         print(e.Data);
     }
 
-    private void Update()
-    {
-        if (Thermometer.temperature != -1)
-        {
-            // activate the thermometer when changing into temperature mode, else deactivate it
-            Thermometer.inst.SetState(ModeData.currentMode.showTemp);
-            Thermometer.inst.UpdateTemperature();
-        }
-        
-        InGamePrinter.inst[0].Ctrl_print("Send: " + outgoingChanges.ToString());
-        InGamePrinter.inst[1].Ctrl_print("Received: " + incomingChanges.ToString());
-    }
-
     private static void ReadOutput(object sender, DataReceivedEventArgs e)
     {
+        // print(e.Data);
         try
         {
             foreach (String partInp in e.Data.Split('%'))
@@ -251,6 +245,13 @@ public class PythonExecuter : MonoBehaviour {
         return (data != "empty");
     }
 
+    /// <summary>
+    /// Send an order to Python.
+    /// script is the script that should execute the order.
+    /// type defines how the order should be handled. E.g. does exec mean, that it will be executed with the exec() statement.
+    /// order contains the data that should be set or the order that should be executed.
+    /// </summary>
+
     // send the given order to Python, where it will be executed with the exec() command
     public void SendOrder(PythonScript script, PythonCommandType type, string order)
     {
@@ -263,10 +264,32 @@ public class PythonExecuter : MonoBehaviour {
         myProcess.StandardInput.WriteLine(full_order);
     }
 
+    /// <summary>
+    /// (De)Activate the thermometer. Print the outgoing and incoming changes to the controller_printer.
+    /// </summary>
+
+    private void Update()
+    {
+        if (Thermometer.temperature != -1)
+        {
+            // activate the thermometer when changing into temperature mode, else deactivate it
+            Thermometer.inst.SetState(ModeData.currentMode.showTemp);
+            Thermometer.inst.UpdateTemperature();
+        }
+
+        InGamePrinter.inst[0].Ctrl_print("Send: " + outgoingChanges.ToString());
+        InGamePrinter.inst[1].Ctrl_print("Received: " + incomingChanges.ToString());
+    }
+
+    // return if Unity is currently waiting for a response of Python
     public static bool IsLoading()
     {
         return outgoingChanges != incomingChanges;
     }
+
+    /// <summary>
+    /// Close the Python Progress the clean way.
+    /// </summary>
 
     private void ClosePythonProgress()
     {
@@ -274,6 +297,7 @@ public class PythonExecuter : MonoBehaviour {
         print("Application ending after " + Time.time + " seconds");
         print("Sent  " + outgoingChanges + " Orders to PyIron");
         print("Received  " + incomingChanges + " Responses from PyIron");
+        // let the program stop itself. This way, it can for example delete the scratch folder.
         myProcess.StandardInput.WriteLine("stop");
         myProcess.StandardInput.Close();
         myProcess.Close();

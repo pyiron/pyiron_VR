@@ -16,21 +16,11 @@ public class ModeMenuController : MenuController {
 
     private void Start()
     {
-        /*dropDown = GetComponentInChildren<Dropdown>();
-        List<Dropdown.OptionData> options = new List<Dropdown.OptionData>();
-        foreach (Mode mode in ModeData.modes)
-        {
-            options.Add(new Dropdown.OptionData(mode.mode.ToString()));
-        }
-        dropDown.ClearOptions();
-        dropDown.AddOptions(options);*/
-
         foreach (Mode mode in ModeData.modes)
         {
             GameObject newModeBtn = Instantiate(OptionButtonPref);
             newModeBtn.transform.SetParent(OptionFolder.transform);
             newModeBtn.GetComponentInChildren<Text>().text = mode.mode.ToString();
-            //newModeBtn.GetComponent<Button>().onClick.AddListener(OnButtonClicked);
         }
     }
 
@@ -44,14 +34,8 @@ public class ModeMenuController : MenuController {
         }
     }
 
-    //public void OnDropDownChange(int mode_nr)
-    //{
-    //    print(mode_nr);
-    //}
-
     public void OnButtonClicked(Button btn)
     {
-        print(btn.GetComponentInChildren<Text>().text);
         ModeData.inst.SetMode((Modes)System.Enum.Parse(typeof(Modes), btn.GetComponentInChildren<Text>().text));
     }
 

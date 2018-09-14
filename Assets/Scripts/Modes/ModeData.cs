@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 // component of CurrentModeText
 public class ModeData : MonoBehaviour
@@ -17,32 +18,18 @@ public class ModeData : MonoBehaviour
 
     [Header("Modes")]
     // get the textmesh from the 3D Text which shows the current mode
-    public TextMesh CurrentModeText;
+    //public TextMesh CurrentModeText;
     public static Mode currentMode;
     // a timer which will disable the text after a few seconds
     private float modeTextTimer;
     // the size the text should have
-    private float textSize = 1f;
+    private float textSize = 8f;
     // remember the new mode which should be set with the main thread
     internal Modes newMode = Modes.None;
-
-    /*public readonly Dictionary<int, Mode> modes = new Dictionary<int, Mode> {
-        { 0, new Mode(m_name:"Move Mode", m_playerCanMoveAtoms:true, m_playerCanResizeAtoms:true, m_showTemp:true, m_showTrashcan:true) },
-        //{ 1, new Mode(m_name:"Relaxation Mode", m_playerCanMoveAtoms:true, m_playerCanResizeAtoms:true, m_showRelaxation:true, m_showTrashcan:true) },
-        { 1, new Mode(m_name:"Info Mode", m_showInfo:true) },
-        { 2, new Mode(m_name:"Edit Mode", m_canDuplicate:true) },
-        };*/
 
     // the dictionary which defines what properties each mode has
     // attention: the trashcan will just be shown if m_playerCanMoveAtoms is true, even if m_showTrashcan is true
     // attention: the mode will just be accessable, if m_playerCanMoveAtoms, m_showInfo or m_canDuplicate is true
-    /*private static readonly Dictionary<int, Mode> modes = new Dictionary<int, Mode> {
-        { 0, new Mode(mode:Modes.Explorer, hideAtoms:true, showPossibleStructures:true) },
-        { 1, new Mode(mode:Modes.Temperature, playerCanMoveAtoms:true, playerCanResizeAtoms:true, showTemp:true, showTrashcan:true) },
-        { 2, new Mode(mode:Modes.Minimize, playerCanMoveAtoms:true, playerCanResizeAtoms:true, showRelaxation:true, showTrashcan:true) },
-        { 3, new Mode(mode:Modes.Info, showInfo:true) }
-        //{ 3, new Mode(m_name:"Edit Mode", m_canDuplicate:true) },
-        };*/
     internal static List<Mode> modes = new List<Mode>() {
         new Mode(mode:Modes.Explorer, hideAtoms: true, showPossibleStructures: true),
         new Mode(mode:Modes.Temperature, playerCanMoveAtoms:true, playerCanResizeAtoms:true, showTemp:true, showTrashcan:true),
@@ -67,7 +54,7 @@ public class ModeData : MonoBehaviour
 
         textSize = textSize / ProgramSettings.textResolution * 10;
         transform.localScale = Vector3.one * textSize;
-        gameObject.GetComponent<TextMesh>().fontSize = (int)ProgramSettings.textResolution;
+        gameObject.GetComponent<Text>().fontSize = (int)ProgramSettings.textResolution;
 
         UpdateScene();
         gameObject.SetActive(false);
@@ -82,7 +69,10 @@ public class ModeData : MonoBehaviour
         if (modeTextTimer > 0)
         {
             if (modeTextTimer - Time.deltaTime <= 0)
+            {
+                transform.localScale = Vector3.one * textSize;
                 gameObject.SetActive(false);
+            }
             else if (modeTextTimer - Time.deltaTime < 1)
                 // let the text fade away
                 transform.localScale -= Vector3.one * textSize * Time.deltaTime;
@@ -90,6 +80,7 @@ public class ModeData : MonoBehaviour
         }
     }
 
+    // change the mode. This includes updating scene, e.g. (de)activating the thermometer or UI
     public void SetMode(Modes newMode)
     {
         if (currentMode != null && !currentMode.showExplorer)
@@ -99,29 +90,19 @@ public class ModeData : MonoBehaviour
         UpdateScene();
     }
 
-    public void RaiseMode()
-    {
-        if (!currentMode.showExplorer)
-            // stop the currently running animation
-            OTP.RunAnim(false);
-        currentMode = modes[((int)currentMode.mode + 1) % modes.Count];
-        UpdateScene();
-    }
-
+    // (de)activate objects in the scene, as well as the menu
     private void UpdateScene() { 
-        gameObject.GetComponent<TextMesh>().text = currentMode.mode.ToString();
+        gameObject.GetComponent<Text>().text = currentMode.mode.ToString() + " mode";
         gameObject.SetActive(true);
         modeTextTimer = 3;
         // set the text to it's original size
-        transform.localScale =  Vector3.one * textSize;
-        transform.eulerAngles = new Vector3(0, SceneReferences.inst.HeadGO.transform.eulerAngles.y, 0);
-        Vector3 newTextPosition = Vector3.zero;
-        newTextPosition.x += Mathf.Sin(SceneReferences.inst.HeadGO.transform.eulerAngles.y / 360 * 2 * Mathf.PI);
-        newTextPosition.z += Mathf.Cos(SceneReferences.inst.HeadGO.transform.eulerAngles.y / 360 * 2 * Mathf.PI);
-        CurrentModeText.transform.position = newTextPosition * 5;
-        // CurrentModeText.transform.position = HeadTransform.position + Vector3.forward * 5;
-        // let the CurrentModeText always look in the direction of the player
-        //Face_Player(CurrentModeText.gameObject);
+        //transform.localScale =  Vector3.one * textSize;
+        //transform.eulerAngles = new Vector3(0, SceneReferences.inst.HeadGO.transform.eulerAngles.y, 0);
+        //Vector3 newTextPosition = Vector3.zero;
+        //newTextPosition.x += Mathf.Sin(SceneReferences.inst.HeadGO.transform.eulerAngles.y / 360 * 2 * Mathf.PI);
+        //newTextPosition.z += Mathf.Cos(SceneReferences.inst.HeadGO.transform.eulerAngles.y / 360 * 2 * Mathf.PI);
+        //newTextPosition.y = 5;
+        //CurrentModeText.transform.position = newTextPosition * 5;
 
         if (Thermometer.temperature != -1)
             // activate the thermometer when changing into temperature mode, else deactivate it
@@ -160,15 +141,16 @@ public class ModeData : MonoBehaviour
         }
     }
 
+    // determine which panels and buttons should be activated/deactivated
     private void UpdateMenu()
     {
-        StructureMenuController.inst.SetState(modes[(int)currentMode.mode].showExplorer);
-        TemperatureMenuController.inst.SetState(modes[(int)currentMode.mode].showTemp);
+        StructureMenuController.inst.SetState(currentMode.showExplorer);
+        TemperatureMenuController.inst.SetState(currentMode.showTemp);
         ModeMenuController.inst.SetState(currentMode.mode != Modes.Explorer);
         ModeMenuController.inst.OnModeChange();
         AnimationMenuController.inst.SetState(currentMode.mode == Modes.Temperature || currentMode.mode == Modes.Minimize ||
             currentMode.mode == Modes.View);
-        InfoMenuController.inst.SetState(currentMode.mode == Modes.Info);
+        InfoMenuController.inst.SetState(currentMode.showInfo);
         //StructureMenuController.inst.transform.parent.gameObject.SetActive(currentMode.mode == Modes.Explorer);
     }
 }

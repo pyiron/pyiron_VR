@@ -1,0 +1,1 @@
+This Folder is devided into data from 2018 and 2017 because some data of 2017 might still be useful, while some might be outdated.
