@@ -18,36 +18,56 @@ public class PeriodensystemButtonManager : MonoBehaviour, IBeginDragHandler, IDr
     public void OnBeginDrag(PointerEventData eventData)
     {
         generatedElem = Instantiate(gameObject);
+        Destroy(generatedElem.GetComponent<PeriodensystemButtonManager>());
         generatedElem.transform.SetParent(transform);
-        generatedElem.transform.position = Vector3.forward * 0.1f;
+        generatedElem.transform.position = Vector3.forward * 0.2f;
         generatedElem.transform.localEulerAngles = Vector3.zero;
         generatedElem.transform.localScale = Vector3.one;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        generatedElem.transform.position = eventData.pointerCurrentRaycast.worldPosition;
-        if (Intersects())
-            generatedElem.transform.position = ElementAdder.transform.position;
+        if (generatedElem != null)
+        {
+            generatedElem.transform.position = eventData.pointerCurrentRaycast.worldPosition;
+            if (Intersects(eventData))
+            {
+                generatedElem.transform.SetParent(ElementAdder.transform.parent);
+                generatedElem.transform.localScale = ElementAdder.transform.localScale;
+                ElementAdder.transform.SetParent(transform);
+                ElementAdder.transform.SetParent(generatedElem.transform.parent);
+                ElementAdder.transform.parent.parent.GetComponent<StructureCreatorMenuController>().AddElement(generatedElem);
+                generatedElem = null;
+            }
+                //generatedElem.transform.position = ElementAdder.transform.position;
+        }
     }
 
-    private bool Intersects()
+    private bool Intersects(PointerEventData data)
     {
-        return generatedElem.transform.position.x + generatedElem.transform.lossyScale.x >= ElementAdder.transform.position.x - ElementAdder.transform.lossyScale.x &&
-            generatedElem.transform.position.x + generatedElem.transform.lossyScale.x >= ElementAdder.transform.position.x - ElementAdder.transform.lossyScale.x &&
-            generatedElem.transform.position.x + generatedElem.transform.lossyScale.x >= ElementAdder.transform.position.x - ElementAdder.transform.lossyScale.x &&
-            generatedElem.transform.position.x + generatedElem.transform.lossyScale.x >= ElementAdder.transform.position.x - ElementAdder.transform.lossyScale.x;
+        return data.hovered.Contains(ElementAdder.transform.parent.gameObject);
+        /*return generatedElem.transform.position.x + generatedElem.transform.lossyScale.x >=
+            ElementAdder.transform.position.x - ElementAdder.transform.lossyScale.x &&
+            generatedElem.transform.position.x - generatedElem.transform.lossyScale.x <=
+            ElementAdder.transform.position.x + ElementAdder.transform.lossyScale.x &&
+            generatedElem.transform.position.y + generatedElem.transform.lossyScale.y >=
+            ElementAdder.transform.position.y - ElementAdder.transform.lossyScale.y &&
+            generatedElem.transform.position.y - generatedElem.transform.lossyScale.y <=
+            ElementAdder.transform.position.y + ElementAdder.transform.lossyScale.y;*/
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        if (Intersects())
+        /*if (Intersects())
         {
             generatedElem.transform.SetParent(ElementAdder.transform.parent);
+            generatedElem.transform.localScale = ElementAdder.transform.localScale;
+            ElementAdder.transform.SetParent(transform);
+            ElementAdder.transform.SetParent(generatedElem.transform.parent);
             generatedElem = null;
         }
-        else
-            Destroy(generatedElem);
+        else*/
+        Destroy(generatedElem);
     }
 
     void Start()

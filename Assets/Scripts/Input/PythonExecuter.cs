@@ -112,7 +112,7 @@ public class PythonExecuter : MonoBehaviour {
 
     private static void ReadOutput(object sender, DataReceivedEventArgs e)
     {
-        // print(e.Data);
+        print(e.Data);
         try
         {
             foreach (String partInp in e.Data.Split('%'))

@@ -27,7 +27,7 @@ public class ImportStructure : MonoBehaviour {
     // the prefab for the boundingbox
     public GameObject BoundingboxPrefab;
     // checks whether all the instances in the scene have to be created or if the scene just has to be updated
-    private bool newImport = true;
+    internal static bool newImport = true;
     // shows whether it is the first import or just a new amount of atoms
     private bool firstImport = true;
     

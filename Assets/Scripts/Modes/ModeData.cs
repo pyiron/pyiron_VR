@@ -31,9 +31,9 @@ public class ModeData : MonoBehaviour
     // attention: the trashcan will just be shown if m_playerCanMoveAtoms is true, even if m_showTrashcan is true
     // attention: the mode will just be accessable, if m_playerCanMoveAtoms, m_showInfo or m_canDuplicate is true
     internal static List<Mode> modes = new List<Mode>() {
-        new Mode(mode:Modes.Explorer, hideAtoms: true, showPossibleStructures: true),
-        new Mode(mode:Modes.Temperature, playerCanMoveAtoms:true, playerCanResizeAtoms:true, showTemp:true, showTrashcan:true),
-        new Mode(mode:Modes.Minimize, playerCanMoveAtoms:true, playerCanResizeAtoms:true, showRelaxation:true, showTrashcan:true),
+        new Mode(mode:Modes.Explorer, hideAtoms: true, showExplorer: true),
+        new Mode(mode:Modes.Temperature, playerCanMoveAtoms:true, playerCanResizeAtoms:true, showTemp:true, showTrashcan:true, showPeriodicSystem:true),
+        new Mode(mode:Modes.Minimize, playerCanMoveAtoms:true, playerCanResizeAtoms:true, showRelaxation:true, showTrashcan:true, showPeriodicSystem:true),
         new Mode(mode:Modes.View, playerCanMoveAtoms:true),
         new Mode(mode:Modes.Info, showInfo:true)
     };
@@ -152,5 +152,7 @@ public class ModeData : MonoBehaviour
             currentMode.mode == Modes.View);
         InfoMenuController.inst.SetState(currentMode.showInfo);
         //StructureMenuController.inst.transform.parent.gameObject.SetActive(currentMode.mode == Modes.Explorer);
+        StructureCreatorMenuController.inst.SetState(currentMode.showPeriodicSystem);
+        PeriodicSysMenuController.inst.SetState(currentMode.showPeriodicSystem);
     }
 }
