@@ -153,6 +153,8 @@ public class ModeData : MonoBehaviour
         InfoMenuController.inst.SetState(currentMode.showInfo);
         //StructureMenuController.inst.transform.parent.gameObject.SetActive(currentMode.mode == Modes.Explorer);
         StructureCreatorMenuController.inst.SetState(currentMode.showPeriodicSystem);
+        if (currentMode.showPeriodicSystem)
+            StructureCreatorMenuController.inst.OnModeChange();
         PeriodicSysMenuController.inst.SetState(currentMode.showPeriodicSystem);
     }
 }

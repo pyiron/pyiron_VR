@@ -7,17 +7,51 @@ public class StructureCreatorMenuController : MenuController
 {
     internal static StructureCreatorMenuController inst;
     public Button CreateBtn;
+    public GameObject AtomAmountPref;
     private List<GameObject> elements = new List<GameObject>();
+    private bool gui_created = false;
+    internal static bool should_build_gui = false;
+    internal static List<Dictionary<string, List<string>>> args = new List<Dictionary<string, List<string>>>();
 
     private void Awake()
     {
         inst = this;
     }
 
+    internal void OnModeChange()
+    {
+        if (!gui_created)
+        {
+            PythonExecuter.inst.SendOrder(PythonScript.Executor, PythonCommandType.exec, "self.send_args_create_ase_bulk()");
+        }
+    }
+
+    private void Update()
+    {
+        if (should_build_gui)
+        {
+            foreach (Dictionary<string, List<string>> arg in args)
+            {
+                print(arg["name"][0]);
+            }
+            should_build_gui = false;
+        }
+    }
+
     public void AddElement(GameObject elm)
     {
         CreateBtn.interactable = true;
         elements.Add(elm);
+        GameObject atomAmount = Instantiate(AtomAmountPref);
+        atomAmount.transform.SetParent(elm.transform);
+        atomAmount.transform.localPosition = Vector3.down * 20;
+        atomAmount.transform.localEulerAngles = Vector3.zero;
+        atomAmount.GetComponent<Text>().fontSize = 72;
+        atomAmount.transform.localScale = Vector3.one * 0.1f;
+        foreach (Button btn in AtomAmountPref.GetComponentsInChildren<Button>())
+        {
+            btn.onClick.AddListener(delegate { OnButtonClicked(btn); });
+        }
     }
 
     public void OnButtonClicked(Button btn)
@@ -35,7 +69,17 @@ public class StructureCreatorMenuController : MenuController
             }
             ImportStructure.newImport = true;
             PythonExecuter.inst.SendOrder(PythonScript.Executor, PythonCommandType.exec, 
-                "self.create_new_struc('" + elementData + "', False)");
+                "self.create_new_struc('" + elementData + "', True)");
+        }
+        else if (btn.name == "Add")
+        {
+            Text txt = btn.transform.parent.GetComponent<Text>();
+            txt.text = "" + int.Parse(txt.text) * 8;
+        }
+        else if (btn.name == "Subtract")
+        {
+            Text txt = btn.transform.parent.GetComponent<Text>();
+            txt.text = "" + int.Parse(txt.text) / 8;
         }
     }
 }

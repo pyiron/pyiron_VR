@@ -188,7 +188,7 @@ public class PythonExecuter : MonoBehaviour {
             int strucSize = -1;
             int frame = -1;
             int frames = -1;
-            
+
             if (ContainsValue(splittedData[2]))
                 if (int.Parse(splittedData[2]) != strucSize)
                 {
@@ -235,6 +235,29 @@ public class PythonExecuter : MonoBehaviour {
                 cellboxVecs[2] = new Vector3(cellboxData[6], cellboxData[7], cellboxData[8]);
             }
             StructureData.AddFrameDataEnd(cellboxVecs);
+        }
+        // Python sends Unity the arguments a function (create_ase_bulk()) needs
+        else if (splittedData[0] == "arg")
+        {
+            Dictionary<string, List<string>> nDict = new Dictionary<string, List<string>>();
+            string t = "";
+            for (int i = 1; i < splittedData.Length; i++)
+            {
+                if (new List<string> { "name", "type", "options", "desc", "end" }.Contains(splittedData[i]))
+                {
+                    t = splittedData[i];
+                    if (t == "end")
+                        StructureCreatorMenuController.should_build_gui = true;
+                    else
+                        nDict.Add(t, new List<string>());
+                }
+                else
+                {
+                    print(t + splittedData[i]);
+                    nDict[t].Add(splittedData[i]);
+                }
+            }
+            StructureCreatorMenuController.args.Add(nDict);
         }
         else
             print("Warning: Unknown Data: " + inp);
