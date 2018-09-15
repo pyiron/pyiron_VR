@@ -460,9 +460,9 @@ public class LaserGrabber : MonoBehaviour
         int frame = AnimationController.frame;
         AnimationController.frame = 0;
         if (ModeData.currentMode.showTemp)
-            PE.SendOrder(PythonScript.Executor, PythonCommandType.exec, loadOrder + "('md', " + frame + ")");
+            PE.SendOrder(PythonScript.Executor, PythonCommandType.exec, loadOrder + "('md')");
         else if (ModeData.currentMode.showRelaxation)
-            PE.SendOrder(PythonScript.Executor, PythonCommandType.exec, loadOrder + "('minimize', " + frame + ")");
+            PE.SendOrder(PythonScript.Executor, PythonCommandType.exec, loadOrder + "('minimize')");
         AnimationController.waitForLoadedStruc = true;
         lammpsIsMd = ModeData.currentMode.showTemp;
     }

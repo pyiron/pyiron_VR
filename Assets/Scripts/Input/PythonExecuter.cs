@@ -255,7 +255,10 @@ public class PythonExecuter : MonoBehaviour {
     // send the given order to Python, where it will be executed with the exec() command
     public void SendOrder(PythonScript script, PythonCommandType type, string order)
     {
-        string full_order = script.ToString() + " " + type.ToString() + " " + order;
+        string type_data = type.ToString();
+        if (type == PythonCommandType.exec)
+            type_data += " " + AnimationController.frame;
+        string full_order = script.ToString() + " " + type_data + " " + order;
         print(full_order);
         // show that the Unity program has send the Python program an order
         outgoingChanges += 1;

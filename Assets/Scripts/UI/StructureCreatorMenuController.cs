@@ -35,7 +35,7 @@ public class StructureCreatorMenuController : MenuController
             }
             ImportStructure.newImport = true;
             PythonExecuter.inst.SendOrder(PythonScript.Executor, PythonCommandType.exec, 
-                "self.create_new_struc('" + elementData + "', False, " + AnimationController.frame + ")");
+                "self.create_new_struc('" + elementData + "', False)");
         }
     }
 }
