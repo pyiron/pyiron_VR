@@ -373,7 +373,7 @@ public class LaserGrabber : MonoBehaviour
     private void ControllAnimation(Vector2 touchPos)
     {
         if (touchPos.x > 0.5)
-            if (OrdersToPython.pythonRunsAnim)
+            if (AnimationController.run_anim)
                 AnimationController.ChangeAnimSpeed(1);
             else
             {
@@ -385,7 +385,7 @@ public class LaserGrabber : MonoBehaviour
                 moveOneFrameTimer = 0;
             }
         else if (touchPos.x < -0.5)
-            if (OrdersToPython.pythonRunsAnim)
+            if (AnimationController.run_anim)
                 // send Python the order to play the animation faster. if it isn't already at it's fastest speed
                 if (AnimationController.animSpeed > 0)
                     AnimationController.animSpeed -= 1;
@@ -398,14 +398,14 @@ public class LaserGrabber : MonoBehaviour
                 AnimationController.move_one_frame(false);
                 moveOneFrameTimer = 0;
             }
-        else if (OrdersToPython.pythonRunsAnim)
-            OTP.RunAnim(false);
+        else if (AnimationController.run_anim)
+            AnimationController.RunAnim(false);
         else
         {
             LoadNewLammps();
 
             // tell Python to start sending the dataframes from the current ham_lammps
-            OTP.RunAnim(true);
+            AnimationController.RunAnim(true);
         }
 
         // update the symbols on on all active controllers
@@ -627,7 +627,7 @@ public class LaserGrabber : MonoBehaviour
 
             positionsHaveChanged = true;
             // deactivate the animation
-            OTP.RunAnim(false);
+            AnimationController.RunAnim(false);
         }
         
         // set the length of the laser to it's new length

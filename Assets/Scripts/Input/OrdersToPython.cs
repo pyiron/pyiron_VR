@@ -12,12 +12,8 @@ public class OrdersToPython : MonoBehaviour
     private LaserGrabber AtomLayerLG;
     // the reference to the LaserGrabber script of the controller that can move the whole structure
     private LaserGrabber BoundingboxLayerLG;  // useless atm
-    // the reference to the controllers
-    //private GameObject[] Controllers = new GameObject[2];
     // shows whether the input order of the user could be executed or not
     private bool couldExecuteOrder;
-    // shows whether Python should be currently sending an animation or just always the same frame
-    public static bool pythonRunsAnim = false;
 
     public static readonly Dictionary<string, string> Orders = new Dictionary<string, string>
     {
@@ -61,7 +57,7 @@ public class OrdersToPython : MonoBehaviour
         //MethodInfo theMethod = this.GetType().GetMethod(orderFunctionName);
         object[] myParams = new object[1];
         myParams[0] = order;
-        if (orderFunctionName != "RequestOrders" || orderFunctionName == "SetNewPositions") // TODO: add in the dict if the functions take params or not
+        if (orderFunctionName != "RequestOrders" || orderFunctionName == "SetNewPositions")
             orderFunctionName += "Order";
         GetType().GetMethod(orderFunctionName).Invoke(this, myParams);
         return couldExecuteOrder;
@@ -127,21 +123,17 @@ public class OrdersToPython : MonoBehaviour
     public void RunAnimOrder(string order)
     {
         if (order != "")
-            RunAnim(order.Contains("Run"));
+            AnimationController.RunAnim(order.Contains("Run"));
     }
 
-    public void RunAnim(bool shouldRun=false)
+    /*public void RunAnim(bool shouldRun=false)
     {
-        if (shouldRun)
-            AnimationController.run_anim = true;
-        else
-            AnimationController.run_anim = false;
-        pythonRunsAnim = shouldRun;
+        AnimationController.run_anim = shouldRun;
         // update the symbols on all active controllers
         foreach (GameObject Controller in SceneReferences.inst.Controllers)
             if (Controller.activeSelf)
                 Controller.GetComponent<ControllerSymbols>().SetSymbol();
-    }
+    }*/
 
     // request the forces of all atoms from Python
     public void RequestAllForces()

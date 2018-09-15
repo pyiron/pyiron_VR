@@ -57,11 +57,11 @@ public class ProgressBar : MonoBehaviour {
                 else if (TM.name.Contains("AnimationSpeed"))
                 {
                     // if the text is activated while it should be deactivated deaktivate it and vice versa
-                    if (OrdersToPython.pythonRunsAnim != TM.gameObject.activeSelf)
-                        TM.gameObject.SetActive(OrdersToPython.pythonRunsAnim);
+                    if (AnimationController.run_anim != TM.gameObject.activeSelf)
+                        TM.gameObject.SetActive(AnimationController.run_anim);
 
                     // update the text of how fast the anim speed is
-                    if (OrdersToPython.pythonRunsAnim)
+                    if (AnimationController.run_anim)
                         TM.text = animationSpeedLabels[AnimationController.animSpeed];
                 }
         }

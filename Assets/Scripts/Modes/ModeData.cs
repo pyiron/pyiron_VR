@@ -85,7 +85,7 @@ public class ModeData : MonoBehaviour
     {
         if (currentMode != null && !currentMode.showExplorer)
             // stop the currently running animation
-            OTP.RunAnim(false);
+            AnimationController.RunAnim(false);
         currentMode = modes[(int)newMode];
         UpdateScene();
     }

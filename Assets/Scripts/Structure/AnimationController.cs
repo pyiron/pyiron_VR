@@ -40,6 +40,15 @@ public class AnimationController : MonoBehaviour {
         }
     }
 
+    public static void RunAnim(bool shouldRun = false)
+    {
+        run_anim = shouldRun;
+        // update the symbols on all active controllers
+        foreach (GameObject Controller in SceneReferences.inst.Controllers)
+            if (Controller.activeSelf)
+                Controller.GetComponent<ControllerSymbols>().SetSymbol();
+    }
+
     static internal void ChangeAnimSpeed(int change)
     {
         // send Python the order to play the animation faster. if it isn't already at it's fastest speed
@@ -84,6 +93,8 @@ public class AnimationController : MonoBehaviour {
 
     private static int Mod(int a, int b)
     {
-        return (a % b + b) % b;
+        if (b != 0)
+            return (a % b + b) % b;
+        return 0;
     }
 }
