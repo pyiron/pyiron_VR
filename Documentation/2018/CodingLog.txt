@@ -32,6 +32,8 @@ All progress is also represented by the commits on GitLab with some more details
 
 12.09.2018: Restored all previos implemented functionality. Changed the Project Explorer, so that Folders and Jobs always get shown with different colors.
 
-TODO:
-show dependencies in the program.
-look why elements get moved strange when going over to the other canvas.
+13.09.2018: Integrated the periodic system into the Unity program.
+
+14.09.2018: Implemented spawning a new atom.
+
+15.09.2018: Cleaned up the Executor.py script. The arguments the create_ase_bulk method needs now get send to Unity.
