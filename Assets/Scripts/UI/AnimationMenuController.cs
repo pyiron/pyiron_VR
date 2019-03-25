@@ -36,12 +36,13 @@ public class AnimationMenuController : MenuController {
 
     public void OnToggleChange(Toggle tog)
     {
-        if (tog.GetComponentInChildren<Text>().text == "Start / Stop")
+        print("Toggler got hit");
+        if (tog.GetComponentInChildren<Text>().text.Contains("Start / Stop"))
         {
-            //if (tog.isOn)
-            //    LaserGrabber.LoadNewLammps();
-            //AnimationController.RunAnim(tog.isOn);
-            AnimationController.run_anim = tog.isOn;
+            if (tog.isOn)
+                LaserGrabber.LoadNewLammps();
+            AnimationController.RunAnim(tog.isOn);
+            //AnimationController.run_anim = tog.isOn;
         }
     }
 }
