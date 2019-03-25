@@ -4,6 +4,7 @@ using System.Threading;
 using UnityEngine;
 using System.Diagnostics;
 using System;
+using System.Globalization;
 using System.IO;
 
 // component of Settings
@@ -18,9 +19,14 @@ public class PythonExecuter : MonoBehaviour {
     private GameObject ProgressBar;
 
     [Header("Start Python")]
+    // to parse floats correct
+    public static CultureInfo ci = (CultureInfo)CultureInfo.CurrentCulture.Clone();
     // the file to where the python script file is located
     // old Path: C:/Users/pneugebauer/PycharmProjects/pyiron/tests/Structures
-    public static string pythonPath = "C:/Users/pneugebauer/PycharmProjects/pyiron/vrplugin";///Structures";
+    // TODO: No Hardcoding!!
+    public static string pythonPath =
+        "C:/Users/Philip/Documents/MPIE/pyiron_vrplugin-master/pyiron_vrplugin-master/vrplugin";
+        //"C:/Users/pneugebauer/PycharmProjects/pyiron/vrplugin";///Structures";
     // public static string pythonPath = "C:/Users/pneugebauer/PyIron_data/projects/Structures";
     // start a process which executes the commands in the shell to start the python script
     private Process myProcess = new Process();
@@ -48,6 +54,9 @@ public class PythonExecuter : MonoBehaviour {
         inst = this;
         // the reference to the ProgressBar
         ProgressBar = GameObject.Find("MyObjects/ProgressBar");
+        
+        // allow float.Parse to parse floats seperated by . correctly
+        ci.NumberFormat.CurrencyDecimalSeparator = ".";
 
         //IS = GameObject.Find("AtomStructure").GetComponent<ImportStructure>();
         LoadUnityManager();
@@ -158,7 +167,7 @@ public class PythonExecuter : MonoBehaviour {
         }
         else if (splittedData[0] == "files")
         {
-            print("Files detected, they are not needed, but do no harm.")
+            print("Files detected, they are not needed, but do no harm.");
             //StructureMenuController.inst.AddOption(OptionType.Script, inp.Substring(6));
         }
         else if (splittedData[0] == "path")
@@ -175,7 +184,7 @@ public class PythonExecuter : MonoBehaviour {
             {
                 allForces[int.Parse(splittedData[4])] = new float[3];
                 for (int i = 0; i < 3; i++)
-                    allForces[int.Parse(splittedData[4])][i] = float.Parse(splittedData[i + 1]);
+                    allForces[int.Parse(splittedData[4])][i] = float.Parse(splittedData[i + 1],NumberStyles.Any,ci);
             }
         }
         else if (splittedData[0] == "StructureDataStart")
@@ -218,8 +227,22 @@ public class PythonExecuter : MonoBehaviour {
             StructureData.AddFrameDataStart(strucSize, frame, frames);
         }
         else if (splittedData[0] == "StructureDataMid")
-            StructureData.AddFrameDataMid(new AtomData(new Vector3(float.Parse(splittedData[1]), float.Parse(splittedData[2]), float.Parse(splittedData[3])),
-                splittedData[4]));
+        {
+            /*for (int i = 1; i < 4; i++)
+            {
+                float f;
+                if (float.TryParse(splittedData[i], out f))
+                {
+                    print("position Data should be a float");
+                }
+            }*/
+
+            
+            StructureData.AddFrameDataMid(new AtomData(
+                new Vector3(float.Parse(splittedData[1],NumberStyles.Any,ci), 
+                    float.Parse(splittedData[2],NumberStyles.Any,ci), 
+                    float.Parse(splittedData[3],NumberStyles.Any,ci)), splittedData[4]));
+        }
         // this is the line where Python sends the data about the cellbox
         else if (splittedData[0] == "StructureDataEnd")
         {
@@ -228,7 +251,7 @@ public class PythonExecuter : MonoBehaviour {
             if (ContainsValue(splittedData[1]))
             {
                 for (int i = 0; i < 9; i++)
-                    cellboxData[i] = float.Parse(splittedData[i + 1]);
+                    cellboxData[i] = float.Parse(splittedData[i + 1],NumberStyles.Any,ci);
 
                 // save the data for the cellbox in 3 Vector3s
                 cellboxVecs[0] = new Vector3(cellboxData[0], cellboxData[1], cellboxData[2]);
@@ -254,7 +277,7 @@ public class PythonExecuter : MonoBehaviour {
                 }
                 else
                 {
-                    print(t + splittedData[i]);
+                    // print(t + splittedData[i]);
                     nDict[t].Add(splittedData[i]);
                 }
             }

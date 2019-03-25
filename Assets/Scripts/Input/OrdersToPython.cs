@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 using System.Reflection;
+using System.Threading;
 
 public class OrdersToPython : MonoBehaviour
 {
@@ -27,6 +29,9 @@ public class OrdersToPython : MonoBehaviour
 
     private void Start()
     {
+        // might not work on mac. Without it, 1.234 could be converted to 1,234
+        Thread.CurrentThread.CurrentCulture = new CultureInfo("en-us");
+        
         // get the reference to the programm which handles the execution of python
         //SceneReferences.inst.PE = gameObject.GetComponent<PythonExecuter>();
         // get the reference to the LaserGrabber script of the controller that can move single atoms

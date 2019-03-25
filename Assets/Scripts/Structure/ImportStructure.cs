@@ -42,6 +42,7 @@ public class ImportStructure : MonoBehaviour {
         SD = gameObject.GetComponent<StructureData>();
     }
 
+    // TODO: is the Update function useless?
     void Update()
     {    
         if (SD.waitForDestroyedAtom)
@@ -157,9 +158,9 @@ public class ImportStructure : MonoBehaviour {
         if (newImport && !SD.waitForDestroyedAtom)
         {
             // create a new instance of an atom
-            currentAtom = Instantiate(AtomPrefab);
+            currentAtom = Instantiate(AtomPrefab, transform);
             // set the parent of the atom to the structure it belongs to
-            currentAtom.transform.parent = gameObject.transform;
+            //currentAtom.transform.parent = gameObject.transform;
         }
         else
             currentAtom = SD.atomInfos[atom.id].m_transform.gameObject;

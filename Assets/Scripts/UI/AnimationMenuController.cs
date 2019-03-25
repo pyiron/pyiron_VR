@@ -18,6 +18,7 @@ public class AnimationMenuController : MenuController {
         speedText.text = "Speed: " + AnimationController.animSpeed;
     }
 
+    // TODO: I think it would be better to call these functions directly from Unity rather then delegating them
     public void OnButtonDown(Button btn)
     {
         Text btn_txt = btn.GetComponentInChildren<Text>();
@@ -36,6 +37,11 @@ public class AnimationMenuController : MenuController {
     public void OnToggleChange(Toggle tog)
     {
         if (tog.GetComponentInChildren<Text>().text == "Start / Stop")
+        {
+            //if (tog.isOn)
+            //    LaserGrabber.LoadNewLammps();
+            //AnimationController.RunAnim(tog.isOn);
             AnimationController.run_anim = tog.isOn;
+        }
     }
 }

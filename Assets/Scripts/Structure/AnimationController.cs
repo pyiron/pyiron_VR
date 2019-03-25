@@ -33,11 +33,14 @@ public class AnimationController : MonoBehaviour {
                     next_time += 2 - (0.5f + Mathf.Abs(animSpeed - 2.5f)) / 2;
             }
         }
-        else if (shouldLoad && StructureData.GetCurrFrameData() != null && StructureData.GetCurrFrameData().cellbox != null)
+        else
+        {
+            FrameData frameData = StructureData.GetCurrFrameData();
+            if (shouldLoad && frameData?.cellbox != null)
         {
             ImportStructure.inst.LoadStructure();
             shouldLoad = false;
-        }
+        }}
     }
 
     public static void RunAnim(bool shouldRun = false)
@@ -49,7 +52,7 @@ public class AnimationController : MonoBehaviour {
                 Controller.GetComponent<ControllerSymbols>().SetSymbol();
     }
 
-    static internal void ChangeAnimSpeed(int change)
+    internal static void ChangeAnimSpeed(int change)
     {
         // send Python the order to play the animation faster. if it isn't already at it's fastest speed
         if (change > 0)

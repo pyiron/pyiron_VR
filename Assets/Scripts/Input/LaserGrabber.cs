@@ -19,8 +19,8 @@ public class LaserGrabber : MonoBehaviour
     // the Script of the Hourglass, which indicates that the structure is currently loading
     private Hourglass HourglassScript;
 
-    private PythonExecuter PE;
-    private OrdersToPython OTP;
+    private static PythonExecuter PE;
+    private static OrdersToPython OTP;
 
     // all data about the modes, f.e. which mode is currently active
     public ModeData MD;
@@ -40,12 +40,12 @@ public class LaserGrabber : MonoBehaviour
     public GameObject LaserPrefab;
     // the instance of the laser in the game
     public GameObject laser;
-    // the hitpoint where the laser met an object
+    // the hit point where the laser met an object
     private Vector3 hitPoint;
     // the length of the laser
     private float laserLength;
     // the max distance when the laser still detects an object to attach
-    public static int laserMaxDistance = 100;
+    private static int laserMaxDistance = 100;
 
     [Header("Change Animation")]
     // shows whether it is the first time an animation should be played,
@@ -386,10 +386,11 @@ public class LaserGrabber : MonoBehaviour
             }
         else if (touchPos.x < -0.5)
             if (AnimationController.run_anim)
+            {
                 // send Python the order to play the animation faster. if it isn't already at it's fastest speed
                 if (AnimationController.animSpeed > 0)
                     AnimationController.animSpeed -= 1;
-                else { }
+            }
             else
             {
                 LoadNewLammps();
@@ -413,7 +414,7 @@ public class LaserGrabber : MonoBehaviour
     }
 
     // send an Order to Python that it should create a new ham_lammps
-    private void LoadNewLammps()
+    public static void LoadNewLammps()
     {
         bool temperatureHasChanged = false;
         // remember that a new ham_lammps has to be loaded
@@ -428,6 +429,7 @@ public class LaserGrabber : MonoBehaviour
             OTP.SetNewPositions();
         }
 
+        print("Loading Anim if " + firstAnimStart + " or " + temperatureHasChanged + " or " + positionsHaveChanged);
         // when loading the first animation, show Python that it's the first time, so that it can check if there is already a loaded ham_lammps
         if (firstAnimStart)
         {
@@ -455,7 +457,7 @@ public class LaserGrabber : MonoBehaviour
             otherCtrl.GetComponent<ControllerSymbols>().SetSymbol();
     }
 
-    private void LoadNewLammps(string loadOrder)
+    private static void LoadNewLammps(string loadOrder)
     {
         int frame = AnimationController.frame;
         AnimationController.frame = 0;
