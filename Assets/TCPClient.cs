@@ -17,11 +17,14 @@ public class TCPClient : MonoBehaviour
 	public static int msgsIn = 0;
 	public static int msgsOut;
 	// the ip address of the server
-	private const string HOST = "192.168.0.196";// "localhost"
+	private string[] HOSTS = {"127.0.0.1", "192.168.0.196", "192.168.0.198"};
+	// private const string HOST = "192.168.0.196";// "localhost"
 	private const int PORT = 65432;
 	
 	private static int BLOCKSIZE = 1024;
 	#endregion
+
+	#region Monobehaviour Callbacks
 
 	private void Awake()
 	{
@@ -46,6 +49,25 @@ public class TCPClient : MonoBehaviour
 			}
 		}     
 	} 
+
+	#endregion
+
+	private void ConnectWithHost()
+	{
+		foreach (string host in HOSTS)
+		{
+			try
+			{
+				socketConnection = new TcpClient(host, PORT);
+				print("Successfully connected with HOST " + host);
+				return;
+			}
+			catch
+			{
+				print("Couldn't connect with Host " + host);
+			}
+		}
+	}
 	
 	/// <summary> 	
 	/// Setup socket connection. 	
@@ -66,7 +88,7 @@ public class TCPClient : MonoBehaviour
 		}
 		else
 		{
-			socketConnection = new TcpClient(HOST, PORT);  
+			ConnectWithHost();
 		}
 	}
 
@@ -76,8 +98,9 @@ public class TCPClient : MonoBehaviour
 	/// Runs in background clientReceiveThread; Listens for incomming data. 	
 	/// </summary>     
 	private void ListenForData() { 		
-		try { 			
-			socketConnection = new TcpClient(HOST, PORT);  			
+		try
+		{
+			ConnectWithHost();  			
 			Byte[] bytes = new Byte[1024];             
 			while (true) { 				
 				// Get a stream object for reading 				
