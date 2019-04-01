@@ -6,10 +6,13 @@ using System.Diagnostics;
 using System;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 
 // component of Settings
 // this script handles everything related to Python, e.g. it receives the data from Python, formats it and can send data to Python
 public class PythonExecuter : MonoBehaviour {
+    #region Attributes
+
     internal static PythonExecuter inst;
 
     [Header("Scene")]
@@ -23,13 +26,14 @@ public class PythonExecuter : MonoBehaviour {
     public static CultureInfo ci = (CultureInfo)CultureInfo.CurrentCulture.Clone();
     // the file to where the python script file is located
     // old Path: C:/Users/pneugebauer/PycharmProjects/pyiron/tests/Structures
-    // TODO: No Hardcoding!!
+    // TODO: No Hardcoding. Could be achieved by using a client/server or ssh
     public static string pythonPath =
-        "C:/Users/Philip/Documents/MPIE/pyiron_vrplugin-master/pyiron_vrplugin-master/vrplugin";
-        //"C:/Users/pneugebauer/PycharmProjects/pyiron/vrplugin";///Structures";
+        "C:/Users/Philip/Documents/MPIE/vrplugin/pyiron_mpie/vrplugin";
+    //"C:/Users/Philip/Documents/MPIE/pyiron_vrplugin-master/pyiron_vrplugin-master/vrplugin";
+    //"C:/Users/pneugebauer/PycharmProjects/pyiron/vrplugin";///Structures";
     // public static string pythonPath = "C:/Users/pneugebauer/PyIron_data/projects/Structures";
     // start a process which executes the commands in the shell to start the python script
-    private Process myProcess = new Process();
+    private static Process myProcess = new Process();
     // shows whether the program has loaded a structure or not
     public static bool loadedStructure;
 
@@ -44,7 +48,11 @@ public class PythonExecuter : MonoBehaviour {
     [Header("Send Data to Python")]
     // the amount of changes the Unity program requested the Python program to do
     public static int outgoingChanges;
+    
+    #endregion
 
+    #region MonoBehaviour Callbacks
+    
     /// <summary>
     /// Start the connection to Python.
     /// </summary>
@@ -58,10 +66,35 @@ public class PythonExecuter : MonoBehaviour {
         // allow float.Parse to parse floats seperated by . correctly
         ci.NumberFormat.CurrencyDecimalSeparator = ".";
 
-        //IS = GameObject.Find("AtomStructure").GetComponent<ImportStructure>();
         LoadUnityManager();
         ResetTransferData();
+    } 
+    
+    /// <summary>
+    /// (De)Activate the thermometer. Print the outgoing and incoming changes to the controller_printer.
+    /// </summary>
+
+    private void Update()
+    {
+        if (Thermometer.temperature != -1)
+        {
+            // activate the thermometer when changing into temperature mode, else deactivate it
+            Thermometer.inst.SetState(ModeData.currentMode.showTemp);
+            Thermometer.inst.UpdateTemperature();
+        }
+
+        InGamePrinter.inst[0].Ctrl_print("Send: " + outgoingChanges.ToString());
+        InGamePrinter.inst[1].Ctrl_print("Received: " + incomingChanges.ToString());
     }
+    
+    public void OnApplicationQuit()
+    {
+        ClosePythonProgress();
+    }
+
+    #endregion
+
+    #region Init
 
     private void ResetTransferData()
     {
@@ -70,7 +103,7 @@ public class PythonExecuter : MonoBehaviour {
         // the amount of changes the Unity program requested the Python program to do
         outgoingChanges = 0;
     }
-
+    
     // start the UnityManager which will start the ProjectExplorer
     public void LoadUnityManager()
     {
@@ -98,8 +131,8 @@ public class PythonExecuter : MonoBehaviour {
             myProcess.StartInfo.RedirectStandardInput = true;
             myProcess.StartInfo.RedirectStandardOutput = true;
             myProcess.StartInfo.RedirectStandardError = true;
-            myProcess.OutputDataReceived += new DataReceivedEventHandler(ReadOutput);
-            myProcess.ErrorDataReceived += new DataReceivedEventHandler(ErrorDataReceived);
+            myProcess.OutputDataReceived += ReceiveOutput;
+            myProcess.ErrorDataReceived += ErrorDataReceived;
             myProcess.StartInfo.FileName = "C:\\Windows\\system32\\cmd.exe";
             myProcess.StartInfo.Arguments = "/c" + order;
             myProcess.EnableRaisingEvents = true;
@@ -107,9 +140,14 @@ public class PythonExecuter : MonoBehaviour {
             myProcess.BeginOutputReadLine();
             myProcess.BeginErrorReadLine();
             loadedStructure = true;
+            SendOrder(PythonScript.None, PythonCommandType.eval, "self.send_group()");
         }
         catch (Exception e) { print(e); }
     }
+
+    #endregion
+
+    #region ReceiveData
 
     /// <summary>
     /// Receive the input from Python and handle it, e.g. by delegating it to other scripts.
@@ -119,12 +157,17 @@ public class PythonExecuter : MonoBehaviour {
         print(e.Data);
     }
 
-    private static void ReadOutput(object sender, DataReceivedEventArgs e)
+    private static void ReceiveOutput(object sender, DataReceivedEventArgs e)
     {
-        print(e.Data);
+        ReadInput(e.Data);
+    }
+
+    private static void ReadInput(string data)
+    {
+        print(data);
         try
         {
-            foreach (String partInp in e.Data.Split('%'))
+            foreach (String partInp in data.Split('%'))
                 HandleInp(partInp);
         }
         catch(Exception exc)
@@ -157,7 +200,12 @@ public class PythonExecuter : MonoBehaviour {
                 print(splittedData + " is not yet implemented!");
             }
         }
-        else if (splittedData[0] == "groups")
+        else if ((new[] {"groups", "nodes", "files"}).Contains(splittedData[0]))
+        {
+            StructureMenuController.inst.AddOption((OptionType) Enum.Parse(typeof(OptionType), splittedData[0]),
+                inp.Substring(splittedData[0].Length + 1));
+        }
+        /*else if (splittedData[0] == "groups")
         {
             StructureMenuController.inst.AddOption(OptionType.Folder, inp.Substring(7));
         }
@@ -169,7 +217,7 @@ public class PythonExecuter : MonoBehaviour {
         {
             print("Files detected, they are not needed, but do no harm.");
             //StructureMenuController.inst.AddOption(OptionType.Script, inp.Substring(6));
-        }
+        }*/
         else if (splittedData[0] == "path")
         {
             if (StructureMenuController.currPath != splittedData[1])
@@ -207,7 +255,7 @@ public class PythonExecuter : MonoBehaviour {
                     for (int atomNr = 0; atomNr < strucSize; atomNr++)
                     {
                         allForces[atomNr] = new float[3];
-                        allForces[atomNr][0] = -1;
+                        allForces[atomNr][0] = float.NaN;
                     }
                 }
             if (ContainsValue(splittedData[3]))
@@ -292,6 +340,10 @@ public class PythonExecuter : MonoBehaviour {
         return (data != "empty");
     }
 
+    #endregion
+
+    #region SendData
+
     /// <summary>
     /// Send an order to Python.
     /// script is the script that should execute the order.
@@ -300,36 +352,24 @@ public class PythonExecuter : MonoBehaviour {
     /// </summary>
 
     // send the given order to Python, where it will be executed with the exec() command
-    public void SendOrder(PythonScript script, PythonCommandType type, string order)
+    public static void SendOrder(PythonScript script, PythonCommandType type, string order)
     {
-        string type_data = type.ToString();
-        if (type == PythonCommandType.exec)
-            type_data += " " + AnimationController.frame;
-        string full_order = script.ToString() + " " + type_data + " " + order;
-        print(full_order);
+        string typeData = type.ToString();
+        if (script != PythonScript.None && type == PythonCommandType.exec)
+            typeData += " " + AnimationController.frame;
+        string fullOrder = script + " " + typeData + " " + order;
+        print(fullOrder);
         // show that the Unity program has send the Python program an order
         outgoingChanges += 1;
 
+        // send the order via TCP 
+        //ReadInput(TCPClient.SendMsgToPython(ExecuteType.forward, full_order));
+        
         // write the command in the input of Python
-        myProcess.StandardInput.WriteLine(full_order);
+        myProcess.StandardInput.WriteLine(fullOrder);
     }
 
-    /// <summary>
-    /// (De)Activate the thermometer. Print the outgoing and incoming changes to the controller_printer.
-    /// </summary>
-
-    private void Update()
-    {
-        if (Thermometer.temperature != -1)
-        {
-            // activate the thermometer when changing into temperature mode, else deactivate it
-            Thermometer.inst.SetState(ModeData.currentMode.showTemp);
-            Thermometer.inst.UpdateTemperature();
-        }
-
-        InGamePrinter.inst[0].Ctrl_print("Send: " + outgoingChanges.ToString());
-        InGamePrinter.inst[1].Ctrl_print("Received: " + incomingChanges.ToString());
-    }
+    #endregion
 
     // return if Unity is currently waiting for a response of Python
     public static bool IsLoading()
@@ -352,19 +392,14 @@ public class PythonExecuter : MonoBehaviour {
         myProcess.StandardInput.Close();
         myProcess.Close();
     }
-
-    public void OnApplicationQuit()
-    {
-        ClosePythonProgress();
-    }
 }
 
 public enum PythonScript
 {
-    UnityManager, Executor, ProjectExplorer
+    None, Executor, ProjectExplorer
 }
 
 public enum PythonCommandType
 {
-    path, pr_input, exec
+    path, pr_input, exec, eval
 }

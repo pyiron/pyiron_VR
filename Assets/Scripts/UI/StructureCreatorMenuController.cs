@@ -22,7 +22,7 @@ public class StructureCreatorMenuController : MenuController
     {
         if (!gui_created)
         {
-            PythonExecuter.inst.SendOrder(PythonScript.Executor, PythonCommandType.exec, "self.send_args_create_ase_bulk()");
+            PythonExecuter.SendOrder(PythonScript.Executor, PythonCommandType.exec, "self.send_args_create_ase_bulk()");
         }
     }
 
@@ -68,7 +68,7 @@ public class StructureCreatorMenuController : MenuController
                 Destroy(go);
             }
             ImportStructure.newImport = true;
-            PythonExecuter.inst.SendOrder(PythonScript.Executor, PythonCommandType.exec, 
+            PythonExecuter.SendOrder(PythonScript.Executor, PythonCommandType.exec, 
                 "self.create_new_struc('" + elementData + "', True)");
         }
         else if (btn.name == "Add")

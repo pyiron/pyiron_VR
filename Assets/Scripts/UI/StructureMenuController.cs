@@ -96,12 +96,12 @@ public class StructureMenuController : MenuController {
                             goto next;
                     }
                     Color btn_col;
-                    if (sm == OptionType.Job)
+                    if (sm == OptionType.nodes)
                         btn_col = Color.cyan;
                     else
                         btn_col = Color.yellow;
                     GameObject btn = InstantiateNewBtn(OptionPrefab, OptionFolder, opt, btn_col);
-                    btn.GetComponent<OptionButton>().isJob = sm == OptionType.Job;
+                    btn.GetComponent<OptionButton>().isJob = sm == OptionType.nodes;
                     next:;
                 }
             }
@@ -114,12 +114,25 @@ public class StructureMenuController : MenuController {
 
     public void AddOption(OptionType t, string opt)
     {
-        options[t].Add(opt);
+        switch (t)
+        {
+            case OptionType.groups:
+            case OptionType.nodes:
+                if (opt[0] != '_')
+                {
+                    
+                    options[t].Add(opt);
+                }
+                break;
+            case OptionType.files:
+                // ignore
+                break;
+        }
         shouldRefresh = true;
     }
 }
 
 public enum OptionType
 {
-    Folder, Job
+    groups, nodes, files
 }

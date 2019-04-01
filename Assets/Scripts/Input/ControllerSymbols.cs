@@ -4,11 +4,6 @@ using UnityEngine;
 
 // component of both controllers
 public class ControllerSymbols : MonoBehaviour {
-    // get the reference to the programm which handles the execution of python
-    private PythonExecuter PE;
-    // all data about the modes, f.e. which mode is currently active
-    public ModeData MD;
-
     // an array which contains all the GameObjects of the symbols
     private GameObject[] AnimSymbols = new GameObject[10];
     // an empty GameObject which holds the symbols
@@ -31,8 +26,6 @@ public class ControllerSymbols : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        // get the reference to the programm which handles the execution of python
-        PE = SceneReferences.inst.PE;//GameObject.Find("Settings").GetComponent<PythonExecuter>();
         // create an empty GameObject which holds the symbols
         Symbols = new GameObject();
         // rename the new GameObject to Symbols

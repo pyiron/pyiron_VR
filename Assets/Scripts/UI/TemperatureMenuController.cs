@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class TemperatureMenuController : MenuController {
-    internal static TemperatureMenuController inst;
+    public static TemperatureMenuController inst;
     private Slider temp_slider;
     public Text tempText;
     public Text minTempText;
@@ -13,11 +13,11 @@ public class TemperatureMenuController : MenuController {
     private void Awake()
     {
         inst = this;
+        temp_slider = GetComponentInChildren<Slider>();
     }
 
     private void Update()
     {
-        temp_slider = GetComponentInChildren<Slider>();
         temp_slider.maxValue = Thermometer.maxTemperature;
         temp_slider.minValue = 1;
         tempText.text = "Temperature: " + temp_slider.value;
@@ -31,7 +31,7 @@ public class TemperatureMenuController : MenuController {
         Thermometer.inst.UpdateTemperature((int)temp_slider.value);
     }
 
-    internal void ChangeTemperature()
+    public void ChangeTemperature()
     {
         temp_slider.value = Thermometer.temperature;
     }

@@ -9,12 +9,6 @@ public class ModeData : MonoBehaviour
     [Header("Scene")]
     // reference to the deployed instance of this script
     public static ModeData inst;
-    // get the reference to the programm which handles the execution of python
-    private PythonExecuter PE;
-    // the script that stores the possible orders which can be send to Python
-    private OrdersToPython OTP;
-    // the reference to the PossiblePythonScripts
-    //private GameObject PossiblePythonScripts;
 
     [Header("Modes")]
     // get the textmesh from the 3D Text which shows the current mode
@@ -22,6 +16,8 @@ public class ModeData : MonoBehaviour
     public static Mode currentMode;
     // a timer which will disable the text after a few seconds
     private float modeTextTimer;
+    // the reference to the attached Text Object
+    private Text textObject;
     // the size the text should have
     private float textSize = 8f;
     // remember the new mode which should be set with the main thread
@@ -42,19 +38,16 @@ public class ModeData : MonoBehaviour
     {
         inst = this;
         currentMode = modes[0];
+        textObject = gameObject.GetComponent<Text>();
     }
 
     private void Start()
     {
         SetMode(modes[(int)currentMode.mode].mode);
-        // get the reference to the script that handles the connection to python
-        PE = SceneReferences.inst.PE;
-        // get the reference to the script that stores the possible orders which can be send to Python
-        OTP = SceneReferences.inst.OTP;
 
         textSize = textSize / ProgramSettings.textResolution * 10;
         transform.localScale = Vector3.one * textSize;
-        gameObject.GetComponent<Text>().fontSize = (int)ProgramSettings.textResolution;
+        textObject.fontSize = (int)ProgramSettings.textResolution;
 
         UpdateScene();
         gameObject.SetActive(false);
@@ -92,7 +85,7 @@ public class ModeData : MonoBehaviour
 
     // (de)activate objects in the scene, as well as the menu
     private void UpdateScene() { 
-        gameObject.GetComponent<Text>().text = currentMode.mode.ToString() + " mode";
+        textObject.text = currentMode.mode.ToString() + " mode";
         gameObject.SetActive(true);
         modeTextTimer = 3;
         // set the text to it's original size
@@ -109,7 +102,7 @@ public class ModeData : MonoBehaviour
             Thermometer.inst.gameObject.SetActive(modes[(int)currentMode.mode].showTemp);
 
         if (modes[(int)currentMode.mode].showInfo)
-            OTP.RequestAllForces();
+            OrdersToPython.RequestAllForces();
         // deactivate the structure if it shouldn't be shown, else activate it
         StructureData.inst.gameObject.SetActive(!modes[(int)currentMode.mode].hideAtoms);
         // TODO! activate the new UI
@@ -117,27 +110,26 @@ public class ModeData : MonoBehaviour
 
         UpdateMenu();
 
-        foreach (GameObject controller in SceneReferences.inst.Controllers)
-            if (controller.activeSelf)
+        foreach (LaserGrabber lg in LaserGrabber.instances)
+            if (lg.gameObject.activeSelf)
             {
                 // activate the symbols of the controller, if changing into a mode which can play an animation, else deactivate them
                 if (modes[(int)currentMode.mode].showTemp || modes[(int)currentMode.mode].showRelaxation)
                 {
-                    controller.GetComponent<ControllerSymbols>().Symbols.SetActive(true);
-                    controller.GetComponent<ControllerSymbols>().SetSymbol();
+                    LaserGrabber.controllerSymbols[(int) lg.ctrlLayer].Symbols.SetActive(true);
+                    LaserGrabber.controllerSymbols[(int) lg.ctrlLayer].SetSymbol();
                 }
                 else {
-                    GameObject symbols = controller.GetComponent<ControllerSymbols>().Symbols;
-                    if (symbols!= null)
+                    GameObject symbols = LaserGrabber.controllerSymbols[(int) lg.ctrlLayer].Symbols;
+                    if (symbols != null)
                         symbols.SetActive(false);
                 }
 
                 // detach the currently attached object from the laser and deactivate the laser
-                LaserGrabber LG = controller.GetComponent<LaserGrabber>();
-                LG.attachedObject = null;
-                LG.laser.SetActive(false);
-                LG.readyForResize = false;
-                LG.InfoText.gameObject.SetActive(false);
+                lg.attachedObject = null;
+                lg.laser.SetActive(false);
+                lg.readyForResize = false;
+                lg.InfoText.gameObject.SetActive(false);
         }
     }
 
@@ -148,8 +140,8 @@ public class ModeData : MonoBehaviour
         TemperatureMenuController.inst.SetState(currentMode.showTemp);
         ModeMenuController.inst.SetState(currentMode.mode != Modes.Explorer);
         ModeMenuController.inst.OnModeChange();
-        AnimationMenuController.inst.SetState(currentMode.mode == Modes.Temperature || currentMode.mode == Modes.Minimize ||
-            currentMode.mode == Modes.View);
+        AnimationMenuController.inst.SetState(currentMode.mode == Modes.Temperature ||
+                                              currentMode.mode == Modes.Minimize || currentMode.mode == Modes.View);
         InfoMenuController.inst.SetState(currentMode.showInfo);
         //StructureMenuController.inst.transform.parent.gameObject.SetActive(currentMode.mode == Modes.Explorer);
         StructureCreatorMenuController.inst.SetState(currentMode.showPeriodicSystem);

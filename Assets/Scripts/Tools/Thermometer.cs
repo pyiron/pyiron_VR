@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class Thermometer : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
@@ -71,18 +72,28 @@ public class Thermometer : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     // show the current temperature data on the thermometer
     public void UpdateTemperature(int exactTemperature = -1)
     {
+         // TODO: Update slider
         // set the current temperature on the text field
         ThermometerText.text = temperature.ToString();
+        float tmp = float.NaN;
         // set the red liquid to the right state / up to the right height
         if (exactTemperature != -1)
-            anim.SetFloat("Temperature", (float)exactTemperature / maxTemperature);
+            tmp = (float) exactTemperature / maxTemperature;
+            // anim.SetFloat("Temperature", (float)exactTemperature / maxTemperature);
         else
             // set the temperature to an exact value, although the temperature is rounded,
             // to make it look smooth how the temperature gets scaled
             if (anim.gameObject.activeSelf)
             {
-                anim.SetFloat("Temperature", (float)temperature / maxTemperature);
+                tmp = (float) temperature / maxTemperature;
+                //anim.SetFloat("Temperature", (float)temperature / maxTemperature);
             }
+
+        if (!float.IsNaN(tmp))
+        {
+            anim.SetFloat("Temperature", tmp);
+            TemperatureMenuController.inst.ChangeTemperature();
+        }
     }
 
     // change the color if the user interacts with the thermometer
@@ -140,7 +151,7 @@ public class Thermometer : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         // send Python the order to change the temperature if the user has changed the temperature on the thermometer
         if (lastTemperature != temperature && temperature > -1)
         {
-            PythonExecuter.inst.SendOrder(PythonScript.Executor, PythonCommandType.exec, "self.set_temperature(" + temperature + ")");
+            PythonExecuter.SendOrder(PythonScript.Executor, PythonCommandType.exec, "self.set_temperature(" + temperature + ")");
             // remember that the last ham_lammps has been created with the current temperature
             lastTemperature = temperature;
             // show that the temperature changed

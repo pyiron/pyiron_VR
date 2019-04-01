@@ -118,23 +118,23 @@ public class LocalElementData : MonoBehaviour {
     };
 
     // the following functions allow to access the properties of the elements
-    public string getCasNumber(string shortName) {
+    public string GetCasNumber(string shortName) {
         return m_localElementDict[shortName].m_casNumber;
     }
 
-    public string getFullName(string shortName) {
+    public string GetFullName(string shortName) {
         return m_localElementDict[shortName].m_fullName;
     }
 
-    public int getOrdinalNumber(string shortName) {
+    public int GetOrdinalNumber(string shortName) {
         return m_localElementDict[shortName].m_ordinalNumber;
     }
 
-    public float getSize(string shortName) {
+    public static float GetSize(string shortName) {
         return m_localElementDict[shortName].m_size;
     }
 
-    public Color getColour(string shortName) {
+    public static Color GetColour(string shortName) {
         return m_localElementDict[shortName].m_colour;
     }
 }

@@ -10,14 +10,8 @@ using System.Reflection;
 // loads the data from the files to create the structure or to animate the structure
 public class ImportStructure : MonoBehaviour {
     public static ImportStructure inst;
-
-    [Header("Scene")]
     // the prefab for the atoms
     public GameObject AtomPrefab;
-    // script which stores the properties of each element, to give each atom it's properties
-    private LocalElementData LED;
-    // the data of the structure the atoms are in
-    private StructureData SD;
 
     [Header("Cellbox")]
     private GameObject Cellbox;
@@ -37,33 +31,29 @@ public class ImportStructure : MonoBehaviour {
     {
         inst = this;
         Thermometer.inst.SetState(false);
-        
-        LED = SceneReferences.inst.Settings.GetComponent<LocalElementData>();
-        SD = gameObject.GetComponent<StructureData>();
     }
 
     // TODO: is the Update function useless?
     void Update()
     {    
-        if (SD.waitForDestroyedAtom)
+        if (StructureData.waitForDestroyedAtom)
         {
             //print(PythonExecuter.structureSize + " and " + SD.atomInfos.Count);
-            if (StructureData.structureSize != SD.atomInfos.Count)
+            if (StructureData.structureSize != StructureData.atomInfos.Count)
                 return;
         }
     }
 
     public void LoadStructure()
     {
-        if (!SD.boundingbox)
+        if (!StructureData.inst.boundingbox)
         {
             // create the instance of the boundingbox
-            SD.boundingbox = Instantiate(BoundingboxPrefab);
-            SD.boundingbox.transform.parent = gameObject.transform;
+            StructureData.inst.boundingbox = Instantiate(BoundingboxPrefab, gameObject.transform, true);
 
             // show the controllers the reference to the boundingbox
-            foreach (LaserGrabber LG in SceneReferences.inst.LGs)
-                LG.boundingbox = SD.boundingbox.transform;
+            foreach (LaserGrabber lg in LaserGrabber.instances)
+                lg.boundingbox = StructureData.inst.boundingbox.transform;
 
             // create the cubes for the cell box and the parent cellBox
             Cellbox = new GameObject();
@@ -81,12 +71,12 @@ public class ImportStructure : MonoBehaviour {
         if (newImport)
         {
             if (!firstImport)
-                foreach (AtomInfos oldAtomInfo in SD.atomInfos)
+                foreach (AtomInfos oldAtomInfo in StructureData.atomInfos)
                     Destroy(oldAtomInfo.m_transform.gameObject);
             // set the length of the Arrays which hold the Data of all Atoms to the amount of atoms in the input file
-            SD.atomInfos.Clear();
+            StructureData.atomInfos.Clear();
             //SD.atomInfos = new List<AtomInfos>();
-            SD.atomCtrlPos.Clear();
+            StructureData.atomCtrlPos.Clear();
         }
         // create the atoms or change their data
         foreach (AtomData atom in StructureData.GetCurrFrameData().atoms)
@@ -105,12 +95,12 @@ public class ImportStructure : MonoBehaviour {
         if (newImport || ProgramSettings.updateBoundingboxEachFrame)
         {
             // check the expansion of the cluster
-            SD.SearchMaxAndMin();
+            StructureData.inst.SearchMaxAndMin();
             // set the Boundingbox, so that it equals the expansion of the cluster
-            SD.UpdateBoundingbox();
+            StructureData.inst.UpdateBoundingbox();
         }
 
-        SD.waitForDestroyedAtom = false;
+        StructureData.waitForDestroyedAtom = false;
         if (firstImport)
         {
             firstImport = false;
@@ -155,7 +145,7 @@ public class ImportStructure : MonoBehaviour {
     private void InitAtoms(AtomData atom)
     {
         GameObject currentAtom;
-        if (newImport && !SD.waitForDestroyedAtom)
+        if (newImport && !StructureData.waitForDestroyedAtom)
         {
             // create a new instance of an atom
             currentAtom = Instantiate(AtomPrefab, transform);
@@ -163,7 +153,7 @@ public class ImportStructure : MonoBehaviour {
             //currentAtom.transform.parent = gameObject.transform;
         }
         else
-            currentAtom = SD.atomInfos[atom.id].m_transform.gameObject;
+            currentAtom = StructureData.atomInfos[atom.id].m_transform.gameObject;
 
         if (newImport)
         {
@@ -171,30 +161,29 @@ public class ImportStructure : MonoBehaviour {
             currentAtom.transform.position = atom.pos;
             //if (animState == "new" || (!firstImport && ProgramSettings.transMode == "shell"))
             //    currentAtom.transform.position *= ProgramSettings.size;
-            SD.atomCtrlPos.Add(Vector3.zero);
+            StructureData.atomCtrlPos.Add(Vector3.zero);
         }
         else
         {
             currentAtom.transform.position = atom.pos * ProgramSettings.size;
-            currentAtom.transform.position += SD.atomCtrlPos[atom.id] + transform.position;
+            currentAtom.transform.position += StructureData.atomCtrlPos[atom.id] + transform.position;
         }
         // set the atom colour to the colour this type of atom has
-        currentAtom.GetComponent<Renderer>().material.color = LED.getColour(atom.type);
+        currentAtom.GetComponent<Renderer>().material.color = LocalElementData.GetColour(atom.type);
         // set the atoms size to the size this type of atom has 
-        currentAtom.transform.localScale = Vector3.one * LED.getSize(atom.type);
-        if (newImport || SD.waitForDestroyedAtom)
+        currentAtom.transform.localScale = Vector3.one * LocalElementData.GetSize(atom.type);
+        if (newImport || StructureData.waitForDestroyedAtom)
         {
             // give the atom an ID
             currentAtom.GetComponent<AtomID>().ID = atom.id;
-            if (SD.waitForDestroyedAtom)
-                SD.atomInfos[atom.id] = new AtomInfos(atom.id, atom.type, currentAtom.transform);
+            if (StructureData.waitForDestroyedAtom)
+                StructureData.atomInfos[atom.id] = new AtomInfos(atom.id, atom.type, currentAtom.transform);
             else
             {
                 // register the atom in the overwiev of StructureData
-                SD.atomInfos.Add(new AtomInfos(atom.id, atom.type, currentAtom.transform));
+                StructureData.atomInfos.Add(new AtomInfos(atom.id, atom.type, currentAtom.transform));
             }
         }
-
     }
 }
 

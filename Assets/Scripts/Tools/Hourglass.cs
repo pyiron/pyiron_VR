@@ -9,16 +9,12 @@ public class Hourglass : MonoBehaviour
     public static Hourglass inst;
     // the animationController of the Hourglass
     private Animator anim;
-    // the Script of the HourglassRotator
-    private HourglassActivator HA;
 
     private void Awake()
     {
         inst = this;
         // get the reference to the animationController of the Hourglass
         anim = gameObject.GetComponent<Animator>();
-        // 
-        HA = GameObject.Find("AtomStructure/HourglassRotator").GetComponent<HourglassActivator>();
     }
 
     void Start()
@@ -26,7 +22,7 @@ public class Hourglass : MonoBehaviour
         // scale the hourglass according to the global size
         transform.localScale = Vector3.one * ProgramSettings.size;
         // let the hourglass face the player
-        transform.parent.eulerAngles = Vector3.up * SceneReferences.inst.HeadGO.transform.eulerAngles.y;
+        transform.parent.eulerAngles = Vector3.up * ProgramSettings.inst.HeadGO.transform.eulerAngles.y;
     }
 
     void Update()
@@ -44,7 +40,7 @@ public class Hourglass : MonoBehaviour
         {
             // start the rotation animation
             anim.Play("Rotate");
-            HA.ResetTimer();
+            HourglassActivator.ResetTimer();
         }
     }
 }

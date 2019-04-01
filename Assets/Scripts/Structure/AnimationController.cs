@@ -47,9 +47,9 @@ public class AnimationController : MonoBehaviour {
     {
         run_anim = shouldRun;
         // update the symbols on all active controllers
-        foreach (GameObject Controller in SceneReferences.inst.Controllers)
-            if (Controller.activeSelf)
-                Controller.GetComponent<ControllerSymbols>().SetSymbol();
+        foreach (LaserGrabber controller in LaserGrabber.instances)
+            if (controller.gameObject.activeSelf)
+                controller.GetComponent<ControllerSymbols>().SetSymbol();
     }
 
     internal static void ChangeAnimSpeed(int change)

@@ -12,12 +12,12 @@ public class StructureData : MonoBehaviour
     public Vector3 minPositions;
     public Vector3 maxPositions;
     // list with all infos about the atoms
-    public List<AtomInfos> atomInfos = new List<AtomInfos>();
+    public static List<AtomInfos> atomInfos = new List<AtomInfos>();
     // the name of the structure, at the moment the name is defined here
     public static string structureName = "Atom Structure";
 
     // the data, how each atom has been relocated by the player
-    public List<Vector3> atomCtrlPos = new List<Vector3>();
+    public static List<Vector3> atomCtrlPos = new List<Vector3>();
     // the data, how each atom has been relocated by the player
     public Vector3[] atomCtrlSize;  // might be unnecessary
     // the data, how the structure has been relocated and resized by the player
@@ -31,7 +31,7 @@ public class StructureData : MonoBehaviour
     // the script which stores the global settings
     private ProgramSettings programSettings;
     // shows whether the structure should check if Pyiron send a structure without the destroyed atom
-    public bool waitForDestroyedAtom;
+    public static bool waitForDestroyedAtom;
 
     [Header("Structure Data")]
     public static List<FrameData> animation_data = new List<FrameData>();

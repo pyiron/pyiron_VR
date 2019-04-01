@@ -40,39 +40,39 @@ public class InputManager : MonoBehaviour
     public void CheckHairTrigger(HandRole handRole)
     {
         if (ViveInput.GetPressDown(handRole, ControllerButton.Trigger)) {
-            SceneReferences.inst.LGs[(int)handRole].HairTriggerDown();
+            LaserGrabber.instances[(int)handRole].HairTriggerDown();
         }
 
         if (ViveInput.GetPress(handRole, ControllerButton.Trigger))
-            SceneReferences.inst.LGs[(int)handRole].WhileHairTriggerDown();
+            LaserGrabber.instances[(int)handRole].WhileHairTriggerDown();
 
         if (ViveInput.GetPressUp(handRole, ControllerButton.Trigger))
-            SceneReferences.inst.LGs[(int)handRole].HairTriggerUp();
+            LaserGrabber.instances[(int)handRole].HairTriggerUp();
     }
 
     private void CheckTouchpad(HandRole handRole)
     {
         Vector2 touchPos = ViveInput.GetPadTouchAxis(handRole);
         if (ViveInput.GetPressDown(handRole, ControllerButton.PadTouch))
-            SceneReferences.inst.LGs[(int)handRole].TouchpadTouchDown(touchPos);
+            LaserGrabber.instances[(int)handRole].TouchpadTouchDown(touchPos);
 
         if (ViveInput.GetPress(handRole, ControllerButton.PadTouch))
-            SceneReferences.inst.LGs[(int)handRole].WhileTouchpadTouchDown(touchPos);
+            LaserGrabber.instances[(int)handRole].WhileTouchpadTouchDown(touchPos);
 
         if (ViveInput.GetPressUp(handRole, ControllerButton.PadTouch))
-            SceneReferences.inst.LGs[(int)handRole].TouchpadTouchUp();
+            LaserGrabber.instances[(int)handRole].TouchpadTouchUp();
 
         if (ViveInput.GetPressDown(handRole, ControllerButton.Pad))
         {
-            SceneReferences.inst.LGs[(int)handRole].TouchpadPressDown(touchPos);
+            LaserGrabber.instances[(int)handRole].TouchpadPressDown(touchPos);
             Thermometer.inst.TouchpadPressDown(touchPos);
         }
 
         if (ViveInput.GetPress(handRole, ControllerButton.Pad))
-            SceneReferences.inst.LGs[(int)handRole].WhileTouchpadPressDown(touchPos);
+            LaserGrabber.instances[(int)handRole].WhileTouchpadPressDown(touchPos);
 
         if (ViveInput.GetPressUp(handRole, ControllerButton.Pad))
-            SceneReferences.inst.LGs[(int)handRole].TouchpadPressUp();
+            LaserGrabber.instances[(int)handRole].TouchpadPressUp();
     }
 
     private void CheckGripButton(HandRole handRole)

@@ -1,12 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 // component of AtomStructure
 public class StructureResizer : MonoBehaviour
 {
-    // the data about the structure
-    private StructureData SD;
+    public static StructureResizer inst;
 
     // the distance of the controllers when the resizeStructure begins
     private float startCtrlDistance;
@@ -24,8 +24,7 @@ public class StructureResizer : MonoBehaviour
 
     public void Awake()
     {
-        // get the script StructureData from AtomStructure
-        SD = GetComponent<StructureData>();
+        inst = this;
     }
 
     void Update()
@@ -37,7 +36,8 @@ public class StructureResizer : MonoBehaviour
     public void InitResize()
     {
         // set the distance of the controllers when the resizeStructure begins
-        startCtrlDistance = (SceneReferences.inst.Controllers[0].transform.position - SceneReferences.inst.Controllers[1].transform.position).magnitude;
+        startCtrlDistance =
+            (LaserGrabber.instances[0].transform.position - LaserGrabber.instances[1].transform.position).magnitude;
         // remember the size the structure had before the resize
         oldStructureSize = ProgramSettings.size;
     }
@@ -45,8 +45,8 @@ public class StructureResizer : MonoBehaviour
     private void TestForResize()
     {
         // return if one of the controllers isn't ready
-        foreach (GameObject ctrl in SceneReferences.inst.Controllers)
-            if (!ctrl.GetComponent<LaserGrabber>().readyForResize)
+        foreach (LaserGrabber lg in LaserGrabber.instances)
+            if (!lg.readyForResize)
                 return;
 
         ResizeStructure();
@@ -55,16 +55,16 @@ public class StructureResizer : MonoBehaviour
     public void ResizeStructure()
     {
         // the data how far the distance between the controllers is currently
-        float currentCtrlDistance;
-        currentCtrlDistance = (SceneReferences.inst.Controllers[0].transform.position - SceneReferences.inst.Controllers[1].transform.position).magnitude;
+        var currentCtrlDistance =
+            (LaserGrabber.instances[0].transform.position - LaserGrabber.instances[1].transform.position).magnitude;
         // the new size the structure should have
         newStrucSize = oldStructureSize + (currentCtrlDistance - startCtrlDistance) * resizeMultiplikator;
         // test if the new size for the structure is allowed
         if (minStrucSize < newStrucSize && newStrucSize < maxStrucSize)
         {
             // update the values how the player has moved each atom, so that these values depend on the global size
-            for (int i = 0; i < SD.atomCtrlPos.Count; i++)
-                SD.atomCtrlPos[i] *= newStrucSize / ProgramSettings.size;
+            for (int i = 0; i < StructureData.atomCtrlPos.Count; i++)
+                StructureData.atomCtrlPos[i] *= newStrucSize / ProgramSettings.size;
             // set the global size to the new value and update the structure
             ProgramSettings.size = newStrucSize;
             transform.localScale = Vector3.one * ProgramSettings.size;        }
