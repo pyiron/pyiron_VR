@@ -407,9 +407,8 @@ public class LaserGrabber : MonoBehaviour
     // send an Order to Python that it should create a new ham_lammps
     public static void LoadNewLammps()
     {
-        bool temperatureHasChanged = false;
         // remember that a new ham_lammps has to be loaded
-        temperatureHasChanged = Thermometer.inst.SendTemp();
+        bool temperatureHasChanged = Thermometer.inst.SendTemp();
 
         // check if the positions of any atom has been changed since the last animation has been started
         if (positionsHaveChanged || lammpsIsMd != ModeData.currentMode.showTemp) // add this: || PythonExecuter.frame != 0    to let the program load a new anima if the frame has changed
@@ -450,7 +449,6 @@ public class LaserGrabber : MonoBehaviour
 
     private static void LoadNewLammps(string loadOrder)
     {
-        int frame = AnimationController.frame;
         AnimationController.frame = 0;
         if (ModeData.currentMode.showTemp)
             PythonExecuter.SendOrder(PythonScript.Executor, PythonCommandType.exec, loadOrder + "('md')");

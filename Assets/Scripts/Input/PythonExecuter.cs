@@ -43,7 +43,9 @@ public class PythonExecuter : MonoBehaviour {
 
     // the forces of all the atoms
     public static float[][] allForces;
-
+    
+    // should the server be used for transfer of data or the shell
+    public static bool useServer = true;
 
     [Header("Send Data to Python")]
     // the amount of changes the Unity program requested the Python program to do
@@ -66,7 +68,8 @@ public class PythonExecuter : MonoBehaviour {
         // allow float.Parse to parse floats seperated by . correctly
         ci.NumberFormat.CurrencyDecimalSeparator = ".";
 
-        LoadUnityManager();
+        if (!useServer)
+            LoadUnityManager();
         ResetTransferData();
     } 
     
@@ -100,6 +103,10 @@ public class PythonExecuter : MonoBehaviour {
     {
         // the amount of changes the Python program did after the Unity program requested it
         incomingChanges = -1;
+        if (useServer)
+        {
+            incomingChanges = 0;
+        }
         // the amount of changes the Unity program requested the Python program to do
         outgoingChanges = 0;
     }
@@ -165,6 +172,10 @@ public class PythonExecuter : MonoBehaviour {
     private static void ReadInput(string data)
     {
         print(data);
+        // remove the "" from the beginning end end if a string got send via the Server
+        // TODO: Use json tools instead
+        if (useServer)
+            data = data.Substring(1, data.Length - 2);
         try
         {
             foreach (String partInp in data.Split('%'))
@@ -294,6 +305,7 @@ public class PythonExecuter : MonoBehaviour {
         // this is the line where Python sends the data about the cellbox
         else if (splittedData[0] == "StructureDataEnd")
         {
+            print(inp);
             float[] cellboxData = new float[9];
             Vector3[] cellboxVecs = new Vector3[3];
             if (ContainsValue(splittedData[1]))
@@ -363,10 +375,11 @@ public class PythonExecuter : MonoBehaviour {
         outgoingChanges += 1;
 
         // send the order via TCP 
-        //ReadInput(TCPClient.SendMsgToPython(ExecuteType.forward, full_order));
-        
+        ReadInput(TCPClient.SendMsgToPython(ExecuteType.forward, fullOrder));
+        incomingChanges += 1;
+
         // write the command in the input of Python
-        myProcess.StandardInput.WriteLine(fullOrder);
+        //myProcess.StandardInput.WriteLine(fullOrder);
     }
 
     #endregion

@@ -14,7 +14,7 @@ public class AnimationController : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        if (run_anim && !waitForLoadedStruc)
+        if (run_anim && (!waitForLoadedStruc || PythonExecuter.useServer)) // program is stuck while waiting anyway
         {
             if (Time.time >= next_time)
             {
@@ -47,9 +47,9 @@ public class AnimationController : MonoBehaviour {
     {
         run_anim = shouldRun;
         // update the symbols on all active controllers
-        foreach (LaserGrabber controller in LaserGrabber.instances)
+        foreach (ControllerSymbols controller in LaserGrabber.controllerSymbols)
             if (controller.gameObject.activeSelf)
-                controller.GetComponent<ControllerSymbols>().SetSymbol();
+                controller.SetSymbol();
     }
 
     internal static void ChangeAnimSpeed(int change)
