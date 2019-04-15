@@ -102,11 +102,7 @@ public class PythonExecuter : MonoBehaviour {
     private void ResetTransferData()
     {
         // the amount of changes the Python program did after the Unity program requested it
-        incomingChanges = -1;
-        if (useServer)
-        {
-            incomingChanges = 0;
-        }
+        incomingChanges = 0;
         // the amount of changes the Unity program requested the Python program to do
         outgoingChanges = 0;
     }
@@ -169,21 +165,37 @@ public class PythonExecuter : MonoBehaviour {
         ReadInput(e.Data);
     }
 
-    private static void ReadInput(string data)
+    public static void ReadInput(string data)
     {
         print(data);
+        if (data == "async") return;
+        //if (String.Compare(data, "async", StringComparison.CurrentCultureIgnoreCase) == 0) return;
         // remove the "" from the beginning end end if a string got send via the Server
         // TODO: Use json tools instead
         if (useServer)
-            data = data.Substring(1, data.Length - 2);
+        {
+            if (data[0] == '"')
+                data = data.Substring(1, data.Length - 1);
+            if(data[data.Length - 1] == '"') 
+                data = data.Substring(0, data.Length - 1);
+        }
+
         try
         {
             foreach (String partInp in data.Split('%'))
-                HandleInp(partInp);
+                if (partInp == "" || partInp == "done")
+                {
+                    if (ProgramSettings.inst.showFilteredMsg)
+                        print("Ignored msg from Python: " + partInp);
+                }
+                else
+                {
+                    HandleInp(partInp);
+                }
         }
         catch(Exception exc)
         {
-            print(exc);
+            UnityEngine.Debug.LogError(exc);
         }
     }
 
@@ -192,13 +204,11 @@ public class PythonExecuter : MonoBehaviour {
         string[] splittedData = inp.Split();
         if (inp.Contains("print"))
             print(inp);
-        else if (inp.Contains("job"))
-            return;
+        else if (inp.Contains("job")) return;
         else if (inp.Contains("Order executed"))
         {
             // show that Unity received the change from Python
             incomingChanges += 1;
-            return;
         }
         else if (splittedData[0].Contains("mode"))
         {
@@ -254,6 +264,7 @@ public class PythonExecuter : MonoBehaviour {
                 return;
             }
 
+            //AnimationController.frame = 0; // might not be necessary
             int strucSize = -1;
             int frame = -1;
             int frames = -1;
@@ -305,7 +316,6 @@ public class PythonExecuter : MonoBehaviour {
         // this is the line where Python sends the data about the cellbox
         else if (splittedData[0] == "StructureDataEnd")
         {
-            print(inp);
             float[] cellboxData = new float[9];
             Vector3[] cellboxVecs = new Vector3[3];
             if (ContainsValue(splittedData[1]))
@@ -344,7 +354,7 @@ public class PythonExecuter : MonoBehaviour {
             StructureCreatorMenuController.args.Add(nDict);
         }
         else
-            print("Warning: Unknown Data: " + inp);
+            UnityEngine.Debug.LogWarning("Unknown Data: " + inp);
     }
 
     private static bool ContainsValue(string data)
@@ -367,19 +377,35 @@ public class PythonExecuter : MonoBehaviour {
     public static void SendOrder(PythonScript script, PythonCommandType type, string order)
     {
         string typeData = type.ToString();
-        if (script != PythonScript.None && type == PythonCommandType.exec)
+        if (script != PythonScript.None && (type == PythonCommandType.exec || type == PythonCommandType.eval))
             typeData += " " + AnimationController.frame;
         string fullOrder = script + " " + typeData + " " + order;
         print(fullOrder);
         // show that the Unity program has send the Python program an order
         outgoingChanges += 1;
+        if (useServer)
+        {
+            // send the order via TCP 
+            if (type == PythonCommandType.exec_l || type == PythonCommandType.eval_l)
+            {
+                fullOrder = order;
+            }
+            else
+            {
+                type = type != PythonCommandType.exec ? PythonCommandType.eval : PythonCommandType.exec;
+            }
 
-        // send the order via TCP 
-        ReadInput(TCPClient.SendMsgToPython(ExecuteType.forward, fullOrder));
-        incomingChanges += 1;
-
-        // write the command in the input of Python
-        //myProcess.StandardInput.WriteLine(fullOrder);
+            ReadInput(TCPClient.SendMsgToPython(type, fullOrder + "%"));
+            if (!TCPClient.isAsync)
+            {
+                incomingChanges += 1;
+            }
+        }
+        else
+        {
+            // write the command in the input of Python
+            myProcess.StandardInput.WriteLine(fullOrder);
+        }
     }
 
     #endregion
@@ -400,10 +426,13 @@ public class PythonExecuter : MonoBehaviour {
         print("Application ending after " + Time.time + " seconds");
         print("Sent  " + outgoingChanges + " Orders to PyIron");
         print("Received  " + incomingChanges + " Responses from PyIron");
-        // let the program stop itself. This way, it can for example delete the scratch folder.
-        myProcess.StandardInput.WriteLine("stop");
-        myProcess.StandardInput.Close();
-        myProcess.Close();
+        if (!useServer)
+        {
+            // let the program stop itself. This way, it can for example delete the scratch folder.
+            myProcess.StandardInput.WriteLine("stop");
+            myProcess.StandardInput.Close();
+            myProcess.Close();
+        }
     }
 }
 
@@ -414,5 +443,5 @@ public enum PythonScript
 
 public enum PythonCommandType
 {
-    path, pr_input, exec, eval
+    path, pr_input, exec_l, eval_l, exec, eval
 }

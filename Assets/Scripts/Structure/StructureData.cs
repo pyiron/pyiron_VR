@@ -115,6 +115,7 @@ public class StructureData : MonoBehaviour
     {
         if (animation_data.Count != 0)
         {
+            print(AnimationController.frame + " / " + animation_data.Count);
             return animation_data[AnimationController.frame];
         }
         return null;

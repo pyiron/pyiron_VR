@@ -85,7 +85,7 @@ public class OrdersToPython : MonoBehaviour
         }
 
         // send Python/Pyiron the order to destroy the atom
-        PythonExecuter.SendOrder(PythonScript.Executor, PythonCommandType.exec, "self.destroy_atom(" + atomId + ")");
+        PythonExecuter.SendOrder(PythonScript.Executor, PythonCommandType.eval, "self.destroy_atom(" + atomId + ")");
         // delete the atom and send python/pyiron that the atom should be excluded in the structure
         StructureData.waitForDestroyedAtom = true;
         // remove the atom in the list of the properties of each atom
@@ -117,7 +117,7 @@ public class OrdersToPython : MonoBehaviour
     // request the forces of all atoms from Python
     public static void RequestAllForces()
     {
-        PythonExecuter.SendOrder(PythonScript.Executor, PythonCommandType.exec, "self.send_all_forces()");
+        PythonExecuter.SendOrder(PythonScript.Executor, PythonCommandType.eval, "self.send_all_forces()");
     }
 
     public static void SetNewPositions()

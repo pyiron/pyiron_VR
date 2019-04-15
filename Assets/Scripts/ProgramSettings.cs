@@ -24,6 +24,10 @@ public class ProgramSettings : MonoBehaviour
     // a Point in short distance before the head of the user
     public GameObject CenterPoint;
 
+    [Header("Debug")] 
+    // Messages from python to Unity will be filtered, e.g. to remove empty messages
+    public bool showFilteredMsg;
+
     private void Awake()
     {
         inst = this;
