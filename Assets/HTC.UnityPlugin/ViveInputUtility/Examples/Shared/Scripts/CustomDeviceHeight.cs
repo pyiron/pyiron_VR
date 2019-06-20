@@ -1,4 +1,4 @@
-﻿//========= Copyright 2016-2018, HTC Corporation. All rights reserved. ===========
+﻿//========= Copyright 2016-2019, HTC Corporation. All rights reserved. ===========
 
 using HTC.UnityPlugin.Utility;
 using HTC.UnityPlugin.VRModuleManagement;
@@ -48,10 +48,11 @@ namespace HTC.UnityPlugin.Vive
 
         public void UpdateHeight()
         {
+            var pos = transform.localPosition;
+
             switch (VRModule.activeModule)
             {
                 case VRModuleActiveEnum.DayDream:
-                    var pos = transform.localPosition;
                     transform.localPosition = new Vector3(pos.x, m_height, pos.y);
                     break;
             }

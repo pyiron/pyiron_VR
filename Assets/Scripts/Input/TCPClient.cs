@@ -114,6 +114,7 @@ public class TCPClient : MonoBehaviour
 		// Read incoming stream into byte arrary. 		
 		int nlen = "num_blocks: ".Length + 10; // has to be the same in python
 		
+		
 		if ((stream.Read(block, 0, nlen)) == 0) return ""; // might be wrong // block.Length
 		PythonExecuter.incomingChanges += 1;
 		var incomingData = new byte[nlen];

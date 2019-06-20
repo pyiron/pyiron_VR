@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
+using GrabberPool = HTC.UnityPlugin.Utility.ObjectPool<Draggable.Grabber>;
 
 // demonstrate of dragging things useing built in EventSystem handlers
 public class Draggable : GrabbableBase<Draggable.Grabber>
@@ -18,13 +19,13 @@ public class Draggable : GrabbableBase<Draggable.Grabber>
 
     public class Grabber : IGrabber
     {
-        private static ObjectPool<Grabber> m_pool;
+        private static GrabberPool m_pool;
 
         public static Grabber Get(PointerEventData eventData)
         {
             if (m_pool == null)
             {
-                m_pool = new ObjectPool<Grabber>(() => new Grabber());
+                m_pool = new GrabberPool(() => new Grabber());
             }
 
             var grabber = m_pool.Get();
@@ -92,6 +93,9 @@ public class Draggable : GrabbableBase<Draggable.Grabber>
     [FormerlySerializedAs("onDrop")]
     [SerializeField]
     private UnityEventDraggable m_onDrop = new UnityEventDraggable(); // change rigidbody drop velocity here
+    [SerializeField]
+    [FormerlySerializedAs("m_scrollDelta")]
+    private float m_scrollingSpeed = 0.01f;
 
     public bool isDragged { get { return isGrabbed; } }
 
@@ -115,6 +119,8 @@ public class Draggable : GrabbableBase<Draggable.Grabber>
 
     [Obsolete("Use grabRigidbody instead")]
     public Rigidbody rigid { get { return grabRigidbody; } set { grabRigidbody = value; } }
+
+    public float scrollingSpeed { get { return m_scrollingSpeed; } set { m_scrollingSpeed = value; } }
 
     protected override void Awake()
     {
@@ -193,7 +199,7 @@ public class Draggable : GrabbableBase<Draggable.Grabber>
             OnGrabTransform();
         }
 
-        var scrollDelta = currentGrabber.eventData.scrollDelta * 0.01f;
+        var scrollDelta = currentGrabber.eventData.scrollDelta * m_scrollingSpeed;
         if (scrollDelta != Vector2.zero)
         {
             currentGrabber.hitDistance = Mathf.Max(0f, currentGrabber.hitDistance + scrollDelta.y);
