@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -15,11 +13,13 @@ public class TCPClient : MonoBehaviour
 
 	public static bool isAsync = true;
 	// the ip address of the server
-	private string[] HOSTS = {"192.168.0.198", "192.168.0.196", "127.0.0.1", "130.183.226.32"};
+	private string[] HOSTS = {"192.168.0.198", "192.168.0.197", "127.0.0.1", "130.183.212.100", "130.183.226.32"};
 	// private const string HOST = "192.168.0.196";// "localhost"
 	private const int PORT = 65432;
 	
 	private static int BLOCKSIZE = 1024;
+	// buffer all incoming data. Needed to deal with the TCP stream
+	private static String recBuffer = "";
 	#endregion
 
 	#region Monobehaviour Callbacks
@@ -106,40 +106,79 @@ public class TCPClient : MonoBehaviour
 
 	#endregion
 
-	private static string HandleInput()
+	// delete the beginning of a string
+	private static void RemoveString(int len)
 	{
-		Byte[] block = new Byte[BLOCKSIZE];
-		NetworkStream stream = socketConnection.GetStream();
-		int length;
-		// Read incoming stream into byte arrary. 		
-		int nlen = "num_blocks: ".Length + 10; // has to be the same in python
-		
-		
-		if ((stream.Read(block, 0, nlen)) == 0) return ""; // might be wrong // block.Length
-		PythonExecuter.incomingChanges += 1;
-		var incomingData = new byte[nlen];
-		Array.Copy(block, 0, incomingData, 0, nlen);
-		// Convert byte array to string message. 						
-		string data = Encoding.ASCII.GetString(incomingData);
-		string[] d_lst = data.Split(':');
-		if (d_lst[0] != "num_blocks") return data;
-		if (!int.TryParse(d_lst[1], out int numBlocks))
+		if (recBuffer.Length > len)
 		{
-			Debug.LogWarning("Couldn't parse " + d_lst[1]);
+			recBuffer = recBuffer.Substring(len);
+		}
+		else
+		{
+			recBuffer = "";
+		}
+	}
+
+	private static string GetMsg(NetworkStream stream)
+	{			
+		Byte[] block = new Byte[BLOCKSIZE + 1];
+		
+		// Read incoming stream into byte array. 
+		int len = stream.Read(block, 0, BLOCKSIZE);
+		// Convert byte array to string message. 
+		if (len == 0) return "";
+		block[len] = 0;
+		string res = Encoding.ASCII.GetString(block, 0, len);
+		//print("res " + res);
+		return res;
+	}
+
+	private static int GetMsgLen(NetworkStream stream)
+	{
+		int headerLen;
+		while (true)
+		{
+			recBuffer += GetMsg(stream);
+			if ((headerLen = recBuffer.IndexOf(';')) != -1)
+			{
+				break;
+			}
+			// todo: fix this busy waiting, which is not good for the performance
 		}
 
-		//print("Num Blocks: " + numBlocks);
-		data = "";
-		for (int i = 1; i <= numBlocks; i++)
+		String header = recBuffer.Substring(0, headerLen);
+		int msg_len = int.Parse(header);
+		PythonExecuter.incomingChanges += 1;
+		RemoveString(headerLen + 1);
+		Debug.Log("Msg len is " + msg_len + ", recbuffer is " + recBuffer + ", len " + recBuffer.Length);
+		return msg_len;
+	}
+
+	private static string HandleInput()
+	{
+		//print("got into HandleInput");
+		// get the length of the message
+		NetworkStream stream = socketConnection.GetStream();
+		int msg_len = GetMsgLen(stream);
+		if (msg_len == -1) return "";
+		
+		// Receive data until at least the whole message has been received
+		String msg = "";
+
+		while (true)
 		{
-			if ((length = stream.Read(block, 0, block.Length)) == 0) continue; // might be wrong
-			incomingData = new byte[length];
-			Array.Copy(block, 0, incomingData, 0, length);
-			// Convert byte array to string message. 						
-			string data_b = Encoding.ASCII.GetString(incomingData);
-			data += data_b;
+			//print("rl " + recBuffer.Length);
+			if (recBuffer.Length >= msg_len)
+			{
+				//print("Now recbuffer is " + recBuffer + ", len " + recBuffer.Length);
+				msg += recBuffer.Substring(0, msg_len - msg.Length);
+				RemoveString(msg.Length);
+				break;
+			}
+			recBuffer += GetMsg(stream);
 		}
-		return data;
+		//print("returned end " + msg);
+		return msg;
 	}
 	
 	private static string Receive()
@@ -184,14 +223,16 @@ public class TCPClient : MonoBehaviour
 		}
 		return "async";
 		// return receive(); 
-	} 
+	}
+
+	public static void CloseServer()
+	{
+		string rec = SendMsgToPython(PythonCommandType.exec,"end server");
+		print("Closed the server: " + rec);
+	}
 	
 	private void OnApplicationQuit()
 	{
-		/*string rec = SendMsgToPython(ExecuteType.exec,"end server", out bool succ);
-		if (!succ)
-		{
-			Debug.Log("Warning:" + rec);
-		}*/
+		CloseServer();
 	}
 }
