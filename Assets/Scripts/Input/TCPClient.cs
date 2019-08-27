@@ -43,6 +43,7 @@ public class TCPClient : MonoBehaviour
 	private void OnApplicationQuit()
 	{
 		CloseServer();
+		ProgramSettings.programIsRunning = false;
 	}
 
 	#endregion
@@ -101,10 +102,10 @@ public class TCPClient : MonoBehaviour
 			while (true)
 			{
 				PythonExecuter.ReadInput(HandleInput());
-				/*if (!Application.isPlaying)
+				if (!ProgramSettings.programIsRunning)
 				{
 					return;
-				}*/
+				}
 			}         
 		}         
 		catch (SocketException socketException) {             
@@ -130,12 +131,10 @@ public class TCPClient : MonoBehaviour
 
 	private static string GetMsg(NetworkStream stream)
 	{			
-		print("In a loop");
 		Byte[] block = new Byte[BLOCKSIZE + 1];
-		
 		// Read incoming stream into byte array. 
 		int len = stream.Read(block, 0, BLOCKSIZE);
-		print("Len is " + len);
+		print("Len is " + len + ", programIsRunning is " + ProgramSettings.programIsRunning);
 		// Convert byte array to string message. 
 		if (len == 0) return "";
 		block[len] = 0;
@@ -157,7 +156,7 @@ public class TCPClient : MonoBehaviour
 				break;
 			}
 
-			if (!isAsync) return "";
+			if (!isAsync || !ProgramSettings.programIsRunning) return "";
 			// todo: busy waiting for the input might be bad for the performance. Some tests should be done with
 			// larger structures or at least when implementing interactive structures
 		}
@@ -168,7 +167,7 @@ public class TCPClient : MonoBehaviour
 		int msg_len = int.Parse(header);
 		if (msg_len == -1) return "";
 		
-		// Receive data until at least the whole message has been received. Additional data will be puffered
+		// Receive data until at least the whole message has been received. Additional data will be pufferred
 		String msg = "";
 		while (true)
 		{

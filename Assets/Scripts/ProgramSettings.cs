@@ -8,6 +8,9 @@ public class ProgramSettings : MonoBehaviour
 {
     public static ProgramSettings inst;
 
+    // needed to stop the TCP listener thread after stopping the program
+    public static bool programIsRunning = true;
+
     [Header("Settings")]
     // the global size multiplier
     public static float size = 0.3f; // default is 0.3f;
