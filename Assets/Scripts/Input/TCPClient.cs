@@ -22,6 +22,9 @@ public class TCPClient : MonoBehaviour
 	// buffer all incoming data. Needed to deal with the TCP stream
 	private static String recBuffer = "";
 	public static float st;
+	private bool clientIsStarted;
+	// the last time the program tried to connect to a host
+	private float lastStartTimer;
 	#endregion
 
 	#region Monobehaviour Callbacks
@@ -31,15 +34,44 @@ public class TCPClient : MonoBehaviour
 		inst = this;
 	}
 
-	// Use this for initialization 	
-	void Start () {
+	private void StartClient()
+	{
 		if (PythonExecuter.useServer)
 		{
-			ConnectToTcpServer();
+			ConnectWithHost();
+			if (!clientIsStarted) return;
+			if (isAsync)
+			{
+				try
+				{
+					clientReceiveThread = new Thread(ListenForData);
+					clientReceiveThread.IsBackground = true;
+					clientReceiveThread.Start();
+				}
+				catch (Exception e)
+				{
+					Debug.Log("On client connect exception " + e);
+				}
+			}
 			PythonExecuter.SendOrder(PythonScript.None, PythonCommandType.eval, "self.send_group()");
 		}
-	}  	
-	
+	}
+
+	// Use this for initialization 	
+	void Start () {
+		StartClient();
+	}
+
+	private void Update()
+	{
+		if (clientIsStarted) return;
+		if (Time.time - lastStartTimer > 10)
+		{
+			StartClient();
+			lastStartTimer = Time.time;
+		}
+	}
+
 	private void OnApplicationQuit()
 	{
 		CloseServer();
@@ -60,33 +92,13 @@ public class TCPClient : MonoBehaviour
 			try
 			{
 				socketConnection = new TcpClient(host, PORT);
+				clientIsStarted = true;
 				print("Successfully connected with HOST " + host);
 				return;
 			}
 			catch
 			{
 				print("Couldn't connect with Host " + host);
-			}
-		}
-	}
-	
-	/// <summary> 	
-	/// Setup socket connection. 	
-	/// </summary> 	
-	private void ConnectToTcpServer () {
-		
-		ConnectWithHost();
-		if (isAsync)
-		{
-			try
-			{
-				clientReceiveThread = new Thread(ListenForData);
-				clientReceiveThread.IsBackground = true;
-				clientReceiveThread.Start();
-			}
-			catch (Exception e)
-			{
-				Debug.Log("On client connect exception " + e);
 			}
 		}
 	}
