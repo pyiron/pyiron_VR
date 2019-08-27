@@ -11,15 +11,17 @@ public class TCPClient : MonoBehaviour
 	private static TcpClient socketConnection; 	
 	private Thread clientReceiveThread;
 
-	public static bool isAsync = true;
-	// the ip address of the server
-	private string[] HOSTS = {"192.168.0.198", "192.168.0.197", "127.0.0.1", "130.183.212.100", "130.183.226.32"};
+	// might crash if set to false at the moment
+	public static bool isAsync = false;
+	// the ip address of the server. Warning: testing out multiple servers can lead to severe loading times (eg. 90s)
+	private string[] HOSTS = {"130.183.226.32"}; //"192.168.0.198", "192.168.0.197", "127.0.0.1", "130.183.212.100", "130.183.212.82"};
 	// private const string HOST = "192.168.0.196";// "localhost"
 	private const int PORT = 65432;
 	
 	private static int BLOCKSIZE = 1024;
 	// buffer all incoming data. Needed to deal with the TCP stream
 	private static String recBuffer = "";
+	public static float st;
 	#endregion
 
 	#region Monobehaviour Callbacks
@@ -34,11 +36,14 @@ public class TCPClient : MonoBehaviour
 		if (PythonExecuter.useServer)
 		{
 			ConnectToTcpServer();
-			// PythonExecuter.SendOrder(PythonScript.None, PythonCommandType.exec_l, "pr = Project('.')");
-			// PythonExecuter.SendOrder(PythonScript.None, PythonCommandType.exec_l, "unity_manager = UM.UnityManager()");
 			PythonExecuter.SendOrder(PythonScript.None, PythonCommandType.eval, "self.send_group()");
 		}
 	}  	
+	
+	private void OnApplicationQuit()
+	{
+		CloseServer();
+	}
 
 	#endregion
 
@@ -121,20 +126,24 @@ public class TCPClient : MonoBehaviour
 
 	private static string GetMsg(NetworkStream stream)
 	{			
+		print("In a loop");
 		Byte[] block = new Byte[BLOCKSIZE + 1];
 		
 		// Read incoming stream into byte array. 
 		int len = stream.Read(block, 0, BLOCKSIZE);
+		print("Len is " + len);
 		// Convert byte array to string message. 
 		if (len == 0) return "";
 		block[len] = 0;
-		string res = Encoding.ASCII.GetString(block, 0, len);
-		//print("res " + res);
-		return res;
+		return Encoding.ASCII.GetString(block, 0, len);
 	}
 
-	private static int GetMsgLen(NetworkStream stream)
+	private static string HandleInput()
 	{
+		// get the input stream
+		NetworkStream stream = socketConnection.GetStream();
+		
+		// get the length of the message that will be send afterwards
 		int headerLen;
 		while (true)
 		{
@@ -143,47 +152,32 @@ public class TCPClient : MonoBehaviour
 			{
 				break;
 			}
-			// todo: fix this busy waiting, which is not good for the performance
+
+			if (!isAsync) return "";
+			// todo: busy waiting for the input might be bad for the performance. Some tests should be done with
+			// larger structures or at least when implementing interactive structures
 		}
 
 		String header = recBuffer.Substring(0, headerLen);
-		int msg_len = int.Parse(header);
 		PythonExecuter.incomingChanges += 1;
 		RemoveString(headerLen + 1);
-		Debug.Log("Msg len is " + msg_len + ", recbuffer is " + recBuffer + ", len " + recBuffer.Length);
-		return msg_len;
-	}
-
-	private static string HandleInput()
-	{
-		//print("got into HandleInput");
-		// get the length of the message
-		NetworkStream stream = socketConnection.GetStream();
-		int msg_len = GetMsgLen(stream);
+		int msg_len = int.Parse(header);
 		if (msg_len == -1) return "";
 		
-		// Receive data until at least the whole message has been received
+		// Receive data until at least the whole message has been received. Additional data will be puffered
 		String msg = "";
-
 		while (true)
 		{
-			//print("rl " + recBuffer.Length);
+			print("Waiting for the msg with len " + msg_len);
 			if (recBuffer.Length >= msg_len)
 			{
-				//print("Now recbuffer is " + recBuffer + ", len " + recBuffer.Length);
 				msg += recBuffer.Substring(0, msg_len - msg.Length);
 				RemoveString(msg.Length);
 				break;
 			}
 			recBuffer += GetMsg(stream);
 		}
-		//print("returned end " + msg);
 		return msg;
-	}
-	
-	private static string Receive()
-	{	
-		return HandleInput();
 	}
 	  	
 	/// <summary> 	
@@ -194,7 +188,9 @@ public class TCPClient : MonoBehaviour
 		if (socketConnection == null) {     
 			Debug.LogError("No socket connection");
 			return "No socket connection";         
-		}  		
+		}
+
+		st = Time.time;
 		try
 		{
 			NetworkStream stream = socketConnection.GetStream();
@@ -219,7 +215,7 @@ public class TCPClient : MonoBehaviour
 
 		if (!isAsync)
 		{
-			return Receive();
+			return HandleInput();
 		}
 		return "async";
 		// return receive(); 
@@ -229,10 +225,5 @@ public class TCPClient : MonoBehaviour
 	{
 		string rec = SendMsgToPython(PythonCommandType.exec,"end server");
 		print("Closed the server: " + rec);
-	}
-	
-	private void OnApplicationQuit()
-	{
-		CloseServer();
 	}
 }

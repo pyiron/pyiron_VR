@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using System.Diagnostics;
 using System;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 
 // component of Settings
@@ -168,7 +166,8 @@ public class PythonExecuter : MonoBehaviour {
     public static void ReadInput(string data)
     {
         print(data);
-        if (data == "async") return;
+        //print("Time needed: " + (1.0 + Time.time - TCPClient.st));
+        if (data == "async" || data == "") return;
         //if (String.Compare(data, "async", StringComparison.CurrentCultureIgnoreCase) == 0) return;
         // remove the "" from the beginning end end if a string got send via the Server
         // TODO: Use json tools instead
@@ -239,14 +238,6 @@ public class PythonExecuter : MonoBehaviour {
             print("Files detected, they are not needed, but do no harm.");
             //StructureMenuController.inst.AddOption(OptionType.Script, inp.Substring(6));
         }*/
-        else if (splittedData[0] == "path")
-        {
-            if (StructureMenuController.currPath != splittedData[1])
-            {
-                StructureMenuController.currPath = splittedData[1];
-                StructureMenuController.pathHasChanged = true;
-            }
-        }
         else if (splittedData[0] == "force")
         {
             if (ContainsValue(splittedData[1]))
@@ -353,13 +344,28 @@ public class PythonExecuter : MonoBehaviour {
             }
             StructureCreatorMenuController.args.Add(nDict);
         }
-        else
+        else if (splittedData[0] == "path")
+        {
+            if (StructureMenuController.currPath != splittedData[1])
+            {
+                StructureMenuController.currPath = splittedData[1];
+                StructureMenuController.pathHasChanged = true;
+            }
+        }
+        else if (splittedData[0] == "")
+        {
             UnityEngine.Debug.LogWarning("Unknown Data: " + inp);
+            TCPClient.CloseServer();
+        }
+        else
+        {
+            print("JSON data or unknown data: " + inp);
+        }
     }
 
     private static bool ContainsValue(string data)
     {
-        return (data != "empty");
+        return data != "empty";
     }
 
     #endregion

@@ -1,3 +1,8 @@
+27.8.2019:
+- increase loading time performance
+- use json for data transfer between python and Unity
+(- let controllers vibrate, eg. when pressing buttons or when moving atoms)
+
 -periodic system, where you can get new atoms from
 (-colour the atoms according to their warmth or energy)
 -make a GUI
@@ -8,7 +13,6 @@
 (- implement the animation of the trashcan (some information for this are in the documentation), instead of having the top of the can just being moved to the side)
 - show the periodic boundary condition, and think of the details (show it just when moving an atom?)
 
-IMPORTANT:
 - possible structures sometimes not loading
 - bug: false positioning of structure after duplicating and when resizing
 (- try to get better performance when having many atoms)
@@ -27,7 +31,6 @@ IMPORTANT:
 - fix bug that sometimes there are error messages "MissingReferenceException: The object of type 'Transform' has been destroyed but you are still trying to access it." after deleting atoms, most likely because the wrong atom has been destroyed
 (- check what happens if an controller deactivates itself after not being used for too long (could maybe happen in a presentation))
 
-- fix bug that the hourglass vanishes after a tenth of a second
 - fix bug that the trigger Input of one controller gets sometimes send to both controllers, while the other controller can't do anything (not even use the touchpad I think), if they are initialised in the wrong order
 - Make Unity send an order to Python when at least one atom has been removed
 - make functions in Unity for each order which can be send to Python (other functions than DestroyAtom have to be implemented)
