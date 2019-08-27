@@ -12,7 +12,7 @@ public class TCPClient : MonoBehaviour
 	private Thread clientReceiveThread;
 
 	// might crash if set to false at the moment
-	public static bool isAsync = false;
+	public static bool isAsync = true;
 	// the ip address of the server. Warning: testing out multiple servers can lead to severe loading times (eg. 90s)
 	private string[] HOSTS = {"130.183.226.32"}; //"192.168.0.198", "192.168.0.197", "127.0.0.1", "130.183.212.100", "130.183.212.82"};
 	// private const string HOST = "192.168.0.196";// "localhost"
@@ -101,6 +101,10 @@ public class TCPClient : MonoBehaviour
 			while (true)
 			{
 				PythonExecuter.ReadInput(HandleInput());
+				/*if (!Application.isPlaying)
+				{
+					return;
+				}*/
 			}         
 		}         
 		catch (SocketException socketException) {             
@@ -195,7 +199,8 @@ public class TCPClient : MonoBehaviour
 		{
 			NetworkStream stream = socketConnection.GetStream();
 			if (stream.CanWrite) {                 
-				string clientMessage = exType + ":" + msg; 				
+				string clientMessage = exType + ":" + msg;
+				clientMessage = clientMessage.Length + ";" + clientMessage;
 				// Convert string message to byte array.                 
 				byte[] clientMessageAsByteArray = Encoding.ASCII.GetBytes(clientMessage); 				
 				// Write byte array to socketConnection stream.                 
