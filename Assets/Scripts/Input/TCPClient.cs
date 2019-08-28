@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TCPClient : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class TCPClient : MonoBehaviour
 	public static bool isAsync = true;
 	// the ip address of the server. Warning: testing out multiple servers can lead to severe loading times (eg. 90s)
 	private string[] HOSTS = {"130.183.226.32"}; //"192.168.0.198", "192.168.0.197", "127.0.0.1", "130.183.212.100", "130.183.212.82"};
+
+	private string HOST = "130.183.226.32";
 	// private const string HOST = "192.168.0.196";// "localhost"
 	private const int PORT = 65432;
 	
@@ -34,12 +37,49 @@ public class TCPClient : MonoBehaviour
 		inst = this;
 	}
 
-	private void StartClient()
+	// Use this for initialization 	
+	void Start () {
+		ConnectWithHost(HOST);
+	}
+
+	private void OnApplicationQuit()
 	{
+		CloseServer();
+		ProgramSettings.programIsRunning = false;
+	}
+
+	#endregion
+
+	public static bool IsReady()
+	{
+		return socketConnection != null;
+	}
+
+	// called by the Input Field for the server address on the network panel
+	public void ConnectTo(InputField inputField)
+	{
+		ConnectWithHost(inputField.text);
+	}
+
+	public void ConnectWithHost(string host)
+	{
+		// after connecting to a server connecting to another one is not possible
+		if (clientIsStarted) return;
+		
 		if (PythonExecuter.useServer)
 		{
-			ConnectWithHost();
-			if (!clientIsStarted) return;
+			try
+			{
+				socketConnection = new TcpClient(host, PORT);
+				clientIsStarted = true;
+				print("Successfully connected with HOST " + host);
+			}
+			catch
+			{
+				print("Couldn't connect with Host " + host);
+				return;
+			}
+			
 			if (isAsync)
 			{
 				try
@@ -57,49 +97,11 @@ public class TCPClient : MonoBehaviour
 		}
 	}
 
-	// Use this for initialization 	
-	void Start () {
-		StartClient();
-	}
-
-	private void Update()
-	{
-		if (clientIsStarted) return;
-		if (Time.time - lastStartTimer > 10)
-		{
-			StartClient();
-			lastStartTimer = Time.time;
-		}
-	}
-
-	private void OnApplicationQuit()
-	{
-		CloseServer();
-		ProgramSettings.programIsRunning = false;
-	}
-
-	#endregion
-
-	public static bool IsReady()
-	{
-		return socketConnection != null;
-	}
-
 	private void ConnectWithHost()
 	{
 		foreach (string host in HOSTS)
 		{
-			try
-			{
-				socketConnection = new TcpClient(host, PORT);
-				clientIsStarted = true;
-				print("Successfully connected with HOST " + host);
-				return;
-			}
-			catch
-			{
-				print("Couldn't connect with Host " + host);
-			}
+			ConnectWithHost(host);
 		}
 	}
 
