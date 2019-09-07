@@ -18,8 +18,9 @@ public class ModeMenuController : MenuController {
     {
         foreach (Mode mode in ModeData.modes)
         {
-            GameObject newModeBtn = Instantiate(OptionButtonPref);
-            newModeBtn.transform.SetParent(OptionFolder.transform);
+            // todo: it should be possible in the future to go back to the Project Explorer to load a new structure
+            if (mode.mode == Modes.Network || mode.mode == Modes.Explorer) continue;
+            GameObject newModeBtn = Instantiate(OptionButtonPref, OptionFolder.transform, true);
             newModeBtn.GetComponentInChildren<Text>().text = mode.mode.ToString();
         }
     }
@@ -28,9 +29,12 @@ public class ModeMenuController : MenuController {
     {
         foreach (Button btn in OptionFolder.GetComponentsInChildren<Button>())
         {
-            btn.transform.localPosition -= new Vector3(0, 0, btn.transform.localPosition.z);
-            btn.transform.localEulerAngles = Vector3.zero;
-            btn.transform.localScale = Vector3.one;
+            var transform1 = btn.transform;
+            var localPosition = transform1.localPosition;
+            localPosition -= new Vector3(0, 0, localPosition.z);
+            transform1.localPosition = localPosition;
+            transform1.localEulerAngles = Vector3.zero;
+            transform1.localScale = Vector3.one;
         }
     }
 

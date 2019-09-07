@@ -8,6 +8,10 @@ using UnityEngine.UI;
 public class TCPClient : MonoBehaviour
 {
 	public static TCPClient inst;
+	// the panels which should be deactivated/activated after connecting successfully to a host
+	public GameObject NetworkPanel;
+	public GameObject ExplorerPanel;
+	
 	#region private members 	
 	private static TcpClient socketConnection; 	
 	private Thread clientReceiveThread;
@@ -79,6 +83,8 @@ public class TCPClient : MonoBehaviour
 			{
 				socketConnection = new TcpClient(host, PORT);
 				clientIsStarted = true;
+				NetworkPanel.SetActive(false);
+				ExplorerPanel.SetActive(true);
 				print("Successfully connected with HOST " + host);
 			}
 			catch

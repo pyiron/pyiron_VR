@@ -25,8 +25,9 @@ public class ModeData : MonoBehaviour
 
     // the dictionary which defines what properties each mode has
     // attention: the trashcan will just be shown if m_playerCanMoveAtoms is true, even if m_showTrashcan is true
-    // attention: the mode will just be accessable, if m_playerCanMoveAtoms, m_showInfo or m_canDuplicate is true
+    // attention: the mode will just be accessible, if m_playerCanMoveAtoms, m_showInfo or m_canDuplicate is true
     internal static List<Mode> modes = new List<Mode>() {
+        new Mode(mode:Modes.Network, hideAtoms: true, showNetwork: true),
         new Mode(mode:Modes.Explorer, hideAtoms: true, showExplorer: true),
         new Mode(mode:Modes.Temperature, playerCanMoveAtoms:true, playerCanResizeAtoms:true, showTemp:true, showTrashcan:true, showPeriodicSystem:true),
         new Mode(mode:Modes.Minimize, playerCanMoveAtoms:true, playerCanResizeAtoms:true, showRelaxation:true, showTrashcan:true, showPeriodicSystem:true),
@@ -76,7 +77,7 @@ public class ModeData : MonoBehaviour
     // change the mode. This includes updating scene, e.g. (de)activating the thermometer or UI
     public void SetMode(Modes newMode)
     {
-        if (currentMode != null && !currentMode.showExplorer)
+        if (currentMode != null && !currentMode.showExplorer && !currentMode.showNetwork)
             // stop the currently running animation
             AnimationController.RunAnim(false);
         currentMode = modes[(int)newMode];
@@ -85,7 +86,7 @@ public class ModeData : MonoBehaviour
 
     // (de)activate objects in the scene, as well as the menu
     private void UpdateScene() { 
-        textObject.text = currentMode.mode.ToString() + " mode";
+        textObject.text = currentMode.mode + " mode";
         gameObject.SetActive(true);
         modeTextTimer = 3;
         // set the text to it's original size
@@ -105,8 +106,6 @@ public class ModeData : MonoBehaviour
             OrdersToPython.RequestAllForces();
         // deactivate the structure if it shouldn't be shown, else activate it
         StructureData.inst.gameObject.SetActive(!modes[(int)currentMode.mode].hideAtoms);
-        // TODO! activate the new UI
-        //ChooseStructure.inst.StructButtons.gameObject.SetActive(modes[currentModeNr].showPossibleStructures);
 
         UpdateMenu();
 
@@ -136,9 +135,10 @@ public class ModeData : MonoBehaviour
     // determine which panels and buttons should be activated/deactivated
     private void UpdateMenu()
     {
+        NetworkMenuController.inst.SetState(currentMode.showNetwork);
         StructureMenuController.inst.SetState(currentMode.showExplorer);
         TemperatureMenuController.inst.SetState(currentMode.showTemp);
-        ModeMenuController.inst.SetState(currentMode.mode != Modes.Explorer);
+        ModeMenuController.inst.SetState(currentMode.mode != Modes.Explorer && currentMode.mode != Modes.Network);
         ModeMenuController.inst.OnModeChange();
         AnimationMenuController.inst.SetState(currentMode.mode == Modes.Temperature ||
                                               currentMode.mode == Modes.Minimize || currentMode.mode == Modes.View);
