@@ -39,7 +39,7 @@ public class TCPClient : MonoBehaviour
 
 	// Use this for initialization 	
 	void Start () {
-		ConnectWithHost(HOST);
+		//ConnectWithHost(HOST);
 	}
 
 	private void OnApplicationQuit()
@@ -60,9 +60,16 @@ public class TCPClient : MonoBehaviour
 	{
 		ConnectWithHost(inputField.text);
 	}
+	
+	// called by the Input Field for the server address on the network panel
+	public void ConnectTo(Text btnText)
+	{
+		ConnectWithHost(btnText.text);
+	}
 
 	public void ConnectWithHost(string host)
 	{
+		print("Trying to connect to " + host);
 		// after connecting to a server connecting to another one is not possible
 		if (clientIsStarted) return;
 		
@@ -94,14 +101,6 @@ public class TCPClient : MonoBehaviour
 				}
 			}
 			PythonExecuter.SendOrder(PythonScript.None, PythonCommandType.eval, "self.send_group()");
-		}
-	}
-
-	private void ConnectWithHost()
-	{
-		foreach (string host in HOSTS)
-		{
-			ConnectWithHost(host);
 		}
 	}
 
