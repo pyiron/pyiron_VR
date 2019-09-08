@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using HTC.UnityPlugin.Vive;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -68,6 +69,11 @@ public class TCPClient : MonoBehaviour
 	// called by the Input Field for the server address on the network panel
 	public void ConnectTo(Text btnText)
 	{
+		// The vibration does not get triggered on the Quest, but it should work on the Vive
+		// If needed on the Quest, the function of the OVR Plugin could be used
+		ViveInput.TriggerHapticVibration(HandRole.LeftHand, 0.2f);
+		ViveInput.TriggerHapticVibration(HandRole.RightHand, 0.2f);
+		
 		ConnectWithHost(btnText.text);
 	}
 

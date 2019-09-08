@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class LocalElementData : MonoBehaviour {
 
     // symbol -> CAS number, name, ordinal number
-    private static readonly Dictionary<string, Element> m_localElementDict = new Dictionary<string, Element> {
+    public static readonly Dictionary<string, Element> m_localElementDict = new Dictionary<string, Element> {
         {  "H", new Element( "1333-74-0",      "Hydrogen",   1,   1f, new Color(255 / 255f, 255 / 255f, 255 / 255f)) },
         { "He", new Element( "7440-59-7",        "Helium",   2, 1.5f, new Color(217 / 255f, 255 / 255f, 255 / 255f)) },
         { "Li", new Element( "7439-93-2",       "Lithium",   3, 1.5f, new Color(204 / 255f, 128 / 255f, 255 / 255f)) },
