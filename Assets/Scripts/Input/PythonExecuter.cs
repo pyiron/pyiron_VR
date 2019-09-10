@@ -247,9 +247,9 @@ public class PythonExecuter : MonoBehaviour {
                     allForces[int.Parse(splittedData[4])][i] = float.Parse(splittedData[i + 1],NumberStyles.Any,ci);
             }
         }
-        else if (splittedData[0] == "StructureDataStart")
+        else if (splittedData[0] == "SDS")
         {
-            if (splittedData.Length < 6)
+            if (splittedData.Length < 5)
             {
                 print("First Line of Structure Data should have 6 parameters!");
                 return;
@@ -260,10 +260,10 @@ public class PythonExecuter : MonoBehaviour {
             int frame = -1;
             int frames = -1;
 
-            if (ContainsValue(splittedData[2]))
-                if (int.Parse(splittedData[2]) != strucSize)
+            if (ContainsValue(splittedData[1]))
+                if (int.Parse(splittedData[1]) != strucSize)
                 {
-                    strucSize = int.Parse(splittedData[2]);
+                    strucSize = int.Parse(splittedData[1]);
                     allForces = new float[strucSize][];
                     for (int atomNr = 0; atomNr < strucSize; atomNr++)
                     {
@@ -271,23 +271,23 @@ public class PythonExecuter : MonoBehaviour {
                         allForces[atomNr][0] = float.NaN;
                     }
                 }
-            if (ContainsValue(splittedData[3]))
+            if (ContainsValue(splittedData[2]))
             {
-                Thermometer.temperature = int.Parse(splittedData[3]);
+                Thermometer.temperature = int.Parse(splittedData[2]);
             }
-            if (ContainsValue(splittedData[4]))
-                frame = int.Parse(splittedData[4]);
+            if (ContainsValue(splittedData[3]))
+                frame = int.Parse(splittedData[3]);
             else
                 print("Warning: Current Frame is missing!");
 
-            if (ContainsValue(splittedData[5]))
-                frames = int.Parse(splittedData[5]);
+            if (ContainsValue(splittedData[4]))
+                frames = int.Parse(splittedData[4]);
             else
                 print("Warning: Frame Amount is missing!");
 
             StructureData.AddFrameDataStart(strucSize, frame, frames);
         }
-        else if (splittedData[0] == "StructureDataMid")
+        else if (splittedData[0] == "SDM")
         {
             /*for (int i = 1; i < 4; i++)
             {
@@ -305,7 +305,7 @@ public class PythonExecuter : MonoBehaviour {
                     float.Parse(splittedData[3],NumberStyles.Any,ci)), splittedData[4]));
         }
         // this is the line where Python sends the data about the cellbox
-        else if (splittedData[0] == "StructureDataEnd")
+        else if (splittedData[0] == "SDE")
         {
             float[] cellboxData = new float[9];
             Vector3[] cellboxVecs = new Vector3[3];

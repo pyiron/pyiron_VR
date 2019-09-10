@@ -207,10 +207,8 @@ public class LaserGrabber : MonoBehaviour
                     InfoText.transform.position = attachedObject.transform.position // + Vector3.up * 0.1f
                             + Vector3.up * attachedObject.transform.localScale[0] / 2 * ProgramSettings.size;
                     string atomSymbol = StructureData.atomInfos[atomId].m_type;
-                    string infoText = "Symbol: " + atomSymbol;
-                    infoText += "\nFull Name: " + LocalElementData.m_localElementDict[atomSymbol].m_fullName;
-                    infoText += "\nOrdinal Number: " + LocalElementData.m_localElementDict[atomSymbol].m_ordinalNumber;
-                    infoText += "\nCas Number: " + LocalElementData.m_localElementDict[atomSymbol].m_casNumber;
+                    string infoText = atomSymbol;
+                    //infoText += "\nFull Name: " + LocalElementData.m_localElementDict[atomSymbol].m_fullName;
                     
                     // include the following code to show the forces the atoms are experiencing
                     // test if the forces are known
