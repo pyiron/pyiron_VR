@@ -26,10 +26,6 @@ public class StructureData : MonoBehaviour
     public Vector3 structureCtrlPos;
     // the data, how the structure has been resized
     public Vector3 structureCtrlSize;  // might be unnecessary
-    // the gameobject which holds the global settings for the program
-    public GameObject Settings;
-    // the script which stores the global settings
-    private ProgramSettings programSettings;
     // shows whether the structure should check if Pyiron send a structure without the destroyed atom
     public static bool waitForDestroyedAtom;
 
@@ -42,8 +38,6 @@ public class StructureData : MonoBehaviour
     public void Awake()
     {
         inst = this;
-        // load the settings from the GameObject Settings
-        programSettings = Settings.GetComponent<ProgramSettings>();
         // create a new empty Instance which holds the data, how the structure has been relocated by the player
         structureCtrlPos = Vector3.zero;
         // create a new empty Instance which holds the data, how the structure has been resized by the player
@@ -121,7 +115,7 @@ public class StructureData : MonoBehaviour
     }
 }
 
-// TODO: combine with AtomInfos.
+// could be combined with AtomInfos.
 public class AtomData
 {
     internal Vector3 pos;

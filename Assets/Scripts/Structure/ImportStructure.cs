@@ -24,24 +24,13 @@ public class ImportStructure : MonoBehaviour {
     internal static bool newImport = true;
     // shows whether it is the first import or just a new amount of atoms
     private bool firstImport = true;
-    
+
 
 
     private void Awake()
     {
         inst = this;
         Thermometer.inst.SetState(false);
-    }
-
-    // TODO: is the Update function useless?
-    void Update()
-    {    
-        if (StructureData.waitForDestroyedAtom)
-        {
-            //print(PythonExecuter.structureSize + " and " + SD.atomInfos.Count);
-            if (StructureData.structureSize != StructureData.atomInfos.Count)
-                return;
-        }
     }
 
     public void LoadStructure()

@@ -84,8 +84,8 @@ public class PythonExecuter : MonoBehaviour {
             Thermometer.inst.UpdateTemperature();
         }
 
-        InGamePrinter.inst[0].Ctrl_print("Send: " + outgoingChanges.ToString());
-        InGamePrinter.inst[1].Ctrl_print("Received: " + incomingChanges.ToString());
+        InGamePrinter.inst[0].Ctrl_print("Send: " + outgoingChanges);
+        InGamePrinter.inst[1].Ctrl_print("Received: " + incomingChanges);
     }
     
     public void OnApplicationQuit()
@@ -203,6 +203,11 @@ public class PythonExecuter : MonoBehaviour {
         string[] splittedData = inp.Split();
         if (inp.Contains("print"))
             print(inp);
+        else if (inp.Contains("error"))
+        {
+            UnityEngine.Debug.LogError(inp);
+            ErrorTextController.inst.ShowMsg("Error:\n" + inp.Substring(7));
+        }
         else if (inp.Contains("job")) return;
         else if (inp.Contains("Order executed"))
         {
@@ -285,7 +290,7 @@ public class PythonExecuter : MonoBehaviour {
             else
                 print("Warning: Frame Amount is missing!");
 
-            StructureData.AddFrameDataStart(strucSize, frame, frames);
+            StructureData.AddFrameDataStart(strucSize, frame, frames); 
         }
         else if (splittedData[0] == "SDM")
         {

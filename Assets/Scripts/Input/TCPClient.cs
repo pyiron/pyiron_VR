@@ -10,8 +10,8 @@ public class TCPClient : MonoBehaviour
 {
 	public static TCPClient inst;
 	// the panels which should be deactivated/activated after connecting successfully to a host
-	public GameObject NetworkPanel;
-	public GameObject ExplorerPanel;
+	//public GameObject NetworkPanel;
+	//public GameObject ExplorerPanel;
 	
 	#region private members 	
 	private static TcpClient socketConnection; 	
@@ -40,11 +40,6 @@ public class TCPClient : MonoBehaviour
 	private void Awake()
 	{
 		inst = this;
-	}
-
-	// Use this for initialization 	
-	void Start () {
-		//ConnectWithHost(HOST);
 	}
 
 	private void OnApplicationQuit()
@@ -89,13 +84,12 @@ public class TCPClient : MonoBehaviour
 			{
 				socketConnection = new TcpClient(host, PORT);
 				clientIsStarted = true;
-				NetworkPanel.SetActive(false);
-				ExplorerPanel.SetActive(true);
+				ModeData.inst.SetMode(Modes.Explorer);
 				print("Successfully connected with HOST " + host);
 			}
 			catch
 			{
-				print("Couldn't connect with Host " + host);
+				ErrorTextController.inst.ShowMsg("Couldn't connect with Host " + host);
 				return;
 			}
 			
@@ -159,7 +153,6 @@ public class TCPClient : MonoBehaviour
 		Byte[] block = new Byte[BLOCKSIZE + 1];
 		// Read incoming stream into byte array. 
 		int len = stream.Read(block, 0, BLOCKSIZE);
-		print("Len is " + len + ", programIsRunning is " + ProgramSettings.programIsRunning);
 		// Convert byte array to string message. 
 		if (len == 0) return "";
 		block[len] = 0;
@@ -196,7 +189,6 @@ public class TCPClient : MonoBehaviour
 		String msg = "";
 		while (true)
 		{
-			print("Waiting for the msg with len " + msg_len);
 			if (recBuffer.Length >= msg_len)
 			{
 				msg += recBuffer.Substring(0, msg_len - msg.Length);
@@ -229,7 +221,7 @@ public class TCPClient : MonoBehaviour
 				byte[] clientMessageAsByteArray = Encoding.ASCII.GetBytes(clientMessage); 				
 				// Write byte array to socketConnection stream.                 
 				stream.Write(clientMessageAsByteArray, 0, clientMessageAsByteArray.Length);  
-				//Debug.Log("Client sent his message - should be received by server");  
+				Debug.Log(Time.time + ": Client sent his message " + msg);  
 			}
 			else
 			{

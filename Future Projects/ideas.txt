@@ -1,3 +1,15 @@
+15.9.2019
+1. Delete Debug prints - DONE
+2. Send changed positions only when they get changed - DONE
+3. try/catch errors in Python and show them in Unity. Maybe undo the last Unity activity
+
+11.9.2019:
+1. write down which lines of code need a long time (write down the line and time they need)
+2. Test it in Garching
+3. Implement loading an empty structure
+4. Implement creating a basic structure after loading an empty structure
+5. Implement the period system for all elements
+
 27.8.2019:
 - increase loading time performance
 - use json for data transfer between python and Unity

@@ -257,6 +257,8 @@ public class LaserGrabber : MonoBehaviour
                 // change the boundingbox to the new extension of the structure, if an atom has been attached
                 if (ctrlMaskName == "AtomLayer")
                 {
+                    // tell Python the new position
+                    OrdersToPython.SetNewPosition(StructureData.atomInfos[attachedObject.GetComponent<AtomID>().ID]);
                     // check the new extension of the structure
                     StructureData.inst.SearchMaxAndMin();
                     // set the boundingbox so that it encloses the structure
@@ -421,7 +423,7 @@ public class LaserGrabber : MonoBehaviour
             // send the new positions to Python
             positionsHaveChanged = true;
             // send Python the new positions of all atoms
-            OrdersToPython.SetNewPositions();
+            //OrdersToPython.SetNewPositions();
         }
 
         print("Loading Anim if " + firstAnimStart + " or " + temperatureHasChanged + " or " + positionsHaveChanged);

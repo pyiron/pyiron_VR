@@ -90,7 +90,7 @@ public class ModeData : MonoBehaviour
         gameObject.SetActive(true);
         modeTextTimer = 3;
         // set the text to it's original size
-        //transform.localScale =  Vector3.one * textSize;
+        transform.localScale =  Vector3.one * textSize;
         //transform.eulerAngles = new Vector3(0, SceneReferences.inst.HeadGO.transform.eulerAngles.y, 0);
         //Vector3 newTextPosition = Vector3.zero;
         //newTextPosition.x += Mathf.Sin(SceneReferences.inst.HeadGO.transform.eulerAngles.y / 360 * 2 * Mathf.PI);

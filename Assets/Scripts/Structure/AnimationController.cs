@@ -37,10 +37,12 @@ public class AnimationController : MonoBehaviour {
         {
             FrameData frameData = StructureData.GetCurrFrameData();
             if (shouldLoad && frameData?.cellbox != null)
-        {
-            ImportStructure.inst.LoadStructure();
-            shouldLoad = false;
-        }}
+            {
+                print(Time.time + ": Received smth"); 
+                ImportStructure.inst.LoadStructure();
+                print(Time.time + ": After load"); 
+                shouldLoad = false;
+            }}
     }
 
     public static void RunAnim(bool shouldRun = false)

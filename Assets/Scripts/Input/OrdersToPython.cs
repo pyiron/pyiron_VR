@@ -124,16 +124,21 @@ public class OrdersToPython : MonoBehaviour
     {
         foreach (AtomInfos atomInfo in StructureData.atomInfos)
         {
-            string newPosition = "";
-            Vector3 atomPosition = atomInfo.m_transform.localPosition;
-            for (int i = 0; i < 3; i++)
-                newPosition += atomPosition[i] + " ";
-            newPosition += atomInfo.m_ID;
-            // send the local position of the current atom to Python
-            PythonExecuter.SendOrder(PythonScript.Executor, PythonCommandType.exec,
-                "self.set_new_base_position('" + newPosition + "')");
-            // show that the player hasn't moved an atom since the last creation of an ham_lammps
-            StructureData.atomCtrlPos[atomInfo.m_ID] = Vector3.zero;
+            SetNewPosition(atomInfo);
         }
+    }
+
+    public static void SetNewPosition(AtomInfos atomInfo)
+    {
+        string newPosition = "";
+        Vector3 atomPosition = atomInfo.m_transform.localPosition;
+        for (int i = 0; i < 3; i++)
+            newPosition += atomPosition[i] + " ";
+        newPosition += atomInfo.m_ID;
+        // send the local position of the current atom to Python
+        PythonExecuter.SendOrder(PythonScript.Executor, PythonCommandType.exec,
+            "self.set_new_base_position('" + newPosition + "')");
+        // show that the player hasn't moved an atom since the last creation of an ham_lammps
+        StructureData.atomCtrlPos[atomInfo.m_ID] = Vector3.zero;
     }
 }
