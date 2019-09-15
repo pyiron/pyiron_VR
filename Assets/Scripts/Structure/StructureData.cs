@@ -32,8 +32,7 @@ public class StructureData : MonoBehaviour
     [Header("Structure Data")]
     public static List<FrameData> animation_data = new List<FrameData>();
     private static FrameData currFrame;
-    public static int structureSize;
-    public static int frame_amount = 0;
+    public static int frame_amount;
 
     public void Awake()
     {
@@ -87,7 +86,6 @@ public class StructureData : MonoBehaviour
         if (frame_id == 0)
             animation_data.Clear();
         currFrame = new FrameData(size, frame_id, frames);
-        structureSize = size;
         frame_amount = frames;
         if (frame_id == 0)
             AnimationController.shouldLoad = true;

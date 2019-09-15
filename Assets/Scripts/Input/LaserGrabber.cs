@@ -253,9 +253,9 @@ public class LaserGrabber : MonoBehaviour
                 // deactivate the laser
                 if (laser.activeSelf)
                     laser.SetActive(false);
-
+                
                 // change the boundingbox to the new extension of the structure, if an atom has been attached
-                if (ctrlMaskName == "AtomLayer")
+                if (ctrlMaskName == "AtomLayer" && (!ModeData.currentMode.showTrashcan || !TrashCan.inst.atomInCan))
                 {
                     // tell Python the new position
                     OrdersToPython.SetNewPosition(StructureData.atomInfos[attachedObject.GetComponent<AtomID>().ID]);
@@ -264,8 +264,26 @@ public class LaserGrabber : MonoBehaviour
                     // set the boundingbox so that it encloses the structure
                     StructureData.inst.UpdateBoundingbox();
                 }
+                
+                if (ModeData.currentMode.showTrashcan)
+                {
+                    if (ctrlMaskName == "AtomLayer")
+                    {
+                        // check that there are more than 2 atoms left (todo: why 2 not 1?) (because this atom would have no temperature/force/velocity
+                        // so it can't build a ham_lammps function)
+                        if (TrashCan.inst.atomInCan && StructureData.atomInfos.Count >= 3)
+                        {
+                            //DestroyAtom();
+                            OrdersToPython.inst.ExecuteOrder(
+                                "Destroy Atom Nr " + attachedObject.GetComponent<AtomID>().ID);
+                        }
 
-                ReleaseObject();
+                        // deactivate the trash can
+                        TrashCan.inst.gameObject.SetActive(false);
+                    }
+                }
+                // detach the attached object
+                attachedObject = null;
             }
         }
         else
@@ -533,8 +551,10 @@ public class LaserGrabber : MonoBehaviour
         // set the position of the attached object to the new position it should have
         attachedObject.transform.position = newPos;
         if (ctrlMaskName == "AtomLayer")
+        {
             // update the data how the atom has been moved by the player 
             StructureData.atomCtrlPos[attachedObject.GetComponent<AtomID>().ID] += newPos - oldPos;
+        }
         else if (ctrlMaskName == "BoundingboxLayer")
             // update the data how the structure has been moved by the player 
             StructureData.inst.structureCtrlPos += newPos - oldPos;
@@ -633,26 +653,6 @@ public class LaserGrabber : MonoBehaviour
         objToHandPos = attachedObject.transform.position - transform.position;
         // would be needed to remember the rotation at the beginning of the grab
         // objToHandRot = attachedObject.transform.eulerAngles - transform.eulerAngles;
-    }
-
-    private void ReleaseObject()
-    {
-        if (ModeData.currentMode.showTrashcan)
-        {
-            if (TrashCan.inst.atomInCan && ctrlMaskName == "AtomLayer")
-                // check that there isn't just one atom left, because this atom would have no temperature/force/velocity,
-                // so it can't build a ham_lammps function
-                if (StructureData.atomInfos.Count >= 3)
-                    //DestroyAtom();
-                    OrdersToPython.inst.ExecuteOrder("Destroy Atom Nr " + attachedObject.GetComponent<AtomID>().ID);
-
-            if (ctrlMaskName == "AtomLayer")
-                // deactivate the trash can
-                TrashCan.inst.gameObject.SetActive(false);
-        }
-
-        // detach the attached object
-        attachedObject = null;
     }
     
     public void ShowLaser(RaycastHit hit) 

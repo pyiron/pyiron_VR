@@ -78,7 +78,7 @@ public class OrdersToPython : MonoBehaviour
     private void DestroyAtom(int atomId)
     {
         // check if the given atomId is less big than the maximum amount of atoms in the structure
-        if (atomId >= StructureData.structureSize)
+        if (atomId >= StructureData.atomInfos.Count)
         {
             SendError("The Atom ID has to be less big than the maximum amount of atoms in the structure!");
             return;
@@ -86,15 +86,22 @@ public class OrdersToPython : MonoBehaviour
 
         // send Python/Pyiron the order to destroy the atom
         PythonExecuter.SendOrder(PythonScript.Executor, PythonCommandType.eval, "self.destroy_atom(" + atomId + ")");
-        // delete the atom and send python/pyiron that the atom should be excluded in the structure
+
+        // update the data of the structure
         StructureData.waitForDestroyedAtom = true;
-        // remove the atom in the list of the properties of each atom
-        StructureData.atomInfos.RemoveAt(LaserGrabber.instances[(int) Layer.Atom].attachedObject.GetComponent<AtomID>().ID);
         // decrease the atomId of the atoms which have a higher ID than the deleted one by one
-        for (int i = LaserGrabber.instances[(int) Layer.Atom].attachedObject.GetComponent<AtomID>().ID; i < StructureData.structureSize - 2; i++)
-            StructureData.atomInfos[i + 1].m_ID -= 1;
+        for (int i = atomId + 1;
+            i < StructureData.atomInfos.Count; i++)
+        {
+            print("i is " + i);
+            StructureData.atomInfos[i].m_ID -= 1;
+            StructureData.atomInfos[i].m_transform.GetComponent<AtomID>().ID -= 1;
+        }
+        // remove the atom in the list of the properties of each atom
+        StructureData.atomInfos.RemoveAt(atomId);
+
         // remove the atom in the list which stores the data how the player has removed each atom
-        StructureData.atomCtrlPos.RemoveAt(LaserGrabber.instances[(int) Layer.Atom].attachedObject.GetComponent<AtomID>().ID);
+        StructureData.atomCtrlPos.RemoveAt(atomId);
         // destroy the gameobject of the destroyed atom. This way, importStructure won't destroy all atoms and load them new
         Destroy(LaserGrabber.instances[(int) Layer.Atom].attachedObject);
     }
@@ -118,14 +125,6 @@ public class OrdersToPython : MonoBehaviour
     public static void RequestAllForces()
     {
         PythonExecuter.SendOrder(PythonScript.Executor, PythonCommandType.eval, "self.send_all_forces()");
-    }
-
-    public static void SetNewPositions()
-    {
-        foreach (AtomInfos atomInfo in StructureData.atomInfos)
-        {
-            SetNewPosition(atomInfo);
-        }
     }
 
     public static void SetNewPosition(AtomInfos atomInfo)

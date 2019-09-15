@@ -1,3 +1,4 @@
+Careful: Data might be wrong!
 UnityManager:
 self.pr = self.pr[val] (~0.3 in Garching), self.pr[val] is of type ham_lammps
 !self.pr = job.copy_to(pr) (~5s on Laptop, 0.6 in Garching)
@@ -9,10 +10,3 @@ self.pr.run() (~0.53s, md) (interactive jobs!)
 self.pr.run() (~0.47s, minimize)
 
 Why is Unity needing so much more time than Python? Because the Time in Python is incorrect!
-Send data:
-Unity: 3.7s
-Python: 1.2s
-
-Lampps_calc:
-Unity Load time: 3.2s
-Python: 1.5s
