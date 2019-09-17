@@ -90,20 +90,20 @@ public class PeriodensystemButtonManager : MonoBehaviour, IBeginDragHandler, IDr
 		m_objectName = this.gameObject.name;
 		m_shortname = m_objectName.Remove (0, 7);
 //		print (m_shortname);
-		string fullname = LED.getFullName(m_shortname);
-		Color atomColor = LED.getColour (m_shortname);
+		string fullname = LocalElementData.GetFullName(m_shortname);
+		Color atomColor = LocalElementData.GetColour (m_shortname);
 
 //		Instantiate(curAtomObject);
 		curAtomObject = Instantiate(curAtomObject, new Vector3(0,0,0), Quaternion.identity) as GameObject;
-		curAtomObject.AddComponent<Atom> ();
+		curAtomObject.AddComponent<AtomID> ();
 		curAtomObject.GetComponent<Atom> ().m_atomID = 1;
 		curAtomObject.GetComponent<Atom> ().m_shortName = this.gameObject.name;
 		curAtomObject.GetComponent<Atom> ().m_fullName = fullname;
 		curAtomObject.GetComponent<Atom> ().m_color = atomColor; 
 		curAtomObject.GetComponent<Atom>().material.color = atomColor;
-		curAtomObject.transform.position = new Vector3 (0, 0, 0);*/
+		curAtomObject.transform.position = new Vector3 (0, 0, 0);
 		//Output this to console when the Button is clicked
-//		Debug.Log("You have clicked the button!");
+//		Debug.Log("You have clicked the button!");*/
 	}
 
 

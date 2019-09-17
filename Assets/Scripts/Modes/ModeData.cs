@@ -144,9 +144,9 @@ public class ModeData : MonoBehaviour
                                               currentMode.mode == Modes.Minimize || currentMode.mode == Modes.View);
         InfoMenuController.inst.SetState(currentMode.showInfo);
         //StructureMenuController.inst.transform.parent.gameObject.SetActive(currentMode.mode == Modes.Explorer);
-        StructureCreatorMenuController.inst.SetState(currentMode.showPeriodicSystem);
-        if (currentMode.showPeriodicSystem)
-            StructureCreatorMenuController.inst.OnModeChange();
+        //StructureCreatorMenuController.inst.SetState(currentMode.showPeriodicSystem);
+        //if (currentMode.showPeriodicSystem)
+        //    StructureCreatorMenuController.inst.OnModeChange();
         PeriodicSysMenuController.inst.SetState(currentMode.showPeriodicSystem);
     }
 }

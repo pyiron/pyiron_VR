@@ -269,9 +269,9 @@ public class LaserGrabber : MonoBehaviour
                 {
                     if (ctrlMaskName == "AtomLayer")
                     {
-                        // check that there are more than 2 atoms left (todo: why 2 not 1?) (because this atom would have no temperature/force/velocity
+                        // check that there are atoms left, which would cause pyiron to fail
                         // so it can't build a ham_lammps function)
-                        if (TrashCan.inst.atomInCan && StructureData.atomInfos.Count >= 3)
+                        if (TrashCan.inst.atomInCan && StructureData.atomInfos.Count >= 1)
                         {
                             //DestroyAtom();
                             OrdersToPython.inst.ExecuteOrder(

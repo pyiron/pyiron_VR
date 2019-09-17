@@ -214,24 +214,33 @@ public class TCPClient : MonoBehaviour
 		try
 		{
 			NetworkStream stream = socketConnection.GetStream();
-			if (stream.CanWrite) {                 
+			if (stream.CanWrite)
+			{
 				string clientMessage = exType + ":" + msg;
 				clientMessage = clientMessage.Length + ";" + clientMessage;
 				// Convert string message to byte array.                 
-				byte[] clientMessageAsByteArray = Encoding.ASCII.GetBytes(clientMessage); 				
+				byte[] clientMessageAsByteArray = Encoding.ASCII.GetBytes(clientMessage);
 				// Write byte array to socketConnection stream.                 
-				stream.Write(clientMessageAsByteArray, 0, clientMessageAsByteArray.Length);  
-				Debug.Log(Time.time + ": Client sent his message " + msg);  
+				stream.Write(clientMessageAsByteArray, 0, clientMessageAsByteArray.Length);
+				Debug.Log(Time.time + ": Client sent his message " + msg);
 			}
 			else
 			{
 				Debug.LogError("stream not writable");
 				return "Stream not writable";
-			}	
-		} 		
-		catch (SocketException socketException) {             
-			Debug.LogError("Socket exception: " + socketException);      
-			return "Socket Exc: " + socketException;
+			}
+		}
+		catch (SocketException ex)
+		{
+			Debug.LogError("InvalidOperationException: " + ex);
+			ErrorTextController.inst.ShowMsg("Socket exception: " + ex);
+			return "Socket Exc: " + ex;
+		}
+		catch (InvalidOperationException ex)
+		{
+			ErrorTextController.inst.ShowMsg("InvalidOperationException: " + ex);
+			Debug.LogError("InvalidOperationException: " + ex);
+			return "Socket Exc: " + ex;
 		}
 
 		if (!isAsync)

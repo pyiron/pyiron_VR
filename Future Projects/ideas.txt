@@ -1,17 +1,25 @@
+16.9.2019
+1. Don't allow calculating a new lammps when just 2 Atoms are left
+2. Just allow the User to create a structure consisting of one element
+3. Allow the User to create a single new atom
+ -> maybe check if it is in the structure, else forbid it
+4. Allow the User to create a structure of one element 
+
 15.9.2019
 1. Delete Debug prints - DONE
 2. Send changed positions only when they get changed - DONE
-3. try/catch errors in Python and show them in Unity. Maybe undo the last Unity activity
+3. try/catch errors in Python and show them in Unity. - DONE
+4. Maybe undo the last Unity activity 
 
 11.9.2019:
-1. write down which lines of code need a long time (write down the line and time they need)
-2. Test it in Garching
+1. write down which lines of code need a long time (write down the line and time they need) - DONE
+2. Test it in Garching - DONE
 3. Implement loading an empty structure
 4. Implement creating a basic structure after loading an empty structure
 5. Implement the period system for all elements
 
 27.8.2019:
-- increase loading time performance
+- increase loading time performance - DONE
 - use json for data transfer between python and Unity
 (- let controllers vibrate, eg. when pressing buttons or when moving atoms)
 
@@ -25,31 +33,23 @@
 (- implement the animation of the trashcan (some information for this are in the documentation), instead of having the top of the can just being moved to the side)
 - show the periodic boundary condition, and think of the details (show it just when moving an atom?)
 
-- possible structures sometimes not loading
-- bug: false positioning of structure after duplicating and when resizing
+(- bug: false positioning of structure after duplicating and when resizing)
 (- try to get better performance when having many atoms)
 - try to avoid large iterations
-- let the animation be interpolated!!!
-- bring the python program to PEP-8 standard and fix TODOs
-(- try to set the position of the atoms to 0 when they are at pos 0,0000000001 in Python (or give them in numpy units))
-- set the size of MyObjects to 0.3, not the size of the atomStructure
+(- let the animation be interpolated)
+(- bring the python program to PEP-8 standard and fix TODOs)
+(- set the size of MyObjects to 0.3, not the size of the atomStructure)
 (- implement extracting compressed position data in Unity)
-- fix bug that the awake of the lasergrabber is called after the start function of the other scripts 
-  -> let the trashcan deactivate itself, instead of letting the lasergrabber do so 
+(- fix bug that the awake of the lasergrabber is called after the start function of the other scripts 
+  -> let the trashcan deactivate itself, instead of letting the lasergrabber do so)
 - fix bug that just one controller (the left) can activate both ctrl_printers and that just the left controller can change the modes, but backwards, which happens sometimes if not both controllers are activated at the same time
-- set always the same controller to right and left
+  -> might be specific to the Vive
 (- after the structure has been duplicated the whole structure gets moved away one time.)
-- bug: false position of the cellbox after it has been moved a bit before the structure has loaded
-- fix bug that sometimes there are error messages "MissingReferenceException: The object of type 'Transform' has been destroyed but you are still trying to access it." after deleting atoms, most likely because the wrong atom has been destroyed
 (- check what happens if an controller deactivates itself after not being used for too long (could maybe happen in a presentation))
 
-- fix bug that the trigger Input of one controller gets sometimes send to both controllers, while the other controller can't do anything (not even use the touchpad I think), if they are initialised in the wrong order
-- Make Unity send an order to Python when at least one atom has been removed
-- make functions in Unity for each order which can be send to Python (other functions than DestroyAtom have to be implemented)
-- Let Unity send an order to Python with the current frame requesting the force data (of one atom or all) when being in info mode, else let it not send the force data
-- Let Python send the amount of frames in the beginning
+(- fix bug that the trigger Input of one controller gets sometimes send to both controllers, while the other controller can't do anything (not even use the touchpad I think), if they are initialised in the wrong order
+  -> might be Vive specific)
 - stop the 3D text from shining through other objects
-(- Stop the error messages which pop up if the program has been started while one of the controllers was inactive.)
 
 - use this to start the 3D Beamer in the shell: *cd to Desktop* VABuild7_18VRAndBeamer.exe -vrmode Stereo
 

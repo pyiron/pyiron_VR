@@ -22,6 +22,7 @@ public class StructureCreatorMenuController : MenuController
     {
         if (!gui_created)
         {
+            gui_created = true;
             // PythonExecuter.SendOrder(PythonScript.Executor, PythonCommandType.eval, "self.send_args_create_ase_bulk()");
         }
     }

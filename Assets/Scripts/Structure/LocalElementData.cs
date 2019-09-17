@@ -118,15 +118,15 @@ public class LocalElementData : MonoBehaviour {
     };
 
     // the following functions allow to access the properties of the elements
-    public string GetCasNumber(string shortName) {
+    public static string GetCasNumber(string shortName) {
         return m_localElementDict[shortName].m_casNumber;
     }
 
-    public string GetFullName(string shortName) {
+    public static string GetFullName(string shortName) {
         return m_localElementDict[shortName].m_fullName;
     }
 
-    public int GetOrdinalNumber(string shortName) {
+    public static int GetOrdinalNumber(string shortName) {
         return m_localElementDict[shortName].m_ordinalNumber;
     }
 
