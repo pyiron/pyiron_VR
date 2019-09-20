@@ -38,9 +38,7 @@ public class AnimationController : MonoBehaviour {
             FrameData frameData = StructureData.GetCurrFrameData();
             if (shouldLoad && frameData?.cellbox != null)
             {
-                print(Time.time + ": Received smth"); 
                 ImportStructure.inst.LoadStructure();
-                print(Time.time + ": After load"); 
                 shouldLoad = false;
             }}
     }

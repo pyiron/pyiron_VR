@@ -169,7 +169,7 @@ public class ImportStructure : MonoBehaviour {
                 StructureData.atomInfos[atom.id] = new AtomInfos(atom.id, atom.type, currentAtom.transform);
             else
             {
-                // register the atom in the overwiev of StructureData
+                // register the atom in the overview of StructureData
                 StructureData.atomInfos.Add(new AtomInfos(atom.id, atom.type, currentAtom.transform));
             }
         }

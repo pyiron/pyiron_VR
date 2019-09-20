@@ -45,7 +45,7 @@ public class LaserGrabber : MonoBehaviour
     // shows if the current lammps is a calc_md or calc_minimize
     private static bool lammpsIsMd;
     // shows whether the positions of the atoms are still the same es they were when the last ham_lammps was created
-    private static bool positionsHaveChanged;
+    public static bool shouldReloadAnim;
     // a timer, which counts when the program should go a frame forward or backwards, when keeping the one frame forward button pressed
     private float moveOneFrameTimer = -1;
     // the time until the program should go a frame forward or backwards, when keeping the "one frame forward button" pressed
@@ -436,28 +436,26 @@ public class LaserGrabber : MonoBehaviour
         bool temperatureHasChanged = Thermometer.inst.SendTemp();
 
         // check if the positions of any atom has been changed since the last animation has been started
-        if (positionsHaveChanged || lammpsIsMd != ModeData.currentMode.showTemp) // add this: || PythonExecuter.frame != 0    to let the program load a new anima if the frame has changed
+        if (shouldReloadAnim || lammpsIsMd != ModeData.currentMode.showTemp) // add this: || PythonExecuter.frame != 0    to let the program load a new anima if the frame has changed
         {
             // send the new positions to Python
-            positionsHaveChanged = true;
-            // send Python the new positions of all atoms
-            //OrdersToPython.SetNewPositions();
+            shouldReloadAnim = true;
         }
 
-        print("Loading Anim if " + firstAnimStart + " or " + temperatureHasChanged + " or " + positionsHaveChanged);
+        print("Loading Anim if " + firstAnimStart + " or " + temperatureHasChanged + " or " + shouldReloadAnim);
         // when loading the first animation, show Python that it's the first time, so that it can check if there is already a loaded ham_lammps
         if (firstAnimStart)
         {
             LoadNewLammps("self.create_new_lammps");// self.calculate");
             firstAnimStart = false;
-            positionsHaveChanged = false;
+            shouldReloadAnim = false;
         }
         // tell Python to create a new ham_lammps because the structure or it's temperature has changed
-        else if (temperatureHasChanged || positionsHaveChanged)
+        else if (temperatureHasChanged || shouldReloadAnim)
         {
             LoadNewLammps("self.create_new_lammps");
             // remember that the ham_lammps is now according to the current structure
-            positionsHaveChanged = false;
+            shouldReloadAnim = false;
         }
         // load a new ham_lammps if the current ham_lammps is for md and the animation for minimize is needed or vice versa
         //else if (lammpsIsMd != MD.modes[MD.activeMode].showTemp)
@@ -642,7 +640,7 @@ public class LaserGrabber : MonoBehaviour
             // spawn the trashcan
             TrashCan.inst.ActivateCan();
 
-            positionsHaveChanged = true;
+            shouldReloadAnim = true;
             // deactivate the animation
             AnimationController.RunAnim(false);
         }

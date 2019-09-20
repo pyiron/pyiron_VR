@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class StructureCreatorMenuController : MenuController
@@ -8,6 +9,7 @@ public class StructureCreatorMenuController : MenuController
     internal static StructureCreatorMenuController inst;
     public Button CreateBtn;
     public GameObject AtomAmountPref;
+    public GameObject AddElementSign;
     private List<GameObject> elements = new List<GameObject>();
     private bool gui_created = false;
     internal static bool should_build_gui = false;
@@ -37,6 +39,9 @@ public class StructureCreatorMenuController : MenuController
             }
             should_build_gui = false;
         }
+
+        // activate the create button if the structure is valid
+        CreateBtn.interactable = !AddElementSign.activeSelf;
     }
 
     public void AddElement(GameObject elm)
@@ -53,6 +58,33 @@ public class StructureCreatorMenuController : MenuController
         {
             btn.onClick.AddListener(delegate { OnButtonClicked(btn); });
         }
+    }
+
+    public void OnCreatStrucBtnClicked(Button btn)
+    {
+        btn.interactable = false;
+        
+        // todo: get the element of the new structure
+        string elm = "Fe";
+        
+        // create the new structure
+        ImportStructure.newImport = true;
+        PythonExecuter.SendOrder(PythonScript.Executor, PythonCommandType.eval, 
+            "self.create_new_struc(" + AnimationController.frame + ", '" + elm + "', True)");
+        
+        
+        
+        /*string elementData = "";
+        foreach (GameObject go in elements)
+        {
+            foreach (Text txt in go.GetComponentsInChildren<Text>())
+                if (txt.name.Contains("Symbol"))
+                    elementData += txt.text;
+            Destroy(go);
+        }
+        ImportStructure.newImport = true;
+        PythonExecuter.SendOrder(PythonScript.Executor, PythonCommandType.eval, 
+            "self.create_new_struc('" + elementData + "', True)");*/
     }
 
     public void OnButtonClicked(Button btn)

@@ -18,19 +18,17 @@ public class TCPClient : MonoBehaviour
 	private Thread clientReceiveThread;
 
 	// might crash if set to false at the moment
-	public static bool isAsync = true;
-	// the ip address of the server. Warning: testing out multiple servers can lead to severe loading times (eg. 90s)
-	private string[] HOSTS = {"130.183.226.32"}; //"192.168.0.198", "192.168.0.197", "127.0.0.1", "130.183.212.100", "130.183.212.82"};
+	public static bool isAsync = false;
+	// the ip address of the server. Warning: testing out multiple servers can lead to long loading times
+	//private string[] HOSTS = {"130.183.226.32"}; //"192.168.0.198", "192.168.0.197", "127.0.0.1", "130.183.212.100", "130.183.212.82"};
 
-	private string HOST = "130.183.226.32";
+	//private string HOST = "130.183.226.32";
 	// private const string HOST = "192.168.0.196";// "localhost"
-	private const int PORT = 65432;
+	public const int PORT = 65432;
 	
 	private static int BLOCKSIZE = 1024;
 	// buffer all incoming data. Needed to deal with the TCP stream
 	private static String recBuffer = "";
-	public static float st;
-	private bool clientIsStarted;
 	// the last time the program tried to connect to a host
 	private float lastStartTimer;
 	#endregion
@@ -76,29 +74,38 @@ public class TCPClient : MonoBehaviour
 	{
 		print("Trying to connect to " + host);
 		// after connecting to a server connecting to another one is not possible
-		if (clientIsStarted) return;
+		if (socketConnection != null) return;
 		
 		if (PythonExecuter.useServer)
 		{
 			try
 			{
-				socketConnection = new TcpClient(host, PORT);
-				clientIsStarted = true;
-				ModeData.inst.SetMode(Modes.Explorer);
-				print("Successfully connected with HOST " + host);
+				socketConnection = new TcpClient();
+				if (!socketConnection.ConnectAsync(host, PORT).Wait(1000))
+				{	
+					socketConnection.Close();
+					print(socketConnection);
+					socketConnection = null;
+					// connection failure due to timeout
+					ErrorTextController.inst.ShowMsg("Couldn't connect with Host " + host);
+					return;
+				}
 			}
 			catch
 			{
+				// connection failure due to the server not being available
 				ErrorTextController.inst.ShowMsg("Couldn't connect with Host " + host);
 				return;
 			}
+			
+			ModeData.inst.SetMode(Modes.Explorer);
+			print("Successfully connected with HOST " + host);
 			
 			if (isAsync)
 			{
 				try
 				{
-					clientReceiveThread = new Thread(ListenForData);
-					clientReceiveThread.IsBackground = true;
+					clientReceiveThread = new Thread(ListenForData) {IsBackground = true};
 					clientReceiveThread.Start();
 				}
 				catch (Exception e)
@@ -152,7 +159,7 @@ public class TCPClient : MonoBehaviour
 	{			
 		Byte[] block = new Byte[BLOCKSIZE + 1];
 		// Read incoming stream into byte array. 
-		int len = stream.Read(block, 0, BLOCKSIZE);
+		int len = stream.ReadAsync(block, 0, BLOCKSIZE).Result;
 		// Convert byte array to string message. 
 		if (len == 0) return "";
 		block[len] = 0;
@@ -210,7 +217,6 @@ public class TCPClient : MonoBehaviour
 			return "No socket connection";         
 		}
 
-		st = Time.time;
 		try
 		{
 			NetworkStream stream = socketConnection.GetStream();

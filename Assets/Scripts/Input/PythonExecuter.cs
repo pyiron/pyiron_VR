@@ -406,11 +406,11 @@ public class PythonExecuter : MonoBehaviour {
                 type = type != PythonCommandType.exec ? PythonCommandType.eval : PythonCommandType.exec;
             }
 
-            ReadInput(TCPClient.SendMsgToPython(type, fullOrder + "%"));
-            if (!TCPClient.isAsync)
+            ReadInput(TCPClient.SendMsgToPython(type, fullOrder));
+            /*if (!TCPClient.isAsync)
             {
                 incomingChanges += 1;
-            }
+            }*/
         }
         else
         {

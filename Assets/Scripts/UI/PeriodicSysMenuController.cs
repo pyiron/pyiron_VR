@@ -11,7 +11,7 @@ public class PeriodicSysMenuController : MenuController {
     public Toggle tog;
     public Text explanation;
     // the state of the toggle, deciding wether a single atom or a structure should be created
-    private bool togState;
+    public bool togState;
 
     private void Awake()
     {
