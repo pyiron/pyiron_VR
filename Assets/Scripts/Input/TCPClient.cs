@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using HTC.UnityPlugin.Vive;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,9 +17,13 @@ public class TCPClient : MonoBehaviour
 	#region private members 	
 	private static TcpClient socketConnection; 	
 	private Thread clientReceiveThread;
+	
+	// needed for asynchronous (lag free) connecting to the server
+	private Task connStatus;
+	private float connTimer = 1;
 
-	// might crash if set to false at the moment
-	public static bool isAsync = false;
+	// being set to false will lead to Unity hanging while loading
+	public static bool isAsync = true;
 	// the ip address of the server. Warning: testing out multiple servers can lead to long loading times
 	//private string[] HOSTS = {"130.183.226.32"}; //"192.168.0.198", "192.168.0.197", "127.0.0.1", "130.183.212.100", "130.183.212.82"};
 
@@ -40,6 +45,38 @@ public class TCPClient : MonoBehaviour
 		inst = this;
 	}
 
+	private void Update()
+	{
+		if (connStatus != null)
+		{
+			if (connTimer > 0)
+			{
+				connTimer -= Time.deltaTime;
+				if (connStatus.IsFaulted || connStatus.IsCanceled)
+				{
+					// error
+					connTimer = 1;
+					print("Connection is Faulted: " + connStatus.IsFaulted);
+					print("Connection is Canceled: " + connStatus.IsCanceled);
+					ConnectionError();
+				}
+				else if (connStatus.IsCompleted)
+				{
+					// success
+					connTimer = 1;
+					print("Successfully connected to the server");
+					ConnectionSuccess();
+				}
+			}
+			else
+			{
+				// the server didn't respond in time
+				connTimer = 1;
+				ConnectionTimeout();
+			}
+		}
+	}
+
 	private void OnApplicationQuit()
 	{
 		CloseServer();
@@ -52,6 +89,8 @@ public class TCPClient : MonoBehaviour
 	{
 		return socketConnection != null;
 	}
+
+	#region ConnectToServer
 
 	// called by the Input Field for the server address on the network panel
 	public void ConnectTo(InputField inputField)
@@ -81,41 +120,55 @@ public class TCPClient : MonoBehaviour
 			try
 			{
 				socketConnection = new TcpClient();
-				if (!socketConnection.ConnectAsync(host, PORT).Wait(1000))
-				{	
-					socketConnection.Close();
-					print(socketConnection);
-					socketConnection = null;
-					// connection failure due to timeout
-					ErrorTextController.inst.ShowMsg("Couldn't connect with Host " + host);
-					return;
-				}
+				connStatus = socketConnection.ConnectAsync(host, PORT);
 			}
 			catch
 			{
-				// connection failure due to the server not being available
-				ErrorTextController.inst.ShowMsg("Couldn't connect with Host " + host);
-				return;
+				ConnectionError();
 			}
-			
-			ModeData.inst.SetMode(Modes.Explorer);
-			print("Successfully connected with HOST " + host);
-			
-			if (isAsync)
-			{
-				try
-				{
-					clientReceiveThread = new Thread(ListenForData) {IsBackground = true};
-					clientReceiveThread.Start();
-				}
-				catch (Exception e)
-				{
-					Debug.Log("On client connect exception " + e);
-				}
-			}
-			PythonExecuter.SendOrder(PythonScript.None, PythonCommandType.eval, "self.send_group()");
 		}
 	}
+
+	private void ConnectionSuccess()
+	{
+		connStatus = null;
+		ModeData.inst.SetMode(Modes.Explorer);
+			
+		if (isAsync)
+		{
+			try
+			{
+				clientReceiveThread = new Thread(ListenForData) {IsBackground = true};
+				clientReceiveThread.Start();
+			}
+			catch (Exception e)
+			{
+				Debug.Log("On client connect exception " + e);
+			}
+		}
+		PythonExecuter.SendOrder(PythonScript.None, PythonCommandType.eval, "self.send_group()");
+	}
+
+	private void ConnectionError()
+	{
+		// connection failure
+		print("Failed to connect");
+		connStatus = null;
+		socketConnection = null;
+		ErrorTextController.inst.ShowMsg("Timeout: Couldn't connect to the server.");
+	}
+
+	private void ConnectionTimeout()
+	{
+		// connection failure caused by timeout
+		print("Failed to connect due to timeout");
+		connStatus = null;
+		socketConnection.Close();
+		socketConnection = null;
+		ErrorTextController.inst.ShowMsg("Couldn't connect to the server");
+	}
+
+	#endregion
 
 	#region Async
 
@@ -175,7 +228,8 @@ public class TCPClient : MonoBehaviour
 		int headerLen;
 		while (true)
 		{
-			recBuffer += GetMsg(stream);
+			string newMsg = GetMsg(stream);
+			recBuffer += newMsg;
 			if ((headerLen = recBuffer.IndexOf(';')) != -1)
 			{
 				break;
@@ -184,6 +238,12 @@ public class TCPClient : MonoBehaviour
 			if (!isAsync || !ProgramSettings.programIsRunning) return "";
 			// todo: busy waiting for the input might be bad for the performance. Some tests should be done with
 			// larger structures or at least when implementing interactive structures
+
+			// this might help a little
+			if (newMsg.Length == 0)
+			{
+				Thread.Sleep(10);
+			}
 		}
 
 		String header = recBuffer.Substring(0, headerLen);
@@ -227,7 +287,7 @@ public class TCPClient : MonoBehaviour
 				// Convert string message to byte array.                 
 				byte[] clientMessageAsByteArray = Encoding.ASCII.GetBytes(clientMessage);
 				// Write byte array to socketConnection stream.                 
-				stream.Write(clientMessageAsByteArray, 0, clientMessageAsByteArray.Length);
+				stream.WriteAsync(clientMessageAsByteArray, 0, clientMessageAsByteArray.Length);
 				Debug.Log(Time.time + ": Client sent his message " + msg);
 			}
 			else
@@ -259,7 +319,10 @@ public class TCPClient : MonoBehaviour
 
 	public static void CloseServer()
 	{
-		string rec = SendMsgToPython(PythonCommandType.exec,"end server");
-		print("Closed the server: " + rec);
+		if (socketConnection != null)
+		{
+			string rec = SendMsgToPython(PythonCommandType.exec, "end server");
+			print("Closed the server: " + rec);
+		}
 	}
 }
