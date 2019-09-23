@@ -180,7 +180,6 @@ public class TCPClient : MonoBehaviour
 	{
 		// connection failure caused by timeout
 		print("Failed to connect due to timeout");
-		connStatus.Dispose();
 		connStatus = null;
 		socketConnection.Close();
 		socketConnection = null;
@@ -238,12 +237,10 @@ public class TCPClient : MonoBehaviour
 			socketReadTask = stream.ReadAsync(block, 0, BLOCKSIZE);
 		}
 
-		while (!socketReadTask.IsCompleted)
+		if (!socketReadTask.IsCompleted)
 		{
-			print("Still waiting ");
 			return "";
 		}
-		// todo: why is block in ascii ""?
 		int len = socketReadTask.Result;
 		socketReadTask.Dispose();
 		socketReadTask = null;
@@ -259,7 +256,16 @@ public class TCPClient : MonoBehaviour
 		// get the input stream
 		if (socketReadTask == null)
 		{
-			stream = socketConnection.GetStream();
+			try
+			{
+				stream = socketConnection.GetStream();
+			} catch (InvalidOperationException e)
+			{
+				Debug.LogError(e.Message + "\n" + e.StackTrace);
+				ErrorTextController.inst.ShowMsg("Couldn't read the TCP stream. Check that you are still connected to" +
+				                                 " the internet!");
+				return "";
+			}
 		}
 
 		// get the length of the message that will be send afterwards
