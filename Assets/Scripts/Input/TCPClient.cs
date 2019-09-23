@@ -10,16 +10,13 @@ using UnityEngine.UI;
 public class TCPClient : MonoBehaviour
 {
 	public static TCPClient inst;
-	// the panels which should be deactivated/activated after connecting successfully to a host
-	//public GameObject NetworkPanel;
-	//public GameObject ExplorerPanel;
 	
 	#region private members 	
 	private static TcpClient socketConnection; 	
 	private Thread clientReceiveThread;
 	
 	// needed for asynchronous (lag free) connecting to the server
-	private Task connStatus;
+	public static Task connStatus;
 	private float connTimer = 1;
 
 	// being set to false will lead to Unity hanging while loading
@@ -47,6 +44,7 @@ public class TCPClient : MonoBehaviour
 
 	private void Update()
 	{
+		// if the TCPClient is trying to connect to the server, check if the connection could be established
 		if (connStatus != null)
 		{
 			if (connTimer > 0)
@@ -74,6 +72,13 @@ public class TCPClient : MonoBehaviour
 				connTimer = 1;
 				ConnectionTimeout();
 			}
+		}
+
+		// after sending a message to Python, check if a response arrived
+		if (PythonExecuter.IsLoading())
+		{
+			
+			// todo
 		}
 	}
 
@@ -112,8 +117,8 @@ public class TCPClient : MonoBehaviour
 	public void ConnectWithHost(string host)
 	{
 		print("Trying to connect to " + host);
-		// after connecting to a server connecting to another one is not possible
-		if (socketConnection != null) return;
+		// after connecting to a server or while trying to connect to one, connecting to another one is not possible
+		if (socketConnection != null || connStatus != null) return;
 		
 		if (PythonExecuter.useServer)
 		{
@@ -305,7 +310,8 @@ public class TCPClient : MonoBehaviour
 		catch (InvalidOperationException ex)
 		{
 			ErrorTextController.inst.ShowMsg("InvalidOperationException: " + ex);
-			Debug.LogError("InvalidOperationException: " + ex);
+			Debug.LogError("InvalidOperationException: " + ex + "\n" +
+			               "Check that the server is still running and you have internet connection");
 			return "Socket Exc: " + ex;
 		}
 
