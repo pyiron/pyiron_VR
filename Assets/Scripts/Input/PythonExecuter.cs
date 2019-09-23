@@ -163,6 +163,12 @@ public class PythonExecuter : MonoBehaviour {
         ReadInput(e.Data);
     }
 
+    // can be called by the TCPServer when receiving a new msg
+    public void ReadReceivedInput()
+    {
+        ReadInput(TCPClient.returnedMsg);
+    }
+
     public static void ReadInput(string data)
     {
         print(data);

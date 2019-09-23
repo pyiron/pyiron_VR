@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -12,15 +13,25 @@ public class TCPClient : MonoBehaviour
 	public static TCPClient inst;
 	
 	#region private members 	
-	private static TcpClient socketConnection; 	
+	private static TcpClient socketConnection;
+	private static NetworkStream stream;
 	private Thread clientReceiveThread;
 	
 	// needed for asynchronous (lag free) connecting to the server
 	public static Task connStatus;
 	private float connTimer = 1;
+	
+	// the List of functions and scripts the Update function should return received messages to
+	private static List<String> returnFunctions = new List<string>();
+	private static List<MonoBehaviour> returnScripts = new List<MonoBehaviour>();
+	public static string returnedMsg;
+	// a buffer for the received data
+	private static Byte[] block;
+	// the task waiting for new data
+	private static Task<int> socketReadTask;
 
 	// being set to false will lead to Unity hanging while loading
-	public static bool isAsync = true;
+	public static bool isAsync = false;
 	// the ip address of the server. Warning: testing out multiple servers can lead to long loading times
 	//private string[] HOSTS = {"130.183.226.32"}; //"192.168.0.198", "192.168.0.197", "127.0.0.1", "130.183.212.100", "130.183.212.82"};
 
@@ -75,10 +86,10 @@ public class TCPClient : MonoBehaviour
 		}
 
 		// after sending a message to Python, check if a response arrived
-		if (PythonExecuter.IsLoading())
+		if (returnFunctions.Count > 0)
 		{
-			
-			// todo
+			// check if new data has arrived
+			HandleInput();
 		}
 	}
 
@@ -136,6 +147,7 @@ public class TCPClient : MonoBehaviour
 
 	private void ConnectionSuccess()
 	{
+		connStatus.Dispose();
 		connStatus = null;
 		ModeData.inst.SetMode(Modes.Explorer);
 			
@@ -158,6 +170,7 @@ public class TCPClient : MonoBehaviour
 	{
 		// connection failure
 		print("Failed to connect");
+		connStatus.Dispose();
 		connStatus = null;
 		socketConnection = null;
 		ErrorTextController.inst.ShowMsg("Timeout: Couldn't connect to the server.");
@@ -167,6 +180,7 @@ public class TCPClient : MonoBehaviour
 	{
 		// connection failure caused by timeout
 		print("Failed to connect due to timeout");
+		connStatus.Dispose();
 		connStatus = null;
 		socketConnection.Close();
 		socketConnection = null;
@@ -215,9 +229,25 @@ public class TCPClient : MonoBehaviour
 
 	private static string GetMsg(NetworkStream stream)
 	{			
-		Byte[] block = new Byte[BLOCKSIZE + 1];
+		
 		// Read incoming stream into byte array. 
-		int len = stream.ReadAsync(block, 0, BLOCKSIZE).Result;
+		//int len = stream.Read(block, 0, BLOCKSIZE);
+		if (socketReadTask == null)
+		{
+			block = new Byte[BLOCKSIZE + 1];
+			socketReadTask = stream.ReadAsync(block, 0, BLOCKSIZE);
+		}
+
+		while (!socketReadTask.IsCompleted)
+		{
+			print("Still waiting ");
+			return "";
+		}
+		// todo: why is block in ascii ""?
+		int len = socketReadTask.Result;
+		socketReadTask.Dispose();
+		socketReadTask = null;
+		
 		// Convert byte array to string message. 
 		if (len == 0) return "";
 		block[len] = 0;
@@ -227,13 +257,17 @@ public class TCPClient : MonoBehaviour
 	private static string HandleInput()
 	{
 		// get the input stream
-		NetworkStream stream = socketConnection.GetStream();
-		
+		if (socketReadTask == null)
+		{
+			stream = socketConnection.GetStream();
+		}
+
 		// get the length of the message that will be send afterwards
 		int headerLen;
 		while (true)
 		{
 			string newMsg = GetMsg(stream);
+			if (newMsg == "" && !isAsync) return "";
 			recBuffer += newMsg;
 			if ((headerLen = recBuffer.IndexOf(';')) != -1)
 			{
@@ -254,28 +288,38 @@ public class TCPClient : MonoBehaviour
 		String header = recBuffer.Substring(0, headerLen);
 		PythonExecuter.incomingChanges += 1;
 		RemoveString(headerLen + 1);
-		int msg_len = int.Parse(header);
-		if (msg_len == -1) return "";
+		print("Header is " + header);
+		int msgLen = int.Parse(header);
+		if (msgLen == -1) return "";
 		
 		// Receive data until at least the whole message has been received. Additional data will be pufferred
-		String msg = "";
+		//String msg = "";
+		returnedMsg = "";
 		while (true)
 		{
-			if (recBuffer.Length >= msg_len)
+			if (recBuffer.Length >= msgLen)
 			{
-				msg += recBuffer.Substring(0, msg_len - msg.Length);
-				RemoveString(msg.Length);
+				returnedMsg += recBuffer.Substring(0, msgLen - returnedMsg.Length);
+				RemoveString(returnedMsg.Length);
 				break;
 			}
 			recBuffer += GetMsg(stream);
 		}
-		return msg;
+
+		if (returnFunctions.Count > 0)
+		{
+			returnScripts[0].Invoke(returnFunctions[0], 0);
+			returnScripts.RemoveAt(0);
+			returnFunctions.RemoveAt(0);
+		}
+		return returnedMsg;
 	}
 	  	
 	/// <summary> 	
 	/// Send message to server using socket connection. 	
 	/// </summary> 	
-	public static string SendMsgToPython(PythonCommandType exType, string msg)
+	public static string SendMsgToPython(PythonCommandType exType, string msg,
+		MonoBehaviour retScript=null, string retMeth="ReadReceivedInput")
 	{
 		if (socketConnection == null) {     
 			Debug.LogError("No socket connection");
@@ -291,7 +335,8 @@ public class TCPClient : MonoBehaviour
 				clientMessage = clientMessage.Length + ";" + clientMessage;
 				// Convert string message to byte array.                 
 				byte[] clientMessageAsByteArray = Encoding.ASCII.GetBytes(clientMessage);
-				// Write byte array to socketConnection stream.                 
+				// Write byte array to socketConnection stream.    
+				// todo: if WriteAsync is used, it might make sense to wait until it has been executed and check for errors
 				stream.WriteAsync(clientMessageAsByteArray, 0, clientMessageAsByteArray.Length);
 				Debug.Log(Time.time + ": Client sent his message " + msg);
 			}
@@ -317,7 +362,16 @@ public class TCPClient : MonoBehaviour
 
 		if (!isAsync)
 		{
-			return HandleInput();
+			returnFunctions.Add(retMeth);
+			if (retScript == null)
+			{
+				returnScripts.Add(PythonExecuter.inst);
+			}
+			else
+			{
+				returnScripts.Add(retScript);
+			}
+			//return HandleInput();
 		}
 		return "async";
 		// return receive(); 
