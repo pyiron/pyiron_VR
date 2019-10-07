@@ -14,7 +14,7 @@ public class AnimationController : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        if (run_anim && (!waitForLoadedStruc || PythonExecuter.useServer && !TCPClient.isAsync)) // program is stuck while waiting anyway
+        if (run_anim && !waitForLoadedStruc)
         {
             if (Time.time >= next_time)
             {

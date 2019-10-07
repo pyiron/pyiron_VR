@@ -136,7 +136,7 @@ public class ModeData : MonoBehaviour
     private void UpdateMenu()
     {
         NetworkMenuController.inst.SetState(currentMode.showNetwork);
-        StructureMenuController.inst.SetState(currentMode.showExplorer);
+        ExplorerMenuController.inst.SetState(currentMode.showExplorer);
         TemperatureMenuController.inst.SetState(currentMode.showTemp);
         ModeMenuController.inst.SetState(currentMode.mode != Modes.Explorer && currentMode.mode != Modes.Network);
         ModeMenuController.inst.OnModeChange();

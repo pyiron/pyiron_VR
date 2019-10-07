@@ -228,12 +228,12 @@ public class PythonExecuter : MonoBehaviour {
             }
             else
             {
-                print(splittedData + " is not yet implemented!");
+                print(splittedData + " is not implemented!");
             }
         }
-        else if ((new[] {"groups", "nodes", "files"}).Contains(splittedData[0]))
+        else if (new[] {"groups", "nodes", "files"}.Contains(splittedData[0]))
         {
-            StructureMenuController.inst.AddOption((OptionType) Enum.Parse(typeof(OptionType), splittedData[0]),
+            ExplorerMenuController.inst.AddOption((OptionType) Enum.Parse(typeof(OptionType), splittedData[0]),
                 inp.Substring(splittedData[0].Length + 1));
         }
         /*else if (splittedData[0] == "groups")
@@ -357,10 +357,10 @@ public class PythonExecuter : MonoBehaviour {
         }
         else if (splittedData[0] == "path")
         {
-            if (StructureMenuController.currPath != splittedData[1])
+            if (ExplorerMenuController.currPath != splittedData[1])
             {
-                StructureMenuController.currPath = splittedData[1];
-                StructureMenuController.pathHasChanged = true;
+                ExplorerMenuController.currPath = splittedData[1];
+                ExplorerMenuController.pathHasChanged = true;
             }
         }
         else if (splittedData[0] == "")
@@ -391,7 +391,8 @@ public class PythonExecuter : MonoBehaviour {
     /// </summary>
 
     // send the given order to Python, where it will be executed with the exec() command
-    public static void SendOrder(PythonScript script, PythonCommandType type, string order)
+    public static void SendOrder(PythonScript script, PythonCommandType type, string order,
+        MonoBehaviour unityScript=null, string unityMethod="")
     {
         string typeData = type.ToString();
         if (script != PythonScript.None && (type == PythonCommandType.exec || type == PythonCommandType.eval))
@@ -412,7 +413,7 @@ public class PythonExecuter : MonoBehaviour {
                 type = type != PythonCommandType.exec ? PythonCommandType.eval : PythonCommandType.exec;
             }
 
-            ReadInput(TCPClient.SendMsgToPython(type, fullOrder));
+            ReadInput(TCPClient.SendMsgToPython(type, fullOrder, unityScript, unityMethod));
             /*if (!TCPClient.isAsync)
             {
                 incomingChanges += 1;

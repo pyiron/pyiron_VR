@@ -12,7 +12,6 @@ public class TCPClient : MonoBehaviour
 {
 	public static TCPClient inst;
 	
-	#region private members 	
 	private static TcpClient socketConnection;
 	private static NetworkStream stream;
 	private Thread clientReceiveThread;
@@ -20,6 +19,10 @@ public class TCPClient : MonoBehaviour
 	// needed for asynchronous (lag free) connecting to the server
 	public static Task connStatus;
 	private float connTimer = 1;
+
+	// will be increased by 1 each time an order gets send. It functions as a unique id for each order send to Python
+	public static int taskNumIn = 0;
+	public static int taskNumOut = 0;
 	
 	// the List of functions and scripts the Update function should return received messages to
 	private static List<String> returnFunctions = new List<string>();
@@ -44,7 +47,6 @@ public class TCPClient : MonoBehaviour
 	private static String recBuffer = "";
 	// the last time the program tried to connect to a host
 	private float lastStartTimer;
-	#endregion
 
 	#region Monobehaviour Callbacks
 
@@ -281,10 +283,9 @@ public class TCPClient : MonoBehaviour
 			}
 
 			if (!isAsync || !ProgramSettings.programIsRunning) return "";
-			// todo: busy waiting for the input might be bad for the performance. Some tests should be done with
-			// larger structures or at least when implementing interactive structures
+			// todo: some performance tests should be done
 
-			// this might help a little
+			// this might slightly increase the performance
 			if (newMsg.Length == 0)
 			{
 				Thread.Sleep(10);
@@ -294,7 +295,6 @@ public class TCPClient : MonoBehaviour
 		String header = recBuffer.Substring(0, headerLen);
 		PythonExecuter.incomingChanges += 1;
 		RemoveString(headerLen + 1);
-		print("Header is " + header);
 		int msgLen = int.Parse(header);
 		if (msgLen == -1) return "";
 		
@@ -325,7 +325,7 @@ public class TCPClient : MonoBehaviour
 	/// Send message to server using socket connection. 	
 	/// </summary> 	
 	public static string SendMsgToPython(PythonCommandType exType, string msg,
-		MonoBehaviour retScript=null, string retMeth="ReadReceivedInput")
+		MonoBehaviour retScript=null, string retMeth="")
 	{
 		if (socketConnection == null) {     
 			Debug.LogError("No socket connection");
@@ -368,7 +368,12 @@ public class TCPClient : MonoBehaviour
 
 		if (!isAsync)
 		{
+			if (retMeth == "")
+			{
+				retMeth = "ReadReceivedInput";
+			}
 			returnFunctions.Add(retMeth);
+			
 			if (retScript == null)
 			{
 				returnScripts.Add(PythonExecuter.inst);
