@@ -44,7 +44,8 @@ public class PythonExecuter : MonoBehaviour {
     public static float[][] allForces;
     
     // should the server be used for transfer of data or the shell
-    public static bool useServer = true;
+    //public static bool useServer = true;
+    public static ConnectionType connType = ConnectionType.AsyncInvoker;
 
     [Header("Send Data to Python")]
     // the amount of changes the Unity program requested the Python program to do
@@ -67,7 +68,7 @@ public class PythonExecuter : MonoBehaviour {
         // allow float.Parse to parse floats seperated by . correctly
         ci.NumberFormat.CurrencyDecimalSeparator = ".";
 
-        if (!useServer)
+        if (connType == ConnectionType.Shell)
             LoadUnityManager();
         ResetTransferData();
     } 
@@ -161,16 +162,16 @@ public class PythonExecuter : MonoBehaviour {
 
     private static void ReceiveOutput(object sender, DataReceivedEventArgs e)
     {
-        ReadInput(e.Data);
+        HandlePythonMsg(e.Data);
     }
 
     // can be called by the TCPServer when receiving a new msg
     public void ReadReceivedInput()
     {
-        ReadInput(TCPClient.returnedMsg);
+        HandlePythonMsg(TCPClient.returnedMsg);
     }
 
-    public static void ReadInput(string data)
+    public static void HandlePythonMsg(string data)
     {
         print(data);
         //print("Time needed: " + (1.0 + Time.time - TCPClient.st));
@@ -178,7 +179,7 @@ public class PythonExecuter : MonoBehaviour {
         //if (String.Compare(data, "async", StringComparison.CurrentCultureIgnoreCase) == 0) return;
         // remove the "" from the beginning end end if a string got send via the Server
         // TODO: Use json tools instead
-        if (useServer)
+        if (connType != ConnectionType.Shell)
         {
             if (data[0] == '"')
                 data = data.Substring(1, data.Length - 1);
@@ -196,7 +197,7 @@ public class PythonExecuter : MonoBehaviour {
                 }
                 else
                 {
-                    HandleInp(partInp);
+                    HandleMsg(partInp);
                 }
         }
         catch(Exception exc)
@@ -205,7 +206,7 @@ public class PythonExecuter : MonoBehaviour {
         }
     }
 
-    private static void HandleInp(String inp)
+    private static void HandleMsg(String inp)
     {
         string[] splittedData = inp.Split();
         if (inp.Contains("print"))
@@ -391,11 +392,8 @@ public class PythonExecuter : MonoBehaviour {
     /// order contains the data that should be set or the order that should be executed.
     /// </summary>
 
-    // send the given order to Python, where it will be executed with the exec() command
-    public static IEnumerator SendOrder(PythonScript script, PythonCommandType type, string order,
-        MonoBehaviour unityScript=null, string unityMethod="")
+    private static string ProcessOrder(PythonScript script, PythonCommandType type, string order)
     {
-        print("yay");
         string typeData = type.ToString();
         if (script != PythonScript.None && (type == PythonCommandType.exec || type == PythonCommandType.eval))
             typeData += " " + AnimationController.frame;
@@ -403,7 +401,35 @@ public class PythonExecuter : MonoBehaviour {
         print(fullOrder);
         // show that the Unity program has send the Python program an order
         outgoingChanges += 1;
-        if (useServer)
+        return fullOrder;
+    }
+    
+    public static string SendOrderSync(PythonScript script, PythonCommandType type, string order, bool handleInput=true)
+    {
+        string fullOrder = ProcessOrder(script, type, order);
+        if (type == PythonCommandType.exec_l || type == PythonCommandType.eval_l)
+        {
+            fullOrder = order;
+        }
+        else
+        {
+            type = (type != PythonCommandType.exec ? PythonCommandType.eval : PythonCommandType.exec);
+        }
+
+        string response = TCPClient.SendMsgToPythonSync(type, fullOrder);
+        if (handleInput)
+        {
+            HandlePythonMsg(response);
+        }
+        return response;
+    }
+
+    // send the given order to Python, where it will be executed with the exec() command
+    public static IEnumerator SendOrder(PythonScript script, PythonCommandType type, string order,
+        MonoBehaviour unityScript=null, string unityMethod="")
+    {
+        string fullOrder = ProcessOrder(script, type, order);
+        if (connType != ConnectionType.Shell)
         {
             // send the order via TCP 
             if (type == PythonCommandType.exec_l || type == PythonCommandType.eval_l)
@@ -412,10 +438,10 @@ public class PythonExecuter : MonoBehaviour {
             }
             else
             {
-                type = type != PythonCommandType.exec ? PythonCommandType.eval : PythonCommandType.exec;
+                type = (type != PythonCommandType.exec ? PythonCommandType.eval : PythonCommandType.exec);
             }
 
-            if (TCPClient.isEZAsync)
+            if (connType == ConnectionType.AsyncInvoker)
             {
                 int id = ++TCPClient.taskNumIn;
                 TCPClient.SendMsgToPython(type, fullOrder, unityScript, unityMethod);
@@ -423,17 +449,12 @@ public class PythonExecuter : MonoBehaviour {
                 yield return new WaitWhile(() => id == TCPClient.taskNumOut);
                 print("The receiver got the response with a matching id");
                 // get the response and handle it
-                ReadInput(TCPClient.returnedMsg);
+                HandlePythonMsg(TCPClient.returnedMsg);
             }
             else
             {
-                ReadInput(TCPClient.SendMsgToPython(type, fullOrder, unityScript, unityMethod));
+                HandlePythonMsg(TCPClient.SendMsgToPython(type, fullOrder, unityScript, unityMethod));
             }
-
-            /*if (!TCPClient.isAsync)
-            {
-                incomingChanges += 1;
-            }*/
         }
         else
         {
@@ -460,7 +481,7 @@ public class PythonExecuter : MonoBehaviour {
         print("Application ending after " + Time.time + " seconds");
         print("Sent  " + outgoingChanges + " Orders to PyIron");
         print("Received  " + incomingChanges + " Responses from PyIron");
-        if (!useServer)
+        if (connType == ConnectionType.Shell)
         {
             // let the program stop itself. This way, it can for example delete the scratch folder.
             myProcess.StandardInput.WriteLine("stop");
@@ -478,4 +499,9 @@ public enum PythonScript
 public enum PythonCommandType
 {
     path, pr_input, exec_l, eval_l, exec, eval
+}
+
+public enum ConnectionType
+{
+    Shell, Sync, AsyncInvoker, AsyncIEnumerator, AsyncThread
 }

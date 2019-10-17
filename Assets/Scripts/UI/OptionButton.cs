@@ -16,7 +16,7 @@ public class OptionButton : MonoBehaviour, IButton {
         ExplorerMenuController.inst.DeleteOptions();
         //ExplorerMenuController.shouldDelete = true;
         ExplorerMenuController.inst.ClearOptions();
-        PythonExecuter.SendOrder(PythonScript.ProjectExplorer, PythonCommandType.pr_input, GetComponentInChildren<Text>().text);
+        PythonExecuter.SendOrderSync(PythonScript.ProjectExplorer, PythonCommandType.pr_input, GetComponentInChildren<Text>().text);
         if (isJob)
             ModeData.inst.SetMode(Modes.Temperature);
     }

@@ -477,12 +477,17 @@ public class LaserGrabber : MonoBehaviour
         AnimationController.frame = 0;
         if (ModeData.currentMode.showTemp)
         {
-            IEnumerator r = new WaitWhile(() => false);
-            instances[0].StartCoroutine(r);
-            instances[0].StartCoroutine(PythonExecuter.SendOrder(PythonScript.Executor, PythonCommandType.eval, loadOrder + "('md')"));
+            //PythonExecuter.SendOrder(PythonScript.Executor, PythonCommandType.eval, loadOrder + "('md')");
+            instances[0].StartCoroutine(
+                PythonExecuter.SendOrder(PythonScript.Executor, PythonCommandType.eval, loadOrder + "('md')"));
         }
         else if (ModeData.currentMode.showRelaxation)
-            PythonExecuter.SendOrder(PythonScript.Executor, PythonCommandType.eval, loadOrder + "('minimize')");
+        {
+            //PythonExecuter.SendOrder(PythonScript.Executor, PythonCommandType.eval, loadOrder + "('minimize')");
+            instances[0].StartCoroutine(
+                PythonExecuter.SendOrder(PythonScript.Executor, PythonCommandType.eval, loadOrder + "('minimize')"));
+        }
+
         AnimationController.waitForLoadedStruc = true;
         print("Wait begun");
         lammpsIsMd = ModeData.currentMode.showTemp;

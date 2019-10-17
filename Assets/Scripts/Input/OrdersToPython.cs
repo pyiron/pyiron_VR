@@ -85,7 +85,7 @@ public class OrdersToPython : MonoBehaviour
         }
 
         // send Python/Pyiron the order to destroy the atom
-        PythonExecuter.SendOrder(PythonScript.Executor, PythonCommandType.eval, "self.destroy_atom(" + atomId + ")");
+        PythonExecuter.SendOrderSync(PythonScript.Executor, PythonCommandType.eval, "self.destroy_atom(" + atomId + ")");
 
         // update the data of the structure
         StructureData.waitForDestroyedAtom = true;
@@ -124,7 +124,7 @@ public class OrdersToPython : MonoBehaviour
     // request the forces of all atoms from Python
     public static void RequestAllForces()
     {
-        PythonExecuter.SendOrder(PythonScript.Executor, PythonCommandType.eval, "self.send_all_forces()");
+        PythonExecuter.SendOrderSync(PythonScript.Executor, PythonCommandType.eval, "self.send_all_forces()");
     }
 
     public static void SetNewPosition(AtomInfos atomInfo)
@@ -135,7 +135,7 @@ public class OrdersToPython : MonoBehaviour
             newPosition += atomPosition[i] + " ";
         newPosition += atomInfo.m_ID;
         // send the local position of the current atom to Python
-        PythonExecuter.SendOrder(PythonScript.Executor, PythonCommandType.exec,
+        PythonExecuter.SendOrderSync(PythonScript.Executor, PythonCommandType.exec,
             "self.set_new_base_position('" + newPosition + "')");
         // show that the player hasn't moved an atom since the last creation of an ham_lammps
         StructureData.atomCtrlPos[atomInfo.m_ID] = Vector3.zero;

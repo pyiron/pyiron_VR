@@ -151,7 +151,7 @@ public class Thermometer : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         // send Python the order to change the temperature if the user has changed the temperature on the thermometer
         if (lastTemperature != temperature && temperature > -1)
         {
-            PythonExecuter.SendOrder(PythonScript.Executor, PythonCommandType.eval, "self.set_temperature(" + temperature + ")");
+            PythonExecuter.SendOrderSync(PythonScript.Executor, PythonCommandType.eval, "self.set_temperature(" + temperature + ")");
             // remember that the last ham_lammps has been created with the current temperature
             lastTemperature = temperature;
             // show that the temperature changed

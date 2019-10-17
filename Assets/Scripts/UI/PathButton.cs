@@ -15,7 +15,7 @@ public class PathButton : MonoBehaviour, IButton
         ExplorerMenuController.inst.DeleteOptions();
         //ExplorerMenuController.shouldDelete = true;
         ExplorerMenuController.inst.ClearOptions();
-        PythonExecuter.SendOrder(PythonScript.ProjectExplorer, PythonCommandType.path, GetCurrPath());
+        PythonExecuter.SendOrderSync(PythonScript.ProjectExplorer, PythonCommandType.path, GetCurrPath());
     }
 
     // todo

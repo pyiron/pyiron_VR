@@ -35,8 +35,8 @@ public class TCPClient : MonoBehaviour
 	private static Task<int> socketReadTask;
 
 	// being set to false will lead to Unity hanging while loading
-	public static bool isAsync = false;
-	public static bool isEZAsync = false;
+	//public static bool isAsync = false;
+	//public static bool isEZAsync = false;
 	// the ip address of the server. Warning: testing out multiple servers can lead to long loading times
 	//private string[] HOSTS = {"130.183.226.32"}; //"192.168.0.198", "192.168.0.197", "127.0.0.1", "130.183.212.100", "130.183.212.82"};
 
@@ -111,7 +111,7 @@ public class TCPClient : MonoBehaviour
 		// after connecting to a server or while trying to connect to one, connecting to another one is not possible
 		if (socketConnection != null || connStatus != null) return;
 		
-		if (PythonExecuter.useServer)
+		if (PythonExecuter.connType != ConnectionType.Shell)
 		{
 			try
 			{
@@ -128,11 +128,14 @@ public class TCPClient : MonoBehaviour
 
 	private IEnumerator TryConnection()
 	{
+		// the time between each update if there has been an update to the connection status
+		float updateTime = 0.4f;
+		
 		while (connTimer > 0)
 		{
 			print("Trying to connect");
 			//connTimer -= Time.deltaTime;
-			connTimer -= 0.4f;
+			connTimer -= updateTime;
 			if (connStatus.IsFaulted || connStatus.IsCanceled)
 			{
 				// error
@@ -142,7 +145,7 @@ public class TCPClient : MonoBehaviour
 				ConnectionError();
 				break;
 			}
-			else if (connStatus.IsCompleted)
+			if (connStatus.IsCompleted)
 			{
 				// success
 				connTimer = 1;
@@ -150,11 +153,7 @@ public class TCPClient : MonoBehaviour
 				ConnectionSuccess();
 				break;
 			}
-
-			//yield break;
-			yield return new WaitForSeconds(0.04f);
-			// would be nice, but Timeout would be missing
-			//yield return new WaitUntil(() => connStatus.IsFaulted || connStatus.IsCanceled || connStatus.IsCompleted);
+			yield return new WaitForSeconds(updateTime);
 		}
 		//else
 		if (connTimer <= 0)
@@ -171,7 +170,7 @@ public class TCPClient : MonoBehaviour
 		connStatus = null;
 		ModeData.inst.SetMode(Modes.Explorer);
 			
-		if (isAsync)
+		if (PythonExecuter.connType == ConnectionType.AsyncThread)
 		{
 			try
 			{
@@ -183,7 +182,8 @@ public class TCPClient : MonoBehaviour
 				Debug.Log("On client connect exception " + e);
 			}
 		}
-		StartCoroutine(PythonExecuter.SendOrder(PythonScript.None, PythonCommandType.eval, "self.send_group()"));
+		PythonExecuter.SendOrderSync(PythonScript.None, PythonCommandType.eval, "self.send_group()");
+		//StartCoroutine(PythonExecuter.SendOrder(PythonScript.None, PythonCommandType.eval, "self.send_group()"));
 	}
 
 	private void ConnectionError()
@@ -218,7 +218,7 @@ public class TCPClient : MonoBehaviour
 		{           
 			while (true)
 			{
-				PythonExecuter.ReadInput(HandleInput());
+				PythonExecuter.HandlePythonMsg(HandleInput());
 				if (!ProgramSettings.programIsRunning)
 				{
 					return;
@@ -246,11 +246,10 @@ public class TCPClient : MonoBehaviour
 		}
 	}
 
-	private static string GetMsg(NetworkStream stream)
+	private static string GetMsgAsync(NetworkStream stream)
 	{			
 		
 		// Read incoming stream into byte array. 
-		//int len = stream.Read(block, 0, BLOCKSIZE);
 		if (socketReadTask == null)
 		{
 			block = new Byte[BLOCKSIZE + 1];
@@ -270,8 +269,20 @@ public class TCPClient : MonoBehaviour
 		block[len] = 0;
 		return Encoding.ASCII.GetString(block, 0, len);
 	}
+	
+	private static string GetMsgSync(NetworkStream stream)
+	{			
+		block = new Byte[BLOCKSIZE + 1];
+		// Read incoming stream into byte array. 
+		int len = stream.Read(block, 0, BLOCKSIZE);
+		
+		// Convert byte array to string message. 
+		if (len == 0) return "";
+		block[len] = 0;
+		return Encoding.ASCII.GetString(block, 0, len);
+	}
 
-	private static string HandleInput()
+	private static string HandleInput(bool readAsync=true)
 	{
 		// get the input stream
 		if (socketReadTask == null)
@@ -292,15 +303,24 @@ public class TCPClient : MonoBehaviour
 		int headerLen;
 		while (true)
 		{
-			string newMsg = GetMsg(stream);
-			if (newMsg == "" && !isAsync) return "";
+			string newMsg;
+			if (readAsync)
+			{
+				newMsg = GetMsgAsync(stream);
+			}
+			else
+			{
+				newMsg = GetMsgSync(stream);
+			}
+
+			if (newMsg == "" && PythonExecuter.connType == ConnectionType.AsyncInvoker) return "";
 			recBuffer += newMsg;
 			if ((headerLen = recBuffer.IndexOf(';')) != -1)
 			{
 				break;
 			}
 
-			if (!isAsync || !ProgramSettings.programIsRunning) return "";
+			if (PythonExecuter.connType == ConnectionType.AsyncInvoker || !ProgramSettings.programIsRunning) return "";
 			// todo: some performance tests should be done
 
 			// this might slightly increase the performance
@@ -327,7 +347,15 @@ public class TCPClient : MonoBehaviour
 				RemoveString(returnedMsg.Length);
 				break;
 			}
-			recBuffer += GetMsg(stream);
+
+			if (readAsync)
+			{
+				recBuffer += GetMsgAsync(stream);
+			}
+			else
+			{
+				recBuffer += GetMsgSync(stream);
+			}
 		}
 
 		if (returnFunctions.Count > 0)
@@ -340,12 +368,20 @@ public class TCPClient : MonoBehaviour
 		taskNumOut += 1;
 		return returnedMsg;
 	}
-	  	
+
+	#region SendMessage
+
+	public static string SendMsgToPythonSync(PythonCommandType exType, string msg)
+	{
+		SendMsgToPython(exType, msg, sendAsync:false);
+		return HandleInput(readAsync:false);
+	}
+	
 	/// <summary> 	
 	/// Send message to server using socket connection. 	
 	/// </summary> 	
 	public static string SendMsgToPython(PythonCommandType exType, string msg,
-		MonoBehaviour retScript=null, string retMeth="")
+		MonoBehaviour retScript=null, string retMeth="", bool sendAsync=true)
 	{
 		if (socketConnection == null) {     
 			Debug.LogError("No socket connection");
@@ -362,8 +398,15 @@ public class TCPClient : MonoBehaviour
 				// Convert string message to byte array.                 
 				byte[] clientMessageAsByteArray = Encoding.ASCII.GetBytes(clientMessage);
 				// Write byte array to socketConnection stream.    
-				// todo: if WriteAsync is used, it might make sense to wait until it has been executed and check for errors
-				stream.WriteAsync(clientMessageAsByteArray, 0, clientMessageAsByteArray.Length);
+				if (sendAsync)
+				{
+					stream.WriteAsync(clientMessageAsByteArray, 0, clientMessageAsByteArray.Length);
+				}
+				else
+				{
+					stream.Write(clientMessageAsByteArray, 0, clientMessageAsByteArray.Length);
+				}
+
 				Debug.Log(Time.time + ": Client sent his message " + msg);
 			}
 			else
@@ -386,7 +429,7 @@ public class TCPClient : MonoBehaviour
 			return "Socket Exc: " + ex;
 		}
 
-		if (!isAsync)
+		if (PythonExecuter.connType == ConnectionType.AsyncInvoker)
 		{
 			if (retMeth == "")
 			{
@@ -407,6 +450,8 @@ public class TCPClient : MonoBehaviour
 		return "async";
 		// return receive(); 
 	}
+
+	#endregion
 
 	public static void CloseServer()
 	{

@@ -9,6 +9,6 @@ public class BackButton : MonoBehaviour, IButton
         ExplorerMenuController.inst.DeleteOptions();
         //ExplorerMenuController.shouldDelete = true;
         ExplorerMenuController.inst.ClearOptions();
-        PythonExecuter.SendOrder(PythonScript.ProjectExplorer, PythonCommandType.pr_input, "..");
+        PythonExecuter.SendOrderSync(PythonScript.ProjectExplorer, PythonCommandType.pr_input, "..");
     }
 }
