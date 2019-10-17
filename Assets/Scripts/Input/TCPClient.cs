@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
@@ -35,6 +36,7 @@ public class TCPClient : MonoBehaviour
 
 	// being set to false will lead to Unity hanging while loading
 	public static bool isAsync = false;
+	public static bool isEZAsync = false;
 	// the ip address of the server. Warning: testing out multiple servers can lead to long loading times
 	//private string[] HOSTS = {"130.183.226.32"}; //"192.168.0.198", "192.168.0.197", "127.0.0.1", "130.183.212.100", "130.183.212.82"};
 
@@ -60,31 +62,7 @@ public class TCPClient : MonoBehaviour
 		// if the TCPClient is trying to connect to the server, check if the connection could be established
 		if (connStatus != null)
 		{
-			if (connTimer > 0)
-			{
-				connTimer -= Time.deltaTime;
-				if (connStatus.IsFaulted || connStatus.IsCanceled)
-				{
-					// error
-					connTimer = 1;
-					print("Connection is Faulted: " + connStatus.IsFaulted);
-					print("Connection is Canceled: " + connStatus.IsCanceled);
-					ConnectionError();
-				}
-				else if (connStatus.IsCompleted)
-				{
-					// success
-					connTimer = 1;
-					print("Successfully connected to the server");
-					ConnectionSuccess();
-				}
-			}
-			else
-			{
-				// the server didn't respond in time
-				connTimer = 1;
-				ConnectionTimeout();
-			}
+			//TryConnection();
 		}
 
 		// after sending a message to Python, check if a response arrived
@@ -139,11 +117,51 @@ public class TCPClient : MonoBehaviour
 			{
 				socketConnection = new TcpClient();
 				connStatus = socketConnection.ConnectAsync(host, PORT);
+				StartCoroutine(TryConnection());
 			}
 			catch
 			{
 				ConnectionError();
 			}
+		}
+	}
+
+	private IEnumerator TryConnection()
+	{
+		while (connTimer > 0)
+		{
+			print("Trying to connect");
+			//connTimer -= Time.deltaTime;
+			connTimer -= 0.4f;
+			if (connStatus.IsFaulted || connStatus.IsCanceled)
+			{
+				// error
+				connTimer = 1;
+				print("Connection is Faulted: " + connStatus.IsFaulted);
+				print("Connection is Canceled: " + connStatus.IsCanceled);
+				ConnectionError();
+				break;
+			}
+			else if (connStatus.IsCompleted)
+			{
+				// success
+				connTimer = 1;
+				print("Successfully connected to the server");
+				ConnectionSuccess();
+				break;
+			}
+
+			//yield break;
+			yield return new WaitForSeconds(0.04f);
+			// would be nice, but Timeout would be missing
+			//yield return new WaitUntil(() => connStatus.IsFaulted || connStatus.IsCanceled || connStatus.IsCompleted);
+		}
+		//else
+		if (connTimer <= 0)
+		{
+			// the server didn't respond in time
+			connTimer = 1;
+			ConnectionTimeout();
 		}
 	}
 
@@ -165,7 +183,7 @@ public class TCPClient : MonoBehaviour
 				Debug.Log("On client connect exception " + e);
 			}
 		}
-		PythonExecuter.SendOrder(PythonScript.None, PythonCommandType.eval, "self.send_group()");
+		StartCoroutine(PythonExecuter.SendOrder(PythonScript.None, PythonCommandType.eval, "self.send_group()"));
 	}
 
 	private void ConnectionError()
@@ -318,6 +336,8 @@ public class TCPClient : MonoBehaviour
 			returnScripts.RemoveAt(0);
 			returnFunctions.RemoveAt(0);
 		}
+
+		taskNumOut += 1;
 		return returnedMsg;
 	}
 	  	

@@ -3,6 +3,7 @@ using System.Threading;
 using UnityEngine;
 using System.Diagnostics;
 using System;
+using System.Collections;
 using System.Globalization;
 using System.Linq;
 
@@ -391,9 +392,10 @@ public class PythonExecuter : MonoBehaviour {
     /// </summary>
 
     // send the given order to Python, where it will be executed with the exec() command
-    public static void SendOrder(PythonScript script, PythonCommandType type, string order,
+    public static IEnumerator SendOrder(PythonScript script, PythonCommandType type, string order,
         MonoBehaviour unityScript=null, string unityMethod="")
     {
+        print("yay");
         string typeData = type.ToString();
         if (script != PythonScript.None && (type == PythonCommandType.exec || type == PythonCommandType.eval))
             typeData += " " + AnimationController.frame;
@@ -413,7 +415,21 @@ public class PythonExecuter : MonoBehaviour {
                 type = type != PythonCommandType.exec ? PythonCommandType.eval : PythonCommandType.exec;
             }
 
-            ReadInput(TCPClient.SendMsgToPython(type, fullOrder, unityScript, unityMethod));
+            if (TCPClient.isEZAsync)
+            {
+                int id = ++TCPClient.taskNumIn;
+                TCPClient.SendMsgToPython(type, fullOrder, unityScript, unityMethod);
+                print("Waiting for the right response to arrive...");
+                yield return new WaitWhile(() => id == TCPClient.taskNumOut);
+                print("The receiver got the response with a matching id");
+                // get the response and handle it
+                ReadInput(TCPClient.returnedMsg);
+            }
+            else
+            {
+                ReadInput(TCPClient.SendMsgToPython(type, fullOrder, unityScript, unityMethod));
+            }
+
             /*if (!TCPClient.isAsync)
             {
                 incomingChanges += 1;

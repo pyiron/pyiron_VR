@@ -237,6 +237,7 @@ namespace HTC.UnityPlugin.VRModuleManagement
             pressActions.Set(VRModuleRawButton.Touchpad, "32", "Press32 (Touchpad)");
             pressActions.Set(VRModuleRawButton.Trigger, "33", "Press33 (Trigger)");
             pressActions.Set(VRModuleRawButton.CapSenseGrip, "34", "Press34 (CapSenseGrip)");
+            pressActions.Set(VRModuleRawButton.Bumper, "35", "Press35 (Bumper)");
 
             touchActions = new ActionArray<VRModuleRawButton>("/in/viu_touch_", "boolean");
             touchActions.Set(VRModuleRawButton.System, "00", "Touch00 (System)");
@@ -251,6 +252,7 @@ namespace HTC.UnityPlugin.VRModuleManagement
             touchActions.Set(VRModuleRawButton.Touchpad, "32", "Touch32 (Touchpad)");
             touchActions.Set(VRModuleRawButton.Trigger, "33", "Touch33 (Trigger)");
             touchActions.Set(VRModuleRawButton.CapSenseGrip, "34", "Touch34 (CapSenseGrip)");
+            touchActions.Set(VRModuleRawButton.Bumper, "35", "Touch35 (Bumper)");
 
             v1Actions = new ActionArray<VRModuleRawAxis>("/in/viu_axis_", "vector1");
             v1Actions.Set(VRModuleRawAxis.Axis0X, "0x", "Axis0 X (TouchpadX)");
@@ -341,7 +343,7 @@ namespace HTC.UnityPlugin.VRModuleManagement
             }
         }
 
-        public static ulong GetInputSrouceHandleForDevice(uint deviceIndex)
+        public static ulong GetInputSourceHandleForDevice(uint deviceIndex)
         {
             if (s_devicePathHandles == null || deviceIndex >= s_devicePathHandles.Length)
             {
@@ -445,6 +447,8 @@ namespace HTC.UnityPlugin.VRModuleManagement
                 {
                     Debug.LogError("UpdateActionState failed! " + ACTION_SET_NAME + " error=" + error);
                 }
+
+                m_originDataCache.Clear();
 
                 for (pressActions.Reset(); pressActions.IsCurrentValid(); pressActions.MoveNext())
                 {
@@ -636,7 +640,6 @@ namespace HTC.UnityPlugin.VRModuleManagement
         private void OnTrackedDeviceRoleChanged(VREvent_t arg)
         {
             InvokeControllerRoleChangedEvent();
-            m_originDataCache.Clear();
         }
 
         public override uint GetLeftControllerDeviceIndex()
@@ -677,7 +680,7 @@ namespace HTC.UnityPlugin.VRModuleManagement
 
         public override void TriggerHapticVibration(uint deviceIndex, float durationSeconds = 0.01f, float frequency = 85f, float amplitude = 0.125f, float startSecondsFromNow = 0f)
         {
-            var handle = GetInputSrouceHandleForDevice(deviceIndex);
+            var handle = GetInputSourceHandleForDevice(deviceIndex);
             if (handle == OpenVR.k_ulInvalidDriverHandle) { return; }
 
             var vrInput = OpenVR.Input;

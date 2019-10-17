@@ -18,6 +18,12 @@ public class PathButton : MonoBehaviour, IButton
         PythonExecuter.SendOrder(PythonScript.ProjectExplorer, PythonCommandType.path, GetCurrPath());
     }
 
+    // todo
+    private IEnumerator LoadNewPath()
+    {
+        return null;
+    }
+
     private string GetCurrPath()
     {
         string currPath = "";

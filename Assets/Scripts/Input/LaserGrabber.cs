@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Dynamic;
 using UnityEngine;
 using System.IO;
 using HTC.UnityPlugin.Vive;
@@ -474,7 +476,11 @@ public class LaserGrabber : MonoBehaviour
     {
         AnimationController.frame = 0;
         if (ModeData.currentMode.showTemp)
-            PythonExecuter.SendOrder(PythonScript.Executor, PythonCommandType.eval, loadOrder + "('md')");
+        {
+            IEnumerator r = new WaitWhile(() => false);
+            instances[0].StartCoroutine(r);
+            instances[0].StartCoroutine(PythonExecuter.SendOrder(PythonScript.Executor, PythonCommandType.eval, loadOrder + "('md')"));
+        }
         else if (ModeData.currentMode.showRelaxation)
             PythonExecuter.SendOrder(PythonScript.Executor, PythonCommandType.eval, loadOrder + "('minimize')");
         AnimationController.waitForLoadedStruc = true;
