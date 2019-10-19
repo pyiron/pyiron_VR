@@ -367,6 +367,7 @@ public class TCPClient : MonoBehaviour
 		}
 
 		taskNumOut += 1;
+		print("Increased taskOut to " + taskNumOut);
 		return returnedMsg;
 	}
 

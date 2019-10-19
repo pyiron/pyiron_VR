@@ -476,22 +476,17 @@ public class LaserGrabber : MonoBehaviour
     {
         // send the order to execute lammps
         PythonExecuter.SendOrderAsync(PythonScript.Executor, PythonCommandType.eval, order);
-        int taskNumIn = TCPClient.taskNumIn;
-        //TCPClient.
-        //yield return new WaitForFixedUpdate();
         
-        print("taskIn: " + taskNumIn + " and taskOut " + TCPClient.taskNumOut);
-        // TCPClient.taskNumOut will be increased in the update function of TCPClient
-        //while (taskNumIn != TCPClient.taskNumOut)
-        //{
-        //    yield return new WaitForSeconds(0.04f);
-        //}
+        // remember the id of the request to wait for the right response id
+        int taskNumIn = TCPClient.taskNumIn;
+        
+        // wait until the response to the send message has arrived
         yield return new WaitUntil(() => taskNumIn == TCPClient.taskNumOut);
-        //yield return new WaitWhile(() => taskNumIn != TCPClient.taskNumOut);
-        print("taskIn: " + taskNumIn + " and taskOut " + TCPClient.taskNumOut);
 
+        // get the response
         string result = TCPClient.returnedMsg;
-        print("Send: " + order + "\nGot: " + result);
+        
+        // handle the response
         PythonExecuter.HandlePythonMsg(result);
         // todo: handle the result here, instead of calling PythonExecuter.HandlePythonMsg
     } 
