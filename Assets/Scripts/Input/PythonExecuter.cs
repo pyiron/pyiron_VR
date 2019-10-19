@@ -45,7 +45,7 @@ public class PythonExecuter : MonoBehaviour {
     
     // should the server be used for transfer of data or the shell
     //public static bool useServer = true;
-    public static ConnectionType connType = ConnectionType.AsyncInvoker;
+    public static ConnectionType connType = ConnectionType.AsyncIEnumerator;
 
     [Header("Send Data to Python")]
     // the amount of changes the Unity program requested the Python program to do
@@ -143,7 +143,7 @@ public class PythonExecuter : MonoBehaviour {
             myProcess.BeginOutputReadLine();
             myProcess.BeginErrorReadLine();
             loadedStructure = true;
-            SendOrder(PythonScript.None, PythonCommandType.eval, "self.send_group()");
+            SendOrderAsync(PythonScript.None, PythonCommandType.eval, "self.send_group()");
         }
         catch (Exception e) { print(e); }
     }
@@ -424,9 +424,32 @@ public class PythonExecuter : MonoBehaviour {
         return response;
     }
 
+    public static IEnumerator SendOrderIEnumerator(PythonScript script, PythonCommandType type, string order,
+        MonoBehaviour unityScript = null, string unityMethod = "")
+    {
+        string fullOrder = ProcessOrder(script, type, order);
+        // send the order via TCP 
+        if (type == PythonCommandType.exec_l || type == PythonCommandType.eval_l)
+        {
+            fullOrder = order;
+        }
+        else
+        {
+            type = (type != PythonCommandType.exec ? PythonCommandType.eval : PythonCommandType.exec);
+        }
+
+        int id = TCPClient.taskNumIn;
+        //int id = ++TCPClient.taskNumIn;
+        TCPClient.SendMsgToPython(type, fullOrder, unityScript, unityMethod);
+        print("Waiting for the right response to arrive...");
+        yield return new WaitWhile(() => id == TCPClient.taskNumOut);
+        print("The receiver got the response with a matching id");
+        // get the response and handle it
+        HandlePythonMsg(TCPClient.returnedMsg);
+    }    
+
     // send the given order to Python, where it will be executed with the exec() command
-    public static IEnumerator SendOrder(PythonScript script, PythonCommandType type, string order,
-        MonoBehaviour unityScript=null, string unityMethod="")
+    public static void SendOrderAsync(PythonScript script, PythonCommandType type, string order)
     {
         string fullOrder = ProcessOrder(script, type, order);
         if (connType != ConnectionType.Shell)
@@ -441,19 +464,14 @@ public class PythonExecuter : MonoBehaviour {
                 type = (type != PythonCommandType.exec ? PythonCommandType.eval : PythonCommandType.exec);
             }
 
-            if (connType == ConnectionType.AsyncInvoker)
+            if (connType == ConnectionType.AsyncIEnumerator)
             {
-                int id = ++TCPClient.taskNumIn;
-                TCPClient.SendMsgToPython(type, fullOrder, unityScript, unityMethod);
-                print("Waiting for the right response to arrive...");
-                yield return new WaitWhile(() => id == TCPClient.taskNumOut);
-                print("The receiver got the response with a matching id");
-                // get the response and handle it
-                HandlePythonMsg(TCPClient.returnedMsg);
+                //++TCPClient.taskNumIn;
+                TCPClient.SendMsgToPython(type, fullOrder);
             }
             else
             {
-                HandlePythonMsg(TCPClient.SendMsgToPython(type, fullOrder, unityScript, unityMethod));
+                HandlePythonMsg(TCPClient.SendMsgToPython(type, fullOrder));
             }
         }
         else

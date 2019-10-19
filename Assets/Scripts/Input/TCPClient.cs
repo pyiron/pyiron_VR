@@ -66,10 +66,11 @@ public class TCPClient : MonoBehaviour
 		}
 
 		// after sending a message to Python, check if a response arrived
-		if (returnFunctions.Count > 0)
+		if (returnFunctions.Count > 0
+		    || PythonExecuter.connType == ConnectionType.AsyncIEnumerator && taskNumIn > taskNumOut)
 		{
 			// check if new data has arrived
-			HandleInput();
+			HandleInput(shouldReturn:true);
 		}
 	}
 
@@ -282,7 +283,7 @@ public class TCPClient : MonoBehaviour
 		return Encoding.ASCII.GetString(block, 0, len);
 	}
 
-	private static string HandleInput(bool readAsync=true)
+	private static string HandleInput(bool readAsync=true, bool shouldReturn=false)
 	{
 		// get the input stream
 		if (socketReadTask == null)
@@ -313,14 +314,14 @@ public class TCPClient : MonoBehaviour
 				newMsg = GetMsgSync(stream);
 			}
 
-			if (newMsg == "" && PythonExecuter.connType == ConnectionType.AsyncInvoker) return "";
+			if (newMsg == "" && shouldReturn) return "";
 			recBuffer += newMsg;
 			if ((headerLen = recBuffer.IndexOf(';')) != -1)
 			{
 				break;
 			}
 
-			if (PythonExecuter.connType == ConnectionType.AsyncInvoker || !ProgramSettings.programIsRunning) return "";
+			if (shouldReturn || !ProgramSettings.programIsRunning) return "";
 			// todo: some performance tests should be done
 
 			// this might slightly increase the performance
@@ -393,6 +394,7 @@ public class TCPClient : MonoBehaviour
 			NetworkStream stream = socketConnection.GetStream();
 			if (stream.CanWrite)
 			{
+				taskNumIn++;
 				string clientMessage = exType + ":" + msg;
 				clientMessage = clientMessage.Length + ";" + clientMessage;
 				// Convert string message to byte array.                 

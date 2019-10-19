@@ -472,22 +472,47 @@ public class LaserGrabber : MonoBehaviour
             controllerSymbols[(int) otherLg.ctrlLayer].SetSymbol();
     }
 
+    private static IEnumerator HandleLammpsLoad(string order)
+    {
+        // send the order to execute lammps
+        PythonExecuter.SendOrderAsync(PythonScript.Executor, PythonCommandType.eval, order);
+        int taskNumIn = TCPClient.taskNumIn;
+        //TCPClient.
+        //yield return new WaitForFixedUpdate();
+        
+        print("taskIn: " + taskNumIn + " and taskOut " + TCPClient.taskNumOut);
+        // TCPClient.taskNumOut will be increased in the update function of TCPClient
+        //while (taskNumIn != TCPClient.taskNumOut)
+        //{
+        //    yield return new WaitForSeconds(0.04f);
+        //}
+        yield return new WaitUntil(() => taskNumIn == TCPClient.taskNumOut);
+        //yield return new WaitWhile(() => taskNumIn != TCPClient.taskNumOut);
+        print("taskIn: " + taskNumIn + " and taskOut " + TCPClient.taskNumOut);
+
+        string result = TCPClient.returnedMsg;
+        print("Send: " + order + "\nGot: " + result);
+        PythonExecuter.HandlePythonMsg(result);
+        // todo: handle the result here, instead of calling PythonExecuter.HandlePythonMsg
+    } 
+
     private static void LoadNewLammps(string loadOrder)
     {
         AnimationController.frame = 0;
-        if (ModeData.currentMode.showTemp)
+        string calculation = ModeData.currentMode.showTemp ? "md" : "minimize";
+        calculation = loadOrder + "('" + calculation + "')";
+        
+        if (PythonExecuter.connType == ConnectionType.AsyncIEnumerator)
         {
-            //PythonExecuter.SendOrder(PythonScript.Executor, PythonCommandType.eval, loadOrder + "('md')");
-            instances[0].StartCoroutine(
-                PythonExecuter.SendOrder(PythonScript.Executor, PythonCommandType.eval, loadOrder + "('md')"));
+            instances[0].StartCoroutine(HandleLammpsLoad(calculation));
         }
-        else if (ModeData.currentMode.showRelaxation)
+        else
         {
-            //PythonExecuter.SendOrder(PythonScript.Executor, PythonCommandType.eval, loadOrder + "('minimize')");
             instances[0].StartCoroutine(
-                PythonExecuter.SendOrder(PythonScript.Executor, PythonCommandType.eval, loadOrder + "('minimize')"));
+                PythonExecuter.SendOrderIEnumerator(PythonScript.Executor, PythonCommandType.eval,
+                    calculation));
         }
-
+        
         AnimationController.waitForLoadedStruc = true;
         print("Wait begun");
         lammpsIsMd = ModeData.currentMode.showTemp;
