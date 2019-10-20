@@ -357,14 +357,14 @@ public class PythonExecuter : MonoBehaviour {
             }
             StructureCreatorMenuController.args.Add(nDict);
         }
-        else if (splittedData[0] == "path")
+        /*else if (splittedData[0] == "path")
         {
             if (ExplorerMenuController.currPath != splittedData[1])
             {
                 ExplorerMenuController.currPath = splittedData[1];
                 ExplorerMenuController.pathHasChanged = true;
             }
-        }
+        }*/
         else if (splittedData[0] == "")
         {
             UnityEngine.Debug.LogWarning("Unknown Data: " + inp);
@@ -466,7 +466,6 @@ public class PythonExecuter : MonoBehaviour {
 
             if (connType == ConnectionType.AsyncIEnumerator)
             {
-                //++TCPClient.taskNumIn;
                 TCPClient.SendMsgToPython(type, fullOrder);
             }
             else
