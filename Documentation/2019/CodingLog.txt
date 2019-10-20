@@ -1,0 +1,6 @@
+Workprogress on Virtual Atoms
+by Philip Neugebauer, 1.8.2018 - 30.9.2018
+All progress is also represented by the commits on GitLab with some more details.
+
+26.8.2019: Updated the tests. The TCP connection between a server in Garching and a client somewhere else is now working. 
+
