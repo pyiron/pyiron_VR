@@ -183,7 +183,9 @@ public class TCPClient : MonoBehaviour
 				Debug.Log("On client connect exception " + e);
 			}
 		}
-		PythonExecuter.SendOrderSync(PythonScript.None, PythonCommandType.eval, "self.send_group()");
+		//PythonExecuter.SendOrderSync(PythonScript.None, PythonCommandType.eval, "self.send_group()");
+		ExplorerMenuController.inst.LoadPathContent();
+		
 		//StartCoroutine(PythonExecuter.SendOrder(PythonScript.None, PythonCommandType.eval, "self.send_group()"));
 	}
 

@@ -3,4 +3,27 @@ by Philip Neugebauer, 1.8.2018 - 30.9.2018
 All progress is also represented by the commits on GitLab with some more details.
 
 26.8.2019: Updated the tests. The TCP connection between a server in Garching and a client somewhere else is now working. 
+other log entries got lost due to a missing git add, but can be seen by the commits on GitLab.
+
+At first the program was updated to cope with the newest pyiron version. Therefore the test had to be updated and improved.
+
+The main focus was to establish a good working connection between the Pyiron code that should be executed and the Unity Program. Therefore a TCP Connection has been set up. This connection is message based, allowing it to always function, even with a slow connection or a connection with low bandwith. Performance improvements have been done. The error handling of errors occuring in the python program has been improved.
+
+
+1.10 - 31.10.2019: The main goal was to make the connection between Python and Unity as simple as possible. Therefore different methods have been tested: 
+ - synchronous connection: simple code, but the program freezes during the loading time
+ - using a new Thread for the connection: the response of a request doesn't arrive at the main thread, so it has to be stored and then accessed from the main thread in order to get handled. This makes the code hard to understand
+ - using sendAsync and readAsync: good for an asynchronous connection, but it is still hard to keep the code simple. Therefore two methods have been tested:
+	1. Invoking a defined method after the response to a request has arrived (complicated)
+	2. Using a Coroutine: Use StartCoroutine and IEnumerator to start a new Coroutine which handles the result. This seems to be the simplest method for an asynchronous 	   connection
+
+The end result is that sending a message synchronous is possible, but also sending a message asynchronous with sendAsync and a Coroutine. This has to be tested a bit further and with the new connection the data transfer can be improved, allowing to simplify the python code and some Unity code.
+
+1.11 - 30.11.2019: 
+The first goal is to use the new connection to simplify the communication. At the same time, json got implemented to simplify the communication even further and reduce python and unity code.
+
+74;"C:/Users/Philip/Desktop/pyiron_mpie/pyiron_mpie/vrplugin/Structures/save"
+63;"C:/Users/Philip/Desktop/pyiron_mpie/pyiron_mpie/vrplugin/save"
+
+
 

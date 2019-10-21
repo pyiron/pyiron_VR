@@ -49,51 +49,12 @@ public class OptionButton : MonoBehaviour, IButton
         }
         else
         {
-            ExplorerMenuController.inst.DeleteOptions();
-            ExplorerMenuController.inst.ClearOptions();
-            PythonExecuter.SendOrderSync(PythonScript.ProjectExplorer, PythonCommandType.pr_input, job_name);
             
-            // set the new path
-            /*PythonExecuter.SendOrderSync(PythonScript.ProjectExplorer,
-                PythonCommandType.exec_l, "pr = unity_manager.pr['" + job_name + "']", handleInput:false);
-            ExplorerMenuController.currPath = PythonExecuter.SendOrderSync(PythonScript.ProjectExplorer,
-                PythonCommandType.eval_l, "pr.path[:-1]");
-            ExplorerMenuController.pathHasChanged = true;
+            //PythonExecuter.SendOrderSync(PythonScript.ProjectExplorer, PythonCommandType.pr_input, job_name);
             
-            // get the jobs and groups 
-            PythonExecuter.SendOrderSync(PythonScript.ProjectExplorer, PythonCommandType.exec_l,
-                "print(type(pr.list_all()))");
-            PythonExecuter.SendOrderSync(PythonScript.ProjectExplorer, PythonCommandType.exec_l,
-                "print(type(pr.list_all()['groups']))");
-
-            String a = "a";
-            print(JsonUtility.ToJson(a));
-            
-            List<string> b = new List<string>();
-            b.Add(a);
-            print(JsonUtility.ToJson(b));
-            
-            print("end exp");
-            
-            //Object o = JsonUtility.FromJson<Object>("");
-            List<string> allNodes = 
-                JsonUtility.FromJson<List<string>>(
-                    PythonExecuter.SendOrderSync(PythonScript.ProjectExplorer, PythonCommandType.eval_l,
-                "pr.list_all()['nodes']"));
-            print("len is " + allNodes.Count);
-            print("nodes are " + allNodes[0]);
-            
-            Dictionary<string, List<string>> allOptions = 
-                JsonUtility.FromJson<Dictionary<string, List<string>>>(
-                    PythonExecuter.SendOrderSync(PythonScript.ProjectExplorer, PythonCommandType.eval_l,
-                "pr.list_all()"));
-            print("All keys yay " + allOptions.Keys.Count);
-            print("All values yay " + allOptions.Values);
-            print("All nodes yay " + allOptions["nodes"]);
-            print("files yay " + allOptions["files"][0]);
-            
-            /*PythonExecuter.SendOrderSync(PythonScript.ProjectExplorer, PythonCommandType.pr_input, job_name);
-            PythonExecuter.SendOrderSync(PythonScript.ProjectExplorer, PythonCommandType.pr_input, job_name);*/
+            ExplorerMenuController.inst.LoadPathContent(job_name);
         }
     }
 }
+
+

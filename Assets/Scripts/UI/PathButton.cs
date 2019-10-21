@@ -12,22 +12,15 @@ public class PathButton : MonoBehaviour, IButton
 
     public void WhenClickDown()
     {
-        ExplorerMenuController.inst.DeleteOptions();
-        //ExplorerMenuController.shouldDelete = true;
-        ExplorerMenuController.inst.ClearOptions();
-        PythonExecuter.SendOrderSync(PythonScript.ProjectExplorer, PythonCommandType.path, GetCurrPath());
-    }
-
-    // todo
-    private IEnumerator LoadNewPath()
-    {
-        return null;
+        //ExplorerMenuController.inst.DeleteOptions();
+        //ExplorerMenuController.inst.ClearOptions();
+        ExplorerMenuController.inst.LoadPathContent(GetCurrPath(), true);
+        //PythonExecuter.SendOrderSync(PythonScript.ProjectExplorer, PythonCommandType.path, GetCurrPath());
     }
 
     private string GetCurrPath()
     {
         string currPath = "";
-        // todo: store path instead of calculating it to reduce lag
         foreach (PathButton but in transform.parent.GetComponentsInChildren<PathButton>())
         {
             currPath += but.GetComponentInChildren<Text>().text;

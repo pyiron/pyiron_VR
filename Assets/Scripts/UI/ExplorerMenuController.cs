@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+//using Newtonsoft.Json;
 
 public class ExplorerMenuController : MenuController {
     // reference to the deployed scripts
@@ -11,10 +12,10 @@ public class ExplorerMenuController : MenuController {
     public GameObject OptionFolder;
     public GameObject PathPrefab;
     public GameObject PathFolder;
-    internal static bool shouldRefresh = false;
+    public static bool shouldRefresh = false;
     //internal static bool shouldDelete;
-    internal static string currPath;
-    internal static bool pathHasChanged;
+    private static string currPath;
+    public static bool pathHasChanged;
 
     public static Dictionary<OptionType, List<string>> options = new Dictionary<OptionType, List<string>>();
 
@@ -66,39 +67,67 @@ public class ExplorerMenuController : MenuController {
         }
         if (shouldRefresh)
         {
-            for (int i = 0; i < 2; i++)
-            {
-                OptionType sm = (OptionType)(i);
-                foreach (string opt in options[sm])
-                {
-                    foreach (Text txt in OptionFolder.GetComponentsInChildren<Text>())
-                    {
-                        if (txt.text == opt)
-                            goto next;
-                    }
-                    Color btn_col;
-                    if (sm == OptionType.nodes)
-                        btn_col = Color.cyan;
-                    else
-                        btn_col = Color.yellow;
-                    GameObject btn = InstantiateNewBtn(OptionPrefab, OptionFolder, opt, btn_col);
-                    btn.GetComponent<OptionButton>().isJob = sm == OptionType.nodes;
-                    next:;
-                }
-            }
-            shouldRefresh = false;
+            ShowNewOptionsOld();
         }
 
         //foreach (Button btn in transform.parent.GetComponentsInChildren<Button>())
         //    btn.interactable = !PythonExecuter.inst.IsLoading();
     }
 
+    public void ShowNewOptionsOld()
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            OptionType sm = (OptionType)(i);
+            foreach (string opt in options[sm])
+            {
+                foreach (Text txt in OptionFolder.GetComponentsInChildren<Text>())
+                {
+                    if (txt.text == opt)
+                        goto next;
+                }
+                Color btn_col;
+                if (sm == OptionType.nodes)
+                    btn_col = Color.cyan;
+                else
+                    btn_col = Color.yellow;
+                GameObject btn = InstantiateNewBtn(OptionPrefab, OptionFolder, opt, btn_col);
+                btn.GetComponent<OptionButton>().isJob = sm == OptionType.nodes;
+                next:;
+            }
+        }
+        shouldRefresh = false;
+    }
+    
+    public void ShowNewOptions(FolderData folderData)
+    {
+        List<string> opts;
+        for (int i = 0; i < 2; i++)
+        {
+            if (i == 0)
+            {
+                opts = folderData.groups;
+            }
+            else
+            {
+                opts = folderData.nodes;
+            }
+            
+            Color btnCol;
+            if (i == 1)
+                btnCol = Color.cyan;
+            else
+                btnCol = Color.yellow;
+            foreach (string opt in opts)
+            {
+                GameObject btn = InstantiateNewBtn(OptionPrefab, OptionFolder, opt, btnCol);
+                btn.GetComponent<OptionButton>().isJob = i == 1;
+            }
+        }
+    }
+
     public void PathHasChanged(string newPath="")
     {
-        if (newPath != "")
-        {
-            
-        }
         PathButton[] pathButtons = GetComponentsInChildren<PathButton>();
         bool correctPath = true;
         string[] splittedPath = currPath.Split('/');
@@ -141,6 +170,48 @@ public class ExplorerMenuController : MenuController {
         }
         shouldRefresh = true;
     }
+
+    public void LoadPathContent(string jobName="", bool isAbsPath=false)
+    {
+        DeleteOptions();
+        ClearOptions();
+        
+        // set the new path
+        if (jobName != "")
+        {
+            if (isAbsPath)
+            {
+                PythonExecuter.SendOrderSync(PythonScript.ProjectExplorer,
+                    PythonCommandType.exec_l, "unity_manager.pr = Project('" + jobName + "')", handleInput: false);
+            }
+            else
+            {
+                PythonExecuter.SendOrderSync(PythonScript.ProjectExplorer,
+                    PythonCommandType.exec_l, "unity_manager.pr = unity_manager.pr['" + jobName + "']", handleInput: false);
+            }
+        }
+        
+        currPath = PythonExecuter.SendOrderSync(PythonScript.None,
+            PythonCommandType.eval_l, "unity_manager.pr.path[:-1]");
+        PathHasChanged();
+            
+        // get the jobs and groups 
+        FolderData folderData = 
+            JsonUtility.FromJson<FolderData>(
+                PythonExecuter.SendOrderSync(PythonScript.None, PythonCommandType.eval_l,
+                    "unity_manager.pr.list_all()"));
+
+        ShowNewOptions(folderData);
+    }
+}
+
+// needed because Unitys JsonUtilities don't support dictionaries
+[Serializable]
+public class FolderData
+{
+    public List<string> groups;
+    public List<string> nodes;
+    public List<string> files;
 }
 
 public enum OptionType
