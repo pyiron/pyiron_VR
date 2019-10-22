@@ -14,23 +14,27 @@ public class OptionButton : MonoBehaviour, IButton
         transform.localEulerAngles = Vector3.zero;
     }
 
-    private IEnumerator HandleLoad(string order)
+    private IEnumerator HandleLoad(string jobName)
     {
         // send the order to load the structure
-        PythonExecuter.SendOrderAsync(PythonScript.ProjectExplorer, PythonCommandType.pr_input, order);
+        //PythonExecuter.SendOrderAsync(PythonScript.ProjectExplorer, PythonCommandType.pr_input, order);
+        
+        PythonExecuter.SendOrderSync(PythonScript.ProjectExplorer,
+            PythonCommandType.exec_l, "unity_manager.pr = unity_manager.pr['" + jobName + "']", handleInput: false);
+
+        PythonExecuter.SendOrderAsync(PythonScript.ProjectExplorer, PythonCommandType.eval_l, 
+            "unity_manager.send_job()");
 
         // remember the id of the request to wait for the right response id
         int taskNumIn = TCPClient.taskNumIn;
 
-        print(taskNumIn + " vs " + TCPClient.taskNumOut);
         // wait until the response to the send message has arrived
         
         yield return new WaitUntil(() => taskNumIn == TCPClient.taskNumOut);
-        print(taskNumIn + " vs " + TCPClient.taskNumOut);
 
         // get the response
         string result = TCPClient.returnedMsg;
-
+        
         // handle the response
         PythonExecuter.HandlePythonMsg(result);
         ExplorerMenuController.inst.DeleteOptions();
@@ -45,7 +49,10 @@ public class OptionButton : MonoBehaviour, IButton
         if (isJob)
         {
             StartCoroutine(HandleLoad(job_name));
-            GetComponent<Button>().interactable = false;
+            foreach (Button btn in transform.parent.GetComponentsInChildren<Button>())
+            {
+                btn.interactable = false;
+            }
         }
         else
         {

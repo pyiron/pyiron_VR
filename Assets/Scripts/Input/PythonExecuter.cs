@@ -222,6 +222,7 @@ public class PythonExecuter : MonoBehaviour {
             // show that Unity received the change from Python
             incomingChanges += 1;
         }
+        // seems not to be in use currently
         else if (splittedData[0].Contains("mode"))
         {
             if (splittedData[1] == "view")
@@ -233,11 +234,11 @@ public class PythonExecuter : MonoBehaviour {
                 print(splittedData + " is not implemented!");
             }
         }
-        else if (new[] {"groups", "nodes", "files"}.Contains(splittedData[0]))
+        /*else if (new[] {"groups", "nodes", "files"}.Contains(splittedData[0]))
         {
             ExplorerMenuController.inst.AddOption((OptionType) Enum.Parse(typeof(OptionType), splittedData[0]),
                 inp.Substring(splittedData[0].Length + 1));
-        }
+        }*/
         /*else if (splittedData[0] == "groups")
         {
             StructureMenuController.inst.AddOption(OptionType.Folder, inp.Substring(7));
@@ -251,7 +252,7 @@ public class PythonExecuter : MonoBehaviour {
             print("Files detected, they are not needed, but do no harm.");
             //StructureMenuController.inst.AddOption(OptionType.Script, inp.Substring(6));
         }*/
-        else if (splittedData[0] == "force")
+        /*else if (splittedData[0] == "force")
         {
             if (ContainsValue(splittedData[1]))
             {
@@ -259,7 +260,7 @@ public class PythonExecuter : MonoBehaviour {
                 for (int i = 0; i < 3; i++)
                     allForces[int.Parse(splittedData[4])][i] = float.Parse(splittedData[i + 1],NumberStyles.Any,ci);
             }
-        }
+        }*/
         else if (splittedData[0] == "SDS")
         {
             if (splittedData.Length < 5)
@@ -268,7 +269,6 @@ public class PythonExecuter : MonoBehaviour {
                 return;
             }
 
-            //AnimationController.frame = 0; // might not be necessary
             int strucSize = -1;
             int frame = -1;
             int frames = -1;
@@ -424,8 +424,7 @@ public class PythonExecuter : MonoBehaviour {
         return response;
     }
 
-    public static IEnumerator SendOrderIEnumerator(PythonScript script, PythonCommandType type, string order,
-        MonoBehaviour unityScript = null, string unityMethod = "")
+    public static IEnumerator SendOrderIEnumerator(PythonScript script, PythonCommandType type, string order)
     {
         string fullOrder = ProcessOrder(script, type, order);
         // send the order via TCP 
@@ -440,7 +439,7 @@ public class PythonExecuter : MonoBehaviour {
 
         int id = TCPClient.taskNumIn;
         //int id = ++TCPClient.taskNumIn;
-        TCPClient.SendMsgToPython(type, fullOrder, unityScript, unityMethod);
+        TCPClient.SendMsgToPython(type, fullOrder);
         print("Waiting for the right response to arrive...");
         yield return new WaitWhile(() => id == TCPClient.taskNumOut);
         print("The receiver got the response with a matching id");
@@ -520,5 +519,5 @@ public enum PythonCommandType
 
 public enum ConnectionType
 {
-    Shell, Sync, AsyncInvoker, AsyncIEnumerator, AsyncThread
+    Shell, Sync, AsyncIEnumerator, AsyncThread
 }

@@ -448,14 +448,14 @@ public class LaserGrabber : MonoBehaviour
         // when loading the first animation, show Python that it's the first time, so that it can check if there is already a loaded ham_lammps
         if (firstAnimStart)
         {
-            LoadNewLammps("self.create_new_lammps");// self.calculate");
+            LoadNewLammpsHelper();
             firstAnimStart = false;
             shouldReloadAnim = false;
         }
         // tell Python to create a new ham_lammps because the structure or it's temperature has changed
         else if (temperatureHasChanged || shouldReloadAnim)
         {
-            LoadNewLammps("self.create_new_lammps");
+            LoadNewLammpsHelper();
             // remember that the ham_lammps is now according to the current structure
             shouldReloadAnim = false;
         }
@@ -475,7 +475,9 @@ public class LaserGrabber : MonoBehaviour
     private static IEnumerator HandleLammpsLoad(string order)
     {
         // send the order to execute lammps
-        PythonExecuter.SendOrderAsync(PythonScript.Executor, PythonCommandType.eval, order);
+        //PythonExecuter.SendOrderAsync(PythonScript.Executor, PythonCommandType.eval, order);
+        PythonExecuter.SendOrderAsync(PythonScript.Executor, PythonCommandType.eval_l,
+            order);
         
         // remember the id of the request to wait for the right response id
         int taskNumIn = TCPClient.taskNumIn;
@@ -491,11 +493,11 @@ public class LaserGrabber : MonoBehaviour
         // todo: handle the result here, instead of calling PythonExecuter.HandlePythonMsg
     } 
 
-    private static void LoadNewLammps(string loadOrder)
+    private static void LoadNewLammpsHelper()
     {
         AnimationController.frame = 0;
         string calculation = ModeData.currentMode.showTemp ? "md" : "minimize";
-        calculation = loadOrder + "('" + calculation + "')";
+        calculation = "unity_manager.Executor.create_new_lammps('" + calculation + "')";
         
         if (PythonExecuter.connType == ConnectionType.AsyncIEnumerator)
         {

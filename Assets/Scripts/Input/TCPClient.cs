@@ -26,8 +26,6 @@ public class TCPClient : MonoBehaviour
 	public static int taskNumOut = 0;
 	
 	// the List of functions and scripts the Update function should return received messages to
-	private static List<String> returnFunctions = new List<string>();
-	private static List<MonoBehaviour> returnScripts = new List<MonoBehaviour>();
 	public static string returnedMsg;
 	// a buffer for the received data
 	private static Byte[] block;
@@ -66,8 +64,7 @@ public class TCPClient : MonoBehaviour
 		}
 
 		// after sending a message to Python, check if a response arrived
-		if (returnFunctions.Count > 0
-		    || PythonExecuter.connType == ConnectionType.AsyncIEnumerator && taskNumIn > taskNumOut)
+		if (PythonExecuter.connType == ConnectionType.AsyncIEnumerator && taskNumIn > taskNumOut)
 		{
 			// check if new data has arrived
 			HandleInput(shouldReturn:true);
@@ -361,15 +358,7 @@ public class TCPClient : MonoBehaviour
 			}
 		}
 
-		if (returnFunctions.Count > 0)
-		{
-			returnScripts[0].Invoke(returnFunctions[0], 0);
-			returnScripts.RemoveAt(0);
-			returnFunctions.RemoveAt(0);
-		}
-
 		taskNumOut += 1;
-		print("Increased taskOut to " + taskNumOut);
 		return returnedMsg;
 	}
 
@@ -384,8 +373,7 @@ public class TCPClient : MonoBehaviour
 	/// <summary> 	
 	/// Send message to server using socket connection. 	
 	/// </summary> 	
-	public static string SendMsgToPython(PythonCommandType exType, string msg,
-		MonoBehaviour retScript=null, string retMeth="", bool sendAsync=true)
+	public static string SendMsgToPython(PythonCommandType exType, string msg, bool sendAsync=true)
 	{
 		if (socketConnection == null) {     
 			Debug.LogError("No socket connection");
@@ -432,25 +420,6 @@ public class TCPClient : MonoBehaviour
 			Debug.LogError("InvalidOperationException: " + ex + "\n" +
 			               "Check that the server is still running and you have internet connection");
 			return "Socket Exc: " + ex;
-		}
-
-		if (PythonExecuter.connType == ConnectionType.AsyncInvoker)
-		{
-			if (retMeth == "")
-			{
-				retMeth = "ReadReceivedInput";
-			}
-			returnFunctions.Add(retMeth);
-			
-			if (retScript == null)
-			{
-				returnScripts.Add(PythonExecuter.inst);
-			}
-			else
-			{
-				returnScripts.Add(retScript);
-			}
-			//return HandleInput();
 		}
 		return "async";
 		// return receive(); 
