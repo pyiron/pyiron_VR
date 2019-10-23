@@ -171,6 +171,11 @@ public class ExplorerMenuController : MenuController {
         shouldRefresh = true;
     }
 
+    public void LoadPathContentHelper(string relPath)
+    {
+        LoadPathContent(relPath);
+    }
+
     public void LoadPathContent(string jobName="", bool isAbsPath=false)
     {
         DeleteOptions();

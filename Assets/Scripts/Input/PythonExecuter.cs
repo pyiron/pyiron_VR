@@ -514,10 +514,10 @@ public enum PythonScript
 
 public enum PythonCommandType
 {
-    path, pr_input, exec_l, eval_l, exec, eval
+    exec_l, eval_l, exec, eval
 }
 
 public enum ConnectionType
 {
-    Shell, Sync, AsyncIEnumerator, AsyncThread
+    Shell, AsyncIEnumerator, AsyncThread
 }
