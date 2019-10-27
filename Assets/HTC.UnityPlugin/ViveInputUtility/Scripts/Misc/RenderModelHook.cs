@@ -67,7 +67,21 @@ namespace HTC.UnityPlugin.Vive
                     {
                         CleanUpRenderModel();
 
-                        var prefab = Resources.Load<GameObject>("Models/VIUModel" + m_loadedModelEnum.ToString());
+                        string modelName;
+                        if (m_loadedModelEnum == VRModuleDeviceModel.OculusQuestOrRiftSControllerLeft)
+                        {
+                            modelName = "Models/VIUModelOculusQuestControllerLeft";
+                        }
+                        else if (m_loadedModelEnum == VRModuleDeviceModel.OculusQuestOrRiftSControllerRight)
+                        {
+                            modelName = "Models/VIUModelOculusQuestControllerRight";
+                        }
+                        else
+                        {
+                            modelName = "Models/VIUModel" + m_loadedModelEnum;
+                        }
+                        
+                        var prefab = Resources.Load<GameObject>(modelName);
                         if (prefab != null)
                         {
                             m_model = Instantiate(prefab);

@@ -19,7 +19,9 @@ public class TCPClient : MonoBehaviour
 	
 	// needed for asynchronous (lag free) connecting to the server
 	public static Task connStatus;
-	private float connTimer = 1;
+	// the time until the connection is declared as not existent
+	private static float connTimeOut = 2;
+	private float connTimer = connTimeOut;
 
 	// will be increased by 1 each time an order gets send. It functions as a unique id for each order send to Python
 	public static int taskNumIn = 0;
@@ -32,16 +34,9 @@ public class TCPClient : MonoBehaviour
 	// the task waiting for new data
 	private static Task<int> socketReadTask;
 
-	// being set to false will lead to Unity hanging while loading
-	//public static bool isAsync = false;
-	//public static bool isEZAsync = false;
-	// the ip address of the server. Warning: testing out multiple servers can lead to long loading times
-	//private string[] HOSTS = {"130.183.226.32"}; //"192.168.0.198", "192.168.0.197", "127.0.0.1", "130.183.212.100", "130.183.212.82"};
-
-	//private string HOST = "130.183.226.32";
-	// private const string HOST = "192.168.0.196";// "localhost"
 	public const int PORT = 65432;
 	
+	// the size of message-packets send from Python to Unity. Should be the same as in Python
 	private static int BLOCKSIZE = 1024;
 	// buffer all incoming data. Needed to deal with the TCP stream
 	private static String recBuffer = "";
@@ -137,7 +132,7 @@ public class TCPClient : MonoBehaviour
 			if (connStatus.IsFaulted || connStatus.IsCanceled)
 			{
 				// error
-				connTimer = 1;
+				connTimer = connTimeOut;
 				print("Connection is Faulted: " + connStatus.IsFaulted);
 				print("Connection is Canceled: " + connStatus.IsCanceled);
 				ConnectionError();
@@ -146,7 +141,7 @@ public class TCPClient : MonoBehaviour
 			if (connStatus.IsCompleted)
 			{
 				// success
-				connTimer = 1;
+				connTimer = connTimeOut;
 				print("Successfully connected to the server");
 				ConnectionSuccess();
 				break;
@@ -157,7 +152,7 @@ public class TCPClient : MonoBehaviour
 		if (connTimer <= 0)
 		{
 			// the server didn't respond in time
-			connTimer = 1;
+			connTimer = connTimeOut;
 			ConnectionTimeout();
 		}
 	}
@@ -193,7 +188,7 @@ public class TCPClient : MonoBehaviour
 		connStatus.Dispose();
 		connStatus = null;
 		socketConnection = null;
-		ErrorTextController.inst.ShowMsg("Timeout: Couldn't connect to the server.");
+		ErrorTextController.inst.ShowMsg("Couldn't connect to the server.");
 	}
 
 	private void ConnectionTimeout()

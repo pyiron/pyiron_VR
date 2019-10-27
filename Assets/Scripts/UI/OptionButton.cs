@@ -9,11 +9,6 @@ public class OptionButton : MonoBehaviour, IButton
 {
     public bool isJob;
 
-    public void Update()
-    {
-        transform.localEulerAngles = Vector3.zero;
-    }
-
     private IEnumerator HandleLoad(string jobName)
     {
         // send the order to load the structure

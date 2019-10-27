@@ -12,10 +12,7 @@ public class PathButton : MonoBehaviour, IButton
 
     public void WhenClickDown()
     {
-        //ExplorerMenuController.inst.DeleteOptions();
-        //ExplorerMenuController.inst.ClearOptions();
         ExplorerMenuController.inst.LoadPathContent(GetCurrPath(), true);
-        //PythonExecuter.SendOrderSync(PythonScript.ProjectExplorer, PythonCommandType.path, GetCurrPath());
     }
 
     private string GetCurrPath()

@@ -1,5 +1,12 @@
-﻿# Vive Input Utility for Unity - v1.10.5
+﻿# Vive Input Utility for Unity - v1.10.6
 Copyright (c) 2016-2019, HTC Corporation. All rights reserved.
+
+
+## Changes for v1.10.6:
+
+* Bug Fix
+  - Fix SteamVR Plugin v2.4.5 incompatibility due to action manifest path changes 5fb63198
+  - Fix some Oculus(Android) recommend settings not working in Unity 2019.1 or newer 1c8ebf78
 
 
 ## Changes for v1.10.5:

@@ -38,7 +38,7 @@ public class ExplorerMenuController : MenuController {
     {
         GameObject newButton = Instantiate(Pref, parent.transform, true);
         newButton.transform.localPosition = Vector3.zero;
-        //newButton.transform.eulerAngles = Vector3.up * 90;
+        newButton.transform.localEulerAngles = Vector3.zero;
         newButton.transform.localScale = Vector3.one;
         newButton.GetComponentInChildren<Text>().text = txt;
         newButton.GetComponent<Image>().color = col;
@@ -128,12 +128,12 @@ public class ExplorerMenuController : MenuController {
 
     public void PathHasChanged(string newPath="")
     {
-        PathButton[] pathButtons = GetComponentsInChildren<PathButton>();
+        Button[] pathButtons = PathFolder.GetComponentsInChildren<Button>();
         bool correctPath = true;
         string[] splittedPath = currPath.Split('/');
         for (int i = 0; i < pathButtons.Length; i++)
         {
-            PathButton btn = pathButtons[i];
+            Button btn = pathButtons[i];
             if (correctPath)
             {
                 if (splittedPath.Length > i)
@@ -170,10 +170,9 @@ public class ExplorerMenuController : MenuController {
         }
         shouldRefresh = true;
     }
-
-    public void LoadPathContentHelper(string relPath)
-    {
-        LoadPathContent(relPath);
+    
+    public void LoadPathContentHelper(string jobName) {
+        LoadPathContent(jobName);
     }
 
     public void LoadPathContent(string jobName="", bool isAbsPath=false)
