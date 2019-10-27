@@ -40,8 +40,6 @@ public class TCPClient : MonoBehaviour
 	private static int BLOCKSIZE = 1024;
 	// buffer all incoming data. Needed to deal with the TCP stream
 	private static String recBuffer = "";
-	// the last time the program tried to connect to a host
-	private float lastStartTimer;
 
 	#region Monobehaviour Callbacks
 
@@ -52,17 +50,11 @@ public class TCPClient : MonoBehaviour
 
 	private void Update()
 	{
-		// if the TCPClient is trying to connect to the server, check if the connection could be established
-		if (connStatus != null)
-		{
-			//TryConnection();
-		}
-
 		// after sending a message to Python, check if a response arrived
-		if (PythonExecuter.connType == ConnectionType.AsyncIEnumerator && taskNumIn > taskNumOut)
+		if (taskNumIn > taskNumOut)
 		{
-			// check if new data has arrived
-			HandleInput(shouldReturn:true);
+			// check if new data has arrived, without blocking
+			ListenForInput(shouldReturn:true);
 		}
 	}
 
@@ -104,18 +96,15 @@ public class TCPClient : MonoBehaviour
 		// after connecting to a server or while trying to connect to one, connecting to another one is not possible
 		if (socketConnection != null || connStatus != null) return;
 		
-		if (PythonExecuter.connType != ConnectionType.Shell)
+		try
 		{
-			try
-			{
-				socketConnection = new TcpClient();
-				connStatus = socketConnection.ConnectAsync(host, PORT);
-				StartCoroutine(TryConnection());
-			}
-			catch
-			{
-				ConnectionError();
-			}
+			socketConnection = new TcpClient();
+			connStatus = socketConnection.ConnectAsync(host, PORT);
+			StartCoroutine(TryConnection());
+		}
+		catch
+		{
+			ConnectionError();
 		}
 	}
 
@@ -127,7 +116,6 @@ public class TCPClient : MonoBehaviour
 		while (connTimer > 0)
 		{
 			print("Trying to connect");
-			//connTimer -= Time.deltaTime;
 			connTimer -= updateTime;
 			if (connStatus.IsFaulted || connStatus.IsCanceled)
 			{
@@ -148,7 +136,6 @@ public class TCPClient : MonoBehaviour
 			}
 			yield return new WaitForSeconds(updateTime);
 		}
-		//else
 		if (connTimer <= 0)
 		{
 			// the server didn't respond in time
@@ -161,24 +148,11 @@ public class TCPClient : MonoBehaviour
 	{
 		connStatus.Dispose();
 		connStatus = null;
-		ModeData.inst.SetMode(Modes.Explorer);
-			
-		if (PythonExecuter.connType == ConnectionType.AsyncThread)
-		{
-			try
-			{
-				clientReceiveThread = new Thread(ListenForData) {IsBackground = true};
-				clientReceiveThread.Start();
-			}
-			catch (Exception e)
-			{
-				Debug.Log("On client connect exception " + e);
-			}
-		}
-		//PythonExecuter.SendOrderSync(PythonScript.None, PythonCommandType.eval, "self.send_group()");
-		ExplorerMenuController.inst.LoadPathContent();
 		
-		//StartCoroutine(PythonExecuter.SendOrder(PythonScript.None, PythonCommandType.eval, "self.send_group()"));
+		ModeData.inst.SetMode(Modes.Explorer);
+		
+		// load the content of the start path (which is defined in the Python script)
+		ExplorerMenuController.inst.LoadPathContent();
 	}
 
 	private void ConnectionError()
@@ -213,7 +187,7 @@ public class TCPClient : MonoBehaviour
 		{           
 			while (true)
 			{
-				PythonExecuter.HandlePythonMsg(HandleInput());
+				PythonExecuter.HandlePythonMsg(ListenForInput());
 				if (!ProgramSettings.programIsRunning)
 				{
 					return;
@@ -277,7 +251,14 @@ public class TCPClient : MonoBehaviour
 		return Encoding.ASCII.GetString(block, 0, len);
 	}
 
-	private static string HandleInput(bool readAsync=true, bool shouldReturn=false)
+	/// <summary>
+	/// Listens on the connection to the Python server if input arrived. Will block if shouldReturn is set to false.
+	/// Returns the received input.
+	/// </summary>
+	/// <param name="readAsync"></param>
+	/// <param name="shouldReturn"></param>
+	/// <returns></returns>
+	private static string ListenForInput(bool readAsync=true, bool shouldReturn=false)
 	{
 		// get the input stream
 		if (socketReadTask == null)
@@ -294,7 +275,7 @@ public class TCPClient : MonoBehaviour
 			}
 		}
 
-		// get the length of the message that will be send afterwards
+		// get the length of the message that will be send from the python program afterwards
 		int headerLen;
 		while (true)
 		{
@@ -310,6 +291,7 @@ public class TCPClient : MonoBehaviour
 
 			if (newMsg == "" && shouldReturn) return "";
 			recBuffer += newMsg;
+			// before the semicolon the length of the following message gets send, after it the message
 			if ((headerLen = recBuffer.IndexOf(';')) != -1)
 			{
 				break;
@@ -331,18 +313,21 @@ public class TCPClient : MonoBehaviour
 		int msgLen = int.Parse(header);
 		if (msgLen == -1) return "";
 		
-		// Receive data until at least the whole message has been received. Additional data will be pufferred
-		//String msg = "";
+		// Receive data until at least the whole message has been received. Additional data will be bufferred
+		// Warning: If the message is really long and the connection really slow this loop could lead to a temporary
+		// screen freeze.
 		returnedMsg = "";
 		while (true)
 		{
 			if (recBuffer.Length >= msgLen)
 			{
+				// the whole message arrived
 				returnedMsg += recBuffer.Substring(0, msgLen - returnedMsg.Length);
 				RemoveString(returnedMsg.Length);
 				break;
 			}
 
+			// try to read input from the stream
 			if (readAsync)
 			{
 				recBuffer += GetMsgAsync(stream);
@@ -362,7 +347,7 @@ public class TCPClient : MonoBehaviour
 	public static string SendMsgToPythonSync(PythonCommandType exType, string msg)
 	{
 		SendMsgToPython(exType, msg, sendAsync:false);
-		return HandleInput(readAsync:false);
+		return ListenForInput(readAsync:false);
 	}
 	
 	/// <summary> 	
@@ -426,7 +411,7 @@ public class TCPClient : MonoBehaviour
 	{
 		if (socketConnection != null)
 		{
-			string rec = SendMsgToPython(PythonCommandType.exec, "end server");
+			string rec = SendMsgToPython(PythonCommandType.exec_l, "end server");
 			print("Closed the server: " + rec);
 		}
 	}

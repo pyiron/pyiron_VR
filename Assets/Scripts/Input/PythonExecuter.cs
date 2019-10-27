@@ -13,39 +13,24 @@ public class PythonExecuter : MonoBehaviour {
     #region Attributes
 
     internal static PythonExecuter inst;
+    
+    // define the way the connection to python should work
+    //public static ConnectionType connType = ConnectionType.AsyncIEnumerator;
 
     [Header("Scene")]
     // the script of the controller printer
     public InGamePrinter printer;
-    // the reference to the ProgressBar
-    private GameObject ProgressBar;
 
-    [Header("Start Python")]
     // to parse floats correct
-    public static CultureInfo ci = (CultureInfo)CultureInfo.CurrentCulture.Clone();
-    // the file to where the python script file is located
-    // old Path: C:/Users/pneugebauer/PycharmProjects/pyiron/tests/Structures
-    // TODO: No Hardcoding. Could be achieved by using a client/server or ssh
-    public static string pythonPath =
-        "C:/Users/Philip/Documents/MPIE/vrplugin/pyiron_mpie/vrplugin";
-    //"C:/Users/Philip/Documents/MPIE/pyiron_vrplugin-master/pyiron_vrplugin-master/vrplugin";
-    //"C:/Users/pneugebauer/PycharmProjects/pyiron/vrplugin";///Structures";
-    // public static string pythonPath = "C:/Users/pneugebauer/PyIron_data/projects/Structures";
-    // start a process which executes the commands in the shell to start the python script
-    private static Process myProcess = new Process();
-    // shows whether the program has loaded a structure or not
-    public static bool loadedStructure;
+    private static CultureInfo ci = (CultureInfo)CultureInfo.CurrentCulture.Clone();
 
     [Header("Receive data from Python")]
     // the amount of changes the Python program did after the Unity program requested it
     public static int incomingChanges;
 
-    // the forces of all the atoms
+    // the forces of all the atoms (not in use at the moment)
     public static float[][] allForces;
     
-    // should the server be used for transfer of data or the shell
-    //public static bool useServer = true;
-    public static ConnectionType connType = ConnectionType.AsyncIEnumerator;
 
     [Header("Send Data to Python")]
     // the amount of changes the Unity program requested the Python program to do
@@ -62,15 +47,9 @@ public class PythonExecuter : MonoBehaviour {
     private void Awake()
     {
         inst = this;
-        // the reference to the ProgressBar
-        ProgressBar = GameObject.Find("MyObjects/ProgressBar");
         
         // allow float.Parse to parse floats seperated by . correctly
         ci.NumberFormat.CurrencyDecimalSeparator = ".";
-
-        if (connType == ConnectionType.Shell)
-            LoadUnityManager();
-        ResetTransferData();
     } 
     
     /// <summary>
@@ -89,82 +68,14 @@ public class PythonExecuter : MonoBehaviour {
         InGamePrinter.inst[0].Ctrl_print("Send: " + outgoingChanges);
         InGamePrinter.inst[1].Ctrl_print("Received: " + incomingChanges);
     }
-    
-    public void OnApplicationQuit()
-    {
-        ClosePythonProgress();
-    }
-
-    #endregion
-
-    #region Init
-
-    private void ResetTransferData()
-    {
-        // the amount of changes the Python program did after the Unity program requested it
-        incomingChanges = 0;
-        // the amount of changes the Unity program requested the Python program to do
-        outgoingChanges = 0;
-    }
-    
-    // start the UnityManager which will start the ProjectExplorer
-    public void LoadUnityManager()
-    {
-        if (loadedStructure) // not needed at the moment
-        {
-            ClosePythonProgress();
-            ResetTransferData();
-        }
-        myProcess = new Process();
-        var pyPathThread = new Thread(delegate () {
-            string executedOrder = "cd " + pythonPath + " && python UnityManager.py";
-            print("executed: " + executedOrder);
-            Command(executedOrder, myProcess);
-        });
-        pyPathThread.Start();
-    }
-
-    static void Command(string order, Process myProcess)
-    {
-        try
-        {
-            myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            myProcess.StartInfo.CreateNoWindow = true;
-            myProcess.StartInfo.UseShellExecute = false;
-            myProcess.StartInfo.RedirectStandardInput = true;
-            myProcess.StartInfo.RedirectStandardOutput = true;
-            myProcess.StartInfo.RedirectStandardError = true;
-            myProcess.OutputDataReceived += ReceiveOutput;
-            myProcess.ErrorDataReceived += ErrorDataReceived;
-            myProcess.StartInfo.FileName = "C:\\Windows\\system32\\cmd.exe";
-            myProcess.StartInfo.Arguments = "/c" + order;
-            myProcess.EnableRaisingEvents = true;
-            myProcess.Start();
-            myProcess.BeginOutputReadLine();
-            myProcess.BeginErrorReadLine();
-            loadedStructure = true;
-            SendOrderAsync(PythonScript.None, PythonCommandType.eval, "self.send_group()");
-        }
-        catch (Exception e) { print(e); }
-    }
-
     #endregion
 
     #region ReceiveData
 
     /// <summary>
-    /// Receive the input from Python and handle it, e.g. by delegating it to other scripts.
+    /// Receive the input from Python and handle it, e.g. by delegating it to other scripts. In the future, the script
+    /// that send a message to python should handle the response, instead of calling this method.
     /// </summary>
-
-    private static void ErrorDataReceived(object sender, DataReceivedEventArgs e) {
-        print(e.Data);
-    }
-
-    private static void ReceiveOutput(object sender, DataReceivedEventArgs e)
-    {
-        HandlePythonMsg(e.Data);
-    }
-
     // can be called by the TCPServer when receiving a new msg
     public void ReadReceivedInput()
     {
@@ -174,18 +85,15 @@ public class PythonExecuter : MonoBehaviour {
     public static void HandlePythonMsg(string data)
     {
         print(data);
-        //print("Time needed: " + (1.0 + Time.time - TCPClient.st));
         if (data == "async" || data == "") return;
-        //if (String.Compare(data, "async", StringComparison.CurrentCultureIgnoreCase) == 0) return;
+        
         // remove the "" from the beginning end end if a string got send via the Server
-        // TODO: Use json tools instead
-        if (connType != ConnectionType.Shell)
-        {
-            if (data[0] == '"')
-                data = data.Substring(1, data.Length - 1);
-            if(data[data.Length - 1] == '"') 
-                data = data.Substring(0, data.Length - 1);
-        }
+        // TODO: JsonUtilities can't parse this and this shouldn't be parsed by hand. I think the exclamation marks
+        // are not needed anyway
+        if (data[0] == '"')
+            data = data.Substring(1, data.Length - 1);
+        if(data[data.Length - 1] == '"') 
+            data = data.Substring(0, data.Length - 1);
 
         try
         {
@@ -234,33 +142,6 @@ public class PythonExecuter : MonoBehaviour {
                 print(splittedData + " is not implemented!");
             }
         }
-        /*else if (new[] {"groups", "nodes", "files"}.Contains(splittedData[0]))
-        {
-            ExplorerMenuController.inst.AddOption((OptionType) Enum.Parse(typeof(OptionType), splittedData[0]),
-                inp.Substring(splittedData[0].Length + 1));
-        }*/
-        /*else if (splittedData[0] == "groups")
-        {
-            StructureMenuController.inst.AddOption(OptionType.Folder, inp.Substring(7));
-        }
-        else if (splittedData[0] == "nodes")
-        {
-            StructureMenuController.inst.AddOption(OptionType.Job, inp.Substring(6));
-        }
-        else if (splittedData[0] == "files")
-        {
-            print("Files detected, they are not needed, but do no harm.");
-            //StructureMenuController.inst.AddOption(OptionType.Script, inp.Substring(6));
-        }*/
-        /*else if (splittedData[0] == "force")
-        {
-            if (ContainsValue(splittedData[1]))
-            {
-                allForces[int.Parse(splittedData[4])] = new float[3];
-                for (int i = 0; i < 3; i++)
-                    allForces[int.Parse(splittedData[4])][i] = float.Parse(splittedData[i + 1],NumberStyles.Any,ci);
-            }
-        }*/
         else if (splittedData[0] == "SDS")
         {
             if (splittedData.Length < 5)
@@ -302,16 +183,6 @@ public class PythonExecuter : MonoBehaviour {
         }
         else if (splittedData[0] == "SDM")
         {
-            /*for (int i = 1; i < 4; i++)
-            {
-                float f;
-                if (float.TryParse(splittedData[i], out f))
-                {
-                    print("position Data should be a float");
-                }
-            }*/
-
-            
             StructureData.AddFrameDataMid(new AtomData(
                 new Vector3(float.Parse(splittedData[1],NumberStyles.Any,ci), 
                     float.Parse(splittedData[2],NumberStyles.Any,ci), 
@@ -357,14 +228,6 @@ public class PythonExecuter : MonoBehaviour {
             }
             StructureCreatorMenuController.args.Add(nDict);
         }
-        /*else if (splittedData[0] == "path")
-        {
-            if (ExplorerMenuController.currPath != splittedData[1])
-            {
-                ExplorerMenuController.currPath = splittedData[1];
-                ExplorerMenuController.pathHasChanged = true;
-            }
-        }*/
         else if (splittedData[0] == "")
         {
             UnityEngine.Debug.LogWarning("Unknown Data: " + inp);
@@ -406,6 +269,7 @@ public class PythonExecuter : MonoBehaviour {
     
     public static string SendOrderSync(PythonScript script, PythonCommandType type, string order, bool handleInput=true)
     {
+        // todo: simplify method and eliminate duplicade code at similar methods
         string fullOrder = ProcessOrder(script, type, order);
         if (type == PythonCommandType.exec_l || type == PythonCommandType.eval_l)
         {
@@ -437,8 +301,10 @@ public class PythonExecuter : MonoBehaviour {
             type = (type != PythonCommandType.exec ? PythonCommandType.eval : PythonCommandType.exec);
         }
 
+        // draw a unique id for the message
         int id = TCPClient.taskNumIn;
-        //int id = ++TCPClient.taskNumIn;
+        
+        // send the message using TCP
         TCPClient.SendMsgToPython(type, fullOrder);
         print("Waiting for the right response to arrive...");
         yield return new WaitWhile(() => id == TCPClient.taskNumOut);
@@ -447,36 +313,23 @@ public class PythonExecuter : MonoBehaviour {
         HandlePythonMsg(TCPClient.returnedMsg);
     }    
 
-    // send the given order to Python, where it will be executed with the exec() command
+    // send the given order to Python, where it will be executed with the exec() or eval() command
     public static void SendOrderAsync(PythonScript script, PythonCommandType type, string order)
     {
         string fullOrder = ProcessOrder(script, type, order);
-        if (connType != ConnectionType.Shell)
+        
+        // send the order via TCP 
+        if (type == PythonCommandType.exec_l || type == PythonCommandType.eval_l)
         {
-            // send the order via TCP 
-            if (type == PythonCommandType.exec_l || type == PythonCommandType.eval_l)
-            {
-                fullOrder = order;
-            }
-            else
-            {
-                type = (type != PythonCommandType.exec ? PythonCommandType.eval : PythonCommandType.exec);
-            }
-
-            if (connType == ConnectionType.AsyncIEnumerator)
-            {
-                TCPClient.SendMsgToPython(type, fullOrder);
-            }
-            else
-            {
-                HandlePythonMsg(TCPClient.SendMsgToPython(type, fullOrder));
-            }
+            fullOrder = order;
         }
         else
         {
-            // write the command in the input of Python
-            myProcess.StandardInput.WriteLine(fullOrder);
+            type = (type != PythonCommandType.exec ? PythonCommandType.eval : PythonCommandType.exec);
         }
+
+        // send the message using TCP
+        TCPClient.SendMsgToPython(type, fullOrder);
     }
 
     #endregion
@@ -485,25 +338,6 @@ public class PythonExecuter : MonoBehaviour {
     public static bool IsLoading()
     {
         return outgoingChanges != incomingChanges;
-    }
-
-    /// <summary>
-    /// Close the Python Progress the clean way.
-    /// </summary>
-
-    private void ClosePythonProgress()
-    {
-        // close the python script
-        print("Application ending after " + Time.time + " seconds");
-        print("Sent  " + outgoingChanges + " Orders to PyIron");
-        print("Received  " + incomingChanges + " Responses from PyIron");
-        if (connType == ConnectionType.Shell)
-        {
-            // let the program stop itself. This way, it can for example delete the scratch folder.
-            myProcess.StandardInput.WriteLine("stop");
-            myProcess.StandardInput.Close();
-            myProcess.Close();
-        }
     }
 }
 
@@ -519,5 +353,5 @@ public enum PythonCommandType
 
 public enum ConnectionType
 {
-    Shell, AsyncIEnumerator, AsyncThread
+    AsyncIEnumerator, AsyncThread
 }

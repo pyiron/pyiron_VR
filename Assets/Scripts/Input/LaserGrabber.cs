@@ -499,16 +499,8 @@ public class LaserGrabber : MonoBehaviour
         string calculation = ModeData.currentMode.showTemp ? "md" : "minimize";
         calculation = "unity_manager.Executor.create_new_lammps('" + calculation + "')";
         
-        if (PythonExecuter.connType == ConnectionType.AsyncIEnumerator)
-        {
-            instances[0].StartCoroutine(HandleLammpsLoad(calculation));
-        }
-        else
-        {
-            instances[0].StartCoroutine(
-                PythonExecuter.SendOrderIEnumerator(PythonScript.Executor, PythonCommandType.eval,
-                    calculation));
-        }
+        // load the new structure in another coroutine
+        instances[0].StartCoroutine(HandleLammpsLoad(calculation));
         
         AnimationController.waitForLoadedStruc = true;
         print("Wait begun");
