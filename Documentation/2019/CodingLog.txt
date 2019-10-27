@@ -32,7 +32,7 @@ while it was originally planned to use Json for objects and primitive types, it 
 I think the second one is definitely the best, so I implemented this one.
 All together it took ~3h to implement the code, while researching Unitys JsonUtility und thinking of a good fix for the problem took the most time.
 
-After that I tested the new system, tried to optimize it, cleaned some code up and removed some of the old, now unnecessary code. This took me ~2h.
+After that I tested the new system and tried to optimize it. I cleaned up the code, e.g. by removing all old, now unnecessary code. Finally I documented the code for exchanging messages between Python and Unity in both the Python scripts and the C# scripts of Unity. This took me ~2h.
 
 
 

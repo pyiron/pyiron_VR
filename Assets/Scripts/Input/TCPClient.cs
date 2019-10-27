@@ -177,31 +177,6 @@ public class TCPClient : MonoBehaviour
 
 	#endregion
 
-	#region Async
-
-	/// <summary> 	
-	/// Runs in background clientReceiveThread; Listens for incomming data. 	
-	/// </summary>     
-	private void ListenForData() { 		
-		try
-		{           
-			while (true)
-			{
-				PythonExecuter.HandlePythonMsg(ListenForInput());
-				if (!ProgramSettings.programIsRunning)
-				{
-					return;
-				}
-			}         
-		}         
-		catch (SocketException socketException) {             
-			Debug.Log("Socket exception: " + socketException);         
-			Debug.Log("Has the Server been started?");
-		}     
-	}	
-
-	#endregion
-
 	// delete the beginning of a string
 	private static void RemoveString(int len)
 	{
@@ -260,6 +235,10 @@ public class TCPClient : MonoBehaviour
 	/// <returns></returns>
 	private static string ListenForInput(bool readAsync=true, bool shouldReturn=false)
 	{
+		// Message protocol: len_of_message;messagelen_of_next_message;next_message
+		// Example: 13;first message4;done
+		// One message will be read per loop
+		
 		// get the input stream
 		if (socketReadTask == null)
 		{

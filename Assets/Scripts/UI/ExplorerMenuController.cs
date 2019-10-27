@@ -185,12 +185,12 @@ public class ExplorerMenuController : MenuController {
         {
             if (isAbsPath)
             {
-                PythonExecuter.SendOrderSync(PythonScript.ProjectExplorer,
+                PythonExecuter.SendOrderSync(PythonScript.None,
                     PythonCommandType.exec_l, "unity_manager.pr = Project('" + jobName + "')", handleInput: false);
             }
             else
             {
-                PythonExecuter.SendOrderSync(PythonScript.ProjectExplorer,
+                PythonExecuter.SendOrderSync(PythonScript.None,
                     PythonCommandType.exec_l, "unity_manager.pr = unity_manager.pr['" + jobName + "']", handleInput: false);
             }
         }

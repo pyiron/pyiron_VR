@@ -14,10 +14,10 @@ public class OptionButton : MonoBehaviour, IButton
         // send the order to load the structure
         //PythonExecuter.SendOrderAsync(PythonScript.ProjectExplorer, PythonCommandType.pr_input, order);
         
-        PythonExecuter.SendOrderSync(PythonScript.ProjectExplorer,
+        PythonExecuter.SendOrderSync(PythonScript.None,
             PythonCommandType.exec_l, "unity_manager.pr = unity_manager.pr['" + jobName + "']", handleInput: false);
 
-        PythonExecuter.SendOrderAsync(PythonScript.ProjectExplorer, PythonCommandType.eval_l, 
+        PythonExecuter.SendOrderAsync(PythonScript.None, PythonCommandType.eval_l, 
             "unity_manager.send_job()");
 
         // remember the id of the request to wait for the right response id
@@ -51,9 +51,6 @@ public class OptionButton : MonoBehaviour, IButton
         }
         else
         {
-            
-            //PythonExecuter.SendOrderSync(PythonScript.ProjectExplorer, PythonCommandType.pr_input, job_name);
-            
             ExplorerMenuController.inst.LoadPathContent(job_name);
         }
     }

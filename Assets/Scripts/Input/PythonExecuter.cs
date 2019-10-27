@@ -13,9 +13,6 @@ public class PythonExecuter : MonoBehaviour {
     #region Attributes
 
     internal static PythonExecuter inst;
-    
-    // define the way the connection to python should work
-    //public static ConnectionType connType = ConnectionType.AsyncIEnumerator;
 
     [Header("Scene")]
     // the script of the controller printer
@@ -288,31 +285,6 @@ public class PythonExecuter : MonoBehaviour {
         return response;
     }
 
-    public static IEnumerator SendOrderIEnumerator(PythonScript script, PythonCommandType type, string order)
-    {
-        string fullOrder = ProcessOrder(script, type, order);
-        // send the order via TCP 
-        if (type == PythonCommandType.exec_l || type == PythonCommandType.eval_l)
-        {
-            fullOrder = order;
-        }
-        else
-        {
-            type = (type != PythonCommandType.exec ? PythonCommandType.eval : PythonCommandType.exec);
-        }
-
-        // draw a unique id for the message
-        int id = TCPClient.taskNumIn;
-        
-        // send the message using TCP
-        TCPClient.SendMsgToPython(type, fullOrder);
-        print("Waiting for the right response to arrive...");
-        yield return new WaitWhile(() => id == TCPClient.taskNumOut);
-        print("The receiver got the response with a matching id");
-        // get the response and handle it
-        HandlePythonMsg(TCPClient.returnedMsg);
-    }    
-
     // send the given order to Python, where it will be executed with the exec() or eval() command
     public static void SendOrderAsync(PythonScript script, PythonCommandType type, string order)
     {
@@ -343,15 +315,10 @@ public class PythonExecuter : MonoBehaviour {
 
 public enum PythonScript
 {
-    None, Executor, ProjectExplorer
+    None, Executor
 }
 
 public enum PythonCommandType
 {
     exec_l, eval_l, exec, eval
-}
-
-public enum ConnectionType
-{
-    AsyncIEnumerator, AsyncThread
 }
