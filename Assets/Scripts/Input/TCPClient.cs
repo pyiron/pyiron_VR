@@ -76,6 +76,8 @@ public class TCPClient : MonoBehaviour
 	// called by the Input Field for the server address on the network panel
 	public void ConnectTo(InputField inputField)
 	{
+		// save the Ip adress
+		PlayerPrefs.SetString("ServerIp", inputField.text);
 		ConnectWithHost(inputField.text);
 	}
 	

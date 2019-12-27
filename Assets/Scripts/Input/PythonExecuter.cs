@@ -266,7 +266,7 @@ public class PythonExecuter : MonoBehaviour {
     
     public static string SendOrderSync(PythonScript script, PythonCommandType type, string order, bool handleInput=true)
     {
-        // todo: simplify method and eliminate duplicade code at similar methods
+        // todo: simplify method and eliminate duplicate code at similar methods
         string fullOrder = ProcessOrder(script, type, order);
         if (type == PythonCommandType.exec_l || type == PythonCommandType.eval_l)
         {
