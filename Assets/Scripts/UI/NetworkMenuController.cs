@@ -33,11 +33,14 @@ public class NetworkMenuController : MenuController {
         serverAddressField.interactable = TCPClient.connStatus == null;
     }
 
+    // Activate a keyboard in VR
+    // The keyboard allows to Input a costume server IP
     public void OnKeyboardToggle(Toggle toggle)
     {
         keyboard.SetActive(toggle.isOn);
     }
 
+    // receive Input from the keyboard and set the IP Address accordingly
     public void OnKeyboardPressDown(Button key)
     {
         Text keyText = key.GetComponentInChildren<Text>();
@@ -46,6 +49,7 @@ public class NetworkMenuController : MenuController {
             serverAddressField.text = "";
         } else if (keyText.text == "Del" && serverAddressField.text != "")
         {
+            // remove the last char
             serverAddressField.text = 
                 serverAddressField.text.Substring(0, serverAddressField.text.Length - 1);
         }

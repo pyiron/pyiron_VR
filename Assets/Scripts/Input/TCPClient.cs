@@ -151,6 +151,7 @@ public class TCPClient : MonoBehaviour
 		connStatus.Dispose();
 		connStatus = null;
 		
+		NetworkMenuController.inst.keyboard.SetActive(false);
 		ModeData.inst.SetMode(Modes.Explorer);
 		
 		// load the content of the start path (which is defined in the Python script)
