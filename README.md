@@ -32,7 +32,7 @@ git pull`
 *  On the PC, SideQuest should now show the Quest as connected
 *  In the Rider in the Bottom-Left Corner click My Apps
 *  On the top should be a big Banner "Installed Apps\nDrag and drop your APK/OBB files over this message to install!!!"
-*  Download the [apk](Builds/QuestBuild.apk)
+*  Download the [latest Oculus Quest Build](Builds/QuestBuild.apk)
 *  Drag the file over the banner on the Top of SideQuest
 
 ### To start the Quest Program
