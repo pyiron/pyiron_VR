@@ -76,3 +76,10 @@ In Temperature and Minimize Mode, a Trashcan will appear when grabbing an atom. 
 ### Creating new Atoms
 -- Currently in Alpha, bugs can and will occur --
 In Temperature and Minimize Mode, Atoms and structures can be created using the UI.
+
+
+## Troubleshooting
+### Connection errors
+*  Make sure the Server and the Client (e.g. the Oculus Quest) are connected to the same network
+*  It can help to mark the network as private, else the server might get blocked from the firewall
+*  Make sure VPN is disabled or both Server and Client are connected to the same VPN Network
