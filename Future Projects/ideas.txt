@@ -80,3 +80,16 @@ Implement new View Mode
 Fix Bugs
 Write Comments and Docu
 Delete unnecessary code
+
+1.1.2020
+-First Mode: Main Menu
+Name of structure/Path
+Start/Stop: Dreieck, Striche
+Home Menu Title adden
+-Home menu modes: Explorer + Structure Builder
+Save/Discard Mock
+Dropdown for MD/Minimize
+-Simulate Button unten
+The Lab als Background
+-Project Explorer: Files untereinander statt nebeneinander
+Controller Symbole fixen

@@ -6,6 +6,7 @@ using UnityEngine;
 using System.IO;
 using HTC.UnityPlugin.Vive;
 using UnityEditor;
+using UnityEngine.Serialization;
 
 // Component of both controllers
 public class LaserGrabber : MonoBehaviour
@@ -30,26 +31,19 @@ public class LaserGrabber : MonoBehaviour
     // the Vector between the controller rotation and the grabbed object rotation
     public Transform boundingbox;
 
-    [Header("Laser")]
+    [FormerlySerializedAs("LaserPrefab")] [Header("Laser")]
     // the prefab for the laser
-    public GameObject LaserPrefab;
+    public GameObject laserPrefab;
     // the instance of the laser in the game
     public GameObject laser;
     // the length of the laser
-    private float laserLength;
+    private float _laserLength;
     // the max distance when the laser still detects an object to attach
     private static int laserMaxDistance = 100;
 
     [Header("Change Animation")]
-    // shows whether it is the first time an animation should be played,
-    // so that the python program knows whether to load a new animation or not
-    public static bool firstAnimStart = true;
-    // shows if the current lammps is a calc_md or calc_minimize
-    private static bool lammpsIsMd;
-    // shows whether the positions of the atoms are still the same es they were when the last ham_lammps was created
-    public static bool shouldReloadAnim;
     // a timer, which counts when the program should go a frame forward or backwards, when keeping the one frame forward button pressed
-    private float moveOneFrameTimer = -1;
+    private float _moveOneFrameTimer = -1;
     // the time until the program should go a frame forward or backwards, when keeping the "one frame forward button" pressed
     private float timeUntilMoveOneFrame = 0.5f;
 
@@ -119,7 +113,7 @@ public class LaserGrabber : MonoBehaviour
     private void InitLaser()
     {
         // create an instance of the laser
-        laser = Instantiate(LaserPrefab);
+        laser = Instantiate(laserPrefab);
         
         // set the controller as the parent of the laser
         laser.transform.parent = gameObject.transform;
@@ -316,6 +310,7 @@ public class LaserGrabber : MonoBehaviour
     {
         if (ScaleAbleLaser())
         {
+            // TODO: Use laser of VIU. Adjust for Joystick usage
             // scale the laser
             currentTouch = touchPos;
             ScaleLaser(currentTouch.y - startTouchPoint.y);
@@ -329,7 +324,7 @@ public class LaserGrabber : MonoBehaviour
                 minLaserLength = attachedObject.transform.localScale.x * ProgramSettings.size / 2;
 
             // if the laser length is changed to a value less than the minimum distance, the attached object is going to be grabbed
-            if (laserLength + currentTouch.y - startTouchPoint.y <= minLaserLength)
+            if (_laserLength + currentTouch.y - startTouchPoint.y <= minLaserLength)
             {
                 AttachObject(attachedObject);
                 laser.SetActive(false);
@@ -343,9 +338,12 @@ public class LaserGrabber : MonoBehaviour
     {
         if (ScaleAbleLaser())
         {
-            // scale the laser to the new laser length
-            laserLength += currentTouch.y - startTouchPoint.y;
-            ScaleLaser();
+            if (Application.platform != RuntimePlatform.Android)
+            {
+                // scale the laser to the new laser length
+                _laserLength += currentTouch.y - startTouchPoint.y;
+                ScaleLaser();
+            }
         }
     }
 
@@ -360,23 +358,23 @@ public class LaserGrabber : MonoBehaviour
 
     public void WhileTouchpadPressDown(Vector2 touchPos)
     {
-        if (moveOneFrameTimer >= 0)
+        if (_moveOneFrameTimer >= 0)
         {
-            moveOneFrameTimer += Time.deltaTime;
-            if (moveOneFrameTimer >= timeUntilMoveOneFrame)
+            _moveOneFrameTimer += Time.deltaTime;
+            if (_moveOneFrameTimer >= timeUntilMoveOneFrame)
             {
                 if (touchPos.x > 0)
                     AnimationController.move_one_frame(true);
                 else
                     AnimationController.move_one_frame(false);
-                moveOneFrameTimer = 0;
+                _moveOneFrameTimer = 0;
             }
         }
     }
 
     public void TouchpadPressUp()
     {
-        moveOneFrameTimer = -1;
+        _moveOneFrameTimer = -1;
     }
 
     // initialize the resize if both controllers are ready, else just set the controller to ready
@@ -395,12 +393,12 @@ public class LaserGrabber : MonoBehaviour
                 AnimationController.ChangeAnimSpeed(1);
             else
             {
-                LoadNewLammps();
+                //LoadNewLammps();
 
                 // go one frame forward
                 AnimationController.move_one_frame(true);
                 // show that the user pressed the button to go one step forward
-                moveOneFrameTimer = 0;
+                _moveOneFrameTimer = 0;
             }
         else if (touchPos.x < -0.5)
             if (AnimationController.run_anim)
@@ -411,102 +409,34 @@ public class LaserGrabber : MonoBehaviour
             }
             else
             {
-                LoadNewLammps();
+                //LoadNewLammps();
 
                 // go one frame back
                 AnimationController.move_one_frame(false);
-                moveOneFrameTimer = 0;
+                _moveOneFrameTimer = 0;
             }
         else if (AnimationController.run_anim)
             AnimationController.RunAnim(false);
         else
         {
-            LoadNewLammps();
+            //LoadNewLammps();
 
             // tell Python to start sending the dataframes from the current ham_lammps
             AnimationController.RunAnim(true);
         }
 
         // update the symbols on on all active controllers
-        UpdateSymbols();
-    }
-
-    // send an Order to Python that it should create a new ham_lammps
-    public static void LoadNewLammps()
-    {
-        // remember that a new ham_lammps has to be loaded
-        bool temperatureHasChanged = Thermometer.inst.SendTemp();
-
-        // check if the positions of any atom has been changed since the last animation has been started
-        if (shouldReloadAnim || lammpsIsMd != ModeData.currentMode.showTemp) // add this: || PythonExecuter.frame != 0    to let the program load a new anima if the frame has changed
-        {
-            // send the new positions to Python
-            shouldReloadAnim = true;
-        }
-
-        print("Loading Anim if " + firstAnimStart + " or " + temperatureHasChanged + " or " + shouldReloadAnim);
-        // when loading the first animation, show Python that it's the first time, so that it can check if there is already a loaded ham_lammps
-        if (firstAnimStart)
-        {
-            LoadNewLammpsHelper();
-            firstAnimStart = false;
-            shouldReloadAnim = false;
-        }
-        // tell Python to create a new ham_lammps because the structure or it's temperature has changed
-        else if (temperatureHasChanged || shouldReloadAnim)
-        {
-            LoadNewLammpsHelper();
-            // remember that the ham_lammps is now according to the current structure
-            shouldReloadAnim = false;
-        }
-        // load a new ham_lammps if the current ham_lammps is for md and the animation for minimize is needed or vice versa
-        //else if (lammpsIsMd != MD.modes[MD.activeMode].showTemp)
-        //    LoadNewLammps("self.create_new_lammps");
-    }
-
-    // update the symbols on all active controllers
-    public void UpdateSymbols()
-    {
         gameObject.GetComponent<ControllerSymbols>().SetSymbol();
         if (otherLg.gameObject.activeSelf)
             controllerSymbols[(int) otherLg.ctrlLayer].SetSymbol();
     }
 
-    private static IEnumerator HandleLammpsLoad(string order)
+    // send an Order to Python that it should create a new ham_lammps
+    public static void LoadNewLammps()
     {
-        // send the order to execute lammps
-        //PythonExecuter.SendOrderAsync(PythonScript.Executor, PythonCommandType.eval, order);
-        PythonExecuter.SendOrderAsync(PythonScript.Executor, PythonCommandType.eval_l,
-            order);
+        return;
         
-        // remember the id of the request to wait for the right response id
-        int taskNumIn = TCPClient.taskNumIn;
-        
-        // wait until the response to the send message has arrived
-        yield return new WaitUntil(() => taskNumIn == TCPClient.taskNumOut);
-
-        // get the response
-        string result = TCPClient.returnedMsg;
-        
-        // handle the response
-        PythonExecuter.HandlePythonMsg(result);
-        // todo: handle the result here, instead of calling PythonExecuter.HandlePythonMsg
-    } 
-
-    private static void LoadNewLammpsHelper()
-    {
-        AnimationController.frame = 0;
-        string calculation = ModeData.currentMode.showTemp ? "md" : "minimize";
-        calculation = "unity_manager.Executor.create_new_lammps('" + calculation + "')";
-        
-        // load the new structure in another coroutine
-        instances[0].StartCoroutine(HandleLammpsLoad(calculation));
-        
-        AnimationController.waitForLoadedStruc = true;
-        print("Wait begun");
-        lammpsIsMd = ModeData.currentMode.showTemp;
     }
-
     // checks if the laser hits an object, which it should hit (an atom or a structure)
     private void SendRaycast()
     {
@@ -602,6 +532,8 @@ public class LaserGrabber : MonoBehaviour
                 laser.SetActive(false);
         }
     }
+    
+    #region Trigger
 
     // checks, if the controller collider collides with an object
     public void OnTriggerEnter(Collider other)
@@ -626,6 +558,8 @@ public class LaserGrabber : MonoBehaviour
 
         collidingObject = null;
     }
+    
+    #endregion
 
     // init the resize and set the controllers state to ready for resize
     private void InitResize()
@@ -638,8 +572,8 @@ public class LaserGrabber : MonoBehaviour
     {
         Vector3 laserSize = laser.transform.localScale;
         laser.transform.position = transform.position + 
-            (laser.transform.position - transform.position) * (laserLength + modification) / laserSize.z;
-        laserSize.z = laserLength + modification;
+            (laser.transform.position - transform.position) * (_laserLength + modification) / laserSize.z;
+        laserSize.z = _laserLength + modification;
         laser.transform.localScale = laserSize;
     }
 
@@ -653,7 +587,7 @@ public class LaserGrabber : MonoBehaviour
 
             // the laser length has to be set to the length from the controller to the boundingbox, because it's attached to it's middle point,
             // and the object should be at the same distance before and after the start of the grab
-            laserLength = (boundingbox.position - transform.position).magnitude;
+            _laserLength = (boundingbox.position - transform.position).magnitude;
         }
         else if (ctrlMaskName == "AtomLayer")
         {
@@ -661,11 +595,11 @@ public class LaserGrabber : MonoBehaviour
             attachedObject = grabAbleObject;
             // the laser length has to be set to the length from the controller to the atom, because it's attached to it's middle point, 
             //and the object should be at the same distance before and after the start of the grab
-            laserLength = (attachedObject.transform.position - transform.position).magnitude;
+            _laserLength = (attachedObject.transform.position - transform.position).magnitude;
             // spawn the trashcan
             TrashCan.inst.ActivateCan();
 
-            shouldReloadAnim = true;
+            SimulationMenuController.ShouldReload = true;
             // deactivate the animation
             AnimationController.RunAnim(false);
         }

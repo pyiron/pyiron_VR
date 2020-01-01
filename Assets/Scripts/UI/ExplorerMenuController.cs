@@ -10,6 +10,7 @@ public class ExplorerMenuController : MenuController {
     internal static ExplorerMenuController inst;
     public GameObject OptionPrefab;
     public GameObject OptionFolder;
+    public GameObject OptionFolderJobs;
     public GameObject PathPrefab;
     public GameObject PathFolder;
     public static bool shouldRefresh = false;
@@ -49,6 +50,8 @@ public class ExplorerMenuController : MenuController {
     {
         foreach (Button btn in OptionFolder.GetComponentsInChildren<Button>())
             Destroy(btn.gameObject);
+        foreach (Button btn in OptionFolderJobs.GetComponentsInChildren<Button>())
+            Destroy(btn.gameObject);
     }
 
     private void Update()
@@ -65,10 +68,10 @@ public class ExplorerMenuController : MenuController {
         {
             PathHasChanged();
         }
-        if (shouldRefresh)
+        /*if (shouldRefresh)
         {
             ShowNewOptionsOld();
-        }
+        }*/
 
         //foreach (Button btn in transform.parent.GetComponentsInChildren<Button>())
         //    btn.interactable = !PythonExecuter.inst.IsLoading();
@@ -81,6 +84,7 @@ public class ExplorerMenuController : MenuController {
             OptionType sm = (OptionType)(i);
             foreach (string opt in options[sm])
             {
+                // outdated: OptionFolderJobs is missing
                 foreach (Text txt in OptionFolder.GetComponentsInChildren<Text>())
                 {
                     if (txt.text == opt)
@@ -114,13 +118,28 @@ public class ExplorerMenuController : MenuController {
             }
             
             Color btnCol;
+            GameObject parentFolder;
             if (i == 1)
+            {
                 btnCol = Color.cyan;
+                parentFolder = OptionFolderJobs;
+            }
             else
+            {
                 btnCol = Color.yellow;
+                parentFolder = OptionFolder;
+            }
+
             foreach (string opt in opts)
             {
-                GameObject btn = InstantiateNewBtn(OptionPrefab, OptionFolder, opt, btnCol);
+                // blend out the scratch folder, access to it would cause errors
+                if (opt == "scratch")
+                {
+                    Debug.LogWarning("Scratch Folder will not be shown");
+                    continue;
+                }
+                
+                GameObject btn = InstantiateNewBtn(OptionPrefab, parentFolder, opt, btnCol);
                 btn.GetComponent<OptionButton>().isJob = i == 1;
             }
         }

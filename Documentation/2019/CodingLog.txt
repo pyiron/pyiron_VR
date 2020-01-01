@@ -37,6 +37,7 @@ After that I tested the new system and tried to optimize it. I cleaned up the co
 1.12 - 31.12.2019:
 Added an Input Field to choose the server while in VR. Previously it was just possible to connect to predetermined IP Adresses which could just be changed in the Unity Editor. The IP Address will be remembered the next time the program gets started. ~1h 
 Added an Installation Guide and an Usage Guide to the Readme on https://gitlab.mpcdf.mpg.de/wuseling/VirtualAtoms/tree/VA-Branch/. ~1h
+Restructured big parts of the program, including new menu hierarchies, a new Simulation Menu, new visuals, and a lot of code cleanup. ~3h + 5h in the next month
 
 
 

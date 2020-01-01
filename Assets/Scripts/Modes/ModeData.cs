@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,7 +14,7 @@ public class ModeData : MonoBehaviour
     [Header("Modes")]
     // get the textmesh from the 3D Text which shows the current mode
     //public TextMesh CurrentModeText;
-    public static Mode currentMode;
+    public static Mode currentMode = new Mode(Modes.None);
     // a timer which will disable the text after a few seconds
     private float modeTextTimer;
     // the reference to the attached Text Object
@@ -29,10 +30,12 @@ public class ModeData : MonoBehaviour
     internal static List<Mode> modes = new List<Mode>() {
         new Mode(mode:Modes.Network, hideAtoms: true, showNetwork: true),
         new Mode(mode:Modes.Explorer, hideAtoms: true, showExplorer: true),
-        new Mode(mode:Modes.Temperature, playerCanMoveAtoms:true, playerCanResizeAtoms:true, showTemp:true, showTrashcan:true, showPeriodicSystem:true),
-        new Mode(mode:Modes.Minimize, playerCanMoveAtoms:true, playerCanResizeAtoms:true, showRelaxation:true, showTrashcan:true, showPeriodicSystem:true),
-        new Mode(mode:Modes.View, playerCanMoveAtoms:true),
-        new Mode(mode:Modes.Info, showInfo:true)
+        new Mode(mode:Modes.Simulation, playerCanMoveAtoms:true, playerCanResizeAtoms:true, showTemp:true, showTrashcan:true),
+        new Mode(mode:Modes.Minimize, playerCanMoveAtoms:true, playerCanResizeAtoms:true, showRelaxation:true, showTrashcan:true),
+        new Mode(mode:Modes.Animate),
+        new Mode(mode:Modes.StructureBuilder, showPeriodicSystem:true),
+        new Mode(mode:Modes.Menu, showModes:true)
+        //new Mode(mode:Modes.Info, showInfo:true)
     };
 
     private void Awake()
@@ -74,10 +77,15 @@ public class ModeData : MonoBehaviour
         }
     }
 
+    public void SetMode(string newMode)
+    {
+        SetMode((Modes)Enum.Parse(typeof(Modes), newMode));
+    }
+
     // change the mode. This includes updating scene, e.g. (de)activating the thermometer or UI
     public void SetMode(Modes newMode)
     {
-        if (currentMode != null && !currentMode.showExplorer && !currentMode.showNetwork)
+        if (currentMode.mode != Modes.None && !currentMode.showExplorer && !currentMode.showNetwork)
             // stop the currently running animation
             AnimationController.RunAnim(false);
         currentMode = modes[(int)newMode];
@@ -106,6 +114,11 @@ public class ModeData : MonoBehaviour
             OrdersToPython.RequestAllForces();
         // deactivate the structure if it shouldn't be shown, else activate it
         StructureData.inst.gameObject.SetActive(!modes[(int)currentMode.mode].hideAtoms);
+
+        if (currentMode.showExplorer)
+        {
+            ProgramSettings.inst.ResetScene();
+        }
 
         UpdateMenu();
 
@@ -137,11 +150,13 @@ public class ModeData : MonoBehaviour
     {
         NetworkMenuController.inst.SetState(currentMode.showNetwork);
         ExplorerMenuController.inst.SetState(currentMode.showExplorer);
-        TemperatureMenuController.inst.SetState(currentMode.showTemp);
-        ModeMenuController.inst.SetState(currentMode.mode != Modes.Explorer && currentMode.mode != Modes.Network);
+        TemperatureMenuController.inst.SetState(currentMode.showTemp &&
+                                                SimulationModeManager.CurrMode==SimModes.MD);
+        ModeMenuController.inst.SetState(currentMode.showModes);
         ModeMenuController.inst.OnModeChange();
-        AnimationMenuController.inst.SetState(currentMode.mode == Modes.Temperature ||
-                                              currentMode.mode == Modes.Minimize || currentMode.mode == Modes.View);
+        AnimationMenuController.inst.SetState(//currentMode.mode == Modes.MD ||
+                                              currentMode.mode == Modes.Minimize || currentMode.mode == Modes.Animate);
+        SimulationMenuController.inst.SetState(currentMode.mode == Modes.Simulation);
         InfoMenuController.inst.SetState(currentMode.showInfo);
         //StructureMenuController.inst.transform.parent.gameObject.SetActive(currentMode.mode == Modes.Explorer);
         //StructureCreatorMenuController.inst.SetState(currentMode.showPeriodicSystem);

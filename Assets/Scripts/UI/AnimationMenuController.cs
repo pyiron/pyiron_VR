@@ -7,6 +7,12 @@ using UnityEngine.UI;
 public class AnimationMenuController : MenuController {
     internal static AnimationMenuController inst;
     public Text speedText;
+    
+    internal override void SetState(bool active)
+    {
+        base.SetState(active);
+        ProgressBar.Inst.gameObject.SetActive(active);
+    }
 
     private void Awake()
     {
@@ -18,7 +24,7 @@ public class AnimationMenuController : MenuController {
         speedText.text = "Speed: " + AnimationController.animSpeed;
     }
 
-    // TODO: I think it would be better to call these functions directly from Unity rather then delegating them
+    // TODO: I think it might be better to call these functions directly from Unity rather then delegating them
     public void OnButtonDown(Button btn)
     {
         Text btn_txt = btn.GetComponentInChildren<Text>();
@@ -36,13 +42,22 @@ public class AnimationMenuController : MenuController {
 
     public void OnToggleChange(Toggle tog)
     {
-        print("Toggler got hit");
         if (tog.GetComponentInChildren<Text>().text.Contains("Start / Stop"))
         {
-            if (tog.isOn)
-                LaserGrabber.LoadNewLammps();
+            //if (tog.isOn)
+            //    LaserGrabber.LoadNewLammps();
             AnimationController.RunAnim(tog.isOn);
             //AnimationController.run_anim = tog.isOn;
         }
+    }
+
+    public void OnSimBtnDown()
+    {
+        // Send an update to Pyiron what the current frame is
+        PythonExecuter.SendOrderSync(PythonScript.None, PythonCommandType.exec_l,
+            "unity_manager.Executor.pr.structure = unity_manager.Executor.pr.get_structure("
+            + AnimationController.frame + ")");
+            //"unity_manager.Executor.frame = " + AnimationController.frame);
+        ModeData.inst.SetMode(Modes.Simulation);
     }
 }

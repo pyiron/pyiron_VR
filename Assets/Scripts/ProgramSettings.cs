@@ -59,17 +59,20 @@ public class ProgramSettings : MonoBehaviour
     }
 
     // a function to get the number of a layer/mask
-    public static int GetLayerNum(LayerMask layer) // I think not needed atm
+    public static int GetLayerNum(LayerMask layer) // not needed
     {
         return (int)Mathf.Log(layer.value, 2);
     }
 
     public void ResetScene()
     {
-        LaserGrabber.firstAnimStart = true;
+        SimulationMenuController.ShouldReload = false;
         Thermometer.temperature = -1;
         Thermometer.inst.SetState(false); 
         StructureData.atomCtrlPos = new List<Vector3>(StructureData.atomCtrlPos.Count);  // seems not to work
         StructureData.inst.structureCtrlPos = Vector3.zero;  // seems not to work
+        ImportStructure.inst.firstImport = true;
+        ImportStructure.newImport = true;
+        AnimationController.frame = 0;
     }
 }

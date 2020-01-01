@@ -26,11 +26,14 @@ public class NetworkMenuController : MenuController {
 
     private void Update()
     {
-        foreach (Button btn in serverSuggestions)
+        if (TCPClient.connStatus == null)
         {
-            btn.interactable = TCPClient.connStatus == null;
+            base.Activate();
         }
-        serverAddressField.interactable = TCPClient.connStatus == null;
+        else
+        {
+            base.Deactivate();
+        }
     }
 
     // Activate a keyboard in VR

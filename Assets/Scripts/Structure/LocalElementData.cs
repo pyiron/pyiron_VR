@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 // component of Settings
-public class LocalElementData : MonoBehaviour {
+public class LocalElementData {
 
     // symbol -> CAS number, name, ordinal number
     public static readonly Dictionary<string, Element> m_localElementDict = new Dictionary<string, Element> {

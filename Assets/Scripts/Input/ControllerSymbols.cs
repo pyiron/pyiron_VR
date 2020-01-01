@@ -58,7 +58,7 @@ public class ControllerSymbols : MonoBehaviour {
 
             objectCounter += 1;
         }
-        if (ModeData.currentMode != null)
+        if (ModeData.currentMode.mode != Modes.None)
         {
             if (ModeData.currentMode.showRelaxation || ModeData.currentMode.showTemp)
                 // activate the symbols that have to be activated and deactivate the remaining symbols

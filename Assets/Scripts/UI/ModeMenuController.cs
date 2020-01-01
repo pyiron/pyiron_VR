@@ -19,9 +19,12 @@ public class ModeMenuController : MenuController {
         foreach (Mode mode in ModeData.modes)
         {
             // todo: it should be possible in the future to go back to the Project Explorer to load a new structure
-            if (mode.mode == Modes.Network || mode.mode == Modes.Explorer) continue;
-            GameObject newModeBtn = Instantiate(OptionButtonPref, OptionFolder.transform, true);
-            newModeBtn.GetComponentInChildren<Text>().text = mode.mode.ToString();
+            if (mode.mode == Modes.Explorer || mode.mode == Modes.StructureBuilder)
+            {
+                // || mode.mode == Modes.Explorer) continue;
+                GameObject newModeBtn = Instantiate(OptionButtonPref, OptionFolder.transform, true);
+                newModeBtn.GetComponentInChildren<Text>().text = mode.mode.ToString();
+            }
         }
     }
 

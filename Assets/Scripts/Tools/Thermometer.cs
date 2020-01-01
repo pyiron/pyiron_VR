@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+// component of MyObjects/Thermometer
 public class Thermometer : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     // reference to the Thermometer
@@ -15,7 +16,7 @@ public class Thermometer : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     // the renderer of the thermometer
     private Renderer ThermometerRenderer;
     // the current temperature
-    public static int temperature = -1;
+    public static int temperature = 0;
     // the size the text on the thermometer telling the temperature should have
     private float TextSize = 0.4f;
     // the max temperature you can set with the thermometer and when the thermometer won't show any higher temperatures
@@ -61,6 +62,20 @@ public class Thermometer : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
         // set lastTemperature to the value the thermometer has been initialised with
         lastTemperature = temperature;
+        
+        // update the thermometer
+        UpdateTemperature();
+    }
+
+    private void Update()
+    {
+        //activate Thermometer
+        //if (temperature != -1)
+        //{
+            // activate the thermometer when changing into temperature mode, else deactivate it
+            //inst.SetState(ModeData.currentMode.showTemp);
+        //inst.UpdateTemperature();
+        //}
     }
 
     // a method to set the state of the thermometer object to see which scripts  change the state
@@ -72,7 +87,6 @@ public class Thermometer : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     // show the current temperature data on the thermometer
     public void UpdateTemperature(int exactTemperature = -1)
     {
-         // TODO: Update slider
         // set the current temperature on the text field
         ThermometerText.text = temperature.ToString();
         float tmp = float.NaN;
@@ -135,6 +149,8 @@ public class Thermometer : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
         // show the current temperature data on the thermometer
         UpdateTemperature(exactTemperature:(int)(maxTemperature * newTemperatureGradient));
+        // a new simulation should be started when the temperature gets changed
+        SimulationMenuController.ShouldReload = true;
     }
 
     // allows to change the maxTemperature
@@ -160,6 +176,8 @@ public class Thermometer : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         return false;
     }
 
+    #region interaction
+
     public void OnBeginDrag(PointerEventData eventData)
     {
         laserOnThermometer = true;
@@ -172,7 +190,7 @@ public class Thermometer : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         laserCurrentlyOnThermometer = eventData.hovered.Contains(gameObject);
         if (laserCurrentlyOnThermometer)
         {
-            ChangeThemperature(eventData.pointerCurrentRaycast.worldPosition.y);
+            ChangeThemperature(eventData.pointerCurrentRaycast.worldPosition.y - transform.position.y);
             TemperatureMenuController.inst.ChangeTemperature();
 
             if (!laserWasOnThermometer)
@@ -208,4 +226,6 @@ public class Thermometer : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             else
                 SetMaxTemperature(0.1f);
     }
+
+    #endregion
 }

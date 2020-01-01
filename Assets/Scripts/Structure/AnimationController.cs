@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// component of the AnimationMenu Panel
 public class AnimationController : MonoBehaviour {
     [Header("Animation")]
     public static bool run_anim;
@@ -43,8 +44,18 @@ public class AnimationController : MonoBehaviour {
             }}
     }
 
+    /// <summary>
+    /// Starts or stops the animation, according to shouldRun.
+    /// </summary>
+    /// <param name="shouldRun"></param>
+    
     public static void RunAnim(bool shouldRun = false)
     {
+        // the simulation should be reloaded
+        if (shouldRun)
+        {
+            SimulationMenuController.ShouldReload = true;
+        }
         run_anim = shouldRun;
         // update the symbols on all active controllers
         foreach (ControllerSymbols controller in LaserGrabber.controllerSymbols)
@@ -66,8 +77,13 @@ public class AnimationController : MonoBehaviour {
             else
                 animSpeed = 0;
     }
-
+    
+/// <summary>
+/// Moves one frame forward or backwards, according to the parameter forward
+/// </summary>
+/// <param name="forward"></param>
     public static void move_one_frame(bool forward=true) {
+        SimulationMenuController.ShouldReload = true;
         if (forward)
             frame = Mod((frame + 1), StructureData.GetCurrFrameData().frames);
         else

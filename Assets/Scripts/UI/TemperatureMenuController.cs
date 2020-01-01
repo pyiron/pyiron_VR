@@ -10,6 +10,12 @@ public class TemperatureMenuController : MenuController {
     public Text minTempText;
     public Text maxTempText;
 
+    internal override void SetState(bool active)
+    {
+        base.SetState(active);
+        Thermometer.inst.SetState(active);
+    }
+
     private void Awake()
     {
         inst = this;
@@ -29,6 +35,8 @@ public class TemperatureMenuController : MenuController {
     {
         Thermometer.temperature = (int)temp_slider.value;
         Thermometer.inst.UpdateTemperature((int)temp_slider.value);
+        // a new simulation should be started when the temperature gets changed
+        SimulationMenuController.ShouldReload = true;
     }
 
     public void ChangeTemperature()

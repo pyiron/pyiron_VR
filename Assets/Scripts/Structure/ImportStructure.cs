@@ -21,16 +21,15 @@ public class ImportStructure : MonoBehaviour {
     // the prefab for the boundingbox
     public GameObject BoundingboxPrefab;
     // checks whether all the instances in the scene have to be created or if the scene just has to be updated
-    internal static bool newImport = true;
+    public static bool newImport = true;
     // shows whether it is the first import or just a new amount of atoms
-    private bool firstImport = true;
+    public bool firstImport = true;
 
 
 
     private void Awake()
     {
         inst = this;
-        Thermometer.inst.SetState(false);
     }
 
     public void LoadStructure()
@@ -93,7 +92,7 @@ public class ImportStructure : MonoBehaviour {
         if (firstImport)
         {
             firstImport = false;
-            Thermometer.inst.SetState(true);
+            //Thermometer.inst.SetState(true);
         }
         newImport = false;
     }

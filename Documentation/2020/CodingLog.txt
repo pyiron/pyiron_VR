@@ -1,0 +1,10 @@
+Workprogress on Virtual Atoms
+by Philip Neugebauer, 1.8.2018 - 30.9.2018
+All progress is also represented by the commits on GitLab with some more details.
+
+1.1 - 31.1.2019:
+Continued to restructure big parts of the program, including new menu hierarchies, a new Simulation Menu, new visuals, and a lot of code cleanup. ~5h
+
+
+
+

@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Globalization;
 using System.Linq;
+using Debug = UnityEngine.Debug;
 
 // component of Settings
 // this script handles everything related to Python, e.g. it receives the data from Python, formats it and can send data to Python
@@ -55,13 +56,6 @@ public class PythonExecuter : MonoBehaviour {
 
     private void Update()
     {
-        if (Thermometer.temperature != -1)
-        {
-            // activate the thermometer when changing into temperature mode, else deactivate it
-            Thermometer.inst.SetState(ModeData.currentMode.showTemp);
-            Thermometer.inst.UpdateTemperature();
-        }
-
         InGamePrinter.inst[0].Ctrl_print("Send: " + outgoingChanges);
         InGamePrinter.inst[1].Ctrl_print("Received: " + incomingChanges);
     }
@@ -132,7 +126,9 @@ public class PythonExecuter : MonoBehaviour {
         {
             if (splittedData[1] == "view")
             {
-                ModeData.inst.newMode = Modes.View;
+                Debug.LogWarning("Oh wow, this is actually in use! Please mark here, that the animation has already been calculated");
+                //ModeData.inst.newMode = Modes.Simulation;
+                ModeData.inst.newMode = Modes.Animate;
             }
             else
             {

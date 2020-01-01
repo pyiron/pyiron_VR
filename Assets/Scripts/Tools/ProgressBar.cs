@@ -1,18 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
-// Component of MyObjects
+// Component of MyObjects/ProgressBar
 // Activates the Progressbar when the current frame and the amount of frames in the animation is known and updates the bar
 public class ProgressBar : MonoBehaviour {
-    // the reference to the ProgressBar
-    private GameObject ProgressBarObject;
+    // a reference to this Script
+    public static ProgressBar Inst;
+    
     // the reference to the animationController of the ProgressBar
-    private Animator anim;
+    private Animator _anim;
     // the reference to the TextMeshes of the ProgressBar
-    private TextMesh[] TextMeshes;
+    private TextMesh[] _textMeshes;
 
-    private static readonly Dictionary<int, string> animationSpeedLabels = new Dictionary<int, string>()
+    private static readonly Dictionary<int, string> AnimationSpeedLabels = new Dictionary<int, string>()
     {
         {0, "-2x" },
         {1, "-1x" },
@@ -22,37 +24,33 @@ public class ProgressBar : MonoBehaviour {
         {5, "2x" }
     };
 
-	void Start () {
-        // get the reference to the ProgressBar
-        ProgressBarObject = GameObject.Find("MyObjects/ProgressBar");
-        // get the reference to the animationController of the ProgressBar
-        anim = ProgressBarObject.GetComponent<Animator>();
-        // get the reference to the TextMeshes of the ProgressBar
-        TextMeshes = ProgressBarObject.GetComponentsInChildren<TextMesh>();
-        // set the TextMeshes to the right size and position
-        for (int i = 0; i < TextMeshes.Length; i++)
-        {
-            TextMeshes[i].transform.localScale = Vector3.one * 0.3f;
-            TextMeshes[i].transform.localPosition += Vector3.up * (i + 1) / 2;
-        }
+    private void Awake()
+    {
+        Inst = this;
+    }
 
-        // deactivate the ProgressBar at the beginning because the current frame and the amount of frames is not yet known
-        ProgressBarObject.SetActive(false);
+    void Start () {
+        // get the reference to the animationController of the ProgressBar
+        _anim = GetComponent<Animator>();
+        // get the reference to the TextMeshes of the ProgressBar
+        _textMeshes = GetComponentsInChildren<TextMesh>();
+        // set the TextMeshes to the right size and position
+        for (int i = 0; i < _textMeshes.Length; i++)
+        {
+            _textMeshes[i].transform.localScale = Vector3.one * 0.3f;
+            _textMeshes[i].transform.localPosition += Vector3.up * (i + 1) / 2;
+        }
     }
 	
 	void Update () {
-        // if the ProgressBar is activated while it should be deactivated deaktivate  it and vice versa
-        if ((AnimationController.frame != -1 && StructureData.frame_amount > 0) != ProgressBarObject.activeSelf)
-            ProgressBarObject.SetActive(!ProgressBarObject.activeSelf);
-
-        if (ProgressBarObject.activeSelf && StructureData.GetCurrFrameData() != null)
+        if (StructureData.GetCurrFrameData() != null)
         {
             // update the progress of the ProgressBar
-            anim.SetFloat("Progress", 1f * AnimationController.frame / StructureData.GetCurrFrameData().frames);
-            foreach (TextMesh TM in TextMeshes)
+            _anim.SetFloat("Progress", 1f * AnimationController.frame / (StructureData.GetCurrFrameData().frames - 1));
+            foreach (TextMesh TM in _textMeshes)
                 // update the text which shows the progress
                 if (TM.name.Contains("Progress"))
-                    TM.text = AnimationController.frame + " / " + StructureData.GetCurrFrameData().frames;
+                    TM.text = (AnimationController.frame + 1) + " / " + StructureData.GetCurrFrameData().frames;
                 // update the text which shows how fast the animation is being played
                 else if (TM.name.Contains("AnimationSpeed"))
                 {
@@ -62,7 +60,7 @@ public class ProgressBar : MonoBehaviour {
 
                     // update the text of how fast the anim speed is
                     if (AnimationController.run_anim)
-                        TM.text = animationSpeedLabels[AnimationController.animSpeed];
+                        TM.text = AnimationSpeedLabels[AnimationController.animSpeed];
                 }
         }
     }
