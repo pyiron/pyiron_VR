@@ -32,7 +32,7 @@ git pull`
 *  On the PC, SideQuest should now show the Quest as connected
 *  In the Rider in the Bottom-Left Corner click My Apps
 *  On the top should be a big Banner "Installed Apps\nDrag and drop your APK/OBB files over this message to install!!!"
-*  Download the apk <insert here when a build got uploaded to Git>
+*  Download the [latest Oculus Quest Build](Builds/QuestBuild.apk)
 *  Drag the file over the banner on the Top of SideQuest
 
 ### To start the Quest Program
@@ -76,3 +76,10 @@ In Temperature and Minimize Mode, a Trashcan will appear when grabbing an atom. 
 ### Creating new Atoms
 -- Currently in Alpha, bugs can and will occur --
 In Temperature and Minimize Mode, Atoms and structures can be created using the UI.
+
+
+## Troubleshooting
+### Connection errors
+*  Make sure the Server and the Client (e.g. the Oculus Quest) are connected to the same network
+*  It can help to mark the network as private, else the server might get blocked from the firewall
+*  Make sure VPN is disabled or both Server and Client are connected to the same VPN Network
