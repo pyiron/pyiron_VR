@@ -19,7 +19,7 @@ public class ModeMenuController : MenuController {
         foreach (Mode mode in ModeController.modes)
         {
             // todo: it should be possible in the future to go back to the Project Explorer to load a new structure
-            if (mode.mode == Modes.Explorer || mode.mode == Modes.StructureBuilder)
+            if (mode.mode == Modes.Explorer || mode.mode == Modes.Structure)
             {
                 // || mode.mode == Modes.Explorer) continue;
                 GameObject newModeBtn = Instantiate(OptionButtonPref, OptionFolder.transform, true);

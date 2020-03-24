@@ -9,6 +9,7 @@ public class ModeBar : MonoBehaviour
     private void Start()
     {
         modeButtons = GetComponentsInChildren<Button>();
+        UpdateButtons("Structure");
     }
 
     /// <summary>
@@ -19,9 +20,20 @@ public class ModeBar : MonoBehaviour
     public void OnButtonClicked(Button clickedButton)
     {
         string btnText = clickedButton.GetComponentInChildren<Text>().text;
+        UpdateButtons(btnText);
+        
+        ModeController.inst.SetMode(btnText);
+    }
+
+    /// <summary>
+    /// Displays the currently active mode among the modes shown on top of the panel
+    /// </summary>
+    /// <param name="activeMode"></param>
+    private void UpdateButtons(string activeMode)
+    {
         foreach (Button button in modeButtons)
         {
-            if (button == clickedButton)
+            if (button.name == activeMode)
             {
                 button.interactable = false;
                 button.image.color = Color.cyan;
@@ -32,7 +44,5 @@ public class ModeBar : MonoBehaviour
                 button.image.color = Color.white;
             }
         }
-        
-        ModeController.inst.SetMode(btnText);
     }
 }

@@ -58,6 +58,6 @@ public class AnimationMenuController : MenuController {
             "unity_manager.Executor.pr.structure = unity_manager.Executor.pr.get_structure("
             + AnimationController.frame + ")");
             //"unity_manager.Executor.frame = " + AnimationController.frame);
-        ModeController.inst.SetMode(Modes.Simulation);
+        ModeController.inst.SetMode(Modes.Calculate);
     }
 }

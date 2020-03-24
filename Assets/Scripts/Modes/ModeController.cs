@@ -26,12 +26,12 @@ public class ModeController : MonoBehaviour
     {
         new Mode(mode:Modes.Network, hideAtoms: true),
         new Mode(mode:Modes.Explorer, hideAtoms: true),
-        new Mode(mode:Modes.Simulation, playerCanMoveAtoms:true, playerCanResizeAtoms:true, showTemp:true,
+        new Mode(mode:Modes.Calculate, playerCanMoveAtoms:true, playerCanResizeAtoms:true, showTemp:true,
             showTrashcan:true),
         new Mode(mode:Modes.Minimize, playerCanMoveAtoms:true, playerCanResizeAtoms:true, showRelaxation:true,
             showTrashcan:true),
         new Mode(mode:Modes.Animate),
-        new Mode(mode:Modes.StructureBuilder),
+        new Mode(mode:Modes.Structure),
         new Mode(mode:Modes.Menu)
         //new Mode(mode:Modes.Info, showInfo:true)
     };
@@ -126,12 +126,12 @@ public class ModeController : MonoBehaviour
         ModeMenuController.inst.OnModeChange();
         AnimationMenuController.inst.SetState(//currentMode.mode == Modes.MD ||
                                               currentMode.mode == Modes.Minimize || currentMode.mode == Modes.Animate);
-        SimulationMenuController.inst.SetState(currentMode.mode == Modes.Simulation);
+        SimulationMenuController.inst.SetState(currentMode.mode == Modes.Calculate);
         //InfoMenuController.inst.SetState(currentMode.showInfo);
         //StructureMenuController.inst.transform.parent.gameObject.SetActive(currentMode.mode == Modes.Explorer);
         //StructureCreatorMenuController.inst.SetState(currentMode.showPeriodicSystem);
         //if (currentMode.showPeriodicSystem)
         //    StructureCreatorMenuController.inst.OnModeChange();
-        PeriodicSysMenuController.inst.SetState(currentMode.mode == Modes.StructureBuilder);
+        PeriodicSysMenuController.inst.SetState(currentMode.mode == Modes.Structure);
     }
 }
