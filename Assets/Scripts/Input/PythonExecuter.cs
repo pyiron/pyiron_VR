@@ -128,7 +128,7 @@ public class PythonExecuter : MonoBehaviour {
             {
                 Debug.LogWarning("Oh wow, this is actually in use! Please mark here, that the animation has already been calculated");
                 //ModeData.inst.newMode = Modes.Simulation;
-                ModeData.inst.newMode = Modes.Animate;
+                ModeController.inst.newMode = Modes.Animate;
             }
             else
             {

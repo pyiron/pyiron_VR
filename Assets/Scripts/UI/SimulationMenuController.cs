@@ -48,7 +48,7 @@ public class SimulationMenuController : MenuController {
         base.Activate();
         AnimationController.frame = 0;
         PythonExecuter.HandlePythonMsg(result);
-        ModeData.inst.SetMode(Modes.Animate);
+        ModeController.inst.SetMode(Modes.Animate);
         // todo: maybe handle the result here, instead of calling PythonExecutor.HandlePythonMsg
     } 
 
@@ -79,7 +79,7 @@ public class SimulationMenuController : MenuController {
         }
         else
         {
-            ModeData.inst.SetMode(Modes.Animate);
+            ModeController.inst.SetMode(Modes.Animate);
         }
     }
 }

@@ -16,7 +16,7 @@ public class ModeMenuController : MenuController {
 
     private void Start()
     {
-        foreach (Mode mode in ModeData.modes)
+        foreach (Mode mode in ModeController.modes)
         {
             // todo: it should be possible in the future to go back to the Project Explorer to load a new structure
             if (mode.mode == Modes.Explorer || mode.mode == Modes.StructureBuilder)
@@ -43,14 +43,14 @@ public class ModeMenuController : MenuController {
 
     public void OnButtonClicked(Button btn)
     {
-        ModeData.inst.SetMode((Modes)System.Enum.Parse(typeof(Modes), btn.GetComponentInChildren<Text>().text));
+        ModeController.inst.SetMode((Modes)System.Enum.Parse(typeof(Modes), btn.GetComponentInChildren<Text>().text));
     }
 
     internal void OnModeChange()
     {
         foreach (Button btn in OptionFolder.GetComponentsInChildren<Button>())
         {
-            bool activeMode = ModeData.currentMode.mode.ToString() == btn.GetComponentInChildren<Text>().text;
+            bool activeMode = ModeController.currentMode.mode.ToString() == btn.GetComponentInChildren<Text>().text;
             if (activeMode)
             {
                 btn.GetComponent<Image>().color = Color.green;

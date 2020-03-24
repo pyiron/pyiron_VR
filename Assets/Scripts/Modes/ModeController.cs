@@ -5,22 +5,17 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // component of CurrentModeText
-public class ModeData : MonoBehaviour
+public class ModeController : MonoBehaviour
 {
     [Header("Scene")]
     // reference to the deployed instance of this script
-    public static ModeData inst;
+    public static ModeController inst;
 
     [Header("Modes")]
     // get the textmesh from the 3D Text which shows the current mode
     //public TextMesh CurrentModeText;
     public static Mode currentMode = new Mode(Modes.None);
-    // a timer which will disable the text after a few seconds
-    private float modeTextTimer;
-    // the reference to the attached Text Object
-    private Text textObject;
-    // the size the text should have
-    private float textSize = 8f;
+    
     // remember the new mode which should be set with the main thread
     internal Modes newMode = Modes.None;
 
@@ -42,19 +37,12 @@ public class ModeData : MonoBehaviour
     {
         inst = this;
         currentMode = modes[0];
-        textObject = gameObject.GetComponent<Text>();
     }
 
     private void Start()
     {
         SetMode(modes[(int)currentMode.mode].mode);
-
-        textSize = textSize / ProgramSettings.textResolution * 10;
-        transform.localScale = Vector3.one * textSize;
-        textObject.fontSize = (int)ProgramSettings.textResolution;
-
         UpdateScene();
-        gameObject.SetActive(false);
     }
 
     void Update()
@@ -62,18 +50,6 @@ public class ModeData : MonoBehaviour
         if (newMode != Modes.None) { 
             SetMode(newMode);
             newMode = Modes.None;
-            }
-        if (modeTextTimer > 0)
-        {
-            if (modeTextTimer - Time.deltaTime <= 0)
-            {
-                transform.localScale = Vector3.one * textSize;
-                gameObject.SetActive(false);
-            }
-            else if (modeTextTimer - Time.deltaTime < 1)
-                // let the text fade away
-                transform.localScale -= Vector3.one * textSize * Time.deltaTime;
-            modeTextTimer -= Time.deltaTime;
         }
     }
 
@@ -94,17 +70,7 @@ public class ModeData : MonoBehaviour
 
     // (de)activate objects in the scene, as well as the menu
     private void UpdateScene() { 
-        textObject.text = currentMode.mode + " mode";
-        gameObject.SetActive(true);
-        modeTextTimer = 3;
-        // set the text to it's original size
-        transform.localScale =  Vector3.one * textSize;
-        //transform.eulerAngles = new Vector3(0, SceneReferences.inst.HeadGO.transform.eulerAngles.y, 0);
-        //Vector3 newTextPosition = Vector3.zero;
-        //newTextPosition.x += Mathf.Sin(SceneReferences.inst.HeadGO.transform.eulerAngles.y / 360 * 2 * Mathf.PI);
-        //newTextPosition.z += Mathf.Cos(SceneReferences.inst.HeadGO.transform.eulerAngles.y / 360 * 2 * Mathf.PI);
-        //newTextPosition.y = 5;
-        //CurrentModeText.transform.position = newTextPosition * 5;
+        ModeText.Inst.OnModeChange();
 
         if (Thermometer.temperature != -1)
             // activate the thermometer when changing into temperature mode, else deactivate it

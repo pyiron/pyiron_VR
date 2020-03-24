@@ -34,7 +34,7 @@ public class OptionButton : MonoBehaviour, IButton
         PythonExecuter.HandlePythonMsg(result);
         ExplorerMenuController.inst.DeleteOptions();
         ExplorerMenuController.inst.ClearOptions();
-        ModeData.inst.SetMode(Modes.Animate);
+        ModeController.inst.SetMode(Modes.Animate);
         // todo: handle the result here, instead of calling PythonExecuter.HandlePythonMsg
     }
 

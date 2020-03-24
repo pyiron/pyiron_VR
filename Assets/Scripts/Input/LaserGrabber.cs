@@ -121,7 +121,7 @@ public class LaserGrabber : MonoBehaviour
 
     void Update()
     {
-        if (ModeData.currentMode.playerCanMoveAtoms)
+        if (ModeController.currentMode.playerCanMoveAtoms)
         {
             // move the grabbed object
             if (attachedObject)
@@ -130,7 +130,7 @@ public class LaserGrabber : MonoBehaviour
                 if (ctrlMaskName.Contains("Atom"))
                 {
                     // update the trashcan, if it is shown in the current mode
-                    if (ModeData.currentMode.showTrashcan)
+                    if (ModeController.currentMode.showTrashcan)
                         TrashCan.inst.UpdateTrashCan(attachedObject);
                 }
                 else
@@ -151,7 +151,7 @@ public class LaserGrabber : MonoBehaviour
     public void HairTriggerDown()
     {
         // if the controller gets pressed, it should try to attach an object to it
-        if (ModeData.currentMode.playerCanMoveAtoms)
+        if (ModeController.currentMode.playerCanMoveAtoms)
         {
             // test if the other controller is ready for a resize
             if (otherLg.readyForResize)
@@ -176,10 +176,10 @@ public class LaserGrabber : MonoBehaviour
 
     public void WhileHairTriggerDown()
     {
-        if (!ModeData.currentMode.playerCanMoveAtoms)
+        if (!ModeController.currentMode.playerCanMoveAtoms)
         {
             SendRaycast();
-            if (ModeData.currentMode.showInfo)
+            if (ModeController.currentMode.showInfo)
                 ShowInfo();
         }
         else
@@ -238,7 +238,7 @@ public class LaserGrabber : MonoBehaviour
     public void HairTriggerUp()
     {
         // check that the move mode is currently active
-        if (ModeData.currentMode.playerCanMoveAtoms)
+        if (ModeController.currentMode.playerCanMoveAtoms)
         {
             // set the state of the controller to not ready for resizeStructure
             readyForResize = false;
@@ -251,7 +251,7 @@ public class LaserGrabber : MonoBehaviour
                     laser.SetActive(false);
                 
                 // change the boundingbox to the new extension of the structure, if an atom has been attached
-                if (ctrlMaskName == "AtomLayer" && (!ModeData.currentMode.showTrashcan || !TrashCan.inst.atomInCan))
+                if (ctrlMaskName == "AtomLayer" && (!ModeController.currentMode.showTrashcan || !TrashCan.inst.atomInCan))
                 {
                     // tell Python the new position
                     OrdersToPython.SetNewPosition(StructureData.atomInfos[attachedObject.GetComponent<AtomID>().ID]);
@@ -261,7 +261,7 @@ public class LaserGrabber : MonoBehaviour
                     StructureData.inst.UpdateBoundingbox();
                 }
                 
-                if (ModeData.currentMode.showTrashcan)
+                if (ModeController.currentMode.showTrashcan)
                 {
                     if (ctrlMaskName == "AtomLayer")
                     {
@@ -296,7 +296,7 @@ public class LaserGrabber : MonoBehaviour
     // show that the laser is currently active and it's possible in the current move to move atoms, and that the laser doesn't point on the thermometer
     private bool ScaleAbleLaser()
     {
-        return (ModeData.currentMode.playerCanMoveAtoms && laser.activeSelf && !Thermometer.laserOnThermometer);
+        return (ModeController.currentMode.playerCanMoveAtoms && laser.activeSelf && !Thermometer.laserOnThermometer);
     }
 
     public void TouchpadTouchDown(Vector2 touchPos)
@@ -350,7 +350,7 @@ public class LaserGrabber : MonoBehaviour
     public void TouchpadPressDown(Vector2 touchPos)
     {
         // look if an animation should be started or stopped
-        if (ModeData.currentMode.showTemp || ModeData.currentMode.showRelaxation)
+        if (ModeController.currentMode.showTemp || ModeController.currentMode.showRelaxation)
             // check that the player isn't currently trying to change the length of the laser
             if (!laser.activeSelf)
                 ControllAnimation(touchPos);
@@ -443,7 +443,7 @@ public class LaserGrabber : MonoBehaviour
         // check that there isn't an object in range to grab
         if (true) //(collidingObject == null)
         {
-            if (!attachedObject || !ModeData.currentMode.playerCanMoveAtoms)
+            if (!attachedObject || !ModeController.currentMode.playerCanMoveAtoms)
                 // send out a raycast to detect if there is an object in front of the laser 
                 if (Physics.Raycast(transform.position, transform.forward, out var hit, laserMaxDistance, ctrlMask))
                 {
@@ -454,14 +454,14 @@ public class LaserGrabber : MonoBehaviour
                         ShowLaser(hit);
 
                         if (!Thermometer.laserOnThermometer)
-                            if (ModeData.currentMode.playerCanMoveAtoms)
+                            if (ModeController.currentMode.playerCanMoveAtoms)
                                 AttachObject(hitObject);
                             else
                                 attachedObject = hitObject;
                     }
                 }
                 // show that the controller is ready to resize the structure, if it is the AtomLayer controller
-                else if (ModeData.currentMode.playerCanResizeAtoms)
+                else if (ModeController.currentMode.playerCanResizeAtoms)
                     if (ctrlMaskName == "AtomLayer")
                         readyForResize = true;
                     else;
@@ -528,7 +528,7 @@ public class LaserGrabber : MonoBehaviour
             collidingObject = col.gameObject;
             // disable the laser if the controller is colliding when the player can't move the atoms 
             // (because the lasr already disables itself in this mode)
-            if (!ModeData.currentMode.playerCanMoveAtoms)
+            if (!ModeController.currentMode.playerCanMoveAtoms)
                 laser.SetActive(false);
         }
     }
