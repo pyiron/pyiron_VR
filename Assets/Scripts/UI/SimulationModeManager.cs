@@ -43,5 +43,5 @@ public class SimulationModeManager : MonoBehaviour
 
 public enum SimModes
 {
-    MD, Minimize, None
+    MD, Minimize, Static, None
 }
