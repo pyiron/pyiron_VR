@@ -12,7 +12,8 @@ public class SimulationModeManager : MonoBehaviour
     void Start()
     {
         _modes = GetComponentsInChildren<Button>();
-        TemperatureMenuController.inst.SetState(CurrMode==SimModes.MD);
+        //TemperatureMenuController.Inst.SetState(CurrMode==SimModes.MD);
+        OnButtonPressed(_modes[0]);
     }
 
     public void OnButtonPressed(Button btn)
@@ -26,8 +27,9 @@ public class SimulationModeManager : MonoBehaviour
         }
         btn.image.color = Color.green;
         btn.interactable = false;
-        CurrMode = (SimModes)Enum.Parse(typeof(SimModes), btn.name); // can be MD or Minimize
-        TemperatureMenuController.inst.SetState(CurrMode==SimModes.MD);
+        CurrMode = (SimModes)Enum.Parse(typeof(SimModes), btn.name); // can be MD, Minimize or Static 
+        TemperatureMenuController.Inst.SetState(CurrMode==SimModes.MD);
+        MinimizeMenuController.Inst.SetState(CurrMode == SimModes.Minimize);
         /*if (btn.name == "MD")
         {
             //activate Thermometer

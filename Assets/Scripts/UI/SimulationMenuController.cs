@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 public class SimulationMenuController : MenuController {
     internal static SimulationMenuController inst;
-    public Button SimulationButton;
+    [SerializeField]
+    private Button SimulationButton;
     private Text _simBtnText;
     public static bool ShouldReload = false;
 
@@ -26,6 +27,15 @@ public class SimulationMenuController : MenuController {
         {
             _simBtnText.text = "Show Animation";
         }
+    }
+
+    public void SetNIonicSteps(Dropdown dropdown)
+    {
+        string n_ionic_steps = dropdown.options[dropdown.value].text;
+        print("Setting n_ionic_steps to " + dropdown.options[dropdown.value].text);
+        // set the value
+        string order = "unity_manager.Executor.n_ionic_steps = " + n_ionic_steps;
+        PythonExecuter.SendOrderSync(PythonScript.None, PythonCommandType.exec_l, order);
     }
     
     // TODO: Deactivate and activate UI Elements
@@ -52,17 +62,33 @@ public class SimulationMenuController : MenuController {
         // todo: maybe handle the result here, instead of calling PythonExecutor.HandlePythonMsg
     } 
 
-    private void LoadNewLammps()
+    private void CalculateNewJob()
     {
         // update the temperture
         PythonExecuter.SendOrderSync(PythonScript.None, PythonCommandType.exec_l,
             "unity_manager.Executor.temperature = " + Thermometer.temperature);
         //string calculation = ModeData.currentMode.showTemp ? "md" : "minimize";
-        string calculation = "unity_manager.Executor.create_new_lammps('" + 
-                             SimulationModeManager.CurrMode.ToString().ToLower() + "')";
-        
+        string calculation = SimulationModeManager.CurrMode.ToString().ToLower();
+        string order;
+        if (calculation == "md")
+        {
+            MdData data = TemperatureMenuController.Inst.GetData();
+            order = "unity_manager.Executor.calculate_" + calculation + "(" +
+                               data.temperature + ", " + 
+                               data.n_ionic_steps + ", " + 
+                               data.n_print +")";
+        }
+        else
+        {
+            MinimizeData data = MinimizeMenuController.Inst.GetData();
+            order = "unity_manager.Executor.calculate_" + calculation + "(" +
+                    data.force_conv + ", " + 
+                    data.max_iterations + ", " + 
+                    data.n_print +")";
+        }
+
         // load the new structure in another coroutine
-        StartCoroutine(HandleLammpsLoad(calculation));
+        StartCoroutine(HandleLammpsLoad(order));
         
         AnimationController.waitForLoadedStruc = true;
         base.Deactivate();
@@ -75,7 +101,7 @@ public class SimulationMenuController : MenuController {
     {
         if (_simBtnText.text == "Start Simulation")
         {
-            LoadNewLammps();
+            CalculateNewJob();
         }
         else
         {

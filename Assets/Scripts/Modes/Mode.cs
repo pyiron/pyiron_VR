@@ -13,15 +13,14 @@ public struct Mode
     public readonly bool canDuplicate;
     public readonly bool showTrashcan;
     public readonly bool hideAtoms;
-    public readonly bool showExplorer;
-    public readonly bool showNetwork;
-    public readonly bool showPeriodicSystem;
-    public readonly bool showModes;
+    //public readonly bool showExplorer;
+    //public readonly bool showNetwork;
+    //public readonly bool showPeriodicSystem;
+    //public readonly bool showModes;
 
     public Mode(Modes mode, bool playerCanMoveAtoms = false, bool playerCanResizeAtoms = false, bool showTemp = false,
         bool showRelaxation = false, bool showInfo = false, bool canDuplicate = false, bool showTrashcan = false,
-        bool hideAtoms = false, bool showExplorer = false, bool showNetwork = false, bool showPeriodicSystem = false,
-        bool showModes = false)
+        bool hideAtoms = false)
     {
         this.mode = mode;
         this.playerCanMoveAtoms = playerCanMoveAtoms;  // switch to type handrole
@@ -32,10 +31,10 @@ public struct Mode
         this.canDuplicate = canDuplicate;
         this.showTrashcan = showTrashcan;
         this.hideAtoms = hideAtoms;
-        this.showExplorer = showExplorer;
-        this.showNetwork = showNetwork;
-        this.showPeriodicSystem = showPeriodicSystem;
-        this.showModes = showModes;
+        //this.showExplorer = showExplorer;
+        //this.showNetwork = showNetwork;
+        //this.showPeriodicSystem = showPeriodicSystem;
+        //this.showModes = showModes;
     }
 }
 

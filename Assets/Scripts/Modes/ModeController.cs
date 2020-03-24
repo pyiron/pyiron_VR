@@ -120,14 +120,14 @@ public class ModeController : MonoBehaviour
     {
         NetworkMenuController.inst.SetState(currentMode.mode == Modes.Network);
         ExplorerMenuController.inst.SetState(currentMode.mode == Modes.Explorer);
-        TemperatureMenuController.inst.SetState(currentMode.showTemp &&
+        TemperatureMenuController.Inst.SetState(currentMode.showTemp &&
                                                 SimulationModeManager.CurrMode==SimModes.MD);
         ModeMenuController.inst.SetState(currentMode.mode == Modes.Menu);
         ModeMenuController.inst.OnModeChange();
         AnimationMenuController.inst.SetState(//currentMode.mode == Modes.MD ||
                                               currentMode.mode == Modes.Minimize || currentMode.mode == Modes.Animate);
         SimulationMenuController.inst.SetState(currentMode.mode == Modes.Simulation);
-        InfoMenuController.inst.SetState(currentMode.showInfo);
+        //InfoMenuController.inst.SetState(currentMode.showInfo);
         //StructureMenuController.inst.transform.parent.gameObject.SetActive(currentMode.mode == Modes.Explorer);
         //StructureCreatorMenuController.inst.SetState(currentMode.showPeriodicSystem);
         //if (currentMode.showPeriodicSystem)
