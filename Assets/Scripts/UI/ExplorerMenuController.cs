@@ -228,7 +228,7 @@ public class ExplorerMenuController : MenuController {
     }
 }
 
-// needed because Unitys JsonUtilities don't support dictionaries
+// needed because JsonUtilities don't support dictionaries
 [Serializable]
 public class FolderData
 {

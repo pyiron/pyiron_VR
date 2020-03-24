@@ -9,7 +9,7 @@ public class OptionButton : MonoBehaviour, IButton
 {
     public bool isJob;
 
-    private IEnumerator HandleLoad(string jobName)
+    public static IEnumerator HandleLoad(string jobName)
     {
         // send the order to load the structure
         //PythonExecuter.SendOrderAsync(PythonScript.ProjectExplorer, PythonCommandType.pr_input, order);
