@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class PathButton : MonoBehaviour, IButton
 {
+    internal int id;
+    
     public void Update()
     {
         transform.localEulerAngles = Vector3.zero;
@@ -18,13 +20,19 @@ public class PathButton : MonoBehaviour, IButton
     private string GetCurrPath()
     {
         string currPath = "";
-        foreach (PathButton but in transform.parent.GetComponentsInChildren<PathButton>())
+
+        string[] parts = ExplorerMenuController.currPath.Split('/');
+        for (int i = 0; i <= id; i++)
+        {
+            currPath += parts[i] + "/";
+        }
+        /*foreach (PathButton but in transform.parent.GetComponentsInChildren<PathButton>())
         {
             currPath += but.GetComponentInChildren<Text>().text;
             if (but == this)
                 break;
             currPath += "/";
-        }
+        }*/
         return currPath;
     }
 }

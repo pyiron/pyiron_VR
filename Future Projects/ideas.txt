@@ -93,3 +93,14 @@ Dropdown for MD/Minimize
 The Lab als Background
 -Project Explorer: Files untereinander statt nebeneinander
 Controller Symbole fixen
+
+25.3.2020
+Load Potentials from pyiron when going into Calculate mode
+Fix the AnimationController panel to the calculate panel
+- Show last 4 Elements of the Path in Explorer
+Check if job name exists + Option to delete
+Fix bugs
+Create name for job automatically
+Allow to move the whole structure regardless of the mode
+Test out how it feelse when the UI is fixed at left controller
+Make the Structure Creator

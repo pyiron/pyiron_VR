@@ -15,7 +15,7 @@ public class ExplorerMenuController : MenuController {
     public GameObject PathFolder;
     public static bool shouldRefresh = false;
     //internal static bool shouldDelete;
-    private static string currPath;
+    internal static string currPath;
     public static bool pathHasChanged;
 
     public static Dictionary<OptionType, List<string>> options = new Dictionary<OptionType, List<string>>();
@@ -75,32 +75,6 @@ public class ExplorerMenuController : MenuController {
 
         //foreach (Button btn in transform.parent.GetComponentsInChildren<Button>())
         //    btn.interactable = !PythonExecuter.inst.IsLoading();
-    }
-
-    public void ShowNewOptionsOld()
-    {
-        for (int i = 0; i < 2; i++)
-        {
-            OptionType sm = (OptionType)(i);
-            foreach (string opt in options[sm])
-            {
-                // outdated: OptionFolderJobs is missing
-                foreach (Text txt in OptionFolder.GetComponentsInChildren<Text>())
-                {
-                    if (txt.text == opt)
-                        goto next;
-                }
-                Color btn_col;
-                if (sm == OptionType.nodes)
-                    btn_col = Color.cyan;
-                else
-                    btn_col = Color.yellow;
-                GameObject btn = InstantiateNewBtn(OptionPrefab, OptionFolder, opt, btn_col);
-                btn.GetComponent<OptionButton>().isJob = sm == OptionType.nodes;
-                next:;
-            }
-        }
-        shouldRefresh = false;
     }
     
     private void ShowNewFolders(FolderData folderData)
@@ -186,13 +160,16 @@ public class ExplorerMenuController : MenuController {
         string[] splittedPath = currPath.Split('/');
         for (int i = 0; i < splittedPath.Length; i++)
         {
-            if (i < 3 || i + 3 > splittedPath.Length)
+            // just last 4 entries get shown
+            if (i + 4 >= splittedPath.Length)
             {
-                InstantiateNewBtn(PathPrefab, PathFolder, splittedPath[i], Color.white);
+                GameObject newButton = InstantiateNewBtn(PathPrefab, PathFolder, splittedPath[i], Color.white);
+                newButton.GetComponent<PathButton>().id = i;
             } 
-            else if (i == 4)
+            else if (i == 0)
             {
-                InstantiateNewBtn(PathPrefab, PathFolder, "...", Color.white);
+                GameObject newButton = InstantiateNewBtn(PathPrefab, PathFolder, "...", Color.white);
+                newButton.GetComponent<Button>().enabled = false;
             }
         }
 
