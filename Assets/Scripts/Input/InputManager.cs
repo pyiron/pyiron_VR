@@ -84,7 +84,28 @@ public class InputManager : MonoBehaviour
         //    InGamePrinter.inst[(int)handRole].SetState(false);
 
         if (ViveInput.GetPressDown(handRole, ControllerButton.Grip))
-            Canvas.SetActive(!Canvas.activeSelf);
+        {
+            //print(Canvas.transform.parent);
+            //Canvas.SetActive(!Canvas.activeSelf);
+            Transform Controller = LaserGrabber.instances[1].transform;
+            Transform Reticle = Controller.parent.parent.GetComponentsInChildren<ReticlePoser>()[0].transform;
+            if (Canvas.transform.parent == null)
+            {
+                Canvas.transform.SetParent(Controller);
+                Reticle.localScale = Vector3.one * 0.1f;
+                Canvas.transform.localPosition = Vector3.up * 0.25f;
+                Canvas.transform.localEulerAngles = Vector3.up * 0;
+                Canvas.transform.localScale /= 10;
+            }
+            else
+            {
+                Canvas.transform.SetParent(null);
+                Reticle.localScale = Vector3.one;
+                Canvas.transform.localPosition = new Vector3(0, 2.9f, 3);
+                Canvas.transform.localEulerAngles = Vector3.zero;
+                Canvas.transform.localScale *= 10;
+            }
+        }
     }
 
     // check if the application menu button has been pressed. If that's the case, go to the next mode

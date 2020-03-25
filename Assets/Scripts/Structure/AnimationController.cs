@@ -1,9 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 // component of the AnimationMenu Panel
-public class AnimationController : MonoBehaviour {
+public class AnimationController : MonoBehaviour
+{
+    public static AnimationController Inst;
+    
+    private Toggle startStopToggle;
+    
     [Header("Animation")]
     public static bool run_anim;
     public static int animSpeed = 4;
@@ -12,6 +18,16 @@ public class AnimationController : MonoBehaviour {
     
     internal static bool waitForLoadedStruc;
     internal static bool shouldLoad;
+
+    private void Awake()
+    {
+        Inst = this;
+    }
+
+    private void Start()
+    {
+        startStopToggle = GetComponentInChildren<Toggle>();
+    }
 
     // Update is called once per frame
     void Update () {
@@ -61,6 +77,8 @@ public class AnimationController : MonoBehaviour {
         foreach (ControllerSymbols controller in LaserGrabber.controllerSymbols)
             if (controller.gameObject.activeSelf)
                 controller.SetSymbol();
+
+        Inst.startStopToggle.isOn = shouldRun;
     }
 
     internal static void ChangeAnimSpeed(int change)

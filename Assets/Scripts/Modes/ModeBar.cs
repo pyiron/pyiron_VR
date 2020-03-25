@@ -6,10 +6,21 @@ using UnityEngine.UI;
 public class ModeBar : MonoBehaviour
 {
     private Button[] modeButtons;
+    private string currentMode;
+    
     private void Start()
     {
         modeButtons = GetComponentsInChildren<Button>();
         UpdateButtons("Structure");
+    }
+
+    private void Update()
+    {
+        if (currentMode != ModeController.currentMode.mode.ToString())
+        {
+            currentMode = ModeController.currentMode.mode.ToString();
+            UpdateButtons(currentMode);
+        }
     }
 
     /// <summary>
@@ -20,7 +31,7 @@ public class ModeBar : MonoBehaviour
     public void OnButtonClicked(Button clickedButton)
     {
         string btnText = clickedButton.GetComponentInChildren<Text>().text;
-        UpdateButtons(btnText);
+        //UpdateButtons(btnText);
         
         ModeController.inst.SetMode(btnText);
     }
@@ -29,7 +40,7 @@ public class ModeBar : MonoBehaviour
     /// Displays the currently active mode among the modes shown on top of the panel
     /// </summary>
     /// <param name="activeMode"></param>
-    private void UpdateButtons(string activeMode)
+    public void UpdateButtons(string activeMode)
     {
         foreach (Button button in modeButtons)
         {

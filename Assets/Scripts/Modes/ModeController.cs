@@ -66,8 +66,11 @@ public class ModeController : MonoBehaviour
     {
         if (currentMode.mode != Modes.None && currentMode.mode != Modes.Explorer &&
             currentMode.mode != Modes.Network)
+        {
             // stop the currently running animation
-            AnimationController.RunAnim(false);
+            AnimationController.RunAnim(true);
+        }
+
         currentMode = modes[(int)newMode];
         UpdateScene();
     }
@@ -126,7 +129,8 @@ public class ModeController : MonoBehaviour
         //ModeMenuController.inst.OnModeChange();
         AnimationMenuController.inst.SetState(//currentMode.mode == Modes.MD ||
                                               currentMode.mode == Modes.Minimize || currentMode.mode == Modes.Animate);
-        SimulationMenuController.inst.SetState(currentMode.mode == Modes.Calculate);
+        SimulationMenuController.inst.SetState(currentMode.mode == Modes.Calculate ||
+                                               currentMode.mode == Modes.Animate);
         //InfoMenuController.inst.SetState(currentMode.showInfo);
         //StructureMenuController.inst.transform.parent.gameObject.SetActive(currentMode.mode == Modes.Explorer);
         //StructureCreatorMenuController.inst.SetState(currentMode.showPeriodicSystem);
