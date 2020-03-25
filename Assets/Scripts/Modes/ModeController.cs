@@ -122,8 +122,8 @@ public class ModeController : MonoBehaviour
         ExplorerMenuController.inst.SetState(currentMode.mode == Modes.Explorer);
         TemperatureMenuController.Inst.SetState(currentMode.showTemp &&
                                                 SimulationModeManager.CurrMode==SimModes.MD);
-        ModeMenuController.inst.SetState(currentMode.mode == Modes.Menu);
-        ModeMenuController.inst.OnModeChange();
+        //ModeMenuController.inst.SetState(currentMode.mode == Modes.Menu);
+        //ModeMenuController.inst.OnModeChange();
         AnimationMenuController.inst.SetState(//currentMode.mode == Modes.MD ||
                                               currentMode.mode == Modes.Minimize || currentMode.mode == Modes.Animate);
         SimulationMenuController.inst.SetState(currentMode.mode == Modes.Calculate);

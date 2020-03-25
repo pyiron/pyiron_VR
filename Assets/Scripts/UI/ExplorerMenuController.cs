@@ -103,9 +103,37 @@ public class ExplorerMenuController : MenuController {
         shouldRefresh = false;
     }
     
+    private void ShowNewFolders(FolderData folderData)
+    {
+        foreach (string opt in folderData.groups)
+        {
+            // blend out the scratch folder, access to it would cause errors
+            if (opt == "scratch")
+            {
+                Debug.LogWarning("Scratch Folder will not be shown");
+                continue;
+            }
+            
+            InstantiateNewBtn(OptionPrefab, OptionFolder, opt, Color.yellow);
+        }
+        InstantiateNewBtn(OptionPrefab, OptionFolder, "..", Color.yellow);
+    }
+    
+    public void ShowNewJobs(FolderData folderData)
+    {
+        foreach (string opt in folderData.nodes)
+        {
+            GameObject btn = InstantiateNewBtn(OptionPrefab, OptionFolderJobs, opt, Color.cyan);
+            btn.GetComponent<OptionButton>().isJob = true;
+        }
+    }
+    
     public void ShowNewOptions(FolderData folderData)
     {
-        List<string> opts;
+        ShowNewFolders(folderData);
+        ShowNewJobs(folderData);
+        
+        /*List<string> opts;
         for (int i = 0; i < 2; i++)
         {
             if (i == 0)
@@ -142,10 +170,36 @@ public class ExplorerMenuController : MenuController {
                 GameObject btn = InstantiateNewBtn(OptionPrefab, parentFolder, opt, btnCol);
                 btn.GetComponent<OptionButton>().isJob = i == 1;
             }
-        }
+        }*/
     }
 
-    public void PathHasChanged(string newPath="")
+    public void PathHasChanged(string newPath = "")
+    {
+        //Destroy all previously shown buttons
+        Button[] pathButtons = PathFolder.GetComponentsInChildren<Button>();
+        foreach (Button button in pathButtons)
+        {
+            Destroy(button.gameObject);
+        }
+        
+        // show the new buttons
+        string[] splittedPath = currPath.Split('/');
+        for (int i = 0; i < splittedPath.Length; i++)
+        {
+            if (i < 3 || i + 3 > splittedPath.Length)
+            {
+                InstantiateNewBtn(PathPrefab, PathFolder, splittedPath[i], Color.white);
+            } 
+            else if (i == 4)
+            {
+                InstantiateNewBtn(PathPrefab, PathFolder, "...", Color.white);
+            }
+        }
+
+        pathHasChanged = false;
+    }
+
+    /*public void PathHasChanged(string newPath="")
     {
         Button[] pathButtons = PathFolder.GetComponentsInChildren<Button>();
         bool correctPath = true;
@@ -169,7 +223,7 @@ public class ExplorerMenuController : MenuController {
             InstantiateNewBtn(PathPrefab, PathFolder, splittedPath[i], Color.white);
         }
         pathHasChanged = false;
-    }
+    }*/
 
     public void AddOption(OptionType t, string opt)
     {
