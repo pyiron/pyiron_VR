@@ -10,7 +10,7 @@ public class TemperatureMenuController : MenuController {
     public Text tempText;
     public Text minTempText;
     public Text maxTempText;
-    private Dropdown[] dropdowns;
+    private Dropdown[] _dropdowns;
 
     internal override void SetState(bool active)
     {
@@ -26,7 +26,7 @@ public class TemperatureMenuController : MenuController {
 
     private void Start()
     {
-        dropdowns = GetComponentsInChildren<Dropdown>();
+        _dropdowns = GetComponentsInChildren<Dropdown>();
     }
 
     private void Update()
@@ -43,7 +43,7 @@ public class TemperatureMenuController : MenuController {
         float temp = Thermometer.temperature;
         string n_ionic_steps = "";
         string n_print = "";
-        foreach (Dropdown dropdown in dropdowns)
+        foreach (Dropdown dropdown in _dropdowns)
         {
             if (dropdown.transform.parent.name == "n_ionic_steps")
             {

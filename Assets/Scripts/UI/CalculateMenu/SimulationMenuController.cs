@@ -70,13 +70,17 @@ public class SimulationMenuController : MenuController {
         //string calculation = ModeData.currentMode.showTemp ? "md" : "minimize";
         string calculation = SimulationModeManager.CurrMode.ToString().ToLower();
         string order;
+        JobData jobData = JobSettingsController.Inst.GetData();
         if (calculation == "md")
         {
             MdData data = TemperatureMenuController.Inst.GetData();
             order = "unity_manager.Executor.calculate_" + calculation + "(" +
                                data.temperature + ", " + 
                                data.n_ionic_steps + ", " + 
-                               data.n_print +")";
+                               data.n_print + ", " + 
+                               jobData.job_type + ", " + 
+                               jobData.job_name + ", " + 
+                               jobData.potential + ")";
         }
         else
         {
@@ -84,7 +88,10 @@ public class SimulationMenuController : MenuController {
             order = "unity_manager.Executor.calculate_" + calculation + "(" +
                     data.force_conv + ", " + 
                     data.max_iterations + ", " + 
-                    data.n_print +")";
+                    data.n_print + ", " + 
+                    jobData.job_type + ", " + 
+                    jobData.job_name + ", " + 
+                    jobData.potential + ")";
         }
 
         // load the new structure in another coroutine
