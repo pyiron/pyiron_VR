@@ -1,18 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class SimulationMenuController : MenuController {
-    internal static SimulationMenuController inst;
+    internal static SimulationMenuController Inst;
+    
     [SerializeField]
     private Button SimulationButton;
     private Text _simBtnText;
+    
     public static bool ShouldReload = false;
 
     private void Awake()
     {
-        inst = this;
+        Inst = this;
         _simBtnText = SimulationButton.GetComponentInChildren<Text>();
     }
 
@@ -29,21 +32,26 @@ public class SimulationMenuController : MenuController {
         }
     }
 
+    public void OnModeStart()
+    {
+        JobSettingsController.Inst.OnModeStart();
+    }
+
     public void SetNIonicSteps(Dropdown dropdown)
     {
         string n_ionic_steps = dropdown.options[dropdown.value].text;
         print("Setting n_ionic_steps to " + dropdown.options[dropdown.value].text);
         // set the value
-        string order = "unity_manager.Executor.n_ionic_steps = " + n_ionic_steps;
-        PythonExecuter.SendOrderSync(PythonScript.None, PythonCommandType.exec_l, order);
+        string order = "n_ionic_steps = " + n_ionic_steps;
+        PythonExecuter.SendOrderSync(PythonScript.Executor, PythonCommandType.exec_l, order);
     }
     
     // TODO: Deactivate and activate UI Elements
-    private IEnumerator HandleLammpsLoad(string order)
+    private IEnumerator HandleLammpsLoad(string order, PythonScript receivingScript)
     {
         // send the order to execute lammps
         //PythonExecutor.SendOrderAsync(PythonScript.Executor, PythonCommandType.eval, order);
-        PythonExecuter.SendOrderAsync(PythonScript.Executor, PythonCommandType.eval_l, order);
+        PythonExecuter.SendOrderAsync(receivingScript, PythonCommandType.eval_l, order);
         
         // remember the id of the request to wait for the right response id
         int taskNumIn = TCPClient.taskNumIn;
@@ -58,15 +66,16 @@ public class SimulationMenuController : MenuController {
         base.Activate();
         AnimationController.frame = 0;
         PythonExecuter.HandlePythonMsg(result);
-        ModeController.inst.SetMode(Modes.Animate);
+        AnimationMenuController.Inst.SetState(true);
+        //ModeController.inst.SetMode(Modes.Animate);
         // todo: maybe handle the result here, instead of calling PythonExecutor.HandlePythonMsg
     } 
 
     private void CalculateNewJob()
     {
         // update the temperture
-        PythonExecuter.SendOrderSync(PythonScript.None, PythonCommandType.exec_l,
-            "unity_manager.Executor.temperature = " + Thermometer.temperature);
+        //PythonExecuter.SendOrderSync(PythonScript.None, PythonCommandType.exec_l,
+        //    "unity_manager.Executor.temperature = " + Thermometer.temperature);
         //string calculation = ModeData.currentMode.showTemp ? "md" : "minimize";
         string calculation = SimulationModeManager.CurrMode.ToString().ToLower();
         string order;
@@ -74,7 +83,7 @@ public class SimulationMenuController : MenuController {
         if (calculation == "md")
         {
             MdData data = TemperatureMenuController.Inst.GetData();
-            order = "unity_manager.Executor.calculate_" + calculation + "(" +
+            order = "calculate_" + calculation + "(" +
                                data.temperature + ", " + 
                                data.n_ionic_steps + ", " + 
                                data.n_print + ", " + 
@@ -85,7 +94,7 @@ public class SimulationMenuController : MenuController {
         else
         {
             MinimizeData data = MinimizeMenuController.Inst.GetData();
-            order = "unity_manager.Executor.calculate_" + calculation + "(" +
+            order = "calculate_" + calculation + "(" +
                     data.force_conv + ", " + 
                     data.max_iterations + ", " + 
                     data.n_print + ", " + 
@@ -95,7 +104,7 @@ public class SimulationMenuController : MenuController {
         }
 
         // load the new structure in another coroutine
-        StartCoroutine(HandleLammpsLoad(order));
+        StartCoroutine(HandleLammpsLoad(order, PythonScript.Executor));
         
         AnimationController.waitForLoadedStruc = true;
         base.Deactivate();
@@ -112,7 +121,8 @@ public class SimulationMenuController : MenuController {
         }
         else
         {
-            ModeController.inst.SetMode(Modes.Animate);
+            //ModeController.inst.SetMode(Modes.Animate);
+            AnimationMenuController.Inst.SetState(true);
         }
     }
 }

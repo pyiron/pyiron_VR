@@ -28,11 +28,11 @@ public class ModeController : MonoBehaviour
         new Mode(mode:Modes.Explorer, hideAtoms: true),
         new Mode(mode:Modes.Calculate, playerCanMoveAtoms:true, playerCanResizeAtoms:true, showTemp:true,
             showTrashcan:true),
-        new Mode(mode:Modes.Minimize, playerCanMoveAtoms:true, playerCanResizeAtoms:true, showRelaxation:true,
-            showTrashcan:true),
-        new Mode(mode:Modes.Animate),
+        //new Mode(mode:Modes.Minimize, playerCanMoveAtoms:true, playerCanResizeAtoms:true, showRelaxation:true,
+        //    showTrashcan:true),
+        //new Mode(mode:Modes.Animate),
         new Mode(mode:Modes.Structure),
-        new Mode(mode:Modes.Menu)
+        //new Mode(mode:Modes.Menu)
         //new Mode(mode:Modes.Info, showInfo:true)
     };
 
@@ -127,10 +127,17 @@ public class ModeController : MonoBehaviour
                                                 SimulationModeManager.CurrMode==SimModes.MD);
         //ModeMenuController.inst.SetState(currentMode.mode == Modes.Menu);
         //ModeMenuController.inst.OnModeChange();
-        AnimationMenuController.inst.SetState(//currentMode.mode == Modes.MD ||
-                                              currentMode.mode == Modes.Minimize || currentMode.mode == Modes.Animate);
-        SimulationMenuController.inst.SetState(currentMode.mode == Modes.Calculate ||
-                                               currentMode.mode == Modes.Animate);
+        if (currentMode.mode != Modes.Calculate)
+        {
+            AnimationMenuController.Inst.SetState(false);
+        }
+        else
+        {
+            SimulationMenuController.Inst.OnModeStart();
+        }
+
+        //                                      currentMode.mode == Modes.Minimize || currentMode.mode == Modes.Animate);
+        SimulationMenuController.Inst.SetState(currentMode.mode == Modes.Calculate);
         //InfoMenuController.inst.SetState(currentMode.showInfo);
         //StructureMenuController.inst.transform.parent.gameObject.SetActive(currentMode.mode == Modes.Explorer);
         //StructureCreatorMenuController.inst.SetState(currentMode.showPeriodicSystem);

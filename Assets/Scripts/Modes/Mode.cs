@@ -40,5 +40,5 @@ public struct Mode
 
 public enum Modes
 {
-    Network, Explorer, Calculate, Minimize, Animate, Structure, Menu, None // , Info,
+    Network, Explorer, Calculate, Structure, None // , Info, Menu, Animate, Minimize
 }

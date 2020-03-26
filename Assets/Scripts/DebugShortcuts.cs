@@ -40,7 +40,7 @@ public class DebugShortcuts : MonoBehaviour
 
             if (counter == 4)
             {
-                AnimationMenuController.inst.OnSimBtnDown();
+                AnimationMenuController.Inst.OnSimBtnDown();
             }
             counter++;
         }

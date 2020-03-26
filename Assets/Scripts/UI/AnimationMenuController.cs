@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 // component of AnimationPanel
 public class AnimationMenuController : MenuController {
-    internal static AnimationMenuController inst;
+    internal static AnimationMenuController Inst;
     public Text speedText;
     
     internal override void SetState(bool active)
@@ -16,7 +16,7 @@ public class AnimationMenuController : MenuController {
 
     private void Awake()
     {
-        inst = this;
+        Inst = this;
     }
 
     public void Update()

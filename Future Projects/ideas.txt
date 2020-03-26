@@ -96,11 +96,15 @@ Controller Symbole fixen
 
 25.3.2020
 Load Potentials from pyiron when going into Calculate mode
-Fix the AnimationController panel to the calculate panel
+- Fix the AnimationController panel to the calculate panel
+Decide when the animation should be played
 - Show last 4 Elements of the Path in Explorer
 Check if job name exists + Option to delete
 Fix bugs
 Create name for job automatically
 Allow to move the whole structure regardless of the mode
-Test out how it feelse when the UI is fixed at left controller
+- Test out how it feelse when the UI is fixed at left controller
+fix bug that atoms duplicate when going to project explorer again
 Make the Structure Creator
+
+MyBinder einrichten

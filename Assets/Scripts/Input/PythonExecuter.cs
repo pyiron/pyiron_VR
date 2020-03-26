@@ -126,9 +126,9 @@ public class PythonExecuter : MonoBehaviour {
         {
             if (splittedData[1] == "view")
             {
-                Debug.LogWarning("Oh wow, this is actually in use! Please mark here, that the animation has already been calculated");
-                //ModeData.inst.newMode = Modes.Simulation;
-                ModeController.inst.newMode = Modes.Animate;
+                Debug.LogWarning("TODO: Please mark here, that the animation has already been calculated");
+                ModeController.inst.newMode = Modes.Calculate;
+                //ModeController.inst.newMode = Modes.Animate;
             }
             else
             {
@@ -266,7 +266,18 @@ public class PythonExecuter : MonoBehaviour {
         string fullOrder = ProcessOrder(script, type, order);
         if (type == PythonCommandType.exec_l || type == PythonCommandType.eval_l)
         {
-            fullOrder = order;
+            if (script == PythonScript.None)
+            {
+                fullOrder = order;
+            }
+            /*else if (script == PythonScript.UnityManager)
+            {
+                fullOrder = order;
+            }*/
+            else if (script == PythonScript.Executor)
+            {
+                fullOrder = "unity_manager.Executor." + order;
+            }
         }
         else
         {
@@ -289,7 +300,18 @@ public class PythonExecuter : MonoBehaviour {
         // send the order via TCP 
         if (type == PythonCommandType.exec_l || type == PythonCommandType.eval_l)
         {
-            fullOrder = order;
+            if (script == PythonScript.None)
+            {
+                fullOrder = order;
+            }
+            /*else if (script == PythonScript.UnityManager)
+            {
+                fullOrder = order;
+            }*/
+            else if (script == PythonScript.Executor)
+            {
+                fullOrder = "unity_manager.Executor." + order;
+            }
         }
         else
         {
