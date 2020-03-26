@@ -7,44 +7,27 @@ using UnityEngine.UI;
 public class SimulationMenuController : MenuController {
     internal static SimulationMenuController Inst;
     
-    [SerializeField]
-    private Button SimulationButton;
-    private Text _simBtnText;
-    
-    public static bool ShouldReload = false;
+    public static bool jobLoaded = false;
 
     private void Awake()
     {
         Inst = this;
-        _simBtnText = SimulationButton.GetComponentInChildren<Text>();
-    }
-
-    private void Update()
-    {
-        SimulationButton.interactable = SimulationModeManager.CurrMode != SimModes.None || !ShouldReload;
-        if (ShouldReload)
-        {
-            _simBtnText.text = "Start Simulation";
-        }
-        else
-        {
-            _simBtnText.text = "Show Animation";
-        }
     }
 
     public void OnModeStart()
     {
         JobSettingsController.Inst.OnModeStart();
+        ActionPanelController.Inst.UpdateButtons();
     }
 
-    public void SetNIonicSteps(Dropdown dropdown)
+    /*public void SetNIonicSteps(Dropdown dropdown)
     {
         string n_ionic_steps = dropdown.options[dropdown.value].text;
         print("Setting n_ionic_steps to " + dropdown.options[dropdown.value].text);
         // set the value
         string order = "n_ionic_steps = " + n_ionic_steps;
         PythonExecuter.SendOrderSync(PythonScript.Executor, PythonCommandType.exec_l, order);
-    }
+    }*/
     
     // TODO: Deactivate and activate UI Elements
     private IEnumerator HandleLammpsLoad(string order, PythonScript receivingScript)
@@ -63,7 +46,7 @@ public class SimulationMenuController : MenuController {
         string result = TCPClient.returnedMsg;
         
         // handle the response
-        base.Activate();
+        Activate();
         AnimationController.frame = 0;
         PythonExecuter.HandlePythonMsg(result);
         AnimationMenuController.Inst.SetState(true);
@@ -71,7 +54,7 @@ public class SimulationMenuController : MenuController {
         // todo: maybe handle the result here, instead of calling PythonExecutor.HandlePythonMsg
     } 
 
-    private void CalculateNewJob()
+    public void CalculateNewJob()
     {
         // update the temperture
         //PythonExecuter.SendOrderSync(PythonScript.None, PythonCommandType.exec_l,
@@ -107,22 +90,10 @@ public class SimulationMenuController : MenuController {
         StartCoroutine(HandleLammpsLoad(order, PythonScript.Executor));
         
         AnimationController.waitForLoadedStruc = true;
-        base.Deactivate();
-        ShouldReload = false;
+        Deactivate();
         print("Wait begun");
         //lammpsIsMd = ModeData.currentMode.showTemp;
     }
 
-    public void StartSimulation()
-    {
-        if (_simBtnText.text == "Start Simulation")
-        {
-            CalculateNewJob();
-        }
-        else
-        {
-            //ModeController.inst.SetMode(Modes.Animate);
-            AnimationMenuController.Inst.SetState(true);
-        }
-    }
+
 }

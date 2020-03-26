@@ -95,8 +95,10 @@ The Lab als Background
 Controller Symbole fixen
 
 25.3.2020
-Load Potentials from pyiron when going into Calculate mode
+- Load Potentials from pyiron when going into Calculate mode
 - Fix the AnimationController panel to the calculate panel
+Load other attributes from the structure (temperature etc.)
+Allow to Delete and Create a structure/job
 Decide when the animation should be played
 - Show last 4 Elements of the Path in Explorer
 Check if job name exists + Option to delete

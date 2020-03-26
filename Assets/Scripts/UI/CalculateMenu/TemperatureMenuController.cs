@@ -62,7 +62,7 @@ public class TemperatureMenuController : MenuController {
         Thermometer.temperature = (int)temp_slider.value;
         Thermometer.inst.UpdateTemperature((int)temp_slider.value);
         // a new simulation should be started when the temperature gets changed
-        SimulationMenuController.ShouldReload = true;
+        SimulationMenuController.jobLoaded = true;
     }
 
     public void ChangeTemperature()

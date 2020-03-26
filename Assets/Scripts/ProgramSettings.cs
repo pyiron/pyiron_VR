@@ -66,7 +66,7 @@ public class ProgramSettings : MonoBehaviour
 
     public void ResetScene()
     {
-        SimulationMenuController.ShouldReload = false;
+        SimulationMenuController.jobLoaded = false;
         Thermometer.temperature = -1;
         Thermometer.inst.SetState(false); 
         StructureData.atomCtrlPos = new List<Vector3>(StructureData.atomCtrlPos.Count);  // seems not to work

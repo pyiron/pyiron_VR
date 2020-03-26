@@ -94,7 +94,7 @@ public class PeriodensystemButtonManager : MonoBehaviour, IBeginDragHandler, IDr
 		{
 			// send Python the order to add a new atom and send back the formatted_data
             ImportStructure.newImport = true;
-            SimulationMenuController.ShouldReload = true;
+            SimulationMenuController.jobLoaded = true;
             
             PythonExecuter.SendOrderSync(PythonScript.Executor, PythonCommandType.eval, 
             	"self.add_new_atom('" + gameObject.name.Remove(0, 7) + "')");

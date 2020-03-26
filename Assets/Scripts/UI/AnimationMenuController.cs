@@ -54,8 +54,8 @@ public class AnimationMenuController : MenuController {
     public void OnSimBtnDown()
     {
         // Send an update to Pyiron what the current frame is
-        PythonExecuter.SendOrderSync(PythonScript.None, PythonCommandType.exec_l,
-            "unity_manager.Executor.pr.structure = unity_manager.Executor.pr.get_structure("
+        PythonExecuter.SendOrderSync(PythonScript.Executor, PythonCommandType.exec_l,
+            "job.structure = unity_manager.Executor.job.get_structure("
             + AnimationController.frame + ")");
             //"unity_manager.Executor.frame = " + AnimationController.frame);
         ModeController.inst.SetMode(Modes.Calculate);

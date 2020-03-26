@@ -150,7 +150,7 @@ public class Thermometer : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         // show the current temperature data on the thermometer
         UpdateTemperature(exactTemperature:(int)(maxTemperature * newTemperatureGradient));
         // a new simulation should be started when the temperature gets changed
-        SimulationMenuController.ShouldReload = true;
+        SimulationMenuController.jobLoaded = true;
     }
 
     // allows to change the maxTemperature

@@ -70,7 +70,7 @@ public class AnimationController : MonoBehaviour
         // the simulation should be reloaded
         if (shouldRun)
         {
-            SimulationMenuController.ShouldReload = true;
+            SimulationMenuController.jobLoaded = true;
         }
         run_anim = shouldRun;
         // update the symbols on all active controllers
@@ -101,7 +101,7 @@ public class AnimationController : MonoBehaviour
 /// </summary>
 /// <param name="forward"></param>
     public static void move_one_frame(bool forward=true) {
-        SimulationMenuController.ShouldReload = true;
+        SimulationMenuController.jobLoaded = true;
         if (forward)
             frame = Mod((frame + 1), StructureData.GetCurrFrameData().frames);
         else

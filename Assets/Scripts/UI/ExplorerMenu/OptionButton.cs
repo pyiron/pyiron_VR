@@ -13,12 +13,13 @@ public class OptionButton : MonoBehaviour, IButton
     {
         // send the order to load the structure
         //PythonExecuter.SendOrderAsync(PythonScript.ProjectExplorer, PythonCommandType.pr_input, order);
-        
-        PythonExecuter.SendOrderSync(PythonScript.None,
-            PythonCommandType.exec_l, "unity_manager.pr = unity_manager.pr['" + jobName + "']", handleInput: false);
 
-        PythonExecuter.SendOrderAsync(PythonScript.None, PythonCommandType.eval_l, 
-            "unity_manager.send_job()");
+        string order = "project = unity_manager.project['" + jobName + "']";
+        PythonExecuter.SendOrderSync(PythonScript.UnityManager,
+            PythonCommandType.exec_l, order, handleInput: false);
+
+        PythonExecuter.SendOrderAsync(PythonScript.UnityManager, PythonCommandType.eval_l, 
+            "send_job()");
 
         // remember the id of the request to wait for the right response id
         int taskNumIn = TCPClient.taskNumIn;
@@ -34,6 +35,7 @@ public class OptionButton : MonoBehaviour, IButton
         PythonExecuter.HandlePythonMsg(result);
         ExplorerMenuController.inst.DeleteOptions();
         ExplorerMenuController.inst.ClearOptions();
+        SimulationMenuController.jobLoaded = true;
         ModeController.inst.SetMode(Modes.Calculate);
         AnimationMenuController.Inst.SetState(true);
         // todo: handle the result here, instead of calling PythonExecuter.HandlePythonMsg

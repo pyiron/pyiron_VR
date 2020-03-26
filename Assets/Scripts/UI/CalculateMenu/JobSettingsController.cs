@@ -21,7 +21,7 @@ public class JobSettingsController : MonoBehaviour
     public void OnModeStart()
     {
         // load all currently available jobs from pyiron
-        string order = "pr.list_potentials()";
+        string order = "job.list_potentials()";
         string potentials = PythonExecuter.SendOrderSync(PythonScript.Executor, PythonCommandType.eval_l, order);
         potentials = JsonHelper.WrapToClass(potentials, "data");
         List<string> potentialsArr = JsonUtility.FromJson<StringList>(potentials).data;
@@ -31,7 +31,7 @@ public class JobSettingsController : MonoBehaviour
             potentialDropdown.options.Add(new Dropdown.OptionData(pot));
         }
         
-        order = "pr.structure.get_chemical_formula()";
+        order = "job.structure.get_chemical_formula()";
         string jobName = PythonExecuter.SendOrderSync(PythonScript.Executor, PythonCommandType.eval_l, order);
         jobNameField.text = jobName;
     }
