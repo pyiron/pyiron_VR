@@ -1,0 +1,29 @@
+Before making any build, I recommand to make a backup of the Python Scripts. Just press Save as and increase the Number in the name by one, or save it as Build~BuildNr~.
+
+How to make a normal Build:
+You want to do this from time to time, so that you can watch how the program worked the last time you did this. Also, when presenting the program to other people I recommend it.
+
+Make a build of the current project:
+Unity Editor -> File -> BuildSettings... 
+Go to Player Settings, and delete Split Stereo Device or Stereo Device if it is in the SDKs. Add OpenVR if it isn't in the SDKs, but it should always be there.
+Go back to the window where you clicked on Player Settings, and press Add Open Scene. Untick the old scene if you have a new Scene.
+Press the Build Button.
+Select the path where you want the build to be stored. I recommend a Folder VABuilds in Desktop, or to put it directly in the Desktop if it should be shown. For the name, I recommend it in the format "VABuild~VersionNr~_VR".
+
+Start the programm by just clicking on the executable (stored where you saved it, or on the Desktop if you saved it there).
+
+
+How to make a Build for the 3D Beamer:
+We tried to project the things the one with the HTC Vive is seeing on the screen of the 3D Beamer. We had no success, displaying it there in 3D. Still, here are some information about what we tried.
+
+Make a build of the current project:
+Unity Editor -> File -> BuildSettings... 
+Go to Player Settings, and add either Split Stereo Device or Stereo Device to the SDKs.
+Go back to the window where you clicked on Player Settings, and press Add Open Scene. Untick the old scene if you have a new Scene.
+Press the Build Button.
+Select the path where you want the build to be stored. I recommend a Folder VABuilds in Desktop, or to put it directly in the Desktop if it should be shown. For the name, I recommend it in the format "VABuild~VersionNr~_VR+~Split~Stereo".
+
+Use this to start the program:
+Open the Shell
+Go to the Folder where you stored the build
+Run it by entering YourBuildName.exe -vrmode Stereo

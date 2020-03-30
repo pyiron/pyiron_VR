@@ -1,0 +1,48 @@
+The first mode should be "Choose a structure" mode. In this mode, the user has to load a Python script which should send Unity the data for a structure.
+
+To choose the mode, the user just has to press the Hairtrigger of a controller and point exactly towards the button with the name of the Python Structure he wants to load. If he points directly to it, there should be a red laser from the controller to the hitpoint on the button. By releasing the Hairtrigger while the controller points toward a button, the Pythonscript with the name written on the button will be loaded.
+
+In the future, there might be a way to open a directory by pressing a button with the name of the directory. After that, the files stored in this directory should be shown as possible Python scripts.
+
+By choosing a script, the user will get to the next mode.
+
+Important: The user can't move on to the next mode by using the application mode when being in this mode for the first time. If he already loaded a structure before and is now again in this mode, he can just press the application menu button to continue with the current structure, or click on one of the green Python buttons to load a new structure. If the new File is the same as the old one, it will load it again, resetting everything the user has done before.
+
+
+The next mode should be temperature mode. In this mode, it is possible to load a ham_lammps animation which shows how the structure reacts to different temperatures.
+
+This mode has a special feature, the thermometer. If a controller points towards the thermometer, the Hairtrigger gets pressed and there is nothing in front of the thermometer, both controllers can set a new temperature. By pressing the Touchpad up or down while having the laser on the thermometer, the scale how the temperature can be changed gets changed.
+
+Currently, after the temperature mode comes the relaxation mode. It is pretty similar to the temperature mode, but it shows a ham_lammps animation of how the structure relaxates, independant from the temperature.
+
+
+Both temperature mode and relaxation mode have many things in common:
+
+The controllers can move the atoms or the whole structure, either by grabbing it, or by using the laser. Each controller has an assigned Layer, called BoundingboxLayer or AtomLayer. If the boundingbox controller is inside the boundingbox, it will grab the structure, if it is outside, it will show a laser, pointing to the middle of the structure. If the AtomLayer controller is inside an atom, it will grab the atom, if it is outside, it will show a laser to the center of the atom.
+
+If something is grabbed, it will just follow the position of the controller.
+
+If something is connected by the laser, and the controller got moved, the object will follow the end of the laser. If the length of the laser gets changed by using the touchpad of the according controller, the object will still follow the end of the laser, this way it can be moved towards or away from the controller.
+
+If a single atom gets moved into the trashcan, it will be destroyed.
+
+Both controllers can controll the animation, if they haven't got anything grabbed at the moment.
+Pressing the touchpad in the center will cause the animation to start if it isn't running yet or will stop it if it was running before.
+
+If the animation isn't running, pressing the right side of the touchpad will cause the animation to move one frame forward. If the user keeps it pressed, it will continue this each 0.5s. This is also possible when pressing the controller on the left side, but this way it will move backwards instead of forward.
+
+When playing the animation, it can be played in following speed modes:
+fast (2x) backwards - backwards - slow (0.5x) backwards - slow(0.5x) forward- forward- - fast (2x) forward
+If the animation is currently running, pressing one side of the touchpad will cause the animation speed mode to the neighbour mode to the side the touchpad has been pressed.
+
+The whole scene (except of the thermometer and progressbar at the moment) can be resized by pressing the Hairtriggers of both controllers simultaneously, but not if the AtomLayer controller has currently an atom attached to it or the boundingboxcontroller is outside the boundingbox. At the moment, it's also not possible to resize it, if the AtomLayer controller is currently in an atom when trying to resize it, but this should be changed.
+
+
+The mode after the relaxation mode is the Info mode. In this mode, the structure can't be moved.
+
+Pointing towards the boundingbox with the BoundingboxLayer controller and pressing the HairTrigger or pressing the HairTrigger inside the boundingbox will let the structure show it's data, at the moment the structure name and the amount of atoms.
+Pointing towards an atom with the AtomLayer controller and pressing the HairTrigger or pressing the HairTrigger inside an atom will let the atom show it's data, at the moment the element and the force of the atom. In the future, the force should be shown as an arrow pointing in the drection in which the force is directed and with the length of the magnitude of the force. Also, other data should be added, f.g. the spin.
+
+
+At the moment, the Grip button can be used in all modes, but it is just important for the developer. It can show the data the developer tells it to show 2m before the controller, which can be any string. To access it, the developer has to get the reference to the Script InGamePrinter of the [CameraRig] GameObject, and call it's function CTRL_print(). The Input is the string that should be shown, the importance that exactly this string gets shown and not an other, called with this function, and whether it should be shown on the right or left controller.
+

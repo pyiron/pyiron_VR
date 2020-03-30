@@ -1,0 +1,11 @@
+Python: PEP8
+
+Unity: 
+- Functions: Beginning with Capital, no underscores, f.g. ExampleFunction()
+- GameObjects: Beginning with Capital, no underscores, f.g. HourglassRotator
+		Some have Object apeended to their scene name, these should be renamed, but before their scriptReference, 		because that was the reason why I named it like this.
+- Transforms: same as GameObjects
+- Scripts: Scripts are a bit messy, mainly because scriptname and GameObject name are sometimes not too different. Most Scripts 	with more than 1 Word, are referenced by just each Starting letter, f.g. OrdersToPython -> OTP, scripts with one word 	keep their name or get script added. Should be improved and the same for each scriptreference
+=> Append Script to Scripts with just one word, than reference them as (FirstLatterOfTheScriptname + S), or choose what you prefere
+
+- Other: beginning without a capital latter, each new word has a capital latter

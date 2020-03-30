@@ -1,0 +1,20 @@
+Workprogress on Virtual Atoms
+by Philip Neugebauer, 1.8.2018 - 30.9.2018
+All progress is also represented by the commits on GitLab with some more details.
+
+1.1 - 31.1.2020:
+Continued to restructure big parts of the program, including new menu hierarchies, a new Simulation Menu, new visuals, and a lot of code cleanup.
+
+1.2. - 29.2.2020:
+Restructured the menu. A calculation menu has been implemented, in which settings concerning the calculation ob a job can be determined. 
+Code cleanup and refactoring in the Python and Unity Project.
+For a better workflow, I implemented a script that mocks the Input needed to load a sample structure when pressing x.
+
+1.3. - 31.3.2020:
+Improved the calculation menu and started to develop the new Structure Panel, which has new options. The Explorer meu has been adjusted to the new style and the path display has been improved. The Canvas can now be attached to the controller by pressing the Grip button of any controller.
+Code cleanup and refactoring in the Python and Unity Project.
+
+
+
+
+

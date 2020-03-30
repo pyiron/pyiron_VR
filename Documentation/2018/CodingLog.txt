@@ -1,0 +1,39 @@
+Workprogress on Virtual Atoms
+by Philip Neugebauer, 1.8.2018 - 30.9.2018
+All progress is also represented by the commits on GitLab with some more details.
+
+8.9.2018: The program is now working again the same way I left it.
+
+18.8.2018: Optimized the code written in C#. By using static references to a script which gets just deployed once in the scene, these scripts can be referenced easier.
+
+21.8.2018: Finished a testing program for the Python script of Virtual Atoms.
+
+23.8.2018: Updated PyIron to the latest version.
+
+24.8.2018: Wrote the PyIron Script FindStructure which allows to choose an executed Job or a Python File in a Folder and start it with the Sender Script. Unity Support is pending.
+
+27.8.2018: The headset and controller Management System has been changed from SteamVR to ViveInputUtility. No errors get thrown, but the program down't work either. The Simulator can already be used, so that it is possible to modify the program without a VR Headset.
+
+28.8.2018: Implemented a new UI to let the user choose which structure should be shown. Program crashes when choosing a structure, due to the new Management System.
+
+29.8.2018: Cleaned up unnecessary code from the Sender.py script, without being able to test it.
+
+03.09.2018: Solved issues invoked through the clean-up. Added a test script for the StructureFinder.
+
+04.09.2018: Rewrote the python scripts, to increase readability and understandability. The UnityManager handles sending and receiving messages from and to Unity, the ProjectExplorer executes the commands needed to explore the project to start a structure, and the Executer handles all commands for the structure/job.
+
+06.09.2018: Added a simple test for the new PythonScripts, which can be easily extended with the old tests.
+
+07.09.2018: Improved the communicationsystem between the Python and Unity Program.
+
+09.09.2018: Implemented the MoveToCenter function, which moves a GameObject to a point in Front of the user. 
+
+10.09.2018: The animation and the structure can now be controlled again. The Python program is now working without threads.
+
+12.09.2018: Restored all previos implemented functionality. Changed the Project Explorer, so that Folders and Jobs always get shown with different colors.
+
+13.09.2018: Integrated the periodic system into the Unity program.
+
+14.09.2018: Implemented spawning a new atom.
+
+15.09.2018: Cleaned up the Executor.py script. The arguments the create_ase_bulk method needs now get send to Unity.

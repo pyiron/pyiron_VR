@@ -1,0 +1,28 @@
+In Unity:
+
+  InvalidOperationException: StandardIn has not been redirected.
+System.Diagnostics.Process.get_StandardInput () (at <f044fe2c9e7e4b8e91984b41f0cf0b04>:0)
+  (wrapper remoting-invoke-with-check) System.Diagnostics.Process:get_StandardInput ()
+PythonExecuter.ClosePythonProgress () (at   Assets/Scripts/Input/PythonExecuter.cs:294)
+PythonExecuter.OnApplicationQuit () (at Assets/Scripts/Input/PythonExecuter.cs:301)
+
+
+  This error should be no problem, because it just happened to me when trying to exit the program. It means that the program wants to close the shell opening   python, but this shell/progress isn't instantiated yet.
+
+  Could be solved by just making a try/catch phrase or testing whether myProgress is initialised.
+
+
+
+In Python:
+
+  Exception during reset or similar
+  Traceback (most recent call last):
+    File "C:\Users\pneugebauer\Anaconda3\lib\site-packages\sqlalchemy\pool.py", line 687, in _finalize_fairy
+      fairy._reset(pool)
+    File "C:\Users\pneugebauer\Anaconda3\lib\site-packages\sqlalchemy\pool.py", line 829, in _reset
+      pool._dialect.do_rollback(self)
+    File "C:\Users\pneugebauer\Anaconda3\lib\site-packages\sqlalchemy\engine\default.py", line 440, in do_rollback
+      dbapi_connection.rollback()
+  sqlite3.ProgrammingError: Cannot operate on a closed database.
+
+  This came every time after closing the Python 

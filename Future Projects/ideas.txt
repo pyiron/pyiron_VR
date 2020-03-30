@@ -1,0 +1,123 @@
+27.10,2019
+1. Simplify the Method PythonExecuter.SendOrderSync
+2. 
+
+16.9.2019
+1. Don't allow calculating a new lammps when just 2 Atoms are left
+2. Just allow the User to create a structure consisting of one element
+3. Allow the User to create a single new atom
+ -> maybe check if it is in the structure, else forbid it
+4. Allow the User to create a structure of one element 
+
+15.9.2019
+1. Delete Debug prints - DONE
+2. Send changed positions only when they get changed - DONE
+3. try/catch errors in Python and show them in Unity. - DONE
+4. Maybe undo the last Unity activity 
+
+11.9.2019:
+1. write down which lines of code need a long time (write down the line and time they need) - DONE
+2. Test it in Garching - DONE
+3. Implement loading an empty structure
+4. Implement creating a basic structure after loading an empty structure
+5. Implement the period system for all elements
+
+27.8.2019:
+- increase loading time performance - DONE
+- use json for data transfer between python and Unity
+(- let controllers vibrate, eg. when pressing buttons or when moving atoms)
+
+-periodic system, where you can get new atoms from
+(-colour the atoms according to their warmth or energy)
+-make a GUI
+- make a file which tells Unity details about the pyiron structure:
+  -> colordependancy, animation
+(- delete the code needed for the slower mode of transfering data between Python and Unity)
+- let the atoms react live
+(- implement the animation of the trashcan (some information for this are in the documentation), instead of having the top of the can just being moved to the side)
+- show the periodic boundary condition, and think of the details (show it just when moving an atom?)
+
+(- bug: false positioning of structure after duplicating and when resizing)
+(- try to get better performance when having many atoms)
+- try to avoid large iterations
+(- let the animation be interpolated)
+(- bring the python program to PEP-8 standard and fix TODOs)
+(- set the size of MyObjects to 0.3, not the size of the atomStructure)
+(- implement extracting compressed position data in Unity)
+(- fix bug that the awake of the lasergrabber is called after the start function of the other scripts 
+  -> let the trashcan deactivate itself, instead of letting the lasergrabber do so)
+- fix bug that just one controller (the left) can activate both ctrl_printers and that just the left controller can change the modes, but backwards, which happens sometimes if not both controllers are activated at the same time
+  -> might be specific to the Vive
+(- after the structure has been duplicated the whole structure gets moved away one time.)
+(- check what happens if an controller deactivates itself after not being used for too long (could maybe happen in a presentation))
+
+(- fix bug that the trigger Input of one controller gets sometimes send to both controllers, while the other controller can't do anything (not even use the touchpad I think), if they are initialised in the wrong order
+  -> might be Vive specific)
+- stop the 3D text from shining through other objects
+
+- use this to start the 3D Beamer in the shell: *cd to Desktop* VABuild7_18VRAndBeamer.exe -vrmode Stereo
+
+
+Seems to be gone:
+- found a bug that I couldn't use the laser, after showing the controller printer, until it grabbed the structure
+- when having something attached to both controllers the atom in the left hand flickers when moving the structure
+- after moving the structure with the laser and the touchpad it sometimes teleports a bit
+- fix bug atoms get added each frame (not much known about this bug yet, except that there are many atoms at one place where just one atom should be. might be stretched somehow
+
+To take from Ulrichs Code:
+(- get paths from environment variables)
+- the UI
+- Observer Pattern
+- Rotate the structure
+- Controller Management
+- Periodic System
+- internal
+
+TODO:
+Implement new Enum for Modes
+Maybe implement ENUM for Lasergrabbers
+Implement new View Mode
+Fix Bugs
+Write Comments and Docu
+Delete unnecessary code
+
+1.1.2020
+-First Mode: Main Menu
+Name of structure/Path
+Start/Stop: Dreieck, Striche
+Home Menu Title adden
+-Home menu modes: Explorer + Structure Builder
+Save/Discard Mock
+Dropdown for MD/Minimize
+-Simulate Button unten
+The Lab als Background
+-Project Explorer: Files untereinander statt nebeneinander
+Controller Symbole fixen
+
+25.3.2020
+- Load Potentials from pyiron when going into Calculate mode
+- Fix the AnimationController panel to the calculate panel
+Load other attributes from the structure (temperature etc.)
+Allow to Delete and Create a structure/job
+Decide when the animation should be played
+- Show last 4 Elements of the Path in Explorer
+Check if job name exists + Option to delete
+Fix bugs
+Create name for job automatically
+Allow to move the whole structure regardless of the mode
+- Test out how it feelse when the UI is fixed at left controller
+fix bug that atoms duplicate when going to project explorer again
+Make the Structure Creator
+
+MyBinder einrichten
+
+28.3.2020
+- neues Repository fuer den Python Teil einrichten
+Script struktur von Papa abschauen
+Bericht an Christoph Freysoldt schicken
+- Neuen Build hochladen
+
+
+Link erstellen
+Auf den Master mergen
+WebVR?

@@ -1,0 +1,4 @@
+strucKind size temp currentFrame animFrames fulfilledOrders StructureName
+x y z kind
+x y z kind
+(flattened array of cellbox, given as 9 floats)

@@ -1,0 +1,12 @@
+Careful: Data might be wrong!
+UnityManager:
+self.pr = self.pr[val] (~0.3 in Garching), self.pr[val] is of type ham_lammps
+!self.pr = job.copy_to(pr) (~5s on Laptop, 0.6 in Garching)
+
+Executor:
+def get_structure_data (~1/10s in Garching)
+!self.pr = self.pr.next(job_name="temp_job_" + str(self.job_id)) (~0.5s in Garching)
+self.pr.run() (~0.53s, md) (interactive jobs!)
+self.pr.run() (~0.47s, minimize)
+
+Why is Unity needing so much more time than Python? Because the Time in Python is incorrect!

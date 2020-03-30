@@ -1,0 +1,18 @@
+The LaserGrabber (following referenced as LG) script is handling everything the controllers are doing.
+
+The LG can move the atoms or the whole structure, either by grabbing it, or by using the laser. Each controller has an assigned Layer, called BoundingboxLayer or AtomLayer. If the boundingbox controller is inside the boundingbox, it will grab the structure, if it is outside, it will show a laser, pointing to the middle of the structure. If the AtomLayer controller is inside an atom, it will grab the atom, if it is outside, it will show a laser to the center of the atom.
+
+If something is grabbed, it will just follow the position of the controller.
+
+If something is connected by the laser, and the controller got moved, the object will follow the end of the laser. If the length of the laser gets changed by using the touchpad of the according controller, the object will still follow the end of the laser, this way it can be moved towards or away from the controller.
+
+If a single atom gets moved into the trashcan, the script will call the DestroyAtom function of OrdersToPython Script.
+
+If a controller points towards the thermometer, the Hairtrigger gets pressed and there is nothing in front of the thermometer, both controllers can set a new temperature. By pressing the Touchpad up or down while having the laser on the thermometer, the scale how the temperature can be changed gets changed. The LG does all that.
+
+In "Choose a structure" mode, the LG script mainly just sends the call that a button is pressed to the ChooseStructure Script, which will then still use some public functions of the LG, f.g. the ShowLaser function.
+
+In Info mode, the LG activates and updates the laser when needed. It is also responsible for showing the Info, although this could be easily outsourced into an extra script, to make the LG script a bit easier to understand.
+
+If it is possible to play an animation in the current mode, the LaserGrabber will call some functions of ControllerSymbols Script to update the Symbols if needed.
+

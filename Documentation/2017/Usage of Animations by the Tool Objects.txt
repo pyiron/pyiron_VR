@@ -1,0 +1,15 @@
+A few objects in the scene use animations. These objects are:
+- the thermometer:
+	the thermometer needs its animation to show different temperatures
+- the hourglass:
+	the hourglass needs its animation to rotate
+- the progressbar
+	the progressbar needs its animation to show the current progress
+(- the trashcan:
+	the trashcan has no animation implemented yet, but the prefab of the trashcan has an animation. This animation would 	allow to open and close the trashcan by rotating the top of the trashcan instead of moving it to the side. When letting 	the trashcan shut down, it can also play a special animation, where the top even bounces of after hitting the lower 	part of the can.)
+
+All objects with an animation have an AnimationController, which is located in the folder AnimationController.
+
+The thermometer and the progressbar are using a blend tree, which allows them to show a state between the two extrema. They both have two animations, which are just one frame long, in which nothing happens. But these animations show the two extreme states of the objects, f.g. the thermometer with a temperature of 0 and with the highest possible temperature.
+
+The hourglass has just one animation, which allows the hourglass to rotate. This animation will repeat itself when it is finished, until the program stops the animation and disables the hourglass.

@@ -1,0 +1,62 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using Button = UnityEngine.UI.Button;
+
+public class OptionButton : MonoBehaviour, IButton
+{
+    public bool isJob;
+
+    public static IEnumerator HandleLoad(string jobName)
+    {
+        // send the order to load the structure
+        //PythonExecuter.SendOrderAsync(PythonScript.ProjectExplorer, PythonCommandType.pr_input, order);
+
+        string order = "project = unity_manager.project['" + jobName + "']";
+        PythonExecuter.SendOrderSync(PythonScript.UnityManager,
+            PythonCommandType.exec_l, order, handleInput: false);
+
+        PythonExecuter.SendOrderAsync(PythonScript.UnityManager, PythonCommandType.eval_l, 
+            "send_job()");
+
+        // remember the id of the request to wait for the right response id
+        int taskNumIn = TCPClient.taskNumIn;
+
+        // wait until the response to the send message has arrived
+        
+        yield return new WaitUntil(() => taskNumIn == TCPClient.taskNumOut);
+
+        // get the response
+        string result = TCPClient.returnedMsg;
+        
+        // handle the response
+        PythonExecuter.HandlePythonMsg(result);
+        ExplorerMenuController.inst.DeleteOptions();
+        ExplorerMenuController.inst.ClearOptions();
+        SimulationMenuController.jobLoaded = true;
+        ModeController.inst.SetMode(Modes.Calculate);
+        AnimationMenuController.Inst.SetState(true);
+        // todo: handle the result here, instead of calling PythonExecuter.HandlePythonMsg
+    }
+
+    public void WhenClickDown()
+    {
+        string job_name = GetComponentInChildren<Text>().text;
+        if (isJob)
+        {
+            StartCoroutine(HandleLoad(job_name));
+            foreach (Button btn in transform.parent.GetComponentsInChildren<Button>())
+            {
+                btn.interactable = false;
+            }
+        }
+        else
+        {
+            ExplorerMenuController.inst.LoadPathContent(job_name);
+        }
+    }
+}
+
+
