@@ -110,3 +110,14 @@ fix bug that atoms duplicate when going to project explorer again
 Make the Structure Creator
 
 MyBinder einrichten
+
+28.3.2020
+- neues Repository fuer den Python Teil einrichten
+Script struktur von Papa abschauen
+Bericht an Christoph Freysoldt schicken
+- Neuen Build hochladen
+
+
+Link erstellen
+Auf den Master mergen
+WebVR?
