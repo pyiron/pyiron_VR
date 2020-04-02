@@ -145,5 +145,9 @@ public class ModeController : MonoBehaviour
         //    StructureCreatorMenuController.inst.OnModeChange();
         //PeriodicSysMenuController.inst.SetState(currentMode.mode == Modes.Structure);
         StructureMenuController.Inst.SetState(currentMode.mode == Modes.Structure);
+        if (currentMode.mode == Modes.Structure)
+        {
+            StructureMenuController.Inst.OnModeStart();
+        }
     }
 }

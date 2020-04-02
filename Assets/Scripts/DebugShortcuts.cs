@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DebugShortcuts : MonoBehaviour
 {
+    public InputField serverIpField;
+    
     private int counter;
     
     // Start is called before the first frame update
@@ -19,7 +22,7 @@ public class DebugShortcuts : MonoBehaviour
         {
             if (counter == 0)
             {
-                TCPClient.inst.ConnectWithHost("10.0.1.5");
+                TCPClient.inst.ConnectWithHost(serverIpField.text);
             }
 
             if (counter == 1)
