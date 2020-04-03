@@ -10,6 +10,8 @@ public class Boundingbox : MonoBehaviour
 
     private GameObject[] _borders = new GameObject[12];
 
+    public Vector3 mid;
+
     private void Awake()
     {
         Inst = this;
@@ -38,11 +40,6 @@ public class Boundingbox : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    private Vector3 arr_to_vec3(float[] arr)
-    {
-        return new Vector3(arr[0], arr[1], arr[2]);
-    }
-
     public void UpdateBoundingBox(Vector3[] data)
     {
         print(data);
@@ -50,23 +47,24 @@ public class Boundingbox : MonoBehaviour
         // reset the positions of the cellbox
         transform.localPosition = Vector3.zero;
 
-        Vector3[] processedData = data;
-//        Vector3[] processedData = {arr_to_vec3(data[0]), arr_to_vec3(data[1]), arr_to_vec3(data[2])};
-
 //        Vector3[] cellboxData = StructureDataOld.GetCurrFrameData().cellbox;
         //set the position and length for each part of the cellbox
         for (int i = 0; i < 4; i++)
+        {
             for (int j = 0; j < 3; j++)
             {
                 Vector3 cellBorderSize = _borders[j * 4 + i].transform.localScale;
-                cellBorderSize[j] = processedData[j].magnitude + ProgramSettings.cellboxWidth;
+                cellBorderSize[j] = data[j].magnitude + ProgramSettings.cellboxWidth;
                 _borders[j * 4 + i].transform.localScale = cellBorderSize;
-    
-                _borders[j * 4 + i].transform.localPosition = processedData[j] * 0.5f;
+
+                _borders[j * 4 + i].transform.localPosition = data[j] * 0.5f;
                 if (i == 1 || i == 3)
-                    _borders[j * 4 + i].transform.localPosition += processedData[(j + 1) % 3];
+                    _borders[j * 4 + i].transform.localPosition += data[(j + 1) % 3];
                 if (i == 2 || i == 3)
-                    _borders[j * 4 + i].transform.localPosition += processedData[(j + 2) % 3];
+                    _borders[j * 4 + i].transform.localPosition += data[(j + 2) % 3];
             }
+        }
+        
+        mid = new Vector3(data[0][0], data[1][1], data[2][2]);
     }
 }

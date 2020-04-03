@@ -4,7 +4,8 @@ using UnityEngine;
 
 // Component of HourglassRotator
 public class HourglassActivator : MonoBehaviour {
-    public static HourglassActivator inst;
+    public static HourglassActivator Inst;
+    
     // the hourglass will just be activated, if this timer is <= 0
     private static float timer;
     // the time, how long the structure should be at least loading until activating the hourglass
@@ -12,7 +13,7 @@ public class HourglassActivator : MonoBehaviour {
 
     private void Awake()
     {
-        inst = this;
+        Inst = this;
     }
 
     void Start () {

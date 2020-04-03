@@ -15,7 +15,7 @@ public class ProgramSettings : MonoBehaviour
     // the global size multiplier
     public static float size = 0.3f; // default is 0.3f;
     // determines whether the boundingbox gets just updated if the player changes it or if it gets updated each frame
-    public static bool updateBoundingboxEachFrame = true;
+//    public static bool updateBoundingboxEachFrame = true;
     // the resolution each text in the scene should have
     public static float textResolution = 100f;
     // the width the borders of the cellbox should have
@@ -71,7 +71,6 @@ public class ProgramSettings : MonoBehaviour
         Thermometer.inst.SetState(false); 
         StructureDataOld.atomCtrlPos = new List<Vector3>(StructureDataOld.atomCtrlPos.Count);  // seems not to work
         StructureDataOld.Inst.structureCtrlPos = Vector3.zero;  // seems not to work
-        ImportStructure.inst.firstImport = true;
         ImportStructure.newImport = true;
         AnimationController.frame = 0;
     }

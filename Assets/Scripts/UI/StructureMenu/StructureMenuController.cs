@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,6 +23,19 @@ public class StructureMenuController : MenuController
         sd.cell = new[] {new Vector3(1.57f, 3.6f, 7.7f), new Vector3(5.0f, 0f)};
         print(JsonUtility.ToJson(sd));
         JsonUtility.FromJson<StructureData>(JsonUtility.ToJson(sd));
+    }
+
+    public Vector3[][] GetFramePositions(Vector3[] flattenedArray)
+    {
+        int struc_len = 3;
+        int frame_len = 1;
+        Vector3[][] all_frames = new Vector3[frame_len][];
+        for (int i = 0; i < frame_len; i++)
+        {
+            Array.Copy(flattenedArray, i * struc_len, all_frames, 0, struc_len);
+        }
+
+        return all_frames;
     }
 
     private void LoadStructure(string structure)
@@ -64,7 +76,9 @@ public class StructureMenuController : MenuController
             
             
         // feed the data into the ImportStructure script to create the new structure or update it
+        Structure.Inst.UpdateStructure(struc.positions, struc.elements);
         Boundingbox.Inst.UpdateBoundingBox(struc.cell);
+        HourglassActivator.Inst.transform.localPosition = Boundingbox.Inst.mid;
     }
     
     public void OnModeStart()

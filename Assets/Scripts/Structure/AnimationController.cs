@@ -35,7 +35,7 @@ public class AnimationController : MonoBehaviour
         {
             if (Time.time >= next_time)
             {
-                ImportStructure.inst.LoadStructure();
+                ImportStructure.Inst.LoadStructure();
                 if (change_frame())
                 {
                     float delta_time = 1f / 90;
@@ -55,7 +55,7 @@ public class AnimationController : MonoBehaviour
             FrameData frameData = StructureDataOld.GetCurrFrameData();
             if (shouldLoad && frameData?.cellbox != null)
             {
-                ImportStructure.inst.LoadStructure();
+                ImportStructure.Inst.LoadStructure();
                 shouldLoad = false;
             }}
     }
@@ -107,7 +107,7 @@ public class AnimationController : MonoBehaviour
         else
             //frame = (GetCurrFrameData().frames - (Mod(GetCurrFrameData().frames - frame, GetCurrFrameData().frames))) - 1;
             frame = Mod((frame - 1), StructureDataOld.GetCurrFrameData().frames);
-        ImportStructure.inst.LoadStructure();
+        ImportStructure.Inst.LoadStructure();
     }
 
     private static bool change_frame() {
@@ -125,7 +125,7 @@ public class AnimationController : MonoBehaviour
     {
         frame = 0;
         if (!run_anim)
-            ImportStructure.inst.LoadStructure();
+            ImportStructure.Inst.LoadStructure();
     }
 
     private static int Mod(int a, int b)

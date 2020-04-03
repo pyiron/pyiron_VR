@@ -9,7 +9,7 @@ using System.Reflection;
 // component of AtomStructure
 // loads the data from the files to create the structure or to animate the structure
 public class ImportStructure : MonoBehaviour {
-    public static ImportStructure inst;
+    public static ImportStructure Inst;
     // the prefab for the atoms
     public GameObject AtomPrefab;
 
@@ -22,44 +22,45 @@ public class ImportStructure : MonoBehaviour {
     public GameObject BoundingboxPrefab;
     // checks whether all the instances in the scene have to be created or if the scene just has to be updated
     public static bool newImport = true;
-    // shows whether it is the first import or just a new amount of atoms
-    public bool firstImport = true;
 
 
 
     private void Awake()
     {
-        inst = this;
+        Inst = this;
     }
 
     public void LoadStructure()
     {
-        if (!StructureDataOld.Inst.boundingbox)
-        {
-            // create the instance of the boundingbox
-            StructureDataOld.Inst.boundingbox = Instantiate(BoundingboxPrefab, gameObject.transform, true);
-
-            // show the controllers the reference to the boundingbox
-            foreach (LaserGrabber lg in LaserGrabber.instances)
-                lg.boundingbox = StructureDataOld.Inst.boundingbox.transform;
-
-            // create the cubes for the cell box and the parent cellBox
-            Cellbox = new GameObject();
-            Cellbox.transform.parent = transform;
-            Cellbox.name = "Cellbox";
-            for (int i = 0; i < 12; i++)
-            {
-                CellBorders[i] = Instantiate(CellboxBorderPrefab);
-                CellBorders[i].transform.parent = Cellbox.transform;
-                CellBorders[i].transform.localScale = Vector3.one * ProgramSettings.cellboxWidth;
-            }
-        }
+        // TODO: refactor before deleting
+//        if (!StructureDataOld.Inst.boundingbox)
+//        {
+//            // create the instance of the boundingbox
+//            StructureDataOld.Inst.boundingbox = Instantiate(BoundingboxPrefab, gameObject.transform, true);
+//
+//            // show the controllers the reference to the boundingbox
+//            foreach (LaserGrabber lg in LaserGrabber.instances)
+//                lg.boundingbox = StructureDataOld.Inst.boundingbox.transform;
+//
+//            // create the cubes for the cell box and the parent cellBox
+//            Cellbox = new GameObject();
+//            Cellbox.transform.parent = transform;
+//            Cellbox.name = "Cellbox";
+//            for (int i = 0; i < 12; i++)
+//            {
+//                CellBorders[i] = Instantiate(CellboxBorderPrefab);
+//                CellBorders[i].transform.parent = Cellbox.transform;
+//                CellBorders[i].transform.localScale = Vector3.one * ProgramSettings.cellboxWidth;
+//            }
+//        }
 
         if (newImport)
         {
-            if (!firstImport)
-                foreach (AtomInfos oldAtomInfo in StructureDataOld.atomInfos)
-                    Destroy(oldAtomInfo.m_transform.gameObject);
+            foreach (AtomInfos oldAtomInfo in StructureDataOld.atomInfos)
+            {
+                Destroy(oldAtomInfo.m_transform.gameObject);
+            }
+
             // set the length of the Arrays which hold the Data of all Atoms to the amount of atoms in the input file
             StructureDataOld.atomInfos.Clear();
             //SD.atomInfos = new List<AtomInfos>();
@@ -77,22 +78,15 @@ public class ImportStructure : MonoBehaviour {
             gameObject.transform.localScale = Vector3.one * ProgramSettings.size;
         }
 
-        SetCellbox();
+//        SetCellbox();
 
-        if (newImport || ProgramSettings.updateBoundingboxEachFrame)
-        {
-            // check the expansion of the cluster
-            StructureDataOld.Inst.SearchMaxAndMin();
-            // set the Boundingbox, so that it equals the expansion of the cluster
-            StructureDataOld.Inst.UpdateBoundingbox();
-        }
+        
+        // check the expansion of the cluster
+        StructureDataOld.Inst.SearchMaxAndMin();
+        // set the Boundingbox, so that it equals the expansion of the cluster
+        StructureDataOld.Inst.UpdateBoundingbox();
 
         StructureDataOld.waitForDestroyedAtom = false;
-        if (firstImport)
-        {
-            firstImport = false;
-            //Thermometer.inst.SetState(true);
-        }
         newImport = false;
     }
 
@@ -100,7 +94,7 @@ public class ImportStructure : MonoBehaviour {
     private void SetCellbox()
     {
         // activate the cellbox
-        Cellbox.SetActive(true);
+//        Cellbox.SetActive(true);
 
         // reset the positions of the cellbox
         Cellbox.transform.localPosition = Vector3.zero;
@@ -122,11 +116,11 @@ public class ImportStructure : MonoBehaviour {
             }
 
         // set the position of the Hourglass to the middle of the cellbox
-        HourglassActivator.inst.transform.localPosition = Vector3.zero;
-        for (int i = 0; i < 3; i++)
-            HourglassActivator.inst.transform.localPosition += cellboxData[i] / 2;
-        // set the size of the Hourglass to the size it should have
-        HourglassActivator.inst.transform.GetChild(0).localScale = Vector3.one;
+//        HourglassActivator.Inst.transform.localPosition = Vector3.zero;
+//        for (int i = 0; i < 3; i++)
+//            HourglassActivator.Inst.transform.localPosition += cellboxData[i] / 2;
+//        // set the size of the Hourglass to the size it should have
+//        HourglassActivator.Inst.transform.GetChild(0).localScale = Vector3.one;
     }
 
     private void InitAtoms(AtomData atom)
