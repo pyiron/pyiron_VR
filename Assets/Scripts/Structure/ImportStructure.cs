@@ -34,14 +34,14 @@ public class ImportStructure : MonoBehaviour {
 
     public void LoadStructure()
     {
-        if (!StructureData.inst.boundingbox)
+        if (!StructureDataOld.Inst.boundingbox)
         {
             // create the instance of the boundingbox
-            StructureData.inst.boundingbox = Instantiate(BoundingboxPrefab, gameObject.transform, true);
+            StructureDataOld.Inst.boundingbox = Instantiate(BoundingboxPrefab, gameObject.transform, true);
 
             // show the controllers the reference to the boundingbox
             foreach (LaserGrabber lg in LaserGrabber.instances)
-                lg.boundingbox = StructureData.inst.boundingbox.transform;
+                lg.boundingbox = StructureDataOld.Inst.boundingbox.transform;
 
             // create the cubes for the cell box and the parent cellBox
             Cellbox = new GameObject();
@@ -51,7 +51,6 @@ public class ImportStructure : MonoBehaviour {
             {
                 CellBorders[i] = Instantiate(CellboxBorderPrefab);
                 CellBorders[i].transform.parent = Cellbox.transform;
-                CellBorders[i].transform.localScale = Vector3.one;
                 CellBorders[i].transform.localScale = Vector3.one * ProgramSettings.cellboxWidth;
             }
         }
@@ -59,15 +58,15 @@ public class ImportStructure : MonoBehaviour {
         if (newImport)
         {
             if (!firstImport)
-                foreach (AtomInfos oldAtomInfo in StructureData.atomInfos)
+                foreach (AtomInfos oldAtomInfo in StructureDataOld.atomInfos)
                     Destroy(oldAtomInfo.m_transform.gameObject);
             // set the length of the Arrays which hold the Data of all Atoms to the amount of atoms in the input file
-            StructureData.atomInfos.Clear();
+            StructureDataOld.atomInfos.Clear();
             //SD.atomInfos = new List<AtomInfos>();
-            StructureData.atomCtrlPos.Clear();
+            StructureDataOld.atomCtrlPos.Clear();
         }
         // create the atoms or change their data
-        foreach (AtomData atom in StructureData.GetCurrFrameData().atoms)
+        foreach (AtomData atom in StructureDataOld.GetCurrFrameData().atoms)
         {
             InitAtoms(atom);
         }
@@ -83,12 +82,12 @@ public class ImportStructure : MonoBehaviour {
         if (newImport || ProgramSettings.updateBoundingboxEachFrame)
         {
             // check the expansion of the cluster
-            StructureData.inst.SearchMaxAndMin();
+            StructureDataOld.Inst.SearchMaxAndMin();
             // set the Boundingbox, so that it equals the expansion of the cluster
-            StructureData.inst.UpdateBoundingbox();
+            StructureDataOld.Inst.UpdateBoundingbox();
         }
 
-        StructureData.waitForDestroyedAtom = false;
+        StructureDataOld.waitForDestroyedAtom = false;
         if (firstImport)
         {
             firstImport = false;
@@ -106,7 +105,7 @@ public class ImportStructure : MonoBehaviour {
         // reset the positions of the cellbox
         Cellbox.transform.localPosition = Vector3.zero;
 
-        Vector3[] cellboxData = StructureData.GetCurrFrameData().cellbox;
+        Vector3[] cellboxData = StructureDataOld.GetCurrFrameData().cellbox;
         //set the position and length for each part of the cellbox
         for (int i = 0; i < 4; i++)
             for (int j = 0; j < 3; j++)
@@ -133,7 +132,7 @@ public class ImportStructure : MonoBehaviour {
     private void InitAtoms(AtomData atom)
     {
         GameObject currentAtom;
-        if (newImport && !StructureData.waitForDestroyedAtom)
+        if (newImport && !StructureDataOld.waitForDestroyedAtom)
         {
             // create a new instance of an atom
             currentAtom = Instantiate(AtomPrefab, transform);
@@ -141,7 +140,7 @@ public class ImportStructure : MonoBehaviour {
             //currentAtom.transform.parent = gameObject.transform;
         }
         else
-            currentAtom = StructureData.atomInfos[atom.id].m_transform.gameObject;
+            currentAtom = StructureDataOld.atomInfos[atom.id].m_transform.gameObject;
 
         if (newImport)
         {
@@ -149,27 +148,27 @@ public class ImportStructure : MonoBehaviour {
             currentAtom.transform.position = atom.pos;
             //if (animState == "new" || (!firstImport && ProgramSettings.transMode == "shell"))
             //    currentAtom.transform.position *= ProgramSettings.size;
-            StructureData.atomCtrlPos.Add(Vector3.zero);
+            StructureDataOld.atomCtrlPos.Add(Vector3.zero);
         }
         else
         {
             currentAtom.transform.position = atom.pos * ProgramSettings.size;
-            currentAtom.transform.position += StructureData.atomCtrlPos[atom.id] + transform.position;
+            currentAtom.transform.position += StructureDataOld.atomCtrlPos[atom.id] + transform.position;
         }
         // set the atom colour to the colour this type of atom has
         currentAtom.GetComponent<Renderer>().material.color = LocalElementData.GetColour(atom.type);
         // set the atoms size to the size this type of atom has 
         currentAtom.transform.localScale = Vector3.one * LocalElementData.GetSize(atom.type);
-        if (newImport || StructureData.waitForDestroyedAtom)
+        if (newImport || StructureDataOld.waitForDestroyedAtom)
         {
             // give the atom an ID
             currentAtom.GetComponent<AtomID>().ID = atom.id;
-            if (StructureData.waitForDestroyedAtom)
-                StructureData.atomInfos[atom.id] = new AtomInfos(atom.id, atom.type, currentAtom.transform);
+            if (StructureDataOld.waitForDestroyedAtom)
+                StructureDataOld.atomInfos[atom.id] = new AtomInfos(atom.id, atom.type, currentAtom.transform);
             else
             {
                 // register the atom in the overview of StructureData
-                StructureData.atomInfos.Add(new AtomInfos(atom.id, atom.type, currentAtom.transform));
+                StructureDataOld.atomInfos.Add(new AtomInfos(atom.id, atom.type, currentAtom.transform));
             }
         }
     }

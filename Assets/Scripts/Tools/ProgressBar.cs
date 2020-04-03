@@ -43,14 +43,14 @@ public class ProgressBar : MonoBehaviour {
     }
 	
 	void Update () {
-        if (StructureData.GetCurrFrameData() != null)
+        if (StructureDataOld.GetCurrFrameData() != null)
         {
             // update the progress of the ProgressBar
-            _anim.SetFloat("Progress", 1f * AnimationController.frame / (StructureData.GetCurrFrameData().frames - 1));
+            _anim.SetFloat("Progress", 1f * AnimationController.frame / (StructureDataOld.GetCurrFrameData().frames - 1));
             foreach (TextMesh TM in _textMeshes)
                 // update the text which shows the progress
                 if (TM.name.Contains("Progress"))
-                    TM.text = (AnimationController.frame + 1) + " / " + StructureData.GetCurrFrameData().frames;
+                    TM.text = (AnimationController.frame + 1) + " / " + StructureDataOld.GetCurrFrameData().frames;
                 // update the text which shows how fast the animation is being played
                 else if (TM.name.Contains("AnimationSpeed"))
                 {

@@ -52,7 +52,7 @@ public class AnimationController : MonoBehaviour
         }
         else
         {
-            FrameData frameData = StructureData.GetCurrFrameData();
+            FrameData frameData = StructureDataOld.GetCurrFrameData();
             if (shouldLoad && frameData?.cellbox != null)
             {
                 ImportStructure.inst.LoadStructure();
@@ -103,10 +103,10 @@ public class AnimationController : MonoBehaviour
     public static void move_one_frame(bool forward=true) {
         SimulationMenuController.jobLoaded = true;
         if (forward)
-            frame = Mod((frame + 1), StructureData.GetCurrFrameData().frames);
+            frame = Mod((frame + 1), StructureDataOld.GetCurrFrameData().frames);
         else
             //frame = (GetCurrFrameData().frames - (Mod(GetCurrFrameData().frames - frame, GetCurrFrameData().frames))) - 1;
-            frame = Mod((frame - 1), StructureData.GetCurrFrameData().frames);
+            frame = Mod((frame - 1), StructureDataOld.GetCurrFrameData().frames);
         ImportStructure.inst.LoadStructure();
     }
 
@@ -116,9 +116,9 @@ public class AnimationController : MonoBehaviour
             frame_step = 2;
         if (animSpeed < 3)
             frame_step *= -1;
-        int newFrame = Mod((frame + frame_step), StructureData.GetCurrFrameData().frames);
+        int newFrame = Mod((frame + frame_step), StructureDataOld.GetCurrFrameData().frames);
         frame = newFrame;
-        return Mod((frame + frame_step), StructureData.GetCurrFrameData().frames) == frame + frame_step;
+        return Mod((frame + frame_step), StructureDataOld.GetCurrFrameData().frames) == frame + frame_step;
     }
 
     internal static void ResetAnimation()

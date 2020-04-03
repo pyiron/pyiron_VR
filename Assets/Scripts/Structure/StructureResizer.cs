@@ -63,8 +63,8 @@ public class StructureResizer : MonoBehaviour
         if (minStrucSize < newStrucSize && newStrucSize < maxStrucSize)
         {
             // update the values how the player has moved each atom, so that these values depend on the global size
-            for (int i = 0; i < StructureData.atomCtrlPos.Count; i++)
-                StructureData.atomCtrlPos[i] *= newStrucSize / ProgramSettings.size;
+            for (int i = 0; i < StructureDataOld.atomCtrlPos.Count; i++)
+                StructureDataOld.atomCtrlPos[i] *= newStrucSize / ProgramSettings.size;
             // set the global size to the new value and update the structure
             ProgramSettings.size = newStrucSize;
             transform.localScale = Vector3.one * ProgramSettings.size;        }

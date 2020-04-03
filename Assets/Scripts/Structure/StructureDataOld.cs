@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // component of AtomStructure
-public class StructureData : MonoBehaviour
+public class StructureDataOld : MonoBehaviour
 {
-    public static StructureData inst;
+    public static StructureDataOld Inst;
     // the boundingbox which defines where you can grab the structure. It will be created in importStructure
     public GameObject boundingbox;
     // the min and max value of the structure in each axis, needed for the boundingbox
@@ -36,7 +36,7 @@ public class StructureData : MonoBehaviour
 
     public void Awake()
     {
-        inst = this;
+        Inst = this;
         // create a new empty Instance which holds the data, how the structure has been relocated by the player
         structureCtrlPos = Vector3.zero;
         // create a new empty Instance which holds the data, how the structure has been resized by the player

@@ -86,7 +86,7 @@ public class ModeController : MonoBehaviour
         if (modes[(int)currentMode.mode].showInfo)
             OrdersToPython.RequestAllForces();
         // deactivate the structure if it shouldn't be shown, else activate it
-        StructureData.inst.gameObject.SetActive(!modes[(int)currentMode.mode].hideAtoms);
+        StructureDataOld.Inst.gameObject.SetActive(!modes[(int)currentMode.mode].hideAtoms);
 
         if (currentMode.mode == Modes.Explorer)
         {
@@ -121,9 +121,9 @@ public class ModeController : MonoBehaviour
     // determine which panels and buttons should be activated/deactivated
     private void UpdateMenu()
     {
-        NetworkMenuController.inst.SetState(currentMode.mode == Modes.Network);
+        NetworkMenuController.Inst.SetState(currentMode.mode == Modes.Network);
         ExplorerMenuController.inst.SetState(currentMode.mode == Modes.Explorer);
-        TemperatureMenuController.Inst.SetState(currentMode.showTemp &&
+        MdMenuController.Inst.SetState(currentMode.showTemp &&
                                                 SimulationModeManager.CurrMode==SimModes.MD);
         //ModeMenuController.inst.SetState(currentMode.mode == Modes.Menu);
         //ModeMenuController.inst.OnModeChange();

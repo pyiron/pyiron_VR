@@ -14,12 +14,14 @@ public class OptionButton : MonoBehaviour, IButton
         // send the order to load the structure
         //PythonExecuter.SendOrderAsync(PythonScript.ProjectExplorer, PythonCommandType.pr_input, order);
 
-        string order = "project = unity_manager.project['" + jobName + "']";
-        PythonExecuter.SendOrderSync(PythonScript.UnityManager,
-            PythonCommandType.exec_l, order, handleInput: false);
+//        string order = "project = unity_manager.project['" + jobName + "']";
+//        PythonExecuter.SendOrderSync(PythonScript.UnityManager,
+//            PythonCommandType.exec_l, order, handleInput: false);
 
-        PythonExecuter.SendOrderAsync(PythonScript.UnityManager, PythonCommandType.eval_l, 
-            "send_job()");
+//        PythonExecuter.SendOrderAsync(PythonScript.UnityManager, PythonCommandType.eval_l, 
+//            "send_job()");
+        PythonExecuter.SendOrderAsync(PythonScript.Executor, PythonCommandType.eval_l, 
+            "load_job(unity_manager.project['" + jobName + "'])");
 
         // remember the id of the request to wait for the right response id
         int taskNumIn = TCPClient.taskNumIn;

@@ -202,7 +202,7 @@ public class LaserGrabber : MonoBehaviour
                     int atomId = attachedObject.GetComponent<AtomID>().ID;
                     InfoText.transform.position = attachedObject.transform.position // + Vector3.up * 0.1f
                             + Vector3.up * attachedObject.transform.localScale[0] / 2 * ProgramSettings.size;
-                    string atomSymbol = StructureData.atomInfos[atomId].m_type;
+                    string atomSymbol = StructureDataOld.atomInfos[atomId].m_type;
                     string infoText = atomSymbol;
                     //infoText += "\nFull Name: " + LocalElementData.m_localElementDict[atomSymbol].m_fullName;
                     
@@ -223,9 +223,9 @@ public class LaserGrabber : MonoBehaviour
                 // set the info text to the top of the boundingbox
                 InfoText.transform.position = boundingbox.transform.position + Vector3.up * 0.1f
                     + Vector3.up * boundingbox.transform.localScale[0] / 2 * ProgramSettings.size;
-                InfoText.text = StructureData.structureName;
+                InfoText.text = StructureDataOld.structureName;
                 InfoText.text += "\nAtoms: "
-                        + StructureData.atomInfos.Count;
+                        + StructureDataOld.atomInfos.Count;
                 // InfoText.text += "\nForce: " + PythonExecuter.structureForce;
                 //might be needed so that the text will stand above the boundingbox
                 //InfoText.GetComponent<TextMesh>().text += "\n";
@@ -254,11 +254,11 @@ public class LaserGrabber : MonoBehaviour
                 if (ctrlMaskName == "AtomLayer" && (!ModeController.currentMode.showTrashcan || !TrashCan.inst.atomInCan))
                 {
                     // tell Python the new position
-                    OrdersToPython.SetNewPosition(StructureData.atomInfos[attachedObject.GetComponent<AtomID>().ID]);
+                    OrdersToPython.SetNewPosition(StructureDataOld.atomInfos[attachedObject.GetComponent<AtomID>().ID]);
                     // check the new extension of the structure
-                    StructureData.inst.SearchMaxAndMin();
+                    StructureDataOld.Inst.SearchMaxAndMin();
                     // set the boundingbox so that it encloses the structure
-                    StructureData.inst.UpdateBoundingbox();
+                    StructureDataOld.Inst.UpdateBoundingbox();
                 }
                 
                 if (ModeController.currentMode.showTrashcan)
@@ -267,7 +267,7 @@ public class LaserGrabber : MonoBehaviour
                     {
                         // check that there are atoms left, which would cause pyiron to fail
                         // so it can't build a ham_lammps function)
-                        if (TrashCan.inst.atomInCan && StructureData.atomInfos.Count >= 1)
+                        if (TrashCan.inst.atomInCan && StructureDataOld.atomInfos.Count >= 1)
                         {
                             //DestroyAtom();
                             OrdersToPython.inst.ExecuteOrder(
@@ -506,11 +506,11 @@ public class LaserGrabber : MonoBehaviour
         if (ctrlMaskName == "AtomLayer")
         {
             // update the data how the atom has been moved by the player 
-            StructureData.atomCtrlPos[attachedObject.GetComponent<AtomID>().ID] += newPos - oldPos;
+            StructureDataOld.atomCtrlPos[attachedObject.GetComponent<AtomID>().ID] += newPos - oldPos;
         }
         else if (ctrlMaskName == "BoundingboxLayer")
             // update the data how the structure has been moved by the player 
-            StructureData.inst.structureCtrlPos += newPos - oldPos;
+            StructureDataOld.Inst.structureCtrlPos += newPos - oldPos;
             // SD.structureCtrlTrans.position += newPos - oldPos;
     }
 

@@ -2,22 +2,20 @@
 using UnityEngine.UI;
 
 public class NetworkMenuController : MenuController {
-    public static NetworkMenuController inst;
+    public static NetworkMenuController Inst;
 
     public Text portText;
     public GameObject keyboard;
-    private Button[] serverSuggestions;
     private InputField serverAddressField;
 
     private void Awake()
     {
-        inst = this;
+        Inst = this;
     }
 
     private void Start()
     {
         portText.text = "Port: " + TCPClient.PORT;
-        serverSuggestions = gameObject.GetComponentsInChildren<Button>();
         serverAddressField = gameObject.GetComponentInChildren<InputField>();
         
         // set the Input field to the last entered value

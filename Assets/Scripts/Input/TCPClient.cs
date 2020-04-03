@@ -151,12 +151,14 @@ public class TCPClient : MonoBehaviour
 		connStatus.Dispose();
 		connStatus = null;
 		
-		NetworkMenuController.inst.keyboard.SetActive(false);
+		NetworkMenuController.Inst.keyboard.SetActive(false);
 		
 		// load the content of the start path (which is defined in the Python script)
 		ExplorerMenuController.inst.LoadPathContent();
 		
 		ModeController.inst.SetMode(Modes.Structure);
+
+		Boundingbox.Inst.gameObject.SetActive(true);
 	}
 
 	private void ConnectionError()

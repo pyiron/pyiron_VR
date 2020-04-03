@@ -106,7 +106,7 @@ public class Thermometer : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         if (!float.IsNaN(tmp))
         {
             anim.SetFloat("Temperature", tmp);
-            TemperatureMenuController.Inst.ChangeTemperature();
+            MdMenuController.Inst.ChangeTemperature();
         }
     }
 
@@ -191,7 +191,7 @@ public class Thermometer : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         if (laserCurrentlyOnThermometer)
         {
             ChangeThemperature(eventData.pointerCurrentRaycast.worldPosition.y - transform.position.y);
-            TemperatureMenuController.Inst.ChangeTemperature();
+            MdMenuController.Inst.ChangeTemperature();
 
             if (!laserWasOnThermometer)
             {

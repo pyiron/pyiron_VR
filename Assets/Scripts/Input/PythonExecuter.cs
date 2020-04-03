@@ -172,11 +172,11 @@ public class PythonExecuter : MonoBehaviour {
             else
                 print("Warning: Frame Amount is missing!");
 
-            StructureData.AddFrameDataStart(strucSize, frame, frames); 
+            StructureDataOld.AddFrameDataStart(strucSize, frame, frames); 
         }
         else if (splittedData[0] == "SDM")
         {
-            StructureData.AddFrameDataMid(new AtomData(
+            StructureDataOld.AddFrameDataMid(new AtomData(
                 new Vector3(float.Parse(splittedData[1],NumberStyles.Any,ci), 
                     float.Parse(splittedData[2],NumberStyles.Any,ci), 
                     float.Parse(splittedData[3],NumberStyles.Any,ci)), splittedData[4]));
@@ -196,7 +196,7 @@ public class PythonExecuter : MonoBehaviour {
                 cellboxVecs[1] = new Vector3(cellboxData[3], cellboxData[4], cellboxData[5]);
                 cellboxVecs[2] = new Vector3(cellboxData[6], cellboxData[7], cellboxData[8]);
             }
-            StructureData.AddFrameDataEnd(cellboxVecs);
+            StructureDataOld.AddFrameDataEnd(cellboxVecs);
         }
         // Python sends Unity the arguments a function (create_ase_bulk()) needs
         else if (splittedData[0] == "arg")
@@ -276,7 +276,7 @@ public class PythonExecuter : MonoBehaviour {
             }
             else if (script == PythonScript.Executor)
             {
-                fullOrder = "unity_manager.Executor." + order;
+                fullOrder = "executor." + order;
             }
             else if (script == PythonScript.StructureManager)
             {
@@ -314,7 +314,7 @@ public class PythonExecuter : MonoBehaviour {
             }
             else if (script == PythonScript.Executor)
             {
-                fullOrder = "unity_manager.Executor." + order;
+                fullOrder = "executor." + order;
             }
             else if (script == PythonScript.StructureManager)
             {

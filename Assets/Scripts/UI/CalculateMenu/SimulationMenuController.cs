@@ -65,7 +65,7 @@ public class SimulationMenuController : MenuController {
         JobData jobData = JobSettingsController.Inst.GetData();
         if (calculation == "md")
         {
-            MdData data = TemperatureMenuController.Inst.GetData();
+            MdData data = MdMenuController.Inst.GetData();
             order = "calculate_" + calculation + "(" +
                                data.temperature + ", " + 
                                data.n_ionic_steps + ", " + 

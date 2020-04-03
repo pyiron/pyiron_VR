@@ -69,8 +69,8 @@ public class ProgramSettings : MonoBehaviour
         SimulationMenuController.jobLoaded = false;
         Thermometer.temperature = -1;
         Thermometer.inst.SetState(false); 
-        StructureData.atomCtrlPos = new List<Vector3>(StructureData.atomCtrlPos.Count);  // seems not to work
-        StructureData.inst.structureCtrlPos = Vector3.zero;  // seems not to work
+        StructureDataOld.atomCtrlPos = new List<Vector3>(StructureDataOld.atomCtrlPos.Count);  // seems not to work
+        StructureDataOld.Inst.structureCtrlPos = Vector3.zero;  // seems not to work
         ImportStructure.inst.firstImport = true;
         ImportStructure.newImport = true;
         AnimationController.frame = 0;

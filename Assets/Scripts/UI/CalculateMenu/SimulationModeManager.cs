@@ -28,7 +28,7 @@ public class SimulationModeManager : MonoBehaviour
         btn.image.color = Color.green;
         btn.interactable = false;
         CurrMode = (SimModes)Enum.Parse(typeof(SimModes), btn.name); // can be MD, Minimize or Static 
-        TemperatureMenuController.Inst.SetState(CurrMode==SimModes.MD);
+        MdMenuController.Inst.SetState(CurrMode==SimModes.MD);
         MinimizeMenuController.Inst.SetState(CurrMode == SimModes.Minimize);
         /*if (btn.name == "MD")
         {

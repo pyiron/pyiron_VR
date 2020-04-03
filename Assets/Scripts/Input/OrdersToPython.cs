@@ -78,7 +78,7 @@ public class OrdersToPython : MonoBehaviour
     private void DestroyAtom(int atomId)
     {
         // check if the given atomId is less big than the maximum amount of atoms in the structure
-        if (atomId >= StructureData.atomInfos.Count)
+        if (atomId >= StructureDataOld.atomInfos.Count)
         {
             SendError("The Atom ID has to be less big than the maximum amount of atoms in the structure!");
             return;
@@ -88,20 +88,20 @@ public class OrdersToPython : MonoBehaviour
         PythonExecuter.SendOrderSync(PythonScript.Executor, PythonCommandType.eval, "self.destroy_atom(" + atomId + ")");
 
         // update the data of the structure
-        StructureData.waitForDestroyedAtom = true;
+        StructureDataOld.waitForDestroyedAtom = true;
         // decrease the atomId of the atoms which have a higher ID than the deleted one by one
         for (int i = atomId + 1;
-            i < StructureData.atomInfos.Count; i++)
+            i < StructureDataOld.atomInfos.Count; i++)
         {
             print("i is " + i);
-            StructureData.atomInfos[i].m_ID -= 1;
-            StructureData.atomInfos[i].m_transform.GetComponent<AtomID>().ID -= 1;
+            StructureDataOld.atomInfos[i].m_ID -= 1;
+            StructureDataOld.atomInfos[i].m_transform.GetComponent<AtomID>().ID -= 1;
         }
         // remove the atom in the list of the properties of each atom
-        StructureData.atomInfos.RemoveAt(atomId);
+        StructureDataOld.atomInfos.RemoveAt(atomId);
 
         // remove the atom in the list which stores the data how the player has removed each atom
-        StructureData.atomCtrlPos.RemoveAt(atomId);
+        StructureDataOld.atomCtrlPos.RemoveAt(atomId);
         // destroy the gameobject of the destroyed atom. This way, importStructure won't destroy all atoms and load them new
         Destroy(LaserGrabber.instances[(int) Layer.Atom].attachedObject);
     }
@@ -138,6 +138,6 @@ public class OrdersToPython : MonoBehaviour
         PythonExecuter.SendOrderSync(PythonScript.Executor, PythonCommandType.exec,
             "self.set_new_base_position('" + newPosition + "')");
         // show that the player hasn't moved an atom since the last creation of an ham_lammps
-        StructureData.atomCtrlPos[atomInfo.m_ID] = Vector3.zero;
+        StructureDataOld.atomCtrlPos[atomInfo.m_ID] = Vector3.zero;
     }
 }

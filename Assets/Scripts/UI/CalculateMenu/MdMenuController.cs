@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TemperatureMenuController : MenuController {
-    public static TemperatureMenuController Inst;
+public class MdMenuController : MenuController {
+    public static MdMenuController Inst;
     
     private Slider temp_slider;
     public Text tempText;
