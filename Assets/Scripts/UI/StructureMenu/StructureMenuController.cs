@@ -159,6 +159,10 @@ class StructureData
 {
     public string[] elements;
 
+    public int size;
+
+    public int frames;
+
     public Vector3[] positions;
 
     public Vector3[] cell;
