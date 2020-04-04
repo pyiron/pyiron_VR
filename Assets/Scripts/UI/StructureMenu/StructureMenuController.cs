@@ -70,7 +70,7 @@ public class StructureMenuController : MenuController
             elementDropdown.value = options.Count - 1;
         }
 
-        repeatDropdown.value = 0;
+//        repeatDropdown.value = 0;
             
         // set cubic and orthorhombic to default value? Or maybe load it somehow
             
