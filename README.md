@@ -4,18 +4,20 @@ This is a project which goal is to present atom structures in 3D with the HTC Vi
 
 The project uses Pyiron to create and manage the structures and Unity to show the structures in Virtual Reality and receive the input from the user.
 
+This is the repository for the Unity program. The repository for the server is https://gitlab.mpcdf.mpg.de/wuseling/virtualatomsserver.
+
 ## Installation
 ### Installation of the server
-*  Clone the pyiron repository
+*  Clone the server repository https://gitlab.mpcdf.mpg.de/wuseling/virtualatomsserver
 *  Go to the project on the command line and type in 
 ```
 git fetch
-git checkout vrplugin_branch3
+git checkout master
 git pull`
 ```
-*  Go to ```~\pyiron_mpie\pyiron_mpie\vrplugin``` on the command line
+*  Go to ```~\vrplugin``` on the command line
 
-### Create the sample structure
+### Create the sample structures
 *  Type in the command line
     ```python FolderInitializer.py```
 
@@ -83,3 +85,4 @@ In Temperature and Minimize Mode, Atoms and structures can be created using the 
 *  Make sure the Server and the Client (e.g. the Oculus Quest) are connected to the same network
 *  It can help to mark the network as private, else the server might get blocked from the firewall
 *  Make sure VPN is disabled or both Server and Client are connected to the same VPN Network
+*  If the network has a 2.4Ghz band and a 5Ghz band, make sure both devices are connected to the same band
