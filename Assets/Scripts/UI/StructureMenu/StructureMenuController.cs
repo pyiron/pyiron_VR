@@ -24,20 +24,6 @@ public class StructureMenuController : MenuController
         print(JsonUtility.ToJson(sd));
         JsonUtility.FromJson<StructureData>(JsonUtility.ToJson(sd));
     }
-
-    public Vector3[][] GetFramePositions(Vector3[] flattenedArray)
-    {
-        int struc_len = 3;
-        int frame_len = 1;
-        Vector3[][] all_frames = new Vector3[frame_len][];
-        for (int i = 0; i < frame_len; i++)
-        {
-            Array.Copy(flattenedArray, i * struc_len, all_frames, 0, struc_len);
-        }
-
-        return all_frames;
-    }
-
     private void LoadStructure(string structure)
     {
         StructureData struc;
@@ -90,45 +76,6 @@ public class StructureMenuController : MenuController
         // visualize the structure
         LoadStructure(structure);
     }
-
-//    public void OnElementChange(Dropdown elementDropdown)
-//    {
-//        string order = "structure.name = '" + elementDropdown.options[elementDropdown.value].text + "'";
-//        PythonExecuter.SendOrderSync(PythonScript.StructureManager, PythonCommandType.exec_l, order);
-//        LoadStructure();
-//    }
-//    
-//    public void OnRepeatChange(Dropdown repeatDropdown)
-//    {
-//        string val = repeatDropdown.options[repeatDropdown.value].text;
-//        string order = "structure = structureManager.structure.repeat([" + val + ", " + val + ", " + val + "])";
-//        PythonExecuter.SendOrderSync(PythonScript.StructureManager, PythonCommandType.exec_l, order);
-//        LoadStructure();
-//    }
-//    
-//    public void OnCubicChange(Toggle cubicToggle)
-//    {
-//        string isOn = "False";
-//        if (cubicToggle.isOn)
-//        {
-//            isOn = "True";
-//        }
-//        string order = "structure.cubic = " + isOn;
-//        PythonExecuter.SendOrderSync(PythonScript.StructureManager, PythonCommandType.exec_l, order);
-//        LoadStructure();
-//    }
-//    
-//    public void OnOrthorombicChange(Toggle orthorombicToggle)
-//    {
-//        string isOrthorombic = "False";
-//        if (orthorombicToggle.isOn)
-//        {
-//            isOrthorombic = "True";
-//        }
-//        string order = "structure.cubic = " + isOrthorombic;
-//        PythonExecuter.SendOrderSync(PythonScript.StructureManager, PythonCommandType.exec_l, order);
-//        LoadStructure();
-//    }
 
     public void OnStructureChange()
     {

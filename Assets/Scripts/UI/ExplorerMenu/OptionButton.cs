@@ -9,6 +9,18 @@ public class OptionButton : MonoBehaviour, IButton
 {
     public bool isJob;
 
+    public static Vector3[][] GetFramePositions(Vector3[] flattenedArray, int struc_len, int frames)
+    {
+        Vector3[][] all_frames = new Vector3[frames][];
+        for (int i = 0; i < frames; i++)
+        {
+            all_frames[i] = new Vector3[struc_len];
+            Array.Copy(flattenedArray, i * struc_len, all_frames[i], 0, struc_len);
+        }
+
+        return all_frames;
+    }
+    
     public static IEnumerator HandleLoad(string jobName)
     {
         // send the order to load the structure
@@ -34,12 +46,20 @@ public class OptionButton : MonoBehaviour, IButton
         string result = TCPClient.returnedMsg;
         
         // handle the response
-        PythonExecuter.HandlePythonMsg(result);
-        ExplorerMenuController.inst.DeleteOptions();
-        ExplorerMenuController.inst.ClearOptions();
-        SimulationMenuController.jobLoaded = true;
-        ModeController.inst.SetMode(Modes.Calculate);
-        AnimationMenuController.Inst.SetState(true);
+//        PythonExecuter.HandlePythonMsg(result);
+
+        print(result);
+        StructureData structureData = JsonUtility.FromJson<StructureData>(result);
+        Vector3[][] allPoses = GetFramePositions(structureData.positions, structureData.size,
+            structureData.frames);
+        Structure.Inst.UpdateStructure(allPoses[0], structureData.elements);
+        Boundingbox.Inst.UpdateBoundingBox(structureData.cell);
+        
+        //ExplorerMenuController.inst.DeleteOptions();
+        //ExplorerMenuController.inst.ClearOptions();
+        //SimulationMenuController.jobLoaded = true;
+        //ModeController.inst.SetMode(Modes.Calculate);
+        //AnimationMenuController.Inst.SetState(true);
         // todo: handle the result here, instead of calling PythonExecuter.HandlePythonMsg
     }
 

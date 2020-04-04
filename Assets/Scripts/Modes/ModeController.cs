@@ -25,7 +25,7 @@ public class ModeController : MonoBehaviour
     internal static List<Mode> modes = new List<Mode>
     {
         new Mode(mode:Modes.Network, hideAtoms: true),
-        new Mode(mode:Modes.Explorer, hideAtoms: true),
+        new Mode(mode:Modes.Explorer),
         new Mode(mode:Modes.Calculate, playerCanMoveAtoms:true, playerCanResizeAtoms:true, showTemp:true,
             showTrashcan:true),
         //new Mode(mode:Modes.Minimize, playerCanMoveAtoms:true, playerCanResizeAtoms:true, showRelaxation:true,

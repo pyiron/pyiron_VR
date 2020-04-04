@@ -121,3 +121,14 @@ Bericht an Christoph Freysoldt schicken
 Link erstellen
 Auf den Master mergen
 WebVR?
+
+Todo:
+1. DONE Wenn struktur im Explorer ausgewählt: im Explorer bleiben
+2. DONE Struktur im Explorer anzeigen
+3. Calculator ausgrauen bis Struktur ausgewählt oder created wurde (oder notfalls default struktur laden)
+4. Job Settings über format_job_settings laden statt die Attribute einzeln zu laden (gilt evtl auch für andere Panels)
+5. Struktur im Calculator anzeigen
+6. DONE Animation rüber schicken, statt nur den ersten frame
+7. DONE Struktur an den richtigen stellen anzeigen/nicht anzeigen
+8. Warum sieht die geladene Struktur so komisch aus?
+9. Animation anzeigen
