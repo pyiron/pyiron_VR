@@ -125,11 +125,18 @@ WebVR?
 Todo:
 1. DONE Wenn struktur im Explorer ausgewählt: im Explorer bleiben
 2. DONE Struktur im Explorer anzeigen
-3. Calculator ausgrauen bis Struktur ausgewählt oder created wurde (oder notfalls default struktur laden)
 4. Job Settings über format_job_settings laden statt die Attribute einzeln zu laden (gilt evtl auch für andere Panels)
-5. Struktur im Calculator anzeigen
+5. DONE Struktur im Calculator anzeigen
 6. DONE Animation rüber schicken, statt nur den ersten frame
 7. DONE Struktur an den richtigen stellen anzeigen/nicht anzeigen
 8. DONE Warum sieht die geladene Struktur so komisch aus?
 9. DONE Animation anzeigen
-10.AnimationController aufräumen
+10.DONE AnimationController aufräumen
+11. Funktion zurückbringen:
+a Atom verschieben
+b Atom löschen
+12. Save System implementieren
+13. Send and handle error Vasp not implemented
+14. DONE Solve boundary box edge bug
+15. look in joergs program how to extract the needed data from pyiron
+16. Show correct temperature 

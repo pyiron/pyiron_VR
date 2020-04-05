@@ -46,7 +46,7 @@ public class ActionPanelController : MonoBehaviour
         SimulationMenuController.jobLoaded = false;
         // TODO: Reactivate when it is possible to create a new job (including the base)
         string order = "project.remove_job(" + JobSettingsController.Inst.GetData().job_name + ")";
-        //PythonExecuter.SendOrderSync(PythonScript.UnityManager, PythonCommandType.exec_l, order);
+        PythonExecuter.SendOrderSync(PythonScript.UnityManager, PythonCommandType.exec_l, order);
         UpdateButtons();
         //ModeController.inst.SetMode(Modes.Animate);
         //AnimationMenuController.Inst.SetState(true);

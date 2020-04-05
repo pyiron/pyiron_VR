@@ -85,7 +85,8 @@ public class Boundingbox : MonoBehaviour
             {
                 _borders[i * 3 + j].transform.localPosition = edgePose;
                 Vector3 newPos = edgePose + data[j] / 2f * signs[i * 3 + j];
-                _borders[i * 3 + j].transform.LookAt(newPos * ProgramSettings.size);
+                Vector3 targetWorldPos = newPos * ProgramSettings.size + transform.parent.localPosition;
+                _borders[i * 3 + j].transform.LookAt(targetWorldPos);
                 _borders[i * 3 + j].transform.localPosition = newPos;
             }
         }

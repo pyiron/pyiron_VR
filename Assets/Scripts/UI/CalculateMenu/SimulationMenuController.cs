@@ -72,7 +72,7 @@ public class SimulationMenuController : MenuController {
                                data.n_print + ", " + 
                                jobData.job_type + ", " + 
                                jobData.job_name + ", " + 
-                               jobData.potential + ")";
+                               jobData.currentPotential + ")";
         }
         else
         {
@@ -83,7 +83,7 @@ public class SimulationMenuController : MenuController {
                     data.n_print + ", " + 
                     jobData.job_type + ", " + 
                     jobData.job_name + ", " + 
-                    jobData.potential + ")";
+                    jobData.currentPotential + ")";
         }
 
         // load the new structure in another coroutine
