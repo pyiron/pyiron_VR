@@ -14,7 +14,7 @@ public class PathButton : MonoBehaviour, IButton
 
     public void WhenClickDown()
     {
-        ExplorerMenuController.inst.LoadPathContent(GetCurrPath(), true);
+        ExplorerMenuController.Inst.LoadPathContent(GetCurrPath(), true);
     }
 
     private string GetCurrPath()

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Remoting.Messaging;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,56 +9,96 @@ public class AnimationController : MonoBehaviour
 {
     public static AnimationController Inst;
     
-    private Toggle startStopToggle;
-    
-    [Header("Animation")]
+
+    [Header("Animation")] 
+    private static Vector3[][] positionData;
     public static bool run_anim;
     public static int animSpeed = 4;
     public static int frame;
-    private static float next_time;
+//    private static float next_time;
+
+    [Tooltip("The time the animation waits before restarting the animation in seconds")]
+    public float pauseDuration = 1;
+    private float pauseTimer;
     
     internal static bool waitForLoadedStruc;
     internal static bool shouldLoad;
+
+//    private bool waitFrame;
 
     private void Awake()
     {
         Inst = this;
     }
 
-    private void Start()
+    private static void Show()
     {
-        startStopToggle = GetComponentInChildren<Toggle>();
+        Structure.Inst.UpdateStructure(positionData[frame]);
+    }
+
+    public void SetNewAnimation(Vector3[][] newData)
+    {
+        RunAnim(true);
+        frame = 0;
+        positionData = newData;
+//        Show();
     }
 
     // Update is called once per frame
     void Update () {
-        if (run_anim && !waitForLoadedStruc)
+        if (run_anim)
         {
-            if (Time.time >= next_time)
+            if (pauseTimer > 0)
             {
-                ImportStructure.Inst.LoadStructure();
-                if (change_frame())
+                pauseTimer -= Time.deltaTime;
+            }
+            else
+            {
+                Show();
+//            if (!waitFrame)
+//            {
+//                Show();
+//                waitFrame = false;
+//                return;
+//            }
+
+                frame += 1;
+                if (frame >= positionData.Length)
                 {
-                    float delta_time = 1f / 90;
-                    next_time = Time.time;
-                    if (2 <= animSpeed && animSpeed <= 3)
-                    {
-                        next_time += delta_time;
-                    }
-                    next_time += delta_time;
+                    frame = 0;
+                    pauseTimer = pauseDuration;
                 }
-                else
-                    next_time += 2 - (0.5f + Mathf.Abs(animSpeed - 2.5f)) / 2;
             }
         }
-        else
-        {
-            FrameData frameData = StructureDataOld.GetCurrFrameData();
-            if (shouldLoad && frameData?.cellbox != null)
-            {
-                ImportStructure.Inst.LoadStructure();
-                shouldLoad = false;
-            }}
+        
+//        if (run_anim && !waitForLoadedStruc)
+//        {
+//            if (Time.time >= next_time)
+//            {
+//                Show();
+////                ImportStructure.Inst.LoadStructure();
+//                if (change_frame())
+//                {
+//                    float delta_time = 1f / 90;
+//                    next_time = Time.time;
+//                    if (2 <= animSpeed && animSpeed <= 3)
+//                    {
+//                        next_time += delta_time;
+//                    }
+//                    next_time += delta_time;
+//                }
+//                else
+//                    next_time += 2 - (0.5f + Mathf.Abs(animSpeed - 2.5f)) / 2;
+//            }
+//        }
+//        else
+//        {
+//            FrameData frameData = StructureDataOld.GetCurrFrameData();
+//            if (shouldLoad && frameData?.cellbox != null)
+//            {
+//                ImportStructure.Inst.LoadStructure();
+//                shouldLoad = false;
+//            }}
     }
 
     /// <summary>
@@ -78,7 +119,7 @@ public class AnimationController : MonoBehaviour
             if (controller.gameObject.activeSelf)
                 controller.SetSymbol();
 
-        Inst.startStopToggle.isOn = shouldRun;
+        AnimationMenuController.Inst.startStopToggle.isOn = shouldRun;
     }
 
     internal static void ChangeAnimSpeed(int change)
@@ -107,7 +148,8 @@ public class AnimationController : MonoBehaviour
         else
             //frame = (GetCurrFrameData().frames - (Mod(GetCurrFrameData().frames - frame, GetCurrFrameData().frames))) - 1;
             frame = Mod((frame - 1), StructureDataOld.GetCurrFrameData().frames);
-        ImportStructure.Inst.LoadStructure();
+//        ImportStructure.Inst.LoadStructure();
+        Show();
     }
 
     private static bool change_frame() {
@@ -116,16 +158,18 @@ public class AnimationController : MonoBehaviour
             frame_step = 2;
         if (animSpeed < 3)
             frame_step *= -1;
-        int newFrame = Mod((frame + frame_step), StructureDataOld.GetCurrFrameData().frames);
+//        int newFrame = Mod((frame + frame_step), StructureDataOld.GetCurrFrameData().frames);
+        int newFrame = Mod((frame + frame_step), positionData.Length);
         frame = newFrame;
-        return Mod((frame + frame_step), StructureDataOld.GetCurrFrameData().frames) == frame + frame_step;
+        return Mod((frame + frame_step), positionData.Length) == frame + frame_step;
     }
 
     internal static void ResetAnimation()
     {
         frame = 0;
         if (!run_anim)
-            ImportStructure.Inst.LoadStructure();
+            Show();
+//            ImportStructure.Inst.LoadStructure();
     }
 
     private static int Mod(int a, int b)

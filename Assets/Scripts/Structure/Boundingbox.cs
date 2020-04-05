@@ -28,6 +28,10 @@ public class Boundingbox : MonoBehaviour
 
     private void Start()
     {
+        // show the controllers the reference to the boundingbox
+        foreach (LaserGrabber lg in LaserGrabber.instances)
+            lg.boundingbox = transform;
+
         // create the instance of the boundingbox
 //        StructureDataOld.Inst.boundingbox = Instantiate(BoundingboxPrefab, gameObject.transform, true);
 
@@ -87,5 +91,9 @@ public class Boundingbox : MonoBehaviour
         }
         
         mid = (data[0] + data[1] +  data[2]) / 2f;
+
+        CellboxCollider.Inst.SetCollider(data);
     }
+
+    
 }

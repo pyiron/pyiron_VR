@@ -32,7 +32,7 @@ public class DebugShortcuts : MonoBehaviour
 
             if (counter == 2)
             {
-                ExplorerMenuController.inst.LoadPathContent(
+                ExplorerMenuController.Inst.LoadPathContent(
                     "Examples");
             }
             

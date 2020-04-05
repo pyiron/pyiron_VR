@@ -54,7 +54,9 @@ public class OptionButton : MonoBehaviour, IButton
             structureData.frames);
         Structure.Inst.UpdateStructure(allPoses[0], structureData.elements);
         Boundingbox.Inst.UpdateBoundingBox(structureData.cell);
+        AnimationController.Inst.SetNewAnimation(allPoses);
         
+        ExplorerMenuController.Inst.Activate();
         //ExplorerMenuController.inst.DeleteOptions();
         //ExplorerMenuController.inst.ClearOptions();
         //SimulationMenuController.jobLoaded = true;
@@ -69,14 +71,15 @@ public class OptionButton : MonoBehaviour, IButton
         if (isJob)
         {
             StartCoroutine(HandleLoad(job_name));
-            foreach (Button btn in transform.parent.GetComponentsInChildren<Button>())
-            {
-                btn.interactable = false;
-            }
+            ExplorerMenuController.Inst.Deactivate();
+//            foreach (Button btn in transform.parent.GetComponentsInChildren<Button>())
+//            {
+//                btn.interactable = false;
+//            }
         }
         else
         {
-            ExplorerMenuController.inst.LoadPathContent(job_name);
+            ExplorerMenuController.Inst.LoadPathContent(job_name);
         }
     }
 }

@@ -130,5 +130,6 @@ Todo:
 5. Struktur im Calculator anzeigen
 6. DONE Animation rüber schicken, statt nur den ersten frame
 7. DONE Struktur an den richtigen stellen anzeigen/nicht anzeigen
-8. Warum sieht die geladene Struktur so komisch aus?
-9. Animation anzeigen
+8. DONE Warum sieht die geladene Struktur so komisch aus?
+9. DONE Animation anzeigen
+10.AnimationController aufräumen

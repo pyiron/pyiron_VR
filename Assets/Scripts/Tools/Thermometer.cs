@@ -199,9 +199,9 @@ public class Thermometer : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
                 ChangeLiquidColor("clicked");
             }
 
-            if (AnimationController.run_anim)
+//            if (AnimationController.run_anim)
                 // stop the animation
-                AnimationController.RunAnim(false);
+//                AnimationController.RunAnim(false);
         }
         else
         {

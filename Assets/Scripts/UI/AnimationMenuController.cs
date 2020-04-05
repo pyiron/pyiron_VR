@@ -6,6 +6,10 @@ using UnityEngine.UI;
 // component of AnimationPanel
 public class AnimationMenuController : MenuController {
     internal static AnimationMenuController Inst;
+    
+    [Header("The toggle in the menu that shows and decides whether the animation should run or not")]
+    public Toggle startStopToggle;
+    
     public Text speedText;
     
     internal override void SetState(bool active)

@@ -68,7 +68,7 @@ public class ModeController : MonoBehaviour
             currentMode.mode != Modes.Network)
         {
             // stop the currently running animation
-            AnimationController.RunAnim(true);
+//            AnimationController.RunAnim(true);
         }
 
         currentMode = modes[(int)newMode];
@@ -122,7 +122,7 @@ public class ModeController : MonoBehaviour
     private void UpdateMenu()
     {
         NetworkMenuController.Inst.SetState(currentMode.mode == Modes.Network);
-        ExplorerMenuController.inst.SetState(currentMode.mode == Modes.Explorer);
+        ExplorerMenuController.Inst.SetState(currentMode.mode == Modes.Explorer);
         MdMenuController.Inst.SetState(currentMode.showTemp &&
                                                 SimulationModeManager.CurrMode==SimModes.MD);
         //ModeMenuController.inst.SetState(currentMode.mode == Modes.Menu);
@@ -135,6 +135,9 @@ public class ModeController : MonoBehaviour
         {
             SimulationMenuController.Inst.OnModeStart();
         }
+
+        AnimationController.Inst.enabled =
+            currentMode.mode == Modes.Explorer || currentMode.mode == Modes.Calculate;
 
         //                                      currentMode.mode == Modes.Minimize || currentMode.mode == Modes.Animate);
         SimulationMenuController.Inst.SetState(currentMode.mode == Modes.Calculate);
