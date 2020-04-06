@@ -18,11 +18,11 @@ public class StructureMenuController : MenuController
     {
         Inst = this;
         
-        StructureData sd = new StructureData();
-        sd.positions = new Vector3[0];
-        sd.cell = new[] {new Vector3(1.57f, 3.6f, 7.7f), new Vector3(5.0f, 0f)};
-        print(JsonUtility.ToJson(sd));
-        JsonUtility.FromJson<StructureData>(JsonUtility.ToJson(sd));
+//        StructureData sd = new StructureData();
+//        sd.positions = new Vector3[0];
+//        sd.cell = new[] {new Vector3(1.57f, 3.6f, 7.7f), new Vector3(5.0f, 0f)};
+//        print(JsonUtility.ToJson(sd));
+//        JsonUtility.FromJson<StructureData>(JsonUtility.ToJson(sd));
     }
     private void LoadStructure(string structure)
     {

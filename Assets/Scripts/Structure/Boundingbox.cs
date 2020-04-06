@@ -31,24 +31,10 @@ public class Boundingbox : MonoBehaviour
         // show the controllers the reference to the boundingbox
         foreach (LaserGrabber lg in LaserGrabber.instances)
             lg.boundingbox = transform;
-
-        // create the instance of the boundingbox
-//        StructureDataOld.Inst.boundingbox = Instantiate(BoundingboxPrefab, gameObject.transform, true);
-
-        // show the controllers the reference to the boundingbox
-//        foreach (LaserGrabber lg in LaserGrabber.instances)
-//            lg.boundingbox = StructureDataOld.Inst.boundingbox.transform;
-
-        // create the cubes for the cell box and the parent cellBox
-//        Cellbox = new GameObject();
-//        Cellbox.transform.parent = transform;
-//        Cellbox.name = "Cellbox";
     }
 
     public void UpdateBoundingBox(Vector3[] data)
     {
-        print(data);
-        
         // reset the positions of the cellbox
         transform.localPosition = Vector3.zero;
 
@@ -94,6 +80,12 @@ public class Boundingbox : MonoBehaviour
         mid = (data[0] + data[1] +  data[2]) / 2f;
 
         CellboxCollider.Inst.SetCollider(data);
+        
+        // set the position of the Hourglass to the middle of the cellbox
+        HourglassActivator.Inst.transform.position = mid;
+        
+        // not sure if this line is still needed
+        HourglassActivator.Inst.transform.GetChild(0).localScale = Vector3.one;
     }
 
     

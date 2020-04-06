@@ -117,7 +117,6 @@ public class TCPClient : MonoBehaviour
 		
 		while (connTimer > 0)
 		{
-			print("Trying to connect");
 			connTimer -= updateTime;
 			if (connStatus.IsFaulted || connStatus.IsCanceled)
 			{

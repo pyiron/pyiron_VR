@@ -77,12 +77,10 @@ public class LaserGrabber : MonoBehaviour
         if (ctrlMaskName.Contains("Atom"))
         {
             ctrlLayer = Layer.Atom;
-            print("Inited LG Atom");
         }
         else
         {
             ctrlLayer = Layer.Structure;
-            print("Inited LG");
         }
         controllerSymbols[(int) ctrlLayer] = GetComponent<ControllerSymbols>();
         instances[(int) ctrlLayer] = this;
@@ -254,11 +252,13 @@ public class LaserGrabber : MonoBehaviour
                 if (ctrlMaskName == "AtomLayer" && (!ModeController.currentMode.showTrashcan || !TrashCan.inst.atomInCan))
                 {
                     // tell Python the new position
-                    OrdersToPython.SetNewPosition(StructureDataOld.atomInfos[attachedObject.GetComponent<AtomID>().ID]);
+                    Structure.Inst.OnAtomPositionChanged(attachedObject);
+                    
+//                    OrdersToPython.SetNewPosition(StructureDataOld.atomInfos[attachedObject.GetComponent<AtomID>().ID]);
                     // check the new extension of the structure
-                    StructureDataOld.Inst.SearchMaxAndMin();
+//                    StructureDataOld.Inst.SearchMaxAndMin();
                     // set the boundingbox so that it encloses the structure
-                    StructureDataOld.Inst.UpdateBoundingbox();
+//                    StructureDataOld.Inst.UpdateBoundingbox();
                 }
                 
                 if (ModeController.currentMode.showTrashcan)

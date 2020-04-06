@@ -82,9 +82,9 @@ public class ImportStructure : MonoBehaviour {
 
         
         // check the expansion of the cluster
-        StructureDataOld.Inst.SearchMaxAndMin();
+//        StructureDataOld.Inst.SearchMaxAndMin();
         // set the Boundingbox, so that it equals the expansion of the cluster
-        StructureDataOld.Inst.UpdateBoundingbox();
+//        StructureDataOld.Inst.UpdateBoundingbox();
 
         StructureDataOld.waitForDestroyedAtom = false;
         newImport = false;

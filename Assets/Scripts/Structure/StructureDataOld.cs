@@ -44,13 +44,13 @@ public class StructureDataOld : MonoBehaviour
     }
 
     // transform the Boundingbox, so that it encloses the structure
-    public void UpdateBoundingbox()
-    {
-        // set it to the size of the structure
-        boundingbox.transform.localScale = maxPositions - minPositions;
-        // place it in the the middle of the structure
-        boundingbox.transform.position = (minPositions + (maxPositions - minPositions) / 2) * ProgramSettings.size;
-    }
+//    public void UpdateBoundingbox()
+//    {
+//        // set it to the size of the structure
+//        boundingbox.transform.localScale = maxPositions - minPositions;
+//        // place it in the the middle of the structure
+//        boundingbox.transform.position = (minPositions + (maxPositions - minPositions) / 2) * ProgramSettings.size;
+//    }
 
     // search for the min and max position of the atoms in the cluster for each axis
     public void SearchMaxAndMin()

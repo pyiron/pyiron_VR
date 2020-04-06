@@ -15,6 +15,19 @@ public class Structure : MonoBehaviour
     {
         Inst = this;
     }
+
+    public void OnAtomPositionChanged(GameObject movedAtom)
+    {
+        print("TODO: the structure should send the new position to pyiron here");
+        int id = atoms.IndexOf(movedAtom);
+        
+    }
+
+    public void OnAtomDeleted(GameObject deletedAtom)
+    {
+        print("TODO: the structure should send this information to the pyiron program here");
+        int id = atoms.IndexOf(deletedAtom);
+    }
     
     private void AdjustStructureSize(int diff)
     {

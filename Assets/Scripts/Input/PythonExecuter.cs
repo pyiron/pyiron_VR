@@ -75,7 +75,7 @@ public class PythonExecuter : MonoBehaviour {
 
     public static void HandlePythonMsg(string data)
     {
-        print(data);
+        print("received: " + data);
         if (data == "async" || data == "") return;
         
         // remove the "" from the beginning end end if a string got send via the Server
