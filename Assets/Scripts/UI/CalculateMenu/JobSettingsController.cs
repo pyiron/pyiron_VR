@@ -52,7 +52,8 @@ public class JobSettingsController : MonoBehaviour
         // update the job name
         jobNameField.text = jobData.job_name;
         
-        // maybe set type
+        // set type
+        SimulationModeManager.Inst.SetMode(jobData.calculation_type);
         
         // load all currently available jobs from pyiron
 //        order = "job.list_potentials()";
@@ -72,23 +73,26 @@ public class JobSettingsController : MonoBehaviour
 
     public JobData GetData()
     {
+        string calculationType = SimulationModeManager.CurrMode.ToString().ToLower();
         string jobType = "'" + jobTypeDropdown.options[jobTypeDropdown.value].text + "'";
         string jobName = "'" + jobNameField.text + "'";
         string potential = "'" + potentialDropdown.options[potentialDropdown.value].text + "'";
       
-        return new JobData(jobType, jobName, potential, null);
+        return new JobData(calculationType, jobType, jobName, potential, null);
     }
 }
 
 public struct JobData
 {
+    public string calculation_type;
     public string job_type;
     public string job_name;
     public string currentPotential;
     public string[] potentials;
 
-    public JobData(string jobType, string jobName, string currentPotential, string[] potentials)
+    public JobData(string calculation_type, string jobType, string jobName, string currentPotential, string[] potentials)
     {
+        this.calculation_type = calculation_type;
         job_type = jobType;
         job_name = jobName;
         this.currentPotential = currentPotential;

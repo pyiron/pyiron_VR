@@ -16,6 +16,10 @@ public class SimulationMenuController : MenuController {
 
     public void OnModeStart()
     {
+        // load if a md, minimize, or static calculation should be performed
+//        string order = "";
+//        string receivedData = PythonExecuter.SendOrderSync(PythonScript.Executor, PythonCommandType.eval_l, order);
+        
         JobSettingsController.Inst.OnModeStart();
         ActionPanelController.Inst.UpdateButtons();
     }
@@ -94,6 +98,4 @@ public class SimulationMenuController : MenuController {
         print("Wait begun");
         //lammpsIsMd = ModeData.currentMode.showTemp;
     }
-
-
 }

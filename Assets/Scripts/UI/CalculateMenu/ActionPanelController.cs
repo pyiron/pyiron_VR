@@ -24,8 +24,8 @@ public class ActionPanelController : MonoBehaviour
 
     void Update()
     {
-        CalculateButton.interactable = SimulationModeManager.CurrMode != SimModes.None;
-        DeleteButton.interactable = SimulationModeManager.CurrMode != SimModes.None;
+        CalculateButton.interactable = SimulationModeManager.CurrMode != SimModes.NONE;
+        DeleteButton.interactable = SimulationModeManager.CurrMode != SimModes.NONE;
     }
 
     public void UpdateButtons()

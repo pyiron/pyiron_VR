@@ -6,9 +6,15 @@ using UnityEngine.UI;
 
 public class SimulationModeManager : MonoBehaviour
 {
-    public static SimModes CurrMode = SimModes.None;
-    private Button[] _modes; 
-    
+    public static SimulationModeManager Inst;
+    public static SimModes CurrMode = SimModes.NONE;
+    private Button[] _modes;
+
+    private void Awake()
+    {
+        Inst = this;
+    }
+
     void Start()
     {
         _modes = GetComponentsInChildren<Button>();
@@ -16,20 +22,28 @@ public class SimulationModeManager : MonoBehaviour
         OnButtonPressed(_modes[0]);
     }
 
-    public void OnButtonPressed(Button btn)
+    public void SetMode(string modeName)
     {
-        print(btn.name + " got pressed");
+        Button currModeBtn = null;
         foreach (Button otherBtn in _modes)
         {
-            if (btn.name == otherBtn.name) continue;
+            if (String.Equals(modeName, otherBtn.name, StringComparison.CurrentCultureIgnoreCase))
+            {
+                currModeBtn = otherBtn;
+                continue;
+            }
             otherBtn.image.color = Color.white;
             otherBtn.interactable = true;
         }
-        btn.image.color = Color.green;
-        btn.interactable = false;
-        CurrMode = (SimModes)Enum.Parse(typeof(SimModes), btn.name); // can be MD, Minimize or Static 
+
+        if (currModeBtn != null)
+        {
+            currModeBtn.image.color = Color.green;
+            currModeBtn.interactable = false;
+        }
+        CurrMode = (SimModes)Enum.Parse(typeof(SimModes), modeName.ToUpper()); // can be MD, Minimize or Static 
         MdMenuController.Inst.SetState(CurrMode==SimModes.MD);
-        MinimizeMenuController.Inst.SetState(CurrMode == SimModes.Minimize);
+        MinimizeMenuController.Inst.SetState(CurrMode == SimModes.MINIMIZE);
         /*if (btn.name == "MD")
         {
             //activate Thermometer
@@ -41,9 +55,14 @@ public class SimulationModeManager : MonoBehaviour
             //}
         }*/
     }
+
+    public void OnButtonPressed(Button btn)
+    {
+        SetMode(btn.name);
+    }
 }
 
 public enum SimModes
 {
-    MD, Minimize, Static, None
+    MD, MINIMIZE, STATIC, NONE
 }
