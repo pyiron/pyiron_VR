@@ -65,7 +65,7 @@ public class InputManager : MonoBehaviour
         if (ViveInput.GetPressDown(handRole, ControllerButton.Pad))
         {
             LaserGrabber.instances[(int)handRole].TouchpadPressDown(touchPos);
-            Thermometer.inst.TouchpadPressDown(touchPos);
+            Thermometer.Inst.TouchpadPressDown(touchPos);
         }
 
         if (ViveInput.GetPress(handRole, ControllerButton.Pad))

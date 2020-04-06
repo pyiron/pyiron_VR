@@ -8,13 +8,13 @@ using UnityEngine.UI;
 public class Thermometer : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     // reference to the Thermometer
-    public static Thermometer inst;
+    public static Thermometer Inst;
     // the reference to the animationController of the thermometer
     private Animator anim;
     // the text on the thermometer how high the temperature currently is
     private TextMesh ThermometerText;
     // the renderer of the thermometer
-    private Renderer ThermometerRenderer;
+    public Renderer ThermometerRenderer;
     // the current temperature
     public static int temperature = 0;
     // the size the text on the thermometer telling the temperature should have
@@ -29,8 +29,6 @@ public class Thermometer : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     private float lowestPoint = 0.31f;
     // determines in which intervals the thermometer should update the temperature text
     private int precision = 100;
-    // the temperature of last calculated ham_lammps
-    public int lastTemperature;
 
     // shows if the user hitted the thermometer with the laser when he pressed the hair trigger down the last time
     internal static bool laserOnThermometer;
@@ -41,7 +39,7 @@ public class Thermometer : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     private void Awake()
     {
         // instantiate the reference to the thermometer
-        inst = this;
+        Inst = this;
         // get the reference to the animationController of the thermometer
         anim = gameObject.GetComponent<Animator>();
         // get the reference to the TextMesh of the temperature
@@ -51,20 +49,12 @@ public class Thermometer : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     void Start () {
         //UpdateTemperature();
         ThermometerText.transform.localScale = Vector3.one * TextSize;
-        
-        // get the reference to the Renderer of the thermometer
-        foreach (Transform Trans in transform)
-            if (Trans.name == "Liquid")
-                ThermometerRenderer = Trans.GetComponent<Renderer>();
 
         // make sure the color is the usual one
         ChangeLiquidColor();
-
-        // set lastTemperature to the value the thermometer has been initialised with
-        lastTemperature = temperature;
         
         // update the thermometer
-        UpdateTemperature();
+//        UpdateTemperature();
     }
 
     private void Update()
@@ -87,6 +77,8 @@ public class Thermometer : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     // show the current temperature data on the thermometer
     public void UpdateTemperature(int exactTemperature = -1)
     {
+        TemperatureSliderController.Inst.UpdateSlider();
+        
         // set the current temperature on the text field
         ThermometerText.text = temperature.ToString();
         float tmp = float.NaN;
@@ -106,12 +98,12 @@ public class Thermometer : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         if (!float.IsNaN(tmp))
         {
             anim.SetFloat("Temperature", tmp);
-            MdMenuController.Inst.ChangeTemperature();
+//            MdMenuController.Inst.ChangeTemperature();
         }
     }
 
     // change the color if the user interacts with the thermometer
-    public void ChangeLiquidColor(string state="idle")
+    private void ChangeLiquidColor(string state="idle")
     {
         // set the color to a dark red if the user currently clicks on the thermometer
         if (state == "clicked")
@@ -150,7 +142,7 @@ public class Thermometer : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         // show the current temperature data on the thermometer
         UpdateTemperature(exactTemperature:(int)(maxTemperature * newTemperatureGradient));
         // a new simulation should be started when the temperature gets changed
-        SimulationMenuController.jobLoaded = true;
+//        SimulationMenuController.jobLoaded = true;
     }
 
     // allows to change the maxTemperature
@@ -158,22 +150,11 @@ public class Thermometer : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     {
         // prevents that the maxTemperature will fall to a value lower than 100, because this would be of no use for the user
         if ((maxTemperature > 100 || change > 1) && (maxTemperature < 100000 || change < 1))
-            // changes the current maxTemperature to the new value
-            maxTemperature = (int)(maxTemperature * change);
-    }
-
-    internal bool SendTemp()
-    {
-        // send Python the order to change the temperature if the user has changed the temperature on the thermometer
-        if (lastTemperature != temperature && temperature > -1)
         {
-            PythonExecuter.SendOrderSync(PythonScript.Executor, PythonCommandType.eval, "self.set_temperature(" + temperature + ")");
-            // remember that the last ham_lammps has been created with the current temperature
-            lastTemperature = temperature;
-            // show that the temperature changed
-            return true;
+            // changes the current maxTemperature to the new value
+            maxTemperature = (int) (maxTemperature * change);
+            TemperatureSliderController.Inst.SetMaxTemperature();
         }
-        return false;
     }
 
     #region interaction
@@ -191,17 +172,14 @@ public class Thermometer : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         if (laserCurrentlyOnThermometer)
         {
             ChangeThemperature(eventData.pointerCurrentRaycast.worldPosition.y - transform.position.y);
-            MdMenuController.Inst.ChangeTemperature();
+//            MdMenuController.Inst.ChangeTemperature();
+//            TemperatureSliderController.Inst.UpdateSlider();
 
             if (!laserWasOnThermometer)
             {
                 // set the color to a dark red to show that the user currently clicks on the thermometer
                 ChangeLiquidColor("clicked");
             }
-
-//            if (AnimationController.run_anim)
-                // stop the animation
-//                AnimationController.RunAnim(false);
         }
         else
         {

@@ -79,7 +79,7 @@ public class ModeController : MonoBehaviour
 
         if (Thermometer.temperature != -1)
             // activate the thermometer when changing into temperature mode, else deactivate it
-            Thermometer.inst.gameObject.SetActive(modes[(int)currentMode.mode].showTemp);
+            Thermometer.Inst.gameObject.SetActive(modes[(int)currentMode.mode].showTemp);
 
         if (modes[(int)currentMode.mode].showInfo)
             OrdersToPython.RequestAllForces();
