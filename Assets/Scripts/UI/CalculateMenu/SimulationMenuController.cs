@@ -26,9 +26,11 @@ public class SimulationMenuController : MenuController {
         {
             MinimizeMenuController.Inst.OnModeStart();
         }
-        ActionPanelController.Inst.UpdateButtons();
-    }
 
+        ActionPanelController.Inst.UpdateButtons();
+
+        AnimationMenuController.Inst.SetState(AnimationController.Inst.HasAnimationLoaded());
+    }
     /*public void SetNIonicSteps(Dropdown dropdown)
     {
         string n_ionic_steps = dropdown.options[dropdown.value].text;

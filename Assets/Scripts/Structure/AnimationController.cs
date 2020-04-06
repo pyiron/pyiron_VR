@@ -11,7 +11,7 @@ public class AnimationController : MonoBehaviour
     
 
     [Header("Animation")] 
-    private static Vector3[][] positionData;
+    public static Vector3[][] positionData;
     public static bool run_anim;
     public static int animSpeed = 4;
     public static int frame;
@@ -31,6 +31,11 @@ public class AnimationController : MonoBehaviour
         Inst = this;
     }
 
+    public bool HasAnimationLoaded()
+    {
+        return positionData != null;
+    }
+
     private static void Show()
     {
         Structure.Inst.UpdateStructure(positionData[frame]);
@@ -42,6 +47,12 @@ public class AnimationController : MonoBehaviour
         frame = 0;
         positionData = newData;
 //        Show();
+    }
+
+    public void DeleteAnimation()
+    {
+        positionData = null;
+        run_anim = false;
     }
 
     // Update is called once per frame
@@ -61,6 +72,8 @@ public class AnimationController : MonoBehaviour
 //                waitFrame = false;
 //                return;
 //            }
+
+                ProgressBar.Inst.UpdateBar();
 
                 frame += 1;
                 if (frame >= positionData.Length)

@@ -48,7 +48,7 @@ public class OptionButton : MonoBehaviour, IButton
         // handle the response
 //        PythonExecuter.HandlePythonMsg(result);
 
-        print(result);
+//        print(result);
         StructureData structureData = JsonUtility.FromJson<StructureData>(result);
         Vector3[][] allPoses = GetFramePositions(structureData.positions, structureData.size,
             structureData.frames);

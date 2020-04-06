@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class SimulationModeManager : MonoBehaviour
 {
     public static SimulationModeManager Inst;
-    public static SimModes CurrMode = SimModes.NONE;
+    public static SimModes CurrMode = SimModes.MD;
     private Button[] _modes;
 
     private void Awake()
@@ -64,5 +64,5 @@ public class SimulationModeManager : MonoBehaviour
 
 public enum SimModes
 {
-    MD, MINIMIZE, STATIC, NONE
+    MD, MINIMIZE, STATIC
 }

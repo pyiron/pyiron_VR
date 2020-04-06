@@ -123,24 +123,27 @@ Auf den Master mergen
 WebVR?
 
 Todo:
-1. DONE Wenn struktur im Explorer ausgewählt: im Explorer bleiben
-2. DONE Struktur im Explorer anzeigen
-4. Job Settings über format_job_settings laden statt die Attribute einzeln zu laden (gilt evtl auch für andere Panels)
-5. DONE Struktur im Calculator anzeigen
-6. DONE Animation rüber schicken, statt nur den ersten frame
-7. DONE Struktur an den richtigen stellen anzeigen/nicht anzeigen
-8. DONE Warum sieht die geladene Struktur so komisch aus?
-9. DONE Animation anzeigen
-10.DONE AnimationController aufräumen
-11. Funktion zurückbringen:
-a Atom verschieben
-b Atom löschen
-12. Save System implementieren
-13. Send and handle error Vasp not implemented
-14. DONE Solve boundary box edge bug
-15. DONE look in joergs program how to extract the needed data from pyiron
-16. Show correct temperature 
-17. Check if there exists a job with the current name
-18. Fix Thermometer
-19. check in dict if it contains the key, if not: leave empty. Check in Unity if it is empty
-20. Set delete button onHover color
+  1. 	DONE Wenn struktur im Explorer ausgewählt: im Explorer bleiben
+  2. 	DONE Struktur im Explorer anzeigen
+  4. 	DONE Job Settings über format_job_settings laden statt die Attribute einzeln zu laden (gilt evtl auch für andere Panels)
+  5. 	DONE Struktur im Calculator anzeigen
+  6. 	DONE Animation rüber schicken, statt nur den ersten frame
+  7. 	DONE Struktur an den richtigen stellen anzeigen/nicht anzeigen
+  8. 	DONE Warum sieht die geladene Struktur so komisch aus?
+  9. 	DONE Animation anzeigen
+  10.	DONE AnimationController aufräumen
+! 11. 	TODO Funktion zurückbringen:
+    a 	Atom verschieben
+    b 	Atom löschen
+! 12. 	TODO Save System implementieren
+  13. 	DONE Send and handle error Vasp not implemented
+  14. 	DONE Solve boundary box edge bug
+  15. 	DONE look in joergs program how to extract the needed data from pyiron
+  16. 	DONE Show correct temperature 
+! 17. 	TODO Check if there exists a job with the current name
+  18. 	DONE Fix Thermometer
+  19. 	DONEcheck in dict if it contains the key, if not: leave empty. Check in Unity if it is empty
+ 20. 	DONE Set delete button onHover color
+! 21. 	TODO just allow to move single atoms in Structure Creator
+  22. 	DONE show AnimationMenu when it should be active 
+! 23. 	TODO Remove old code that has been replaced
