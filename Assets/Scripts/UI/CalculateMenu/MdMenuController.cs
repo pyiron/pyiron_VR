@@ -12,6 +12,9 @@ public class MdMenuController : MenuController {
     public Text maxTempText;
     private Dropdown[] _dropdowns;
 
+    public Dropdown nIonicStepsDropdown;
+    public Dropdown nPrintDropdown;
+
     internal override void SetState(bool active)
     {
         base.SetState(active);
@@ -29,6 +32,33 @@ public class MdMenuController : MenuController {
         _dropdowns = GetComponentsInChildren<Dropdown>();
     }
 
+    private void SetDropdownValue(Dropdown dropdown, string value)
+    {
+        for (int i = 0; i < dropdown.options.Count; i++)
+        {
+            if (dropdown.options[i].text == value)
+            {
+                dropdown.value = i;
+                return;
+            }
+        }
+        dropdown.options.Add(new Dropdown.OptionData(value));
+        dropdown.value = dropdown.options.Count - 1;
+    }
+
+    public void OnModeStart()
+    {
+        string order = "format_md_settings()";
+        string receivedData = PythonExecuter.SendOrderSync(PythonScript.Executor, PythonCommandType.eval_l, order);
+        MdData mdData = JsonUtility.FromJson<MdData>(receivedData);
+        
+        Thermometer.inst.UpdateTemperature((int)mdData.temperature);
+
+        SetDropdownValue(nIonicStepsDropdown, mdData.n_ionic_steps);
+        
+        SetDropdownValue(nPrintDropdown, mdData.n_print);
+    }
+
     private void Update()
     {
         temp_slider.maxValue = Thermometer.maxTemperature;
@@ -41,19 +71,11 @@ public class MdMenuController : MenuController {
     public MdData GetData()
     {
         float temp = Thermometer.temperature;
-        string n_ionic_steps = "";
-        string n_print = "";
-        foreach (Dropdown dropdown in _dropdowns)
-        {
-            if (dropdown.transform.parent.name == "n_ionic_steps")
-            {
-                n_ionic_steps = dropdown.options[dropdown.value].text;
-            } 
-            else if (dropdown.transform.parent.name == "n_print")
-            {
-                n_print = dropdown.options[dropdown.value].text;
-            }
-        }
+        
+        string n_ionic_steps = nIonicStepsDropdown.options[nIonicStepsDropdown.value].text;
+
+        string n_print = nPrintDropdown.options[nPrintDropdown.value].text;
+
         return new MdData(temp, n_ionic_steps, n_print);
     }
 
@@ -62,7 +84,7 @@ public class MdMenuController : MenuController {
         Thermometer.temperature = (int)temp_slider.value;
         Thermometer.inst.UpdateTemperature((int)temp_slider.value);
         // a new simulation should be started when the temperature gets changed
-        SimulationMenuController.jobLoaded = true;
+//        SimulationMenuController.jobLoaded = true;
     }
 
     public void ChangeTemperature()

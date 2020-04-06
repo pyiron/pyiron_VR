@@ -20,6 +20,11 @@ public class MinimizeMenuController : MenuController
     {
         _dropdowns = GetComponentsInChildren<Dropdown>();
     }
+    
+    public void OnModeStart()
+    {
+        
+    }
 
     public MinimizeData GetData()
     {

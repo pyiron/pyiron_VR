@@ -16,11 +16,16 @@ public class SimulationMenuController : MenuController {
 
     public void OnModeStart()
     {
-        // load if a md, minimize, or static calculation should be performed
-//        string order = "";
-//        string receivedData = PythonExecuter.SendOrderSync(PythonScript.Executor, PythonCommandType.eval_l, order);
-        
         JobSettingsController.Inst.OnModeStart();
+
+        if (SimulationModeManager.CurrMode == SimModes.MD)
+        {
+            MdMenuController.Inst.OnModeStart();
+        }
+        else if (SimulationModeManager.CurrMode == SimModes.MINIMIZE)
+        {
+            MinimizeMenuController.Inst.OnModeStart();
+        }
         ActionPanelController.Inst.UpdateButtons();
     }
 

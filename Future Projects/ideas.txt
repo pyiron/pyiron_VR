@@ -138,5 +138,6 @@ b Atom löschen
 12. Save System implementieren
 13. Send and handle error Vasp not implemented
 14. DONE Solve boundary box edge bug
-15. look in joergs program how to extract the needed data from pyiron
+15. DONE look in joergs program how to extract the needed data from pyiron
 16. Show correct temperature 
+17. Check if there exists a job with the current name

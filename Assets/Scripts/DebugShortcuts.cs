@@ -43,6 +43,11 @@ public class DebugShortcuts : MonoBehaviour
 
             if (counter == 4)
             {
+                ModeController.inst.SetMode(Modes.Calculate);
+            }
+
+            if (counter == 5)
+            {
                 AnimationMenuController.Inst.OnSimBtnDown();
             }
             counter++;

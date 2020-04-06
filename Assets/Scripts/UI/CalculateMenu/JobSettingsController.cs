@@ -52,7 +52,7 @@ public class JobSettingsController : MonoBehaviour
         // update the job name
         jobNameField.text = jobData.job_name;
         
-        // set type
+        // set calculation type (md, minimize or static)
         SimulationModeManager.Inst.SetMode(jobData.calculation_type);
         
         // load all currently available jobs from pyiron
