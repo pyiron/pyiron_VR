@@ -74,9 +74,9 @@ public class JobSettingsController : MonoBehaviour
     public JobData GetData()
     {
         string calculationType = SimulationModeManager.CurrMode.ToString().ToLower();
-        string jobType = "'" + jobTypeDropdown.options[jobTypeDropdown.value].text + "'";
+        string jobType = "'" + Utilities.GetStringValue(jobTypeDropdown) + "'";
         string jobName = "'" + jobNameField.text + "'";
-        string potential = "'" + potentialDropdown.options[potentialDropdown.value].text + "'";
+        string potential = "'" + Utilities.GetStringValue(potentialDropdown) + "'";
       
         return new JobData(calculationType, jobType, jobName, potential, null);
     }

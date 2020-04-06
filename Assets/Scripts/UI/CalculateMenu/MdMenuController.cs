@@ -6,11 +6,11 @@ using UnityEngine.UI;
 public class MdMenuController : MenuController {
     public static MdMenuController Inst;
     
+    // TODO: source out to extra script?
     private Slider temp_slider;
     public Text tempText;
     public Text minTempText;
     public Text maxTempText;
-    private Dropdown[] _dropdowns;
 
     public Dropdown nIonicStepsDropdown;
     public Dropdown nPrintDropdown;
@@ -27,25 +27,6 @@ public class MdMenuController : MenuController {
         temp_slider = GetComponentInChildren<Slider>();
     }
 
-    private void Start()
-    {
-        _dropdowns = GetComponentsInChildren<Dropdown>();
-    }
-
-    private void SetDropdownValue(Dropdown dropdown, string value)
-    {
-        for (int i = 0; i < dropdown.options.Count; i++)
-        {
-            if (dropdown.options[i].text == value)
-            {
-                dropdown.value = i;
-                return;
-            }
-        }
-        dropdown.options.Add(new Dropdown.OptionData(value));
-        dropdown.value = dropdown.options.Count - 1;
-    }
-
     public void OnModeStart()
     {
         string order = "format_md_settings()";
@@ -54,9 +35,9 @@ public class MdMenuController : MenuController {
         
         Thermometer.inst.UpdateTemperature((int)mdData.temperature);
 
-        SetDropdownValue(nIonicStepsDropdown, mdData.n_ionic_steps);
+        Utilities.SetDropdownValue(nIonicStepsDropdown, mdData.n_ionic_steps);
         
-        SetDropdownValue(nPrintDropdown, mdData.n_print);
+        Utilities.SetDropdownValue(nPrintDropdown, mdData.n_print);
     }
 
     private void Update()
@@ -71,11 +52,8 @@ public class MdMenuController : MenuController {
     public MdData GetData()
     {
         float temp = Thermometer.temperature;
-        
-        string n_ionic_steps = nIonicStepsDropdown.options[nIonicStepsDropdown.value].text;
-
-        string n_print = nPrintDropdown.options[nPrintDropdown.value].text;
-
+        string n_ionic_steps = Utilities.GetStringValue(nIonicStepsDropdown);
+        string n_print = Utilities.GetStringValue(nPrintDropdown);
         return new MdData(temp, n_ionic_steps, n_print);
     }
 

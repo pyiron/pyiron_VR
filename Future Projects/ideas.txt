@@ -141,3 +141,6 @@ b Atom löschen
 15. DONE look in joergs program how to extract the needed data from pyiron
 16. Show correct temperature 
 17. Check if there exists a job with the current name
+18. Fix Thermometer
+19. check in dict if it contains the key, if not: leave empty. Check in Unity if it is empty
+20. Set delete button onHover color
