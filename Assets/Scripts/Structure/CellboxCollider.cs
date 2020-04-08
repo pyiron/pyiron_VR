@@ -13,6 +13,7 @@ public class CellboxCollider : MonoBehaviour
     private void Awake()
     {
         Inst = this;
+        print("Initialized");
     }
 
     public void SetCollider(Vector3[] data)

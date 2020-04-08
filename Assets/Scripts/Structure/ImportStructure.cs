@@ -91,37 +91,37 @@ public class ImportStructure : MonoBehaviour {
     }
 
     // set the cellbox according to the data given from Python
-    private void SetCellbox()
-    {
-        // activate the cellbox
-//        Cellbox.SetActive(true);
-
-        // reset the positions of the cellbox
-        Cellbox.transform.localPosition = Vector3.zero;
-
-        Vector3[] cellboxData = StructureDataOld.GetCurrFrameData().cellbox;
-        //set the position and length for each part of the cellbox
-        for (int i = 0; i < 4; i++)
-            for (int j = 0; j < 3; j++)
-            {
-                Vector3 cellBorderSize = CellBorders[j * 4 + i].transform.localScale;
-                cellBorderSize[j] = cellboxData[j].magnitude + ProgramSettings.cellboxWidth;
-                CellBorders[j * 4 + i].transform.localScale = cellBorderSize;
-
-                CellBorders[j * 4 + i].transform.localPosition = cellboxData[j] * 0.5f;
-                if (i == 1 || i == 3)
-                    CellBorders[j * 4 + i].transform.localPosition += cellboxData[(j + 1) % 3];
-                if (i == 2 || i == 3)
-                    CellBorders[j * 4 + i].transform.localPosition += cellboxData[(j + 2) % 3];
-            }
-
-        // set the position of the Hourglass to the middle of the cellbox
-//        HourglassActivator.Inst.transform.localPosition = Vector3.zero;
-//        for (int i = 0; i < 3; i++)
-//            HourglassActivator.Inst.transform.localPosition += cellboxData[i] / 2;
-//        // set the size of the Hourglass to the size it should have
-//        HourglassActivator.Inst.transform.GetChild(0).localScale = Vector3.one;
-    }
+//    private void SetCellbox()
+//    {
+//        // activate the cellbox
+////        Cellbox.SetActive(true);
+//
+//        // reset the positions of the cellbox
+//        Cellbox.transform.localPosition = Vector3.zero;
+//
+//        Vector3[] cellboxData = StructureDataOld.GetCurrFrameData().cellbox;
+//        //set the position and length for each part of the cellbox
+//        for (int i = 0; i < 4; i++)
+//            for (int j = 0; j < 3; j++)
+//            {
+//                Vector3 cellBorderSize = CellBorders[j * 4 + i].transform.localScale;
+//                cellBorderSize[j] = cellboxData[j].magnitude + ProgramSettings.cellboxWidth;
+//                CellBorders[j * 4 + i].transform.localScale = cellBorderSize;
+//
+//                CellBorders[j * 4 + i].transform.localPosition = cellboxData[j] * 0.5f;
+//                if (i == 1 || i == 3)
+//                    CellBorders[j * 4 + i].transform.localPosition += cellboxData[(j + 1) % 3];
+//                if (i == 2 || i == 3)
+//                    CellBorders[j * 4 + i].transform.localPosition += cellboxData[(j + 2) % 3];
+//            }
+//
+//        // set the position of the Hourglass to the middle of the cellbox
+////        HourglassActivator.Inst.transform.localPosition = Vector3.zero;
+////        for (int i = 0; i < 3; i++)
+////            HourglassActivator.Inst.transform.localPosition += cellboxData[i] / 2;
+////        // set the size of the Hourglass to the size it should have
+////        HourglassActivator.Inst.transform.GetChild(0).localScale = Vector3.one;
+//    }
 
     private void InitAtoms(AtomData atom)
     {

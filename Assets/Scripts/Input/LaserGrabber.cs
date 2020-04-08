@@ -503,15 +503,15 @@ public class LaserGrabber : MonoBehaviour
         }
         // set the position of the attached object to the new position it should have
         attachedObject.transform.position = newPos;
-        if (ctrlMaskName == "AtomLayer")
-        {
-            // update the data how the atom has been moved by the player 
-            StructureDataOld.atomCtrlPos[attachedObject.GetComponent<AtomID>().ID] += newPos - oldPos;
-        }
-        else if (ctrlMaskName == "BoundingboxLayer")
-            // update the data how the structure has been moved by the player 
-            StructureDataOld.Inst.structureCtrlPos += newPos - oldPos;
-            // SD.structureCtrlTrans.position += newPos - oldPos;
+//        if (ctrlMaskName == "AtomLayer")
+//        {
+//            // update the data how the atom has been moved by the player 
+////            StructureDataOld.atomCtrlPos[attachedObject.GetComponent<AtomID>().ID] += newPos - oldPos;
+//        }
+//        else if (ctrlMaskName == "BoundingboxLayer")
+//            // update the data how the structure has been moved by the player 
+//            StructureDataOld.Inst.structureCtrlPos += newPos - oldPos;
+//            // SD.structureCtrlTrans.position += newPos - oldPos;
     }
 
     // set the colliding object as the collidingObject, if it fulfills these conditions

@@ -79,6 +79,7 @@ public class Boundingbox : MonoBehaviour
         
         mid = (data[0] + data[1] +  data[2]) / 2f;
 
+        print(CellboxCollider.Inst);
         CellboxCollider.Inst.SetCollider(data);
         
         // set the position of the Hourglass to the middle of the cellbox

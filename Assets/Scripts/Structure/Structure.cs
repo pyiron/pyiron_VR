@@ -20,7 +20,7 @@ public class Structure : MonoBehaviour
     {
         print("TODO: the structure should send the new position to pyiron here");
         int id = atoms.IndexOf(movedAtom);
-        
+        string order = "structure[" + id + "] = " + movedAtom.transform.localPosition;
     }
 
     public void OnAtomDeleted(GameObject deletedAtom)
