@@ -22,8 +22,6 @@ public class Boundingbox : MonoBehaviour
             _borders[i].transform.parent = transform;
             _borders[i].transform.localScale = Vector3.one * ProgramSettings.cellboxWidth;
         }
-        
-        gameObject.SetActive(false);
     }
 
     private void Start()
