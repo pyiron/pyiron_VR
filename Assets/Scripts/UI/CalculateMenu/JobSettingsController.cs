@@ -53,7 +53,7 @@ public class JobSettingsController : MonoBehaviour
         jobNameField.text = jobData.job_name;
         
         // set calculation type (md, minimize or static)
-        SimulationModeManager.Inst.SetMode(jobData.calculation_type);
+        SimulationModeManager.Inst.SetMode(jobData.calc_mode);
         
         // load all currently available jobs from pyiron
 //        order = "job.list_potentials()";
@@ -84,15 +84,15 @@ public class JobSettingsController : MonoBehaviour
 
 public struct JobData
 {
-    public string calculation_type;
+    public string calc_mode;
     public string job_type;
     public string job_name;
     public string currentPotential;
     public string[] potentials;
 
-    public JobData(string calculation_type, string jobType, string jobName, string currentPotential, string[] potentials)
+    public JobData(string calc_mode, string jobType, string jobName, string currentPotential, string[] potentials)
     {
-        this.calculation_type = calculation_type;
+        this.calc_mode = calc_mode;
         job_type = jobType;
         job_name = jobName;
         this.currentPotential = currentPotential;

@@ -31,9 +31,9 @@ public class MinimizeMenuController : MenuController
         string receivedData = PythonExecuter.SendOrderSync(PythonScript.Executor, PythonCommandType.eval_l, order);
         MinimizeData minimizeData = JsonUtility.FromJson<MinimizeData>(receivedData);
 
-        if (minimizeData.force_conv != null)
+        if (minimizeData.f_eps != null)
         {
-            Utilities.SetDropdownValue(forceConvDropdown, minimizeData.force_conv);
+            Utilities.SetDropdownValue(forceConvDropdown, minimizeData.f_eps);
         }
 
         Utilities.SetDropdownValue(maxIterationsDropdown, minimizeData.max_iterations);
@@ -46,23 +46,23 @@ public class MinimizeMenuController : MenuController
 
     public MinimizeData GetData()
     {
-        string force_conv = Utilities.GetStringValue(forceConvDropdown);
+        string f_eps = Utilities.GetStringValue(forceConvDropdown);
         string max_iterations = Utilities.GetStringValue(maxIterationsDropdown);
         string n_print = Utilities.GetStringValue(nPrintDropdown);
-        return new MinimizeData(force_conv, max_iterations, n_print);
+        return new MinimizeData(f_eps, max_iterations, n_print);
     }
 }
 
 public struct MinimizeData
 {
-    public string force_conv;
+    public string f_eps;
     public string max_iterations;
     public string n_print;
 
-    public MinimizeData(string forceConv, string maxIterations, string nPrint)
+    public MinimizeData(string f_eps, string maxIterations, string nPrint)
     {
-        force_conv = forceConv;
-        max_iterations = maxIterations;
-        n_print = nPrint;
+        this.f_eps = f_eps;
+        this.max_iterations = maxIterations;
+        this.n_print = nPrint;
     }
 }

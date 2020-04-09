@@ -23,6 +23,9 @@ ExportedObj/
 *.svd
 *.pdb
 
+# Exclude rider idea data
+.idea
+
 # Unity3D generated meta files
 *.pidb.meta
 

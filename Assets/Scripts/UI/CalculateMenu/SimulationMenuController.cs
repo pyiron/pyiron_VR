@@ -16,6 +16,9 @@ public class SimulationMenuController : MenuController {
 
     public void OnModeStart()
     {
+        string order = "load_job(None)";
+        PythonExecuter.SendOrderSync(PythonScript.Executor, PythonCommandType.exec_l, order);
+
         JobSettingsController.Inst.OnModeStart();
 
         if (SimulationModeManager.CurrMode == SimModes.MD)
@@ -89,7 +92,7 @@ public class SimulationMenuController : MenuController {
         {
             MinimizeData data = MinimizeMenuController.Inst.GetData();
             order = "calculate_" + calculation + "(" +
-                    data.force_conv + ", " + 
+                    data.f_eps + ", " + 
                     data.max_iterations + ", " + 
                     data.n_print + ", " + 
                     jobData.job_type + ", " + 
