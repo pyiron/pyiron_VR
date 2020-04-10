@@ -77,27 +77,36 @@ public class StructureMenuController : MenuController
         LoadStructure(structure);
     }
 
+    private void UpdateStructure(string order)
+    {
+        string structure = PythonExecuter.SendOrderSync(PythonScript.StructureManager, PythonCommandType.eval_l, order);
+        LoadStructure(structure);
+    }
+
+    private string ToggleToPythonBool(Toggle tog)
+    {
+        if (tog.isOn)
+        {
+            return "True";
+        }
+
+        return "False";
+    }
+
     public void OnStructureChange()
     {
-        string isCubic = "False";
-        if (cubicToggle.isOn)
-        {
-            isCubic = "True";
-        }
-        
-        string isOrthorombic = "False";
-        if (orthorombicToggle.isOn)
-        {
-            isOrthorombic = "True";
-        }
-        
         string repeat = repeatDropdown.options[repeatDropdown.value].text;
 
         string element = "'" + elementDropdown.options[elementDropdown.value].text + "'";
 
-        string order = "create(" + element + ", " + repeat + ", " + isCubic + ", " + isOrthorombic + ")";
-        string structure = PythonExecuter.SendOrderSync(PythonScript.StructureManager, PythonCommandType.eval_l, order);
-        LoadStructure(structure);
+        UpdateStructure("create(" + element + ", " + repeat + ", " + ToggleToPythonBool(cubicToggle) + ", " + 
+                        ToggleToPythonBool(orthorombicToggle) + ")");
+    }
+
+    public void OnRepeatChange()
+    {
+        string repeat = repeatDropdown.options[repeatDropdown.value].text;
+        UpdateStructure("structure.repeat([" + repeat + ", " + repeat + ", " + repeat + "])");
     }
 }
 

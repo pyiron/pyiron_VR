@@ -30,7 +30,7 @@ public class SimulationMenuController : MenuController {
             MinimizeMenuController.Inst.OnModeStart();
         }
 
-        ActionPanelController.Inst.UpdateButtons();
+        ActionPanelController.Inst.OnModeStart();
 
         AnimationMenuController.Inst.SetState(AnimationController.Inst.HasAnimationLoaded());
     }

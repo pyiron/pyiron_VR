@@ -6,6 +6,8 @@ public class Structure : MonoBehaviour
 {
     public static Structure Inst;
 
+    public static bool modifiedPositions;
+
     public GameObject atomPrefab;
     
     private List<GameObject> atoms = new List<GameObject>();
@@ -16,11 +18,19 @@ public class Structure : MonoBehaviour
         Inst = this;
     }
 
+    private string Vec3ToArrayString(Vector3 v3)
+    {
+        return v3.ToString().Replace('(', '[').Replace(')', ']');
+    }
+
     public void OnAtomPositionChanged(GameObject movedAtom)
     {
-        print("TODO: the structure should send the new position to pyiron here");
         int id = atoms.IndexOf(movedAtom);
-        string order = "structure[" + id + "] = " + movedAtom.transform.localPosition;
+        string order = "structure.positions[" + id + "] = " + Vec3ToArrayString(movedAtom.transform.localPosition);
+        //string order = "print(Structure.Structure.structure.positions[" + id + "])";
+        PythonExecuter.SendOrderSync(PythonScript.StructureManager, PythonCommandType.exec_l, order);
+        //PythonExecuter.SendOrderSync(PythonScript.None, PythonCommandType.exec_l, order);
+        modifiedPositions = true;
     }
 
     public void OnAtomDeleted(GameObject deletedAtom)

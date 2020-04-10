@@ -17,7 +17,7 @@ public class ActionPanelController : MonoBehaviour
         Inst = this;
     }
 
-    public void UpdateButtons()
+    public void OnModeStart()
     {
         CalculateButton.gameObject.SetActive(!SimulationMenuController.jobLoaded);
         DeleteButton.gameObject.SetActive(SimulationMenuController.jobLoaded);
@@ -27,7 +27,7 @@ public class ActionPanelController : MonoBehaviour
     {
         SimulationMenuController.jobLoaded = true;
         SimulationMenuController.Inst.CalculateNewJob();
-        UpdateButtons();
+        OnModeStart();
     }
     
     public void OnDeleteBtnDown()
@@ -40,7 +40,7 @@ public class ActionPanelController : MonoBehaviour
         // TODO: Reactivate when it is possible to create a new job (including the base)
         string order = "project.remove_job(" + JobSettingsController.Inst.GetData().job_name + ")";
         PythonExecuter.SendOrderSync(PythonScript.UnityManager, PythonCommandType.exec_l, order);
-        UpdateButtons();
+        OnModeStart();
         //ModeController.inst.SetMode(Modes.Animate);
         //AnimationMenuController.Inst.SetState(true);
     }

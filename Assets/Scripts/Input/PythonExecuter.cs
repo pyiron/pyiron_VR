@@ -272,7 +272,7 @@ public class PythonExecuter : MonoBehaviour {
             }
             else if (script == PythonScript.UnityManager)
             {
-                fullOrder = "unity_manager." + order;
+                fullOrder = "unityManager." + order;
             }
             else if (script == PythonScript.Executor)
             {
@@ -280,7 +280,7 @@ public class PythonExecuter : MonoBehaviour {
             }
             else if (script == PythonScript.StructureManager)
             {
-                fullOrder = "structureManager." + order;
+                fullOrder = "structure." + order;
             }
         }
         else

@@ -147,7 +147,7 @@ public class ExplorerMenuController : MenuController {
             else
             {
                 PythonExecuter.SendOrderSync(PythonScript.UnityManager,
-                    PythonCommandType.exec_l, "project = unity_manager.project['" + jobName + "']", handleInput: false);
+                    PythonCommandType.exec_l, "project = unityManager.project['" + jobName + "']", handleInput: false);
             }
         }
         

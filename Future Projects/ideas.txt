@@ -133,8 +133,8 @@ Todo:
   9. 	DONE Animation anzeigen
   10.	DONE AnimationController aufräumen
 ! 11. 	TODO Funktion zurückbringen:
-    a 	Atom verschieben
-    b 	Atom löschen
+    a 	DONE Atom verschieben
+    b 	TODO Atom löschen
 ! 12. 	TODO Save System implementieren
   13. 	DONE Send and handle error Vasp not implemented
   14. 	DONE Solve boundary box edge bug
@@ -147,3 +147,14 @@ Todo:
 ! 21. 	TODO just allow to move single atoms in Structure Creator
   22. 	DONE show AnimationMenu when it should be active 
 ! 23. 	TODO Remove old code that has been replaced
+
+10.4.2020:
+Leave Structure Creator for later
+Remember if a single atom has been moved
+	if yes: delete the old job when going into Calculate mode
+	if no: load the old job when going into Calculate mode
+
+To see if 
+a single has been moved: modifiedPositions=true
+a new job has been loaded in explorer: modifiedPositions=jobNameEndsWithShifted()
+(clicked reset structure in Structure creator: modifiedPositions = false)
