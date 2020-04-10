@@ -28,7 +28,7 @@ public class Structure : MonoBehaviour
         int id = atoms.IndexOf(movedAtom);
         string order = "structure.positions[" + id + "] = " + Vec3ToArrayString(movedAtom.transform.localPosition);
         //string order = "print(Structure.Structure.structure.positions[" + id + "])";
-        PythonExecuter.SendOrderSync(PythonScript.StructureManager, PythonCommandType.exec_l, order);
+        PythonExecuter.SendOrderSync(PythonScript.structure, PythonCommandType.exec_l, order);
         //PythonExecuter.SendOrderSync(PythonScript.None, PythonCommandType.exec_l, order);
         modifiedPositions = true;
     }

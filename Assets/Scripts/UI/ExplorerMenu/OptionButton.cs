@@ -32,8 +32,8 @@ public class OptionButton : MonoBehaviour, IButton
 
 //        PythonExecuter.SendOrderAsync(PythonScript.UnityManager, PythonCommandType.eval_l, 
 //            "send_job()");
-        PythonExecuter.SendOrderAsync(PythonScript.Executor, PythonCommandType.eval_l, 
-            "load_job(unityManager.project['" + jobName + "'])");
+        PythonExecuter.SendOrderAsync(PythonScript.executor, PythonCommandType.eval_l, 
+            "load_job(" + PythonScript.unityManager + ".project['" + jobName + "'])");
 
         // remember the id of the request to wait for the right response id
         int taskNumIn = TCPClient.taskNumIn;

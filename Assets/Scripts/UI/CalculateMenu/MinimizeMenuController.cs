@@ -28,7 +28,7 @@ public class MinimizeMenuController : MenuController
     public void OnModeStart()
     {
         string order = "format_minimize_settings()";
-        string receivedData = PythonExecuter.SendOrderSync(PythonScript.Executor, PythonCommandType.eval_l, order);
+        string receivedData = PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.eval_l, order);
         MinimizeData minimizeData = JsonUtility.FromJson<MinimizeData>(receivedData);
 
         if (minimizeData.f_eps != null)

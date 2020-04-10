@@ -141,24 +141,24 @@ public class ExplorerMenuController : MenuController {
         {
             if (isAbsPath)
             {
-                PythonExecuter.SendOrderSync(PythonScript.UnityManager,
+                PythonExecuter.SendOrderSync(PythonScript.unityManager,
                     PythonCommandType.exec_l, "project = Project('" + jobName + "')", handleInput: false);
             }
             else
             {
-                PythonExecuter.SendOrderSync(PythonScript.UnityManager,
-                    PythonCommandType.exec_l, "project = unityManager.project['" + jobName + "']", handleInput: false);
+                PythonExecuter.SendOrderSync(PythonScript.unityManager,
+                    PythonCommandType.exec_l, "project = " + PythonScript.unityManager + ".project['" + jobName + "']", handleInput: false);
             }
         }
         
-        currPath = PythonExecuter.SendOrderSync(PythonScript.UnityManager,
+        currPath = PythonExecuter.SendOrderSync(PythonScript.unityManager,
             PythonCommandType.eval_l, "project.path[:-1]");
         PathHasChanged();
             
         // get the jobs and groups 
         FolderData folderData = 
             JsonUtility.FromJson<FolderData>(
-                PythonExecuter.SendOrderSync(PythonScript.UnityManager, PythonCommandType.eval_l,
+                PythonExecuter.SendOrderSync(PythonScript.unityManager, PythonCommandType.eval_l,
                     "project.list_all()"));
 
         ShowNewOptions(folderData);

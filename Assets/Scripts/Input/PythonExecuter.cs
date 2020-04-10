@@ -270,17 +270,9 @@ public class PythonExecuter : MonoBehaviour {
             {
                 fullOrder = order;
             }
-            else if (script == PythonScript.UnityManager)
+            else
             {
-                fullOrder = "unityManager." + order;
-            }
-            else if (script == PythonScript.Executor)
-            {
-                fullOrder = "executor." + order;
-            }
-            else if (script == PythonScript.StructureManager)
-            {
-                fullOrder = "structure." + order;
+                fullOrder = script + "." + order;
             }
         }
         else
@@ -308,17 +300,9 @@ public class PythonExecuter : MonoBehaviour {
             {
                 fullOrder = order;
             }
-            else if (script == PythonScript.UnityManager)
+            else
             {
-                fullOrder = "unity_manager." + order;
-            }
-            else if (script == PythonScript.Executor)
-            {
-                fullOrder = "executor." + order;
-            }
-            else if (script == PythonScript.StructureManager)
-            {
-                fullOrder = "structureManager." + order;
+                fullOrder = script + "." + order;
             }
         }
         else
@@ -341,7 +325,7 @@ public class PythonExecuter : MonoBehaviour {
 
 public enum PythonScript
 {
-    None, UnityManager, Executor, StructureManager
+    None, unityManager, executor, structure
 }
 
 public enum PythonCommandType

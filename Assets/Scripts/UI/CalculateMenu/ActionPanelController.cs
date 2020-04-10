@@ -39,7 +39,7 @@ public class ActionPanelController : MonoBehaviour
         
         // TODO: Reactivate when it is possible to create a new job (including the base)
         string order = "project.remove_job(" + JobSettingsController.Inst.GetData().job_name + ")";
-        PythonExecuter.SendOrderSync(PythonScript.UnityManager, PythonCommandType.exec_l, order);
+        PythonExecuter.SendOrderSync(PythonScript.unityManager, PythonCommandType.exec_l, order);
         OnModeStart();
         //ModeController.inst.SetMode(Modes.Animate);
         //AnimationMenuController.Inst.SetState(true);

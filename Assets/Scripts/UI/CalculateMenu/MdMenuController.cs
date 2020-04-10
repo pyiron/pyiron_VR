@@ -24,7 +24,7 @@ public class MdMenuController : MenuController {
     public void OnModeStart()
     {
         string order = "format_md_settings()";
-        string receivedData = PythonExecuter.SendOrderSync(PythonScript.Executor, PythonCommandType.eval_l, order);
+        string receivedData = PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.eval_l, order);
         MdData mdData = JsonUtility.FromJson<MdData>(receivedData);
 
         Thermometer.temperature = mdData.temperature;

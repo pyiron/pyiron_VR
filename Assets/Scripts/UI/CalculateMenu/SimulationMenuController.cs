@@ -17,7 +17,7 @@ public class SimulationMenuController : MenuController {
     public void OnModeStart()
     {
         string order = "load_job(None)";
-        PythonExecuter.SendOrderSync(PythonScript.Executor, PythonCommandType.exec_l, order);
+        PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.exec_l, order);
 
         JobSettingsController.Inst.OnModeStart();
 
@@ -101,7 +101,7 @@ public class SimulationMenuController : MenuController {
         }
 
         // load the new structure in another coroutine
-        StartCoroutine(HandleLammpsLoad(order, PythonScript.Executor));
+        StartCoroutine(HandleLammpsLoad(order, PythonScript.executor));
         
         AnimationController.waitForLoadedStruc = true;
         Deactivate();

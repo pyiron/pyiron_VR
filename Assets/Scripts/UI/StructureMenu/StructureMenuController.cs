@@ -71,7 +71,7 @@ public class StructureMenuController : MenuController
     {
         // Load the data
         string order = "get_data()";
-        string structure = PythonExecuter.SendOrderSync(PythonScript.StructureManager, PythonCommandType.eval_l, order);
+        string structure = PythonExecuter.SendOrderSync(PythonScript.structure, PythonCommandType.eval_l, order);
 
         // visualize the structure
         LoadStructure(structure);
@@ -79,7 +79,7 @@ public class StructureMenuController : MenuController
 
     private void UpdateStructure(string order)
     {
-        string structure = PythonExecuter.SendOrderSync(PythonScript.StructureManager, PythonCommandType.eval_l, order);
+        string structure = PythonExecuter.SendOrderSync(PythonScript.structure, PythonCommandType.eval_l, order);
         LoadStructure(structure);
     }
 

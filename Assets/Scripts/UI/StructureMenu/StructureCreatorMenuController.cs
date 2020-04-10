@@ -69,7 +69,7 @@ public class StructureCreatorMenuController : MenuController
         
         // create the new structure
         ImportStructure.newImport = true;
-        PythonExecuter.SendOrderSync(PythonScript.Executor, PythonCommandType.eval, 
+        PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.eval, 
             "self.create_new_struc(" + AnimationController.frame + ", '" + elm + "', True)");
         
         
@@ -101,7 +101,7 @@ public class StructureCreatorMenuController : MenuController
                 Destroy(go);
             }
             ImportStructure.newImport = true;
-            PythonExecuter.SendOrderSync(PythonScript.Executor, PythonCommandType.eval, 
+            PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.eval, 
                 "self.create_new_struc('" + elementData + "', True)");
         }
         else if (btn.name == "Add")

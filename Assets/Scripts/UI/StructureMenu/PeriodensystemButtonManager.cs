@@ -96,7 +96,7 @@ public class PeriodensystemButtonManager : MonoBehaviour, IBeginDragHandler, IDr
             ImportStructure.newImport = true;
             SimulationMenuController.jobLoaded = true;
             
-            PythonExecuter.SendOrderSync(PythonScript.Executor, PythonCommandType.eval, 
+            PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.eval, 
             	"self.add_new_atom('" + gameObject.name.Remove(0, 7) + "')");
 		}
 		
