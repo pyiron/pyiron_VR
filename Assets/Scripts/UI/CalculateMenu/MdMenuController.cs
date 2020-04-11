@@ -21,18 +21,12 @@ public class MdMenuController : MenuController {
         Inst = this;
     }
 
-    public void OnModeStart()
+    public void OnModeStart(JobData jobData)
     {
-        string order = "format_md_settings()";
-        string receivedData = PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.eval_l, order);
-        JobData mdData = JsonUtility.FromJson<JobData>(receivedData);
-
-        Thermometer.temperature = mdData.temperature;
-        Thermometer.Inst.UpdateTemperature(mdData.temperature);
-
-        Utilities.SetDropdownValue(nIonicStepsDropdown, mdData.n_ionic_steps);
-        
-        Utilities.SetDropdownValue(nPrintDropdown, mdData.n_print);
+        Thermometer.temperature = jobData.temperature;
+        Thermometer.Inst.UpdateTemperature(jobData.temperature);
+        Utilities.SetDropdownValue(nIonicStepsDropdown, jobData.n_ionic_steps);
+        Utilities.SetDropdownValue(nPrintDropdown, jobData.n_print);
     }
 
     public JobData GetData()

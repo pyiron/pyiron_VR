@@ -21,16 +21,13 @@ public class SimulationMenuController : MenuController
 
     private void UpdatePanels()
     {
-        JobSettingsController.Inst.OnModeStart();
-
-        if (SimulationModeManager.CurrMode == SimModes.MD)
-        {
-            MdMenuController.Inst.OnModeStart();
-        }
-        else if (SimulationModeManager.CurrMode == SimModes.MINIMIZE)
-        {
-            MinimizeMenuController.Inst.OnModeStart();
-        }
+        string order = "format_job_settings()";
+        string data = PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.eval_l, order);
+        JobData jobData = JsonUtility.FromJson<JobData>(data);
+        
+        JobSettingsController.Inst.OnModeStart(jobData);
+        MdMenuController.Inst.OnModeStart(jobData);
+        MinimizeMenuController.Inst.OnModeStart(jobData);
 
         ActionPanelController.Inst.OnModeStart();
 

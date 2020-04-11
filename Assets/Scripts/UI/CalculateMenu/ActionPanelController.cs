@@ -39,14 +39,7 @@ public class ActionPanelController : MonoBehaviour
     {
         SimulationMenuController.jobLoaded = false;
         
-        
-        // TODO: Remember the current frame, stop the animation and delete the position data (I think it is not needed anymore)
-        
-        // TODO: Reactivate when it is possible to create a new job (including the base)
-        //string order = "project.remove_job(" + JobSettingsController.Inst.GetData().job_name + ")";
-        //PythonExecuter.SendOrderSync(PythonScript.unityManager, PythonCommandType.exec_l, order);
         UpdateButtons(false);
-        //ModeController.inst.SetMode(Modes.Animate);
         
         AnimationController.Inst.DeleteAnimation();
 

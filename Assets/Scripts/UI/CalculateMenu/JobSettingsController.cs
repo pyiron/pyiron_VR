@@ -18,12 +18,8 @@ public class JobSettingsController : MonoBehaviour
         Inst = this;
     }
     
-    public void OnModeStart()
+    public void OnModeStart(JobData jobData)
     {
-        string order = "format_job_settings()";
-        string data = PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.eval_l, order);
-        JobData jobData = JsonUtility.FromJson<JobData>(data);
-        
         // update the type dropdown (lammps or vasp)
         for (int id = 0; id < jobTypeDropdown.options.Count; id++)
         {

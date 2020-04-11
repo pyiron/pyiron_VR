@@ -158,6 +158,8 @@ Todo:
 ! 31. 	TODO Optimize calls to python
 ! 32. 	TODO Always send all settings in one file to Unity
 ! 33.	TODO Send all settings after resetting/deleting the structure
+! 34.	TODO Dont crash if job has no output
+! 35.	TODO Delete job if it hasnt run yet
 
 10.4.2020:
 Leave Structure Creator for later

@@ -25,22 +25,18 @@ public class MinimizeMenuController : MenuController
         _dropdowns = GetComponentsInChildren<Dropdown>();
     }
     
-    public void OnModeStart()
+    public void OnModeStart(JobData jobData)
     {
-        string order = "format_minimize_settings()";
-        string receivedData = PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.eval_l, order);
-        JobData minimizeData = JsonUtility.FromJson<JobData>(receivedData);
-
-        if (minimizeData.f_eps != null)
+        if (jobData.f_eps != null)
         {
-            Utilities.SetDropdownValue(forceConvDropdown, minimizeData.f_eps);
+            Utilities.SetDropdownValue(forceConvDropdown, jobData.f_eps);
         }
 
-        Utilities.SetDropdownValue(maxIterationsDropdown, minimizeData.max_iterations);
+        Utilities.SetDropdownValue(maxIterationsDropdown, jobData.max_iterations);
 
-        if (minimizeData.n_print != null)
+        if (jobData.n_print != null)
         {
-            Utilities.SetDropdownValue(nPrintDropdown, minimizeData.n_print);
+            Utilities.SetDropdownValue(nPrintDropdown, jobData.n_print);
         }
     }
 
