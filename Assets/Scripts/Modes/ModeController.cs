@@ -121,6 +121,10 @@ public class ModeController : MonoBehaviour
     {
         NetworkMenuController.Inst.SetState(currentMode.mode == Modes.Network);
         ExplorerMenuController.Inst.SetState(currentMode.mode == Modes.Explorer);
+        if (currentMode.mode == Modes.Explorer)
+        {
+            ExplorerMenuController.Inst.OnModeStart();
+        }
         MdMenuController.Inst.SetState(currentMode.showTemp &&
                                                 SimulationModeManager.CurrMode==SimModes.MD);
         //ModeMenuController.inst.SetState(currentMode.mode == Modes.Menu);

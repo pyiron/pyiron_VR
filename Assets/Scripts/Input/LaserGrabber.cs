@@ -599,7 +599,6 @@ public class LaserGrabber : MonoBehaviour
             // spawn the trashcan
             TrashCan.inst.ActivateCan();
 
-            SimulationMenuController.jobLoaded = true;
             // deactivate the animation
             AnimationController.RunAnim(false);
         }

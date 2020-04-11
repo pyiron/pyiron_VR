@@ -58,16 +58,8 @@ public class StructureMenuController : MenuController
         
         // send the new structureName to the CalculationMenu
         SimulationMenuController.jobName = struc.formula;
-
-//        repeatDropdown.value = 0;
-            
-        // set cubic and orthorhombic to default value? Or maybe load it somehow
-            
-            
-        // feed the data into the ImportStructure script to create the new structure or update it
-        Structure.Inst.UpdateStructure(struc.positions, struc.elements);
-        Boundingbox.Inst.UpdateBoundingBox(struc.cell);
-        HourglassActivator.Inst.transform.localPosition = Boundingbox.Inst.mid;
+        
+        StructureLoader.LoadStaticStructure(struc);
     }
     
     public void OnModeStart()
@@ -125,7 +117,7 @@ public class StructureMenuController : MenuController
 }
 
 [Serializable]
-class StructureData
+public class StructureData
 {
     public string[] elements;
 

@@ -8,8 +8,6 @@ public class SimulationMenuController : MenuController
 {
     internal static SimulationMenuController Inst;
 
-    public static bool jobLoaded = false;
-
     public static string jobName;
 
     public static readonly string SHIFTED = "_shifted";
@@ -69,6 +67,7 @@ public class SimulationMenuController : MenuController
             }
         }
     }
+    
     /*public void SetNIonicSteps(Dropdown dropdown)
     {
         string n_ionic_steps = dropdown.options[dropdown.value].text;

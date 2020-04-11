@@ -30,14 +30,11 @@ public class ActionPanelController : MonoBehaviour
 
     public void OnCalculateBtnDown()
     {
-        SimulationMenuController.jobLoaded = true;
         SimulationMenuController.Inst.CalculateNewJob();
     }
     
     public void OnDeleteBtnDown(bool saveStructure=true)
     {
-        SimulationMenuController.jobLoaded = false;
-        
         UpdateButtons(false);
 
         if (saveStructure)

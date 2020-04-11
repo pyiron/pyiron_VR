@@ -23,6 +23,12 @@ public class ExplorerMenuController : MenuController {
         ClearOptions();
     }
 
+    public void OnModeStart()
+    {
+        // reload the jobs
+        LoadPathContent();
+    }
+
     internal void ClearOptions()
     {
         options.Clear();

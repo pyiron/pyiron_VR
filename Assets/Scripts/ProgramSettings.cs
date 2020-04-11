@@ -64,14 +64,11 @@ public class ProgramSettings : MonoBehaviour
         return (int)Mathf.Log(layer.value, 2);
     }
 
+    // might not be needed anymore
     public void ResetScene()
     {
-        SimulationMenuController.jobLoaded = false;
         Thermometer.temperature = -1;
         Thermometer.Inst.SetState(false); 
-        StructureDataOld.atomCtrlPos = new List<Vector3>(StructureDataOld.atomCtrlPos.Count);  // seems not to work
-        StructureDataOld.Inst.structureCtrlPos = Vector3.zero;  // seems not to work
-        ImportStructure.newImport = true;
         AnimationController.frame = 0;
     }
 }

@@ -25,5 +25,15 @@ public class StructureLoader
         Structure.Inst.UpdateStructure(allPoses[0], structureData.elements);
         Boundingbox.Inst.UpdateBoundingBox(structureData.cell);
         AnimationController.Inst.SetNewAnimation(allPoses);
+        HourglassActivator.Inst.transform.localPosition = Boundingbox.Inst.mid;
+    }
+
+    public static void LoadStaticStructure(StructureData struc)
+    {
+        
+        // feed the data into the ImportStructure script to create the new structure or update it
+        Structure.Inst.UpdateStructure(struc.positions, struc.elements);
+        Boundingbox.Inst.UpdateBoundingBox(struc.cell);
+        HourglassActivator.Inst.transform.localPosition = Boundingbox.Inst.mid;
     }
 }

@@ -125,11 +125,6 @@ public class AnimationController : MonoBehaviour
     
     public static void RunAnim(bool shouldRun = false)
     {
-        // the simulation should be reloaded
-        if (shouldRun)
-        {
-            SimulationMenuController.jobLoaded = true;
-        }
         run_anim = shouldRun;
         // update the symbols on all active controllers
         foreach (ControllerSymbols controller in LaserGrabber.controllerSymbols)

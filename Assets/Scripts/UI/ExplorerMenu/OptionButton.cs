@@ -8,20 +8,10 @@ using Button = UnityEngine.UI.Button;
 public class OptionButton : MonoBehaviour, IButton
 {
     public bool isJob;
-
-    
     
     public static IEnumerator HandleLoad(string jobName)
     {
         // send the order to load the structure
-        //PythonExecuter.SendOrderAsync(PythonScript.ProjectExplorer, PythonCommandType.pr_input, order);
-
-//        string order = "project = unity_manager.project['" + jobName + "']";
-//        PythonExecuter.SendOrderSync(PythonScript.UnityManager,
-//            PythonCommandType.exec_l, order, handleInput: false);
-
-//        PythonExecuter.SendOrderAsync(PythonScript.UnityManager, PythonCommandType.eval_l, 
-//            "send_job()");
         PythonExecuter.SendOrderAsync(PythonScript.executor, PythonCommandType.eval_l, 
             "load_job(" + PythonScript.unityManager + ".project['" + jobName + "'])");
         
@@ -43,25 +33,9 @@ public class OptionButton : MonoBehaviour, IButton
         // get the response
         string result = TCPClient.returnedMsg;
         
-        // handle the response
-//        PythonExecuter.HandlePythonMsg(result);
-
-//        print(result);
-        // StructureData structureData = JsonUtility.FromJson<StructureData>(result);
-        // Vector3[][] allPoses = GetFramePositions(structureData.positions, structureData.size,
-        //     structureData.frames);
-        // Structure.Inst.UpdateStructure(allPoses[0], structureData.elements);
-        // Boundingbox.Inst.UpdateBoundingBox(structureData.cell);
-        // AnimationController.Inst.SetNewAnimation(allPoses);
-        
         StructureLoader.LoadAnimation(result);
         
         ExplorerMenuController.Inst.Activate();
-        //ExplorerMenuController.inst.DeleteOptions();
-        //ExplorerMenuController.inst.ClearOptions();
-        //SimulationMenuController.jobLoaded = true;
-        //ModeController.inst.SetMode(Modes.Calculate);
-        //AnimationMenuController.Inst.SetState(true);
     }
 
     public void WhenClickDown()
@@ -71,10 +45,6 @@ public class OptionButton : MonoBehaviour, IButton
         {
             StartCoroutine(HandleLoad(job_name));
             ExplorerMenuController.Inst.Deactivate();
-//            foreach (Button btn in transform.parent.GetComponentsInChildren<Button>())
-//            {
-//                btn.interactable = false;
-//            }
         }
         else
         {
