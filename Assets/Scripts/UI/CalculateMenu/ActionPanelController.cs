@@ -22,7 +22,7 @@ public class ActionPanelController : MonoBehaviour
         UpdateButtons(SimulationMenuController.Inst.CheckJobExists());
     }
 
-    private void UpdateButtons(bool jobExists)
+    public void UpdateButtons(bool jobExists)
     {
         CalculateButton.gameObject.SetActive(!jobExists);
         DeleteButton.gameObject.SetActive(jobExists);
@@ -32,7 +32,6 @@ public class ActionPanelController : MonoBehaviour
     {
         SimulationMenuController.jobLoaded = true;
         SimulationMenuController.Inst.CalculateNewJob();
-        UpdateButtons(true);
     }
     
     public void OnDeleteBtnDown()
@@ -44,10 +43,5 @@ public class ActionPanelController : MonoBehaviour
         AnimationController.Inst.DeleteAnimation();
 
         ExplorerMenuController.Inst.DeleteJob(SimulationMenuController.jobName);
-    }
-
-    public void OnRefreshDown()
-    {
-        // dont know what to do here
     }
 }

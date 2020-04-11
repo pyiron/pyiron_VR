@@ -112,6 +112,8 @@ public class SimulationMenuController : MenuController
 
         // handle the response
         Activate();
+        
+        ActionPanelController.Inst.UpdateButtons(true);
 
         StructureLoader.LoadAnimation(result);
 
