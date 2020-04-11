@@ -72,12 +72,20 @@ public class StructureMenuController : MenuController
     
     public void OnModeStart()
     {
-        // Load the data
-        string order = "get_data()";
-        string structure = PythonExecuter.SendOrderSync(PythonScript.structure, PythonCommandType.eval_l, order);
-
-        // visualize the structure
-        LoadStructure(structure);
+        // delete the animation if it still exists
+        if (AnimationController.Inst.HasAnimationLoaded())
+        {
+            AnimationController.Inst.DeleteAnimation();
+        }
+        else
+        {
+            // Load the data
+            string order = "get_data()";
+            string structure = PythonExecuter.SendOrderSync(PythonScript.structure, PythonCommandType.eval_l, order);
+            
+            // visualize the structure
+            LoadStructure(structure);
+        }
     }
 
     private void UpdateStructure(string order)

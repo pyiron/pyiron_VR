@@ -125,17 +125,17 @@ public class ModeController : MonoBehaviour
                                                 SimulationModeManager.CurrMode==SimModes.MD);
         //ModeMenuController.inst.SetState(currentMode.mode == Modes.Menu);
         //ModeMenuController.inst.OnModeChange();
-        if (currentMode.mode != Modes.Calculate)
-        {
-            AnimationMenuController.Inst.SetState(false);
-        }
-        else
+        if (currentMode.mode == Modes.Calculate)
         {
             SimulationMenuController.Inst.OnModeStart();
         }
 
-        AnimationController.Inst.enabled =
-            currentMode.mode == Modes.Explorer || currentMode.mode == Modes.Calculate;
+        bool modeCanHaveAnimation = currentMode.mode == Modes.Explorer || currentMode.mode == Modes.Calculate;
+        AnimationController.Inst.enabled = modeCanHaveAnimation;
+        if (!modeCanHaveAnimation)
+        {        
+            AnimationMenuController.Inst.SetState(false);
+        }
 
         //                                      currentMode.mode == Modes.Minimize || currentMode.mode == Modes.Animate);
         SimulationMenuController.Inst.SetState(currentMode.mode == Modes.Calculate);

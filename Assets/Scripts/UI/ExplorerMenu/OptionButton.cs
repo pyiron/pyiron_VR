@@ -30,8 +30,7 @@ public class OptionButton : MonoBehaviour, IButton
         SimulationMenuController.jobName = jobName;
         if (SimulationMenuController.Inst.IsStructureShifted())
         {
-            SimulationMenuController.jobName = SimulationMenuController.jobName.Substring(0, 
-                jobName.Length - SimulationMenuController.SHIFTED.Length);
+            SimulationMenuController.jobName = SimulationMenuController.jobName;
         }
 
         // remember the id of the request to wait for the right response id
@@ -63,7 +62,6 @@ public class OptionButton : MonoBehaviour, IButton
         //SimulationMenuController.jobLoaded = true;
         //ModeController.inst.SetMode(Modes.Calculate);
         //AnimationMenuController.Inst.SetState(true);
-        // todo: handle the result here, instead of calling PythonExecuter.HandlePythonMsg
     }
 
     public void WhenClickDown()

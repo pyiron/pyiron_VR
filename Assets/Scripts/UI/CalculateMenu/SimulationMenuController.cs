@@ -4,25 +4,23 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SimulationMenuController : MenuController {
+public class SimulationMenuController : MenuController
+{
     internal static SimulationMenuController Inst;
-    
+
     public static bool jobLoaded = false;
 
     public static string jobName;
 
-    public static readonly string SHIFTED = "_shifted"; 
+    public static readonly string SHIFTED = "_shifted";
 
     private void Awake()
     {
         Inst = this;
     }
 
-    public void OnModeStart()
+    private void UpdatePanels()
     {
-        string order = "load_job(None)";
-        PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.exec_l, order);
-
         JobSettingsController.Inst.OnModeStart();
 
         if (SimulationModeManager.CurrMode == SimModes.MD)
@@ -37,6 +35,48 @@ public class SimulationMenuController : MenuController {
         ActionPanelController.Inst.OnModeStart();
 
         AnimationMenuController.Inst.SetState(AnimationController.Inst.HasAnimationLoaded());
+    }
+
+    public void OnModeStart()
+    {
+        // check if the job has been loaded already
+        if (AnimationController.Inst.HasAnimationLoaded())
+        {
+            UpdatePanels();
+        }
+        else
+        {
+            if (CheckJobExists())
+            {
+                // load the structure 
+                
+                
+                if (IsStructureShifted())
+                {
+                    PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.exec_l, 
+                        "job = " + PythonScript.unityManager + "["+ jobName + "]");
+                    
+                    // Load all information except for the structure data, then reset the job
+                    UpdatePanels();
+                    ActionPanelController.Inst.OnDeleteBtnDown();
+                }
+                else
+                {
+                    string job = PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.eval_l, 
+                        "load_job(" + PythonScript.unityManager + "["+ jobName + "])");
+                    StructureLoader.LoadAnimation(job);
+                    // Load the information of the old job. The structure should have been set in Explorer already
+                    // PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.exec_l, order);
+                    UpdatePanels();
+                }
+            }
+            else
+            {
+                // create a new job, then load the information from it
+                PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.exec_l, "load_job(None)");
+                UpdatePanels();
+            }
+        }
     }
     /*public void SetNIonicSteps(Dropdown dropdown)
     {
@@ -56,33 +96,33 @@ public class SimulationMenuController : MenuController {
         FolderData folderData = ExplorerMenuController.Inst.LoadFolderData();
         return folderData.nodes.Contains(jobName);
     }
-    
+
     // TODO: Deactivate and activate UI Elements
     private IEnumerator HandleLammpsLoad(string order, PythonScript receivingScript)
     {
         // send the order to execute lammps
         //PythonExecutor.SendOrderAsync(PythonScript.Executor, PythonCommandType.eval, order);
         PythonExecuter.SendOrderAsync(receivingScript, PythonCommandType.eval_l, order);
-        
+
         // remember the id of the request to wait for the right response id
         int taskNumIn = TCPClient.taskNumIn;
-        
+
         // wait until the response to the send message has arrived
         yield return new WaitUntil(() => taskNumIn == TCPClient.taskNumOut);
-        
+
         // get the response
         string result = TCPClient.returnedMsg;
-        
+
         // handle the response
         Activate();
-        
+
         StructureLoader.LoadAnimation(result);
-        
+
         // AnimationController.frame = 0;
         // PythonExecuter.HandlePythonMsg(result);
-        AnimationMenuController.Inst.SetState(true);
+        // AnimationMenuController.Inst.SetState(true);
         //ModeController.inst.SetMode(Modes.Animate);
-    } 
+    }
 
     public void CalculateNewJob()
     {
@@ -97,31 +137,30 @@ public class SimulationMenuController : MenuController {
         {
             MdData data = MdMenuController.Inst.GetData();
             order = "calculate_" + calculation + "(" +
-                               data.temperature + ", " + 
-                               data.n_ionic_steps + ", " + 
-                               data.n_print + ", " + 
-                               jobData.job_type + ", " + 
-                               jobData.job_name + ", " + 
-                               jobData.currentPotential + ")";
+                    data.temperature + ", " +
+                    data.n_ionic_steps + ", " +
+                    data.n_print + ", " +
+                    jobData.job_type + ", " +
+                    jobData.job_name + ", " +
+                    jobData.currentPotential + ")";
         }
         else
         {
             MinimizeData data = MinimizeMenuController.Inst.GetData();
             order = "calculate_" + calculation + "(" +
-                    data.f_eps + ", " + 
-                    data.max_iterations + ", " + 
-                    data.n_print + ", " + 
-                    jobData.job_type + ", " + 
-                    jobData.job_name + ", " + 
+                    data.f_eps + ", " +
+                    data.max_iterations + ", " +
+                    data.n_print + ", " +
+                    jobData.job_type + ", " +
+                    jobData.job_name + ", " +
                     jobData.currentPotential + ")";
         }
-        
-        AnimationController.waitForLoadedStruc = true;
+
         Deactivate();
 
         // load the new structure in another coroutine
         StartCoroutine(HandleLammpsLoad(order, PythonScript.executor));
-        
+
         print("Wait begun");
         //lammpsIsMd = ModeData.currentMode.showTemp;
     }

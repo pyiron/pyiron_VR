@@ -171,7 +171,7 @@ public class ExplorerMenuController : MenuController {
     public void DeleteJob(string jobName)
     {
         PythonExecuter.SendOrderSync(PythonScript.executor,
-            PythonCommandType.exec_l, "reset_job(" + AnimationController.frame + ", '" + SimulationMenuController.jobName + "')");
+            PythonCommandType.exec_l, "reset_job('" + SimulationMenuController.jobName + "')");
         
         // PythonExecuter.SendOrderSync(PythonScript.unityManager,
         //     PythonCommandType.exec_l, "project['" + jobName + "'].remove()");

@@ -20,9 +20,6 @@ public class AnimationController : MonoBehaviour
     [Tooltip("The time the animation waits before restarting the animation in seconds")]
     public float pauseDuration = 1;
     private float pauseTimer;
-    
-    internal static bool waitForLoadedStruc;
-    internal static bool shouldLoad;
 
 //    private bool waitFrame;
 
@@ -46,14 +43,20 @@ public class AnimationController : MonoBehaviour
         RunAnim(true);
         frame = 0;
         positionData = newData;
+        AnimationMenuController.Inst.SetState(true);
 //        Show();
     }
 
     public void DeleteAnimation()
     {
+        PythonExecuter.SendOrderSync(PythonScript.structure, PythonCommandType.exec_l,
+            "structure = " + PythonScript.executor + ".job.get_structure(" + AnimationController.frame + ")");
+        
         positionData = null;
         run_anim = false;
-        Debug.LogWarning("TODO: We might want to set the structure to the current frame here");
+        frame = 0;
+        
+        AnimationMenuController.Inst.SetState(false);
     }
 
     // Update is called once per frame
@@ -138,17 +141,18 @@ public class AnimationController : MonoBehaviour
 
     internal static void ChangeAnimSpeed(int change)
     {
-        // send Python the order to play the animation faster. if it isn't already at it's fastest speed
-        if (change > 0)
-            if (animSpeed + change <= 5)
-                animSpeed += change;
-            else
-                animSpeed = 5;
-        else
-            if (animSpeed + change >= 0)
-                animSpeed += change;
-            else
-                animSpeed = 0;
+        Debug.LogWarning("Function not implemented at the moment");
+        // // send Python the order to play the animation faster. if it isn't already at it's fastest speed
+        // if (change > 0)
+        //     if (animSpeed + change <= 5)
+        //         animSpeed += change;
+        //     else
+        //         animSpeed = 5;
+        // else
+        //     if (animSpeed + change >= 0)
+        //         animSpeed += change;
+        //     else
+        //         animSpeed = 0;
     }
     
 /// <summary>
@@ -156,14 +160,15 @@ public class AnimationController : MonoBehaviour
 /// </summary>
 /// <param name="forward"></param>
     public static void move_one_frame(bool forward=true) {
-        SimulationMenuController.jobLoaded = true;
-        if (forward)
-            frame = Mod((frame + 1), StructureDataOld.GetCurrFrameData().frames);
-        else
-            //frame = (GetCurrFrameData().frames - (Mod(GetCurrFrameData().frames - frame, GetCurrFrameData().frames))) - 1;
-            frame = Mod((frame - 1), StructureDataOld.GetCurrFrameData().frames);
-//        ImportStructure.Inst.LoadStructure();
-        Show();
+    Debug.LogWarning("Function not implemented at the moment");
+//         SimulationMenuController.jobLoaded = true;
+//         if (forward)
+//             frame = Mod((frame + 1), StructureDataOld.GetCurrFrameData().frames);
+//         else
+//             //frame = (GetCurrFrameData().frames - (Mod(GetCurrFrameData().frames - frame, GetCurrFrameData().frames))) - 1;
+//             frame = Mod((frame - 1), StructureDataOld.GetCurrFrameData().frames);
+// //        ImportStructure.Inst.LoadStructure();
+//         Show();
     }
 
     private static bool change_frame() {

@@ -87,8 +87,8 @@ public class StructureDataOld : MonoBehaviour
             animation_data.Clear();
         currFrame = new FrameData(size, frame_id, frames);
         frame_amount = frames;
-        if (frame_id == 0)
-            AnimationController.shouldLoad = true;
+        // if (frame_id == 0)
+        //     AnimationController.shouldLoad = true;
     }
 
     public static void AddFrameDataMid(AtomData atom)
@@ -100,7 +100,7 @@ public class StructureDataOld : MonoBehaviour
     {
         currFrame.AddCellbox(newCellbox);
         animation_data.Add(currFrame);
-        AnimationController.waitForLoadedStruc = false;
+        // AnimationController.waitForLoadedStruc = false;
     }
 
     public static FrameData GetCurrFrameData()

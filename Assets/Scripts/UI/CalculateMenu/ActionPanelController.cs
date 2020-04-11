@@ -39,7 +39,6 @@ public class ActionPanelController : MonoBehaviour
     {
         SimulationMenuController.jobLoaded = false;
         
-        ExplorerMenuController.Inst.DeleteJob(SimulationMenuController.jobName);
         
         // TODO: Remember the current frame, stop the animation and delete the position data (I think it is not needed anymore)
         
@@ -50,7 +49,8 @@ public class ActionPanelController : MonoBehaviour
         //ModeController.inst.SetMode(Modes.Animate);
         
         AnimationController.Inst.DeleteAnimation();
-        AnimationMenuController.Inst.SetState(true);
+
+        ExplorerMenuController.Inst.DeleteJob(SimulationMenuController.jobName);
     }
 
     public void OnRefreshDown()
