@@ -150,5 +150,7 @@ public class ModeController : MonoBehaviour
         {
             StructureMenuController.Inst.OnModeStart();
         }
+
+        // ModeBar.Inst.UpdateButtons(currentMode.mode.ToString());
     }
 }

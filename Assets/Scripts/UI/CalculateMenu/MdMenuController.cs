@@ -25,7 +25,7 @@ public class MdMenuController : MenuController {
     {
         string order = "format_md_settings()";
         string receivedData = PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.eval_l, order);
-        MdData mdData = JsonUtility.FromJson<MdData>(receivedData);
+        JobData mdData = JsonUtility.FromJson<JobData>(receivedData);
 
         Thermometer.temperature = mdData.temperature;
         Thermometer.Inst.UpdateTemperature(mdData.temperature);
@@ -35,25 +35,25 @@ public class MdMenuController : MenuController {
         Utilities.SetDropdownValue(nPrintDropdown, mdData.n_print);
     }
 
-    public MdData GetData()
+    public JobData GetData()
     {
         int temp = Thermometer.temperature;
         string n_ionic_steps = Utilities.GetStringValue(nIonicStepsDropdown);
         string n_print = Utilities.GetStringValue(nPrintDropdown);
-        return new MdData(temp, n_ionic_steps, n_print);
+        return new JobData(temperature:temp, nIonicSteps:n_ionic_steps, nPrint:n_print);
     }
 }
 
-public struct MdData
-{
-    public int temperature;
-    public string n_ionic_steps;
-    public string n_print;
-
-    public MdData(int temperature, string nIonicSteps, string nPrint)
-    {
-        this.temperature = temperature;
-        n_ionic_steps = nIonicSteps;
-        n_print = nPrint;
-    }
-}
+// public struct MdData
+// {
+//     public int temperature;
+//     public string n_ionic_steps;
+//     public string n_print;
+//
+//     public MdData(int temperature, string nIonicSteps, string nPrint)
+//     {
+//         this.temperature = temperature;
+//         n_ionic_steps = nIonicSteps;
+//         n_print = nPrint;
+//     }
+// }

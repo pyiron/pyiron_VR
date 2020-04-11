@@ -63,7 +63,7 @@ public class SimulationMenuController : MenuController
                 else
                 {
                     string job = PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.eval_l, 
-                        "load_job(" + PythonScript.unityManager + "["+ jobName + "])");
+                        "load_job(" + PythonScript.unityManager + ".project['"+ jobName + "'])");
                     StructureLoader.LoadAnimation(job);
                     // Load the information of the old job. The structure should have been set in Explorer already
                     // PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.exec_l, order);
@@ -135,7 +135,7 @@ public class SimulationMenuController : MenuController
         JobData jobData = JobSettingsController.Inst.GetData();
         if (calculation == "md")
         {
-            MdData data = MdMenuController.Inst.GetData();
+            JobData data = MdMenuController.Inst.GetData();
             order = "calculate_" + calculation + "(" +
                     data.temperature + ", " +
                     data.n_ionic_steps + ", " +
@@ -146,7 +146,7 @@ public class SimulationMenuController : MenuController
         }
         else
         {
-            MinimizeData data = MinimizeMenuController.Inst.GetData();
+            JobData data = MinimizeMenuController.Inst.GetData();
             order = "calculate_" + calculation + "(" +
                     data.f_eps + ", " +
                     data.max_iterations + ", " +
@@ -168,5 +168,56 @@ public class SimulationMenuController : MenuController
     public bool IsStructureShifted()
     {
         return jobName.EndsWith(SHIFTED);
+    }
+}
+
+public struct JobData
+{
+    // data for all calculation modes
+    public string calc_mode;
+    public string job_type;
+    public string job_name;
+    public string currentPotential;
+    public string[] potentials;
+    
+    // data for md and minimize
+    public string n_print;
+    
+    // data for md
+    public int temperature;
+    public string n_ionic_steps;
+    
+    // data for minimize
+    public string f_eps;
+    public string max_iterations;
+
+    private void SetAllToNull()
+    {
+        this.calc_mode = null;
+        job_type = null;
+        job_name = null;
+        this.currentPotential = null;
+        this.potentials = null;
+        n_print = null;
+        temperature = 0;
+        n_ionic_steps = null;
+        f_eps = null;
+        max_iterations = null;
+    }
+
+    public JobData(string calcMode=null, string jobType=null, string jobName=null, string currentPotential=null,
+        string[] potentials=null, string nPrint=null, int temperature=0, string nIonicSteps=null, string fEps=null,
+        string maxIterations=null)
+    {
+        calc_mode = calcMode;
+        job_type = jobType;
+        job_name = jobName;
+        this.currentPotential = currentPotential;
+        this.potentials = potentials;
+        n_print = nPrint;
+        this.temperature = temperature;
+        n_ionic_steps = nIonicSteps;
+        f_eps = fEps;
+        max_iterations = maxIterations;
     }
 }

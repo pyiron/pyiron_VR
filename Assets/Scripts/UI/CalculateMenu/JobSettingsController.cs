@@ -79,26 +79,10 @@ public class JobSettingsController : MonoBehaviour
         string jobName = "'" + jobNameField.text + "'";
         string potential = "'" + Utilities.GetStringValue(potentialDropdown) + "'";
       
-        return new JobData(calculationType, jobType, jobName, potential, null);
+        return new JobData(calcMode:calculationType, jobType:jobType, jobName:jobName, currentPotential:potential);
     }
 }
 
-public struct JobData
-{
-    public string calc_mode;
-    public string job_type;
-    public string job_name;
-    public string currentPotential;
-    public string[] potentials;
 
-    public JobData(string calc_mode, string jobType, string jobName, string currentPotential, string[] potentials)
-    {
-        this.calc_mode = calc_mode;
-        job_type = jobType;
-        job_name = jobName;
-        this.currentPotential = currentPotential;
-        this.potentials = potentials;
-    }
-}
 
 
