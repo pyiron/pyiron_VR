@@ -152,7 +152,7 @@ Todo:
 ! 25. 	TODO Remove the job with the same name if it ends with _shifted
 ! 26.	TODO Remove the old job if the Delete Button gets pressed
 ! 27. 	TODO Create a new job if no old job has been loaded
-! 28. 	TODO Delete the data of the last job when pressing the delete button
+  28. 	DONE Delete the data of the last job when pressing the delete button
 ! 29. 	TODO Set the structure to the one corresponding to the current frame when switching from the cslculator to structure creator
 
 10.4.2020:

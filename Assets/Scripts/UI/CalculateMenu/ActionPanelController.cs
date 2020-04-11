@@ -48,7 +48,9 @@ public class ActionPanelController : MonoBehaviour
         //PythonExecuter.SendOrderSync(PythonScript.unityManager, PythonCommandType.exec_l, order);
         UpdateButtons(false);
         //ModeController.inst.SetMode(Modes.Animate);
-        //AnimationMenuController.Inst.SetState(true);
+        
+        AnimationController.Inst.DeleteAnimation();
+        AnimationMenuController.Inst.SetState(true);
     }
 
     public void OnRefreshDown()

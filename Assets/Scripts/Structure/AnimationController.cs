@@ -53,6 +53,7 @@ public class AnimationController : MonoBehaviour
     {
         positionData = null;
         run_anim = false;
+        Debug.LogWarning("TODO: We might want to set the structure to the current frame here");
     }
 
     // Update is called once per frame
