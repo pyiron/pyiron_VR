@@ -45,17 +45,11 @@ public class SimulationMenuController : MenuController
         {
             if (CheckJobExists())
             {
-                // load the structure 
-                
-                
                 if (IsStructureShifted())
                 {
-                    PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.exec_l, 
-                        "job = " + PythonScript.unityManager + "["+ jobName + "]");
-                    
-                    // Load all information except for the structure data, then reset the job
+                    // Reset the job, then load all information except for the structure data
+                    ActionPanelController.Inst.OnDeleteBtnDown(false);
                     UpdatePanels();
-                    ActionPanelController.Inst.OnDeleteBtnDown();
                 }
                 else
                 {

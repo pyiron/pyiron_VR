@@ -34,13 +34,16 @@ public class ActionPanelController : MonoBehaviour
         SimulationMenuController.Inst.CalculateNewJob();
     }
     
-    public void OnDeleteBtnDown()
+    public void OnDeleteBtnDown(bool saveStructure=true)
     {
         SimulationMenuController.jobLoaded = false;
         
         UpdateButtons(false);
-        
-        AnimationController.Inst.DeleteAnimation();
+
+        if (saveStructure)
+        {
+            AnimationController.Inst.DeleteAnimation();
+        }
 
         ExplorerMenuController.Inst.DeleteJob(SimulationMenuController.jobName);
     }
