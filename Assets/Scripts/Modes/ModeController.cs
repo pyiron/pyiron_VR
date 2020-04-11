@@ -81,8 +81,8 @@ public class ModeController : MonoBehaviour
             // activate the thermometer when changing into temperature mode, else deactivate it
             Thermometer.Inst.gameObject.SetActive(modes[(int)currentMode.mode].showTemp);
 
-        if (modes[(int)currentMode.mode].showInfo)
-            OrdersToPython.RequestAllForces();
+        // if (modes[(int)currentMode.mode].showInfo)
+            // OrdersToPython.RequestAllForces();
         // deactivate the structure if it shouldn't be shown, else activate it
         StructureDataOld.Inst.gameObject.SetActive(!modes[(int)currentMode.mode].hideAtoms);
 

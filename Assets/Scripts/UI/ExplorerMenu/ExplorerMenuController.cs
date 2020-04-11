@@ -131,6 +131,13 @@ public class ExplorerMenuController : MenuController {
         LoadPathContent(jobName);
     }
 
+    public FolderData LoadFolderData()
+    {
+        return JsonUtility.FromJson<FolderData>(
+            PythonExecuter.SendOrderSync(PythonScript.unityManager, PythonCommandType.eval_l,
+                "project.list_all()"));
+    }
+
     public void LoadPathContent(string jobName="", bool isAbsPath=false)
     {
         DeleteOptions();
@@ -156,12 +163,22 @@ public class ExplorerMenuController : MenuController {
         PathHasChanged();
             
         // get the jobs and groups 
-        FolderData folderData = 
-            JsonUtility.FromJson<FolderData>(
-                PythonExecuter.SendOrderSync(PythonScript.unityManager, PythonCommandType.eval_l,
-                    "project.list_all()"));
+        FolderData folderData = LoadFolderData();
 
         ShowNewOptions(folderData);
+    }
+
+    public void DeleteJob(string jobName)
+    {
+        PythonExecuter.SendOrderSync(PythonScript.executor,
+            PythonCommandType.exec_l, "reset_job(" + AnimationController.frame + ", '" + SimulationMenuController.jobName + "')");
+        
+        // PythonExecuter.SendOrderSync(PythonScript.unityManager,
+        //     PythonCommandType.exec_l, "project['" + jobName + "'].remove()");
+        
+        // Debug.LogWarning("The following line can be removed when pyiron integrated it into the remove function");
+        // PythonExecuter.SendOrderSync(PythonScript.unityManager,
+        //     PythonCommandType.exec_l, "project['" + jobName + "']._status = None");
     }
 }
 

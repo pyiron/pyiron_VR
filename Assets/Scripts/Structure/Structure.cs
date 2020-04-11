@@ -31,6 +31,11 @@ public class Structure : MonoBehaviour
         PythonExecuter.SendOrderSync(PythonScript.structure, PythonCommandType.exec_l, order);
         //PythonExecuter.SendOrderSync(PythonScript.None, PythonCommandType.exec_l, order);
         modifiedPositions = true;
+
+        if (!SimulationMenuController.Inst.IsStructureShifted())
+        {
+            SimulationMenuController.jobName += SimulationMenuController.SHIFTED;
+        }
     }
 
     public void OnAtomDeleted(GameObject deletedAtom)

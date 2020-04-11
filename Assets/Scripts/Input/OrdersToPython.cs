@@ -60,51 +60,51 @@ public class OrdersToPython : MonoBehaviour
         couldExecuteOrder = false;
     }
 
-    public void DestroyAtomOrder(string order)
-    {
-        // the ID of the atom that should be destroyed
-        int atomId;
-        // checks if the argument that should contain the atom ID is an integer, else return and just print what the error was
-        if (!int.TryParse(order.Split()[3], out atomId))
-        {
-            SendError("The Atom ID has to be an Integer!");
-            return;
-        }
-        else
-            DestroyAtom(atomId);
-    }
+    // public void DestroyAtomOrder(string order)
+    // {
+    //     // the ID of the atom that should be destroyed
+    //     int atomId;
+    //     // checks if the argument that should contain the atom ID is an integer, else return and just print what the error was
+    //     if (!int.TryParse(order.Split()[3], out atomId))
+    //     {
+    //         SendError("The Atom ID has to be an Integer!");
+    //         return;
+    //     }
+    //     else
+    //         DestroyAtom(atomId);
+    // }
 
     // destroys the atom, the user wants to destroy
-    private void DestroyAtom(int atomId)
-    {
-        // check if the given atomId is less big than the maximum amount of atoms in the structure
-        if (atomId >= StructureDataOld.atomInfos.Count)
-        {
-            SendError("The Atom ID has to be less big than the maximum amount of atoms in the structure!");
-            return;
-        }
-
-        // send Python/Pyiron the order to destroy the atom
-        PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.eval, "self.destroy_atom(" + atomId + ")");
-
-        // update the data of the structure
-        StructureDataOld.waitForDestroyedAtom = true;
-        // decrease the atomId of the atoms which have a higher ID than the deleted one by one
-        for (int i = atomId + 1;
-            i < StructureDataOld.atomInfos.Count; i++)
-        {
-            print("i is " + i);
-            StructureDataOld.atomInfos[i].m_ID -= 1;
-            StructureDataOld.atomInfos[i].m_transform.GetComponent<AtomID>().ID -= 1;
-        }
-        // remove the atom in the list of the properties of each atom
-        StructureDataOld.atomInfos.RemoveAt(atomId);
-
-        // remove the atom in the list which stores the data how the player has removed each atom
-        StructureDataOld.atomCtrlPos.RemoveAt(atomId);
-        // destroy the gameobject of the destroyed atom. This way, importStructure won't destroy all atoms and load them new
-        Destroy(LaserGrabber.instances[(int) Layer.Atom].attachedObject);
-    }
+    // private void DestroyAtom(int atomId)
+    // {
+    //     // check if the given atomId is less big than the maximum amount of atoms in the structure
+    //     if (atomId >= StructureDataOld.atomInfos.Count)
+    //     {
+    //         SendError("The Atom ID has to be less big than the maximum amount of atoms in the structure!");
+    //         return;
+    //     }
+    //
+    //     // send Python/Pyiron the order to destroy the atom
+    //     PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.eval, "self.destroy_atom(" + atomId + ")");
+    //
+    //     // update the data of the structure
+    //     StructureDataOld.waitForDestroyedAtom = true;
+    //     // decrease the atomId of the atoms which have a higher ID than the deleted one by one
+    //     for (int i = atomId + 1;
+    //         i < StructureDataOld.atomInfos.Count; i++)
+    //     {
+    //         print("i is " + i);
+    //         StructureDataOld.atomInfos[i].m_ID -= 1;
+    //         StructureDataOld.atomInfos[i].m_transform.GetComponent<AtomID>().ID -= 1;
+    //     }
+    //     // remove the atom in the list of the properties of each atom
+    //     StructureDataOld.atomInfos.RemoveAt(atomId);
+    //
+    //     // remove the atom in the list which stores the data how the player has removed each atom
+    //     StructureDataOld.atomCtrlPos.RemoveAt(atomId);
+    //     // destroy the gameobject of the destroyed atom. This way, importStructure won't destroy all atoms and load them new
+    //     Destroy(LaserGrabber.instances[(int) Layer.Atom].attachedObject);
+    // }
 
     public void RunAnimOrder(string order)
     {
@@ -122,22 +122,22 @@ public class OrdersToPython : MonoBehaviour
     }*/
 
     // request the forces of all atoms from Python
-    public static void RequestAllForces()
-    {
-        PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.eval, "self.send_all_forces()");
-    }
+    // public static void RequestAllForces()
+    // {
+    //     PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.eval, "self.send_all_forces()");
+    // }
 
-    public static void SetNewPosition(AtomInfos atomInfo)
-    {
-        string newPosition = "";
-        Vector3 atomPosition = atomInfo.m_transform.localPosition;
-        for (int i = 0; i < 3; i++)
-            newPosition += atomPosition[i] + " ";
-        newPosition += atomInfo.m_ID;
-        // send the local position of the current atom to Python
-        PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.exec,
-            "self.set_new_base_position('" + newPosition + "')");
-        // show that the player hasn't moved an atom since the last creation of an ham_lammps
-        StructureDataOld.atomCtrlPos[atomInfo.m_ID] = Vector3.zero;
-    }
+    // public static void SetNewPosition(AtomInfos atomInfo)
+    // {
+    //     string newPosition = "";
+    //     Vector3 atomPosition = atomInfo.m_transform.localPosition;
+    //     for (int i = 0; i < 3; i++)
+    //         newPosition += atomPosition[i] + " ";
+    //     newPosition += atomInfo.m_ID;
+    //     // send the local position of the current atom to Python
+    //     PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.exec,
+    //         "self.set_new_base_position('" + newPosition + "')");
+    //     // show that the player hasn't moved an atom since the last creation of an ham_lammps
+    //     StructureDataOld.atomCtrlPos[atomInfo.m_ID] = Vector3.zero;
+    // }
 }

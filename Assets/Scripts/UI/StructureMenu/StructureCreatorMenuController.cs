@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
+/// <summary>
+/// Outdated and not in use anymore
+/// </summary>
 public class StructureCreatorMenuController : MenuController
 {
     internal static StructureCreatorMenuController inst;

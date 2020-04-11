@@ -147,6 +147,13 @@ Todo:
 ! 21. 	TODO just allow to move single atoms in Structure Creator
   22. 	DONE show AnimationMenu when it should be active 
 ! 23. 	TODO Remove old code that has been replaced
+  24.	DONE Keep the jobName correct to see if the job has been shifted or not
+  24	DONE Check if there exists an job with the same jobName 
+! 25. 	TODO Remove the job with the same name if it ends with _shifted
+! 26.	TODO Remove the old job if the Delete Button gets pressed
+! 27. 	TODO Create a new job if no old job has been loaded
+! 28. 	TODO Delete the data of the last job when pressing the delete button
+! 29. 	TODO Set the structure to the one corresponding to the current frame when switching from the cslculator to structure creator
 
 10.4.2020:
 Leave Structure Creator for later
@@ -155,6 +162,10 @@ Remember if a single atom has been moved
 	if no: load the old job when going into Calculate mode
 
 To see if 
-a single has been moved: modifiedPositions=true
+DONE a single has been moved: modifiedPositions=true
 a new job has been loaded in explorer: modifiedPositions=jobNameEndsWithShifted()
 (clicked reset structure in Structure creator: modifiedPositions = false)
+
+There might be a better solution to the one above. SimulationMenuController should have an attribute jobName which gets set by the
+structure creator onModeEnd or by the Explorer OnJobLoaded. The name ends with _shifted or not, therefore the simulationMenuController
+knows whether to delete or load the old job

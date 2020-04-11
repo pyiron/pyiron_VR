@@ -50,7 +50,8 @@ public class JobSettingsController : MonoBehaviour
         }
         
         // update the job name
-        jobNameField.text = jobData.job_name;
+        //jobNameField.text = jobData.job_name;
+        jobNameField.text = SimulationMenuController.jobName;
         
         // set calculation type (md, minimize or static)
         SimulationModeManager.Inst.SetMode(jobData.calc_mode);

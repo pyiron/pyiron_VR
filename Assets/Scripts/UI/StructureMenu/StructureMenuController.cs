@@ -55,6 +55,9 @@ public class StructureMenuController : MenuController
             options.Add(new Dropdown.OptionData(elm));
             elementDropdown.value = options.Count - 1;
         }
+        
+        // send the new structureName to the CalculationMenu
+        SimulationMenuController.jobName = struc.formula;
 
 //        repeatDropdown.value = 0;
             
@@ -103,6 +106,9 @@ public class StructureMenuController : MenuController
                         ToggleToPythonBool(orthorombicToggle) + ")");
     }
 
+    /// <summary>
+    /// not used atm but might be used in the future. Repeats the CURRENT structure instead of the BASE structure.
+    /// </summary>
     public void OnRepeatChange()
     {
         string repeat = repeatDropdown.options[repeatDropdown.value].text;
@@ -118,6 +124,8 @@ class StructureData
     public int size;
 
     public int frames;
+
+    public string formula;
 
     public Vector3[] positions;
 

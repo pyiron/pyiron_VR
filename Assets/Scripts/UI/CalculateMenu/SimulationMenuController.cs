@@ -9,6 +9,10 @@ public class SimulationMenuController : MenuController {
     
     public static bool jobLoaded = false;
 
+    public static string jobName;
+
+    public static readonly string SHIFTED = "_shifted"; 
+
     private void Awake()
     {
         Inst = this;
@@ -42,6 +46,16 @@ public class SimulationMenuController : MenuController {
         string order = "n_ionic_steps = " + n_ionic_steps;
         PythonExecuter.SendOrderSync(PythonScript.Executor, PythonCommandType.exec_l, order);
     }*/
+
+    /// <summary>
+    /// Checks whether a job with the current name/structure already exists.
+    /// </summary>
+    /// <returns>true if the job exists</returns>
+    public bool CheckJobExists()
+    {
+        FolderData folderData = ExplorerMenuController.Inst.LoadFolderData();
+        return folderData.nodes.Contains(jobName);
+    }
     
     // TODO: Deactivate and activate UI Elements
     private IEnumerator HandleLammpsLoad(string order, PythonScript receivingScript)
@@ -55,17 +69,19 @@ public class SimulationMenuController : MenuController {
         
         // wait until the response to the send message has arrived
         yield return new WaitUntil(() => taskNumIn == TCPClient.taskNumOut);
-
+        
         // get the response
         string result = TCPClient.returnedMsg;
         
         // handle the response
         Activate();
-        AnimationController.frame = 0;
-        PythonExecuter.HandlePythonMsg(result);
+        
+        StructureLoader.LoadAnimation(result);
+        
+        // AnimationController.frame = 0;
+        // PythonExecuter.HandlePythonMsg(result);
         AnimationMenuController.Inst.SetState(true);
         //ModeController.inst.SetMode(Modes.Animate);
-        // todo: maybe handle the result here, instead of calling PythonExecutor.HandlePythonMsg
     } 
 
     public void CalculateNewJob()
@@ -99,13 +115,19 @@ public class SimulationMenuController : MenuController {
                     jobData.job_name + ", " + 
                     jobData.currentPotential + ")";
         }
+        
+        AnimationController.waitForLoadedStruc = true;
+        Deactivate();
 
         // load the new structure in another coroutine
         StartCoroutine(HandleLammpsLoad(order, PythonScript.executor));
         
-        AnimationController.waitForLoadedStruc = true;
-        Deactivate();
         print("Wait begun");
         //lammpsIsMd = ModeData.currentMode.showTemp;
+    }
+
+    public bool IsStructureShifted()
+    {
+        return jobName.EndsWith(SHIFTED);
     }
 }

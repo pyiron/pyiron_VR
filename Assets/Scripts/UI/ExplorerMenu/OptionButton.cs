@@ -9,17 +9,7 @@ public class OptionButton : MonoBehaviour, IButton
 {
     public bool isJob;
 
-    public static Vector3[][] GetFramePositions(Vector3[] flattenedArray, int struc_len, int frames)
-    {
-        Vector3[][] all_frames = new Vector3[frames][];
-        for (int i = 0; i < frames; i++)
-        {
-            all_frames[i] = new Vector3[struc_len];
-            Array.Copy(flattenedArray, i * struc_len, all_frames[i], 0, struc_len);
-        }
-
-        return all_frames;
-    }
+    
     
     public static IEnumerator HandleLoad(string jobName)
     {
@@ -34,6 +24,15 @@ public class OptionButton : MonoBehaviour, IButton
 //            "send_job()");
         PythonExecuter.SendOrderAsync(PythonScript.executor, PythonCommandType.eval_l, 
             "load_job(" + PythonScript.unityManager + ".project['" + jobName + "'])");
+        
+        // save the job name in the SimulationMenuController, but tell it the structure hasnt been shifted, so that it 
+        // wont delete the job
+        SimulationMenuController.jobName = jobName;
+        if (SimulationMenuController.Inst.IsStructureShifted())
+        {
+            SimulationMenuController.jobName = SimulationMenuController.jobName.Substring(0, 
+                jobName.Length - SimulationMenuController.SHIFTED.Length);
+        }
 
         // remember the id of the request to wait for the right response id
         int taskNumIn = TCPClient.taskNumIn;
@@ -49,12 +48,14 @@ public class OptionButton : MonoBehaviour, IButton
 //        PythonExecuter.HandlePythonMsg(result);
 
 //        print(result);
-        StructureData structureData = JsonUtility.FromJson<StructureData>(result);
-        Vector3[][] allPoses = GetFramePositions(structureData.positions, structureData.size,
-            structureData.frames);
-        Structure.Inst.UpdateStructure(allPoses[0], structureData.elements);
-        Boundingbox.Inst.UpdateBoundingBox(structureData.cell);
-        AnimationController.Inst.SetNewAnimation(allPoses);
+        // StructureData structureData = JsonUtility.FromJson<StructureData>(result);
+        // Vector3[][] allPoses = GetFramePositions(structureData.positions, structureData.size,
+        //     structureData.frames);
+        // Structure.Inst.UpdateStructure(allPoses[0], structureData.elements);
+        // Boundingbox.Inst.UpdateBoundingBox(structureData.cell);
+        // AnimationController.Inst.SetNewAnimation(allPoses);
+        
+        StructureLoader.LoadAnimation(result);
         
         ExplorerMenuController.Inst.Activate();
         //ExplorerMenuController.inst.DeleteOptions();

@@ -19,28 +19,34 @@ public class ActionPanelController : MonoBehaviour
 
     public void OnModeStart()
     {
-        CalculateButton.gameObject.SetActive(!SimulationMenuController.jobLoaded);
-        DeleteButton.gameObject.SetActive(SimulationMenuController.jobLoaded);
+        UpdateButtons(SimulationMenuController.Inst.CheckJobExists());
+    }
+
+    private void UpdateButtons(bool jobExists)
+    {
+        CalculateButton.gameObject.SetActive(!jobExists);
+        DeleteButton.gameObject.SetActive(jobExists);
     }
 
     public void OnCalculateBtnDown()
     {
         SimulationMenuController.jobLoaded = true;
         SimulationMenuController.Inst.CalculateNewJob();
-        OnModeStart();
+        UpdateButtons(true);
     }
     
     public void OnDeleteBtnDown()
     {
         SimulationMenuController.jobLoaded = false;
         
-        // set the structure to the current position data
-        // TODO
+        ExplorerMenuController.Inst.DeleteJob(SimulationMenuController.jobName);
+        
+        // TODO: Remember the current frame, stop the animation and delete the position data (I think it is not needed anymore)
         
         // TODO: Reactivate when it is possible to create a new job (including the base)
-        string order = "project.remove_job(" + JobSettingsController.Inst.GetData().job_name + ")";
-        PythonExecuter.SendOrderSync(PythonScript.unityManager, PythonCommandType.exec_l, order);
-        OnModeStart();
+        //string order = "project.remove_job(" + JobSettingsController.Inst.GetData().job_name + ")";
+        //PythonExecuter.SendOrderSync(PythonScript.unityManager, PythonCommandType.exec_l, order);
+        UpdateButtons(false);
         //ModeController.inst.SetMode(Modes.Animate);
         //AnimationMenuController.Inst.SetState(true);
     }
