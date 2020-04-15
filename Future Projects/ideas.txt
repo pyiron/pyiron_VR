@@ -161,7 +161,7 @@ Todo:
   32. 	DONE Always send all settings in one file to Unity
   33.	DONE Send all settings after resetting/deleting the structure
   34.	DONE Dont crash if job has no output
-! 35.	TODO Allow to delete jobs in the Explorer menu
+- 35.	LATER Allow to delete jobs in the Explorer menu
   36. 	DONE Refresh Explorer OnModeStart
 - 37. 	LATER Make it possible to create jobs in another Folder than structures
 ! 38.	TODO Handle error when creating non cubic Fe structure job
