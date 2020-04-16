@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.Remoting.Messaging;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 // component of the AnimationMenu Panel
 public class AnimationController : MonoBehaviour

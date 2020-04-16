@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class PeriodicSysMenuController : MenuController {
-    /*internal static PeriodicSysMenuController inst;
+    internal static PeriodicSysMenuController inst;
 
     public GameObject StructureCreatorPanel;
     // the toggle, deciding wether a single atom or a structure should be created
@@ -12,6 +12,7 @@ public class PeriodicSysMenuController : MenuController {
     public Text explanation;
     // the state of the toggle, deciding wether a single atom or a structure should be created
     public bool togState;
+    /*
 
     private void Awake()
     {
