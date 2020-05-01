@@ -165,14 +165,18 @@ Todo:
   36. 	DONE Refresh Explorer OnModeStart
 - 37. 	LATER Make it possible to create jobs in another Folder than structures
   38.	DONE Handle error when creating non cubic Fe structure job
-- 39. 	LATER Implement choosing the element by using the periodic table
+  39. 	DONE Implement choosing the element by using the periodic table
 - 40. 	LATER Implement a scrollbar for the explorer in case there are more structures than ther is space on the panel
 - 41.	laTER Add minimize, md to job name
   42.	DONE Update documentation and batch file
 - 43.	LATER moving atoms can cause an OutOfBounds Error
 ! 44.	TODO fix bug that no animations can be created
 ! 45.	TODO make an Error log
-! 46.	TODO Email lesen wie pyiron mit wsl installiert werden kann	
+  46.	DONE Email lesen wie pyiron mit wsl installiert werden kann
+! 47.	TODO fix error that the wrong potentials get shown
+! 48.	TODO make error messages prettier/better
+! 49.	TODO fix error that the server doesn't reset sometimes
+! 50.	TODO make a loading symbol	
 
 Time needed for sending a Message sync to python: 0.05s
 

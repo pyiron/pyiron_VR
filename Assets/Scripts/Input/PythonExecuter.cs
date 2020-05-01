@@ -291,6 +291,9 @@ public class PythonExecuter : MonoBehaviour {
     // send the given order to Python, where it will be executed with the exec() or eval() command
     public static void SendOrderAsync(PythonScript script, PythonCommandType type, string order)
     {
+        // show that the program is loading
+        LoadingText.Inst.Activate();
+        
         string fullOrder = ProcessOrder(script, type, order);
         
         // send the order via TCP 

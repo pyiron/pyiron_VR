@@ -95,6 +95,10 @@ public class TCPClient : MonoBehaviour
 	public void ConnectWithHost(string host)
 	{
 		print("Trying to connect to " + host);
+		
+		// show that the program is loading
+		LoadingText.Inst.Activate();
+		
 		// after connecting to a server or while trying to connect to one, connecting to another one is not possible
 		if (socketConnection != null || connStatus != null) return;
 		
@@ -102,15 +106,18 @@ public class TCPClient : MonoBehaviour
 		{
 			socketConnection = new TcpClient();
 			connStatus = socketConnection.ConnectAsync(host, PORT);
-			StartCoroutine(TryConnection());
+			StartCoroutine(TryToConnect());
 		}
 		catch
 		{
 			ConnectionError();
+			
+			// the loading is over, deactivate the loading text
+			LoadingText.Inst.Deactivate();
 		}
 	}
 
-	private IEnumerator TryConnection()
+	private IEnumerator TryToConnect()
 	{
 		// the time between each update if there has been an update to the connection status
 		float updateTime = 0.4f;
@@ -143,6 +150,9 @@ public class TCPClient : MonoBehaviour
 			connTimer = connTimeOut;
 			ConnectionTimeout();
 		}
+		
+		// the loading is over, deactivate the loading text
+		LoadingText.Inst.Deactivate();
 	}
 
 	private void ConnectionSuccess()
@@ -323,6 +333,11 @@ public class TCPClient : MonoBehaviour
 		}
 
 		taskNumOut += 1;
+		if (taskNumOut == taskNumIn)
+		{
+			// all requested messages got loaded, so the loading text can be deactivated
+			LoadingText.Inst.Deactivate();
+		}
 		return returnedMsg;
 	}
 
