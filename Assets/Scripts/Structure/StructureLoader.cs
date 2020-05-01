@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 
 public class StructureLoader
@@ -19,6 +20,12 @@ public class StructureLoader
     
     public static void LoadAnimation(string data)
     {
+        if (data.StartsWith("error:", true, CultureInfo.CurrentCulture))
+        {
+            ErrorTextController.inst.ShowMsg(data);
+            return;
+        }
+        
         StructureData structureData = JsonUtility.FromJson<StructureData>(data);
         Vector3[][] allPoses = GetFramePositions(structureData.positions, structureData.size,
             structureData.frames);

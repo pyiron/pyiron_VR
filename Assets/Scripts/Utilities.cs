@@ -36,6 +36,7 @@ public static class Utilities
         // creates a new option
         dropdown.options.Add(new Dropdown.OptionData(value));
         dropdown.value = dropdown.options.Count - 1;
+        dropdown.RefreshShownValue();
     }
     
     /// <summary>
