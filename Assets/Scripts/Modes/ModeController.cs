@@ -25,13 +25,13 @@ public class ModeController : MonoBehaviour
     internal static List<Mode> modes = new List<Mode>
     {
         new Mode(mode:Modes.Network, hideAtoms: true),
-        new Mode(mode:Modes.Explorer, playerCanMoveAtoms:true),
-        new Mode(mode:Modes.Calculate, playerCanMoveAtoms:true, playerCanResizeAtoms:true, showTemp:true,
+        new Mode(mode:Modes.Explorer, playerCanResizeAtoms:true),
+        new Mode(mode:Modes.Calculate, playerCanResizeAtoms:true, showTemp:true,
             showTrashcan:true),
         //new Mode(mode:Modes.Minimize, playerCanMoveAtoms:true, playerCanResizeAtoms:true, showRelaxation:true,
         //    showTrashcan:true),
         //new Mode(mode:Modes.Animate),
-        new Mode(mode:Modes.Structure, playerCanMoveAtoms:true),
+        new Mode(mode:Modes.Structure, playerCanMoveAtoms:true, playerCanResizeAtoms:true),
     };
 
     private void Awake()

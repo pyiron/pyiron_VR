@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This script handles everything related to the atom structure
+/// </summary>
 public class Structure : MonoBehaviour
 {
     public static Structure Inst;
 
-    public static bool modifiedPositions;
-
+    // the prefab to spawn a new atom
     public GameObject atomPrefab;
-    
+    // references to all currently instanciated atoms
     private List<GameObject> atoms = new List<GameObject>();
 
 
@@ -18,19 +20,22 @@ public class Structure : MonoBehaviour
         Inst = this;
     }
 
-    private string Vec3ToArrayString(Vector3 v3)
+    /// <summary>
+    /// returns how many atoms the current structure has
+    /// </summary>
+    /// <returns>the amount of atoms</returns>
+    public int AtomAmount()
     {
-        return v3.ToString().Replace('(', '[').Replace(')', ']');
+        return atoms.Count;
     }
 
     public void OnAtomPositionChanged(GameObject movedAtom)
     {
         int id = atoms.IndexOf(movedAtom);
-        string order = "structure.positions[" + id + "] = " + Vec3ToArrayString(movedAtom.transform.localPosition);
+        string order = "structure.positions[" + id + "] = " + Utilities.Vec3ToArrayString(movedAtom.transform.localPosition);
         //string order = "print(Structure.Structure.structure.positions[" + id + "])";
         PythonExecuter.SendOrderSync(PythonScript.structure, PythonCommandType.exec_l, order);
         //PythonExecuter.SendOrderSync(PythonScript.None, PythonCommandType.exec_l, order);
-        modifiedPositions = true;
 
         if (!SimulationMenuController.Inst.IsStructureShifted())
         {
@@ -44,6 +49,10 @@ public class Structure : MonoBehaviour
         int id = atoms.IndexOf(deletedAtom);
     }
     
+    /// <summary>
+    /// Set the number of atoms in the scene to the one that should be shown by spawning new atoms or deleting some
+    /// </summary>
+    /// <param name="diff"></param>
     private void AdjustStructureSize(int diff)
     {
         // if the old structure has more atoms than the new, delete all redundant atoms
@@ -61,14 +70,23 @@ public class Structure : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Update the structure according to the position data, but don't update the type of each atom
+    /// </summary>
+    /// <param name="positions"></param>
     public void UpdateStructure(Vector3[] positions)
     {
         UpdateStructure(positions, null);
     }
     
-    
+    /// <summary>
+    /// Update the structure according to the position data and the given elements
+    /// </summary>
+    /// <param name="positions">the positions the atoms should be set at</param>
+    /// <param name="elements">the element of each atom. Set to null to keep the old elements</param>
     public void UpdateStructure(Vector3[] positions, string[] elements)
     {
+        // we need as many atoms in the scene as should be shown
         AdjustStructureSize(atoms.Count - positions.Length);
         
         // set the positions and elements

@@ -3,17 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// This script allows to jump through the program in a predefined way to create a better workflow
+/// </summary>
 public class DebugShortcuts : MonoBehaviour
 {
     public InputField serverIpField;
     
     private int counter;
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()

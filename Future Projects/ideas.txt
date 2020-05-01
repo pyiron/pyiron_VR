@@ -172,6 +172,7 @@ Todo:
 - 43.	LATER moving atoms can cause an OutOfBounds Error
 ! 44.	TODO fix bug that no animations can be created
 ! 45.	TODO make an Error log
+! 46.	TODO Email lesen wie pyiron mit wsl installiert werden kann	
 
 Time needed for sending a Message sync to python: 0.05s
 

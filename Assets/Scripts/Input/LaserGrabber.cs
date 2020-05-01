@@ -267,11 +267,13 @@ public class LaserGrabber : MonoBehaviour
                     {
                         // check that there are atoms left, which would cause pyiron to fail
                         // so it can't build a ham_lammps function)
-                        if (TrashCan.inst.atomInCan && StructureDataOld.atomInfos.Count >= 1)
+                        //if (TrashCan.inst.atomInCan && StructureDataOld.atomInfos.Count >= 1)
+                        if (TrashCan.inst.atomInCan && Structure.Inst.AtomAmount() >= 1)
                         {
+                            Structure.Inst.OnAtomDeleted(attachedObject);
                             //DestroyAtom();
-                            OrdersToPython.inst.ExecuteOrder(
-                                "Destroy Atom Nr " + attachedObject.GetComponent<AtomID>().ID);
+                            //OrdersToPython.inst.ExecuteOrder(
+                            //    "Destroy Atom Nr " + attachedObject.GetComponent<AtomID>().ID);
                         }
 
                         // deactivate the trash can
@@ -310,10 +312,19 @@ public class LaserGrabber : MonoBehaviour
     {
         if (ScaleAbleLaser())
         {
-            // TODO: Use laser of VIU. Adjust for Joystick usage
+            // TODO: Use laser of VIU
             // scale the laser
             currentTouch = touchPos;
-            ScaleLaser(currentTouch.y - startTouchPoint.y);
+            float modification;
+            if (Application.platform == RuntimePlatform.Android)
+            {
+                modification = currentTouch.y * Time.deltaTime;
+            }
+            else
+            {
+                modification = currentTouch.y - startTouchPoint.y;
+            }
+            ScaleLaser(modification);
 
             // set the max distance the laser should have to exist and not grab the object
             float minLaserLength;
@@ -324,7 +335,7 @@ public class LaserGrabber : MonoBehaviour
                 minLaserLength = attachedObject.transform.localScale.x * ProgramSettings.size / 2;
 
             // if the laser length is changed to a value less than the minimum distance, the attached object is going to be grabbed
-            if (_laserLength + currentTouch.y - startTouchPoint.y <= minLaserLength)
+            if (_laserLength + modification < minLaserLength)
             {
                 AttachObject(attachedObject);
                 laser.SetActive(false);

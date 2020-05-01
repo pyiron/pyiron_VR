@@ -47,8 +47,8 @@ PlayerSettings:
   defaultScreenHeight: 768
   defaultScreenWidthWeb: 960
   defaultScreenHeightWeb: 600
-  m_StereoRenderingPath: 0
-  m_ActiveColorSpace: 0
+  m_StereoRenderingPath: 1
+  m_ActiveColorSpace: 1
   m_MTRendering: 1
   m_StackTraceTypes: 010000000100000001000000010000000100000001000000
   iosShowActivityIndicatorOnLoading: -1
@@ -78,13 +78,13 @@ PlayerSettings:
   hideHomeButton: 0
   submitAnalytics: 1
   usePlayerLog: 1
-  bakeCollisionMeshes: 0
+  bakeCollisionMeshes: 1
   forceSingleInstance: 0
   useFlipModelSwapchain: 1
   resizableWindow: 0
   useMacAppStoreValidation: 0
   macAppStoreCategory: public.app-category.games
-  gpuSkinning: 0
+  gpuSkinning: 1
   xboxPIXTextureCapture: 0
   xboxEnableAvatar: 0
   xboxEnableKinect: 0
@@ -121,8 +121,7 @@ PlayerSettings:
     16:9: 1
     Others: 1
   bundleVersion: 1.0
-  preloadedAssets:
-  - {fileID: -8611316437188166057, guid: c65eaec830610834eb8790e98793db15, type: 2}
+  preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -179,8 +178,8 @@ PlayerSettings:
   ForceSDCardPermission: 0
   CreateWallpaper: 0
   APKExpansionFiles: 0
-  keepLoadedShadersAlive: 0
-  StripUnusedMeshComponents: 0
+  keepLoadedShadersAlive: 1
+  StripUnusedMeshComponents: 1
   VertexChannelCompressionMask: 4054
   iPhoneSdkVersion: 988
   iOSTargetOSVersionString: 10.0
@@ -384,7 +383,10 @@ PlayerSettings:
       m_Height: 36
       m_Kind: 0
       m_SubKind: 
-  m_BuildTargetBatching: []
+  m_BuildTargetBatching:
+  - m_BuildTarget: Android
+    m_StaticBatching: 1
+    m_DynamicBatching: 1
   m_BuildTargetGraphicsJobs:
   - m_BuildTarget: MacStandaloneSupport
     m_GraphicsJobs: 0
@@ -417,10 +419,13 @@ PlayerSettings:
     m_GraphicsJobMode: 0
   - m_BuildTarget: XboxOnePlayer
     m_GraphicsJobMode: 0
-  m_BuildTargetGraphicsAPIs: []
+  m_BuildTargetGraphicsAPIs:
+  - m_BuildTarget: AndroidPlayer
+    m_APIs: 0b000000
+    m_Automatic: 0
   m_BuildTargetVRSettings:
   - m_BuildTarget: Standalone
-    m_Enabled: 0
+    m_Enabled: 1
     m_Devices:
     - Oculus
   - m_BuildTarget: Android
@@ -667,8 +672,8 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLWasmStreaming: 0
   scriptingDefineSymbols:
-    1: VIU_OCULUSVR;VIU_PLUGIN;VIU_OCULUSVR_1_37_0_OR_NEWER;VIU_SIUMULATOR_SUPPORT
-    7: VIU_OCULUSVR;VIU_OCULUSVR_1_37_0_OR_NEWER;VIU_PLUGIN;VIU_SIUMULATOR_SUPPORT;VIU_OCULUSVR_ANDROID_SUPPORT
+    1: VIU_OCULUSVR_1_37_0_OR_NEWER;VIU_OCULUSVR;VIU_PLUGIN;VIU_SIUMULATOR_SUPPORT
+    7: VIU_OCULUSVR;VIU_PLUGIN;VIU_OCULUSVR_1_37_0_OR_NEWER;VIU_SIUMULATOR_SUPPORT;VIU_OCULUSVR_ANDROID_SUPPORT
   platformArchitecture: {}
   scriptingBackend: {}
   il2cppCompilerConfiguration: {}
