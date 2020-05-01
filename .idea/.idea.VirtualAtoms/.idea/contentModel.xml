@@ -464,6 +464,7 @@
               <e p="PathButton.cs" t="Include" />
             </e>
             <e p="IButton.cs" t="Include" />
+            <e p="LoadingText.cs" t="Include" />
             <e p="ModeMenuController.cs" t="Include" />
             <e p="NetworkMenuController.cs" t="Include" />
             <e p="Outdated" t="Include">

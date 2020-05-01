@@ -13,7 +13,7 @@ public class ErrorTextController : MonoBehaviour
     private static Text textObject;
     private static string errorMsg;
     private static float shrinkTimer;
-    private static int activeTime = 5;
+    private static int activeTime = 12;
 
     private void Awake()
     {

@@ -30,6 +30,8 @@ public class JobSettingsController : MonoBehaviour
                 break;
             }
         }
+
+        potentialDropdown.value = 0;
         
         // Update the potential dropdown. Show all potentials and which one is currently active
         potentialDropdown.options.Clear();
@@ -41,9 +43,9 @@ public class JobSettingsController : MonoBehaviour
             if (pot == jobData.currentPotential)
             {
                 potentialDropdown.value = potId;
-                break;
             }
         }
+        potentialDropdown.RefreshShownValue();
         
         // update the job name
         //jobNameField.text = jobData.job_name;

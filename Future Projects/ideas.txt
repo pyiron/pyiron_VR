@@ -176,7 +176,7 @@ Todo:
 ! 47.	TODO fix error that the wrong potentials get shown
 ! 48.	TODO make error messages prettier/better
 ! 49.	TODO fix error that the server doesn't reset sometimes
-! 50.	TODO make a loading symbol	
+  50.	DONE make a loading symbol	
 
 Time needed for sending a Message sync to python: 0.05s
 
