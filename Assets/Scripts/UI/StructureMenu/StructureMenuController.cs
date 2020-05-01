@@ -8,7 +8,7 @@ public class StructureMenuController : MenuController
 {
     public static StructureMenuController Inst;
 
-    public Dropdown elementDropdown;
+//    public Dropdown elementDropdown;
     public Button elementButton;
     public Dropdown repeatDropdown;
     public Toggle cubicToggle;
@@ -26,31 +26,42 @@ public class StructureMenuController : MenuController
 //        JsonUtility.FromJson<StructureData>(JsonUtility.ToJson(sd));
     }
 
-    public void SetElementDropdown(string newElement)
+    internal override void SetState(bool active)
     {
-        bool foundValue = false;
-        for (int i = 0; i < elementDropdown.options.Count; i++)
-        {
-            if (newElement == elementDropdown.options[i].text)
-            {
-                elementDropdown.value = i;
-                foundValue = true;
-            }
-        }
-
-        if (!foundValue)
-        {
-            List<Dropdown.OptionData> options = elementDropdown.options;
-            options.Add(new Dropdown.OptionData(newElement));
-            elementDropdown.value = options.Count - 1;
-        }
+        base.SetState(active);
+        elementButton.interactable = true;
     }
 
-    public void SetElementButton(string newElement)
+    private void Start()
+    {
+        // start with Fe
+        //UpdateElementButton("Fe");
+    }
+
+//    public void SetElementDropdown(string newElement)
+//    {
+//        bool foundValue = false;
+//        for (int i = 0; i < elementDropdown.options.Count; i++)
+//        {
+//            if (newElement == elementDropdown.options[i].text)
+//            {
+//                elementDropdown.value = i;
+//                foundValue = true;
+//            }
+//        }
+//
+//        if (!foundValue)
+//        {
+//            List<Dropdown.OptionData> options = elementDropdown.options;
+//            options.Add(new Dropdown.OptionData(newElement));
+//            elementDropdown.value = options.Count - 1;
+//        }
+//    }
+
+    public void UpdateElementButton(string newElement)
     {
         elementButton.GetComponentInChildren<Text>().text = newElement;
-        // maybe set the button color to the color of the element
-        //elementButton.image.color = ;
+        elementButton.image.color = LocalElementData.GetColour(newElement);
     }
     
     private void LoadStructure(string structure)
@@ -66,8 +77,8 @@ public class StructureMenuController : MenuController
             
         struc = JsonUtility.FromJson<StructureData>(structure);
 
-        SetElementDropdown(struc.elements[0]);
-        SetElementButton(struc.elements[0]);
+//        SetElementDropdown(struc.elements[0]);
+        UpdateElementButton(struc.elements[0]);
         
         // send the new structureName to the CalculationMenu
         SimulationMenuController.jobName = struc.formula;
@@ -110,7 +121,8 @@ public class StructureMenuController : MenuController
     {
         string repeat = repeatDropdown.options[repeatDropdown.value].text;
 
-        string element = "'" + elementDropdown.options[elementDropdown.value].text + "'";
+//        string element = "'" + elementDropdown.options[elementDropdown.value].text + "'";
+        string element = "'" + elementButton.GetComponentInChildren<Text>().text + "'";
 
         UpdateStructure("create(" + element + ", " + repeat + ", " + Utilities.ToggleToPythonBool(cubicToggle) + ", " + 
                         Utilities.ToggleToPythonBool(orthorombicToggle) + ")");
