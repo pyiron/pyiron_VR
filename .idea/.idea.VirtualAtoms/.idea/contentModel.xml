@@ -102,7 +102,6 @@
               <e p="SingletonBehaviour.cs" t="Include" />
             </e>
             <e p="ViveInputUtility" t="Include">
-              <e p="changelog.txt" t="Include" />
               <e p="Examples" t="Include">
                 <e p="2.2DDragDrop" t="Include">
                   <e p="Scripts" t="Include">
@@ -470,10 +469,11 @@
             <e p="Outdated" t="Include">
               <e p="InfoMenuController.cs" t="Include" />
               <e p="MenuController.cs" t="Include" />
-            </e>
-            <e p="StructureMenu" t="Include">
               <e p="PeriodensystemButtonManager.cs" t="Include" />
               <e p="PeriodicSysMenuController.cs" t="Include" />
+            </e>
+            <e p="StructureMenu" t="Include">
+              <e p="PeriodicTable.cs" t="Include" />
               <e p="StructureCreatorMenuController.cs" t="Include" />
               <e p="StructureMenuController.cs" t="Include" />
             </e>

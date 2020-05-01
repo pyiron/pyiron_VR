@@ -4,7 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// This file should manage the sizes of all the objects in the scene. At the moment it just scales
-/// the structure on startup
+/// the structure on startup. Maybe merge with StructureResizer?
 /// </summary>
 public class SizeManager : MonoBehaviour
 {

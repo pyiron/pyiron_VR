@@ -155,6 +155,7 @@ public class ModeController : MonoBehaviour
             StructureMenuController.Inst.OnModeStart();
         }
 
+        PeriodicTable.Inst.SetState(false);
         // ModeBar.Inst.UpdateButtons(currentMode.mode.ToString());
     }
 }

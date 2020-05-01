@@ -9,6 +9,7 @@ public class StructureMenuController : MenuController
     public static StructureMenuController Inst;
 
     public Dropdown elementDropdown;
+    public Button elementButton;
     public Dropdown repeatDropdown;
     public Toggle cubicToggle;
     public Toggle orthorombicToggle;
@@ -24,6 +25,34 @@ public class StructureMenuController : MenuController
 //        print(JsonUtility.ToJson(sd));
 //        JsonUtility.FromJson<StructureData>(JsonUtility.ToJson(sd));
     }
+
+    public void SetElementDropdown(string newElement)
+    {
+        bool foundValue = false;
+        for (int i = 0; i < elementDropdown.options.Count; i++)
+        {
+            if (newElement == elementDropdown.options[i].text)
+            {
+                elementDropdown.value = i;
+                foundValue = true;
+            }
+        }
+
+        if (!foundValue)
+        {
+            List<Dropdown.OptionData> options = elementDropdown.options;
+            options.Add(new Dropdown.OptionData(newElement));
+            elementDropdown.value = options.Count - 1;
+        }
+    }
+
+    public void SetElementButton(string newElement)
+    {
+        elementButton.GetComponentInChildren<Text>().text = newElement;
+        // maybe set the button color to the color of the element
+        //elementButton.image.color = ;
+    }
+    
     private void LoadStructure(string structure)
     {
         StructureData struc;
@@ -37,24 +66,8 @@ public class StructureMenuController : MenuController
             
         struc = JsonUtility.FromJson<StructureData>(structure);
 
-        string elm = struc.elements[0];
-            
-        bool foundValue = false;
-        for (int i = 0; i < elementDropdown.options.Count; i++)
-        {
-            if (elm == elementDropdown.options[i].text)
-            {
-                elementDropdown.value = i;
-                foundValue = true;
-            }
-        }
-
-        if (!foundValue)
-        {
-            List<Dropdown.OptionData> options = elementDropdown.options;
-            options.Add(new Dropdown.OptionData(elm));
-            elementDropdown.value = options.Count - 1;
-        }
+        SetElementDropdown(struc.elements[0]);
+        SetElementButton(struc.elements[0]);
         
         // send the new structureName to the CalculationMenu
         SimulationMenuController.jobName = struc.formula;
@@ -86,14 +99,11 @@ public class StructureMenuController : MenuController
         LoadStructure(structure);
     }
 
-    private string ToggleToPythonBool(Toggle tog)
+    public void OnElementButtonDown()
     {
-        if (tog.isOn)
-        {
-            return "True";
-        }
-
-        return "False";
+        // open periodic table here
+        PeriodicTable.Inst.SetState(true);
+        elementButton.interactable = false;
     }
 
     public void OnStructureChange()
@@ -102,8 +112,8 @@ public class StructureMenuController : MenuController
 
         string element = "'" + elementDropdown.options[elementDropdown.value].text + "'";
 
-        UpdateStructure("create(" + element + ", " + repeat + ", " + ToggleToPythonBool(cubicToggle) + ", " + 
-                        ToggleToPythonBool(orthorombicToggle) + ")");
+        UpdateStructure("create(" + element + ", " + repeat + ", " + Utilities.ToggleToPythonBool(cubicToggle) + ", " + 
+                        Utilities.ToggleToPythonBool(orthorombicToggle) + ")");
     }
 
     /// <summary>

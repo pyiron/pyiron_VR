@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-// component of AtomStructure
+// component of AtomStructure. maybe merge with SizeManager?
 public class StructureResizer : MonoBehaviour
 {
     public static StructureResizer inst;

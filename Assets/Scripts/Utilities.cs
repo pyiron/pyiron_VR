@@ -58,4 +58,15 @@ public static class Utilities
     {
         return v3.ToString().Replace('(', '[').Replace(')', ']');
     }
+    
+    
+    public static string ToggleToPythonBool(Toggle tog)
+    {
+        if (tog.isOn)
+        {
+            return "True";
+        }
+
+        return "False";
+    }
 }
