@@ -167,16 +167,17 @@ Todo:
   38.	DONE Handle error when creating non cubic Fe structure job
   39. 	DONE Implement choosing the element by using the periodic table
 - 40. 	LATER Implement a scrollbar for the explorer in case there are more structures than ther is space on the panel
-- 41.	laTER Add minimize, md to job name
+- 41.	LATER Add minimize, md to job name
   42.	DONE Update documentation and batch file
 - 43.	LATER moving atoms can cause an OutOfBounds Error
 ? 44.	FIXED? fix bug that no animations can be created
 ! 45.	TODO make an Error log
   46.	DONE Email lesen wie pyiron mit wsl installiert werden kann
   47.	DONE fix error that the wrong potentials get shown
-! 48.	TODO make error messages prettier/better
+  48.	DONE make error messages prettier/better
 ! 49.	TODO fix error that the server doesn't reset sometimes
-  50.	DONE make a loading symbol	
+  50.	DONE make a loading symbol
+! 51. 	TODO allow to close error messages	
 
 Time needed for sending a Message sync to python: 0.05s
 

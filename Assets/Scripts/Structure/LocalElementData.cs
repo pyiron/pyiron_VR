@@ -119,22 +119,43 @@ public class LocalElementData {
 
     // the following functions allow to access the properties of the elements
     public static string GetCasNumber(string shortName) {
-        return m_localElementDict[shortName].m_casNumber;
+        if (m_localElementDict.ContainsKey(shortName))
+        {
+            return m_localElementDict[shortName].m_casNumber;
+        }
+        return "";
     }
 
     public static string GetFullName(string shortName) {
-        return m_localElementDict[shortName].m_fullName;
+        if (m_localElementDict.ContainsKey(shortName))
+        {
+            return m_localElementDict[shortName].m_fullName;
+        }
+        return "";
     }
 
     public static int GetOrdinalNumber(string shortName) {
-        return m_localElementDict[shortName].m_ordinalNumber;
+        if (m_localElementDict.ContainsKey(shortName))
+        {
+            return m_localElementDict[shortName].m_ordinalNumber;
+        }
+        return -1;
     }
 
     public static float GetSize(string shortName) {
-        return m_localElementDict[shortName].m_size;
+        if (m_localElementDict.ContainsKey(shortName))
+        {
+            return m_localElementDict[shortName].m_size;
+        }
+        // TODO: return 1 or NaN if element is not in the database?
+        return 1f;
     }
 
     public static Color GetColour(string shortName) {
-        return m_localElementDict[shortName].m_colour;
+        if (m_localElementDict.ContainsKey(shortName))
+        {
+            return m_localElementDict[shortName].m_colour;
+        }
+        return Color.white;
     }
 }
