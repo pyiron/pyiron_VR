@@ -19,7 +19,7 @@ public class DebugShortcuts : MonoBehaviour
         {
             if (counter == 0)
             {
-                TCPClient.inst.ConnectWithHost(serverIpField.text);
+                TCPClient.Inst.ConnectWithHost(serverIpField.text);
             }
 
             if (counter == 1)

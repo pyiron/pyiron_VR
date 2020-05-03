@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 public class TCPClient : MonoBehaviour
 {
-	public static TCPClient inst;
+	public static TCPClient Inst;
 	
 	private static TcpClient socketConnection;
 	private static NetworkStream stream;
@@ -34,6 +34,7 @@ public class TCPClient : MonoBehaviour
 	// the task waiting for new data
 	private static Task<int> socketReadTask;
 
+	private string HOST;
 	public const int PORT = 65432;
 	
 	// the size of message-packets send from Python to Unity. Should be the same as in Python
@@ -45,7 +46,7 @@ public class TCPClient : MonoBehaviour
 
 	private void Awake()
 	{
-		inst = this;
+		Inst = this;
 	}
 
 	private void Update()
@@ -94,10 +95,20 @@ public class TCPClient : MonoBehaviour
 
 	public void ConnectWithHost(string host)
 	{
-		print("Trying to connect to " + host);
-		
 		// show that the program is loading
 		LoadingText.Inst.Activate();
+
+		// if no new host is specified, try to load the one we have been connected to before 
+		// (needed for temporary internet outages)
+		if (host == null)
+		{
+			host = HOST;
+		}
+
+		// save the host
+		HOST = host;
+		
+		print("Trying to connect to " + HOST);
 		
 		// after connecting to a server or while trying to connect to one, connecting to another one is not possible
 		if (socketConnection != null || connStatus != null) return;
@@ -248,7 +259,7 @@ public class TCPClient : MonoBehaviour
 	/// <param name="readAsync"></param>
 	/// <param name="shouldReturn"></param>
 	/// <returns></returns>
-	private static string ListenForInput(bool readAsync=true, bool shouldReturn=false)
+	private static string ListenForInput(bool readAsync=true, bool shouldReturn=true) // freezes if shouldReturn=false
 	{
 		// Message protocol: len_of_message;messagelen_of_next_message;next_message
 		// Example: 13;first message4;done
@@ -265,9 +276,12 @@ public class TCPClient : MonoBehaviour
 				Debug.LogError(e.Message + "\n" + e.StackTrace);
 				ErrorTextController.inst.ShowMsg("Couldn't read the TCP stream. Check that you are still connected to" +
 				                                 " the internet!");
+				
 				return "";
 			}
 		}
+
+//		stream.ReadTimeout = 1000;
 
 		// get the length of the message that will be send from the python program afterwards
 		int headerLen;
@@ -283,6 +297,7 @@ public class TCPClient : MonoBehaviour
 				newMsg = GetMsgSync(stream);
 			}
 
+			// check if the server disconnected
 			if (newMsg == "" && shouldReturn) return "";
 			recBuffer += newMsg;
 			// before the semicolon the length of the following message gets send, after it the message
@@ -322,14 +337,22 @@ public class TCPClient : MonoBehaviour
 			}
 
 			// try to read input from the stream
+			string newMsg;
 			if (readAsync)
 			{
-				recBuffer += GetMsgAsync(stream);
+				newMsg = GetMsgAsync(stream);
 			}
 			else
 			{
-				recBuffer += GetMsgSync(stream);
+				newMsg = GetMsgSync(stream);
 			}
+
+			// check if the server disconnected
+			if (newMsg == "")
+			{
+				return "";
+			}
+			recBuffer += newMsg;
 		}
 
 		taskNumOut += 1;
@@ -345,8 +368,25 @@ public class TCPClient : MonoBehaviour
 
 	public static string SendMsgToPythonSync(PythonCommandType exType, string msg)
 	{
-		SendMsgToPython(exType, msg, sendAsync:false);
+		string msgRes = SendMsgToPython(exType, msg, sendAsync:false);
+		print(msgRes);
+		if (msgRes.StartsWith("Error"))
+		{
+			return msgRes;
+		}
+
 		return ListenForInput(readAsync:false);
+	}
+
+	private static void TryReconnect()
+	{
+		if (socketConnection != null)
+		{
+			socketConnection.Close();
+			socketConnection = null;
+		}
+
+		Inst.ConnectWithHost(null);
 	}
 	
 	/// <summary> 	
@@ -354,17 +394,21 @@ public class TCPClient : MonoBehaviour
 	/// </summary> 	
 	public static string SendMsgToPython(PythonCommandType exType, string msg, bool sendAsync=true)
 	{
-		if (socketConnection == null) {     
-			Debug.LogError("No socket connection");
-			return "No socket connection";         
+		if (socketConnection == null || !socketConnection.Connected)
+		{
+			string problem = "Socket currently not connected!";
+			Debug.LogWarning(problem + " socketConnection is " + socketConnection);
+			ErrorTextController.inst.ShowMsg(problem);
+			TryReconnect();
+			return "Error: " + problem;
 		}
 
 		try
 		{
 			NetworkStream stream = socketConnection.GetStream();
+			stream.WriteTimeout = 1000;
 			if (stream.CanWrite)
 			{
-				taskNumIn++;
 				string clientMessage = exType + ":" + msg;
 				clientMessage = clientMessage.Length + ";" + clientMessage;
 				// Convert string message to byte array.                 
@@ -378,27 +422,45 @@ public class TCPClient : MonoBehaviour
 				{
 					stream.Write(clientMessageAsByteArray, 0, clientMessageAsByteArray.Length);
 				}
+				
+				taskNumIn++;
 
 				Debug.Log(Time.time + ": Client sent his message " + msg);
 			}
 			else
 			{
 				Debug.LogError("stream not writable");
-				return "Stream not writable";
+				return "Error: Stream not writable";
 			}
 		}
-		catch (SocketException ex)
+		// can throw a SocketException, InvalidOperationException or System.IO.IOException,
+		// main cause is a failure of internet or that the server stopped
+//		catch (SocketException ex)
+//		{
+//			Debug.LogError("InvalidOperationException: " + ex);
+//			ErrorTextController.inst.ShowMsg("Socket exception: " + ex);
+//			return "Socket Exc: " + ex;
+//		}
+//		catch (InvalidOperationException ex)
+//		{
+//			ErrorTextController.inst.ShowMsg("InvalidOperationException: " + ex);
+//			Debug.LogError("InvalidOperationException: " + ex + "\n" +
+//			               "Check that the server is still running and you have internet connection");
+//			return "Socket Exc: " + ex;
+//		}
+//		catch (System.IO.IOException ex)
+//		{
+//			ErrorTextController.inst.ShowMsg("IOException: " + ex);
+//			Debug.LogError("IOException: " + ex + "\n" +
+//			               "Check that the server is still running and you have internet connection");
+//			return "IO Exc: " + ex;
+//		}
+		catch (Exception ex)
 		{
-			Debug.LogError("InvalidOperationException: " + ex);
-			ErrorTextController.inst.ShowMsg("Socket exception: " + ex);
-			return "Socket Exc: " + ex;
-		}
-		catch (InvalidOperationException ex)
-		{
-			ErrorTextController.inst.ShowMsg("InvalidOperationException: " + ex);
-			Debug.LogError("InvalidOperationException: " + ex + "\n" +
-			               "Check that the server is still running and you have internet connection");
-			return "Socket Exc: " + ex;
+			Debug.LogWarning(ex);
+			ErrorTextController.inst.ShowMsg(ex.ToString());
+			TryReconnect();
+			return "Error: " + ex;
 		}
 		return "async";
 		// return receive(); 

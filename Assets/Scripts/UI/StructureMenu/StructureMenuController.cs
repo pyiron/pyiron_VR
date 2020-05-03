@@ -67,6 +67,11 @@ public class StructureMenuController : MenuController
     private void LoadStructure(string structure)
     {
         StructureData struc;
+        if (structure == "")
+        {
+            ErrorText.text = "Couldn't load the new structure. Please try again!";
+            return;
+        }
         if (structure.StartsWith("Error"))
         {
             ErrorText.text = structure;

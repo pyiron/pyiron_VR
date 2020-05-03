@@ -147,11 +147,11 @@ public class LocalElementData {
         {
             return m_localElementDict[shortName].m_size;
         }
-        // TODO: return 1 or NaN if element is not in the database?
         return 1f;
     }
 
-    public static Color GetColour(string shortName) {
+    public static Color GetColour(string shortName)
+    {
         if (m_localElementDict.ContainsKey(shortName))
         {
             return m_localElementDict[shortName].m_colour;

@@ -281,7 +281,7 @@ public class PythonExecuter : MonoBehaviour {
         }
 
         string response = TCPClient.SendMsgToPythonSync(type, fullOrder);
-        if (handleInput)
+        if (handleInput && !response.StartsWith("Error"))
         {
             HandlePythonMsg(response);
         }
