@@ -33,6 +33,8 @@ public class TCPClient : MonoBehaviour
 	private static Byte[] block;
 	// the task waiting for new data
 	private static Task<int> socketReadTask;
+	// the length of the msg that should be read next (0 if it is unknown)
+	private static int msgLen;
 
 	private string HOST;
 	public const int PORT = 65432;
@@ -259,7 +261,7 @@ public class TCPClient : MonoBehaviour
 	/// <param name="readAsync"></param>
 	/// <param name="shouldReturn"></param>
 	/// <returns></returns>
-	private static string ListenForInput(bool readAsync=true, bool shouldReturn=true) // freezes if shouldReturn=false
+	private static string ListenForInput(bool readAsync=true, bool shouldReturn=false) // doesnt freeze if shouldReturn=true
 	{
 		// Message protocol: len_of_message;messagelen_of_next_message;next_message
 		// Example: 13;first message4;done
@@ -282,50 +284,58 @@ public class TCPClient : MonoBehaviour
 		}
 
 //		stream.ReadTimeout = 1000;
-
-		// get the length of the message that will be send from the python program afterwards
 		int headerLen;
-		while (true)
+		if (msgLen == 0)
 		{
-			string newMsg;
-			if (readAsync)
+			// get the length of the message that will be send from the python program afterwards
+			while (true)
 			{
-				newMsg = GetMsgAsync(stream);
-			}
-			else
-			{
-				newMsg = GetMsgSync(stream);
+				string newMsg;
+				if (readAsync)
+				{
+					newMsg = GetMsgAsync(stream);
+				}
+				else
+				{
+					newMsg = GetMsgSync(stream);
+				}
+
+
+
+				// check if the server disconnected
+				if (newMsg == "")
+				{
+					print("Getting no response from the server");
+					return "";
+				}
+
+				recBuffer += newMsg;
+				// before the semicolon the length of the following message gets send, after it the message
+				if ((headerLen = recBuffer.IndexOf(';')) != -1)
+				{
+					break;
+				}
+
+				if (shouldReturn || !ProgramSettings.programIsRunning) return "";
+				// todo: some performance tests should be done
 			}
 
-			// check if the server disconnected
-			if (newMsg == "" && shouldReturn) return "";
-			recBuffer += newMsg;
-			// before the semicolon the length of the following message gets send, after it the message
-			if ((headerLen = recBuffer.IndexOf(';')) != -1)
+			String header = recBuffer.Substring(0, headerLen);
+			PythonExecuter.incomingChanges += 1;
+			RemoveString(headerLen + 1);
+			msgLen = int.Parse(header);
+			if (msgLen == -1)
 			{
-				break;
+				msgLen = 0;
+				return "";
 			}
-
-			if (shouldReturn || !ProgramSettings.programIsRunning) return "";
-			// todo: some performance tests should be done
-
-			// this might slightly increase the performance
-			if (newMsg.Length == 0)
-			{
-				Thread.Sleep(10);
-			}
+			
+			returnedMsg = "";
 		}
 
-		String header = recBuffer.Substring(0, headerLen);
-		PythonExecuter.incomingChanges += 1;
-		RemoveString(headerLen + 1);
-		int msgLen = int.Parse(header);
-		if (msgLen == -1) return "";
-		
 		// Receive data until at least the whole message has been received. Additional data will be bufferred
 		// Warning: If the message is really long and the connection really slow this loop could lead to a temporary
 		// screen freeze.
-		returnedMsg = "";
 		while (true)
 		{
 			if (recBuffer.Length >= msgLen)
@@ -350,10 +360,13 @@ public class TCPClient : MonoBehaviour
 			// check if the server disconnected
 			if (newMsg == "")
 			{
+				print("Getting no response from the server");
 				return "";
 			}
 			recBuffer += newMsg;
 		}
+
+		msgLen = 0;
 
 		taskNumOut += 1;
 		if (taskNumOut == taskNumIn)

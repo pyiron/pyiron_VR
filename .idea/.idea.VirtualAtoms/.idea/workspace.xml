@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8cfb1e49-c2a3-4bd3-89b8-e91eb354f53b" name="Default Changelist" comment="">
+    <list default="true" id="8cfb1e49-c2a3-4bd3-89b8-e91eb354f53b" name="Default Changelist" comment="Fixed a bug that the program would load endlessly when trying to load somethin asynchronous. Receiving a large file from python now seems to be asynchronous.">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.VirtualAtoms/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.VirtualAtoms/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/DebugShortcuts.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/DebugShortcuts.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Input/PythonExecuter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Input/PythonExecuter.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Input/TCPClient.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Input/TCPClient.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Structure/LocalElementData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Structure/LocalElementData.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/StructureMenu/StructureMenuController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/StructureMenu/StructureMenuController.cs" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -159,79 +155,79 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Assets/Scripts/Input/TCPClient.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="356">
-              <caret line="299" column="47" selection-start-line="299" selection-start-column="47" selection-end-line="299" selection-end-column="47" />
+            <state relative-caret-position="68">
+              <caret line="370" column="24" lean-forward="true" selection-start-line="370" selection-start-column="24" selection-end-line="370" selection-end-column="24" />
               <folding>
-                <marker date="1588530550226" expanded="false" signature="6:241" ph="..." />
-                <marker date="1588530550226" expanded="true" signature="281:12425" ph="{...}" />
-                <marker date="1588530550226" expanded="false" signature="1423:1841" ph="Monobehaviour Callbacks" />
-                <marker date="1588530550226" expanded="true" signature="1477:1498" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="1522:1726" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="1623:1723" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="1761:1828" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="1872:1913" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="1916:5269" ph="ConnectToServer" />
-                <marker date="1588530550226" expanded="true" signature="2060:2180" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="2293:2619" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="2299:2457" ph="/* The vibration does not get triggered on the Quest, but it should work on the Vive ... */" />
-                <marker date="1588530550226" expanded="true" signature="2662:3451" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="2738:2868" ph="/* if no new host is specified, try to load the one we have been connected to before ... */" />
-                <marker date="1588530550226" expanded="true" signature="2888:2912" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="3176:3317" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="3328:3448" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="3488:4367" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="3632:4152" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="3718:3928" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="3959:4100" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="4174:4274" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="4402:4746" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="4515:4644" ph="/* load the content of the start path (which is defined in the Python script) ... */" />
-                <marker date="1588530550226" expanded="true" signature="4779:4982" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="5017:5256" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="5350:5469" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="5383:5432" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="5439:5466" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="5527:6004" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="5610:5713" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="5749:5771" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="6062:6338" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="6341:6621" ph="/// Listens on the connection to the Python server if input arrived. Will block if shouldReturn is set to false. ... " />
-                <marker date="1588530550226" expanded="true" signature="6737:9256" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="6743:6923" ph="/* Message protocol: len_of_message;messagelen_of_next_message;next_message ... */" />
-                <marker date="1588530550226" expanded="true" signature="6953:7305" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="6964:7017" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="7053:7301" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="7307:7426" ph="/* stream.ReadTimeout = 1000; ... */" />
-                <marker date="1588530550226" expanded="true" signature="7458:8107" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="7498:7542" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="7550:7593" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="7851:7872" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="7946:8044" ph="/* todo: some performance tests should be done ... */" />
-                <marker date="1588530550226" expanded="true" signature="8071:8103" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="8302:8534" ph="/* Receive data until at least the whole message has been received. Additional data will be bufferred ... */" />
-                <marker date="1588530550226" expanded="true" signature="8569:9058" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="8608:8772" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="8849:8893" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="8901:8944" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="9005:9030" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="9109:9231" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="9259:12230" ph="SendMessage" />
-                <marker date="1588530550226" expanded="true" signature="9359:9550" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="9478:9504" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="9587:9721" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="9622:9687" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="9725:9813" ph="/// Send message to server using socket connection. &#9; ... " />
-                <marker date="1588530550226" expanded="true" signature="9910:12217" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="9976:10210" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="10217:11060" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="10332:10954" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="10663:10761" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="10770:10863" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="10962:11056" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="11063:12019" ph="/* can throw a SocketException, InvalidOperationException or System.IO.IOException, ... */" />
-                <marker date="1588530550226" expanded="true" signature="12042:12172" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="12265:12423" ph="{...}" />
-                <marker date="1588530550226" expanded="true" signature="12300:12420" ph="{...}" />
+                <marker date="1588540724832" expanded="false" signature="6:241" ph="..." />
+                <marker date="1588540724832" expanded="true" signature="281:12623" ph="{...}" />
+                <marker date="1588540724832" expanded="false" signature="1523:1941" ph="Monobehaviour Callbacks" />
+                <marker date="1588540724832" expanded="true" signature="1577:1598" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="1622:1826" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="1723:1823" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="1861:1928" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="1972:2013" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="2016:5369" ph="ConnectToServer" />
+                <marker date="1588540724832" expanded="true" signature="2160:2280" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="2393:2719" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="2399:2557" ph="/* The vibration does not get triggered on the Quest, but it should work on the Vive ... */" />
+                <marker date="1588540724832" expanded="true" signature="2762:3551" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="2838:2968" ph="/* if no new host is specified, try to load the one we have been connected to before ... */" />
+                <marker date="1588540724832" expanded="true" signature="2988:3012" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="3276:3417" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="3428:3548" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="3588:4467" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="3732:4252" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="3818:4028" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="4059:4200" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="4274:4374" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="4502:4846" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="4615:4744" ph="/* load the content of the start path (which is defined in the Python script) ... */" />
+                <marker date="1588540724832" expanded="true" signature="4879:5082" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="5117:5356" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="5450:5569" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="5483:5532" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="5539:5566" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="5627:6104" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="5710:5813" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="5849:5871" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="6162:6438" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="6441:6721" ph="/// Listens on the connection to the Python server if input arrived. Will block if shouldReturn is set to false. ... " />
+                <marker date="1588540724832" expanded="true" signature="6843:9454" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="6849:7029" ph="/* Message protocol: len_of_message;messagelen_of_next_message;next_message ... */" />
+                <marker date="1588540724832" expanded="true" signature="7059:7411" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="7070:7123" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="7159:7407" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="7479:8451" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="7588:8202" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="7631:7678" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="7687:7733" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="7798:7877" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="8051:8075" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="8381:8422" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="8455:8687" ph="/* Receive data until at least the whole message has been received. Additional data will be bufferred ... */" />
+                <marker date="1588540724832" expanded="true" signature="8702:9241" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="8741:8905" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="8982:9026" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="9034:9077" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="9138:9213" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="9307:9429" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="9457:12428" ph="SendMessage" />
+                <marker date="1588540724832" expanded="true" signature="9557:9748" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="9676:9702" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="9785:9919" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="9820:9885" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="9923:10011" ph="/// Send message to server using socket connection. &#9; ... " />
+                <marker date="1588540724832" expanded="true" signature="10108:12415" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="10174:10408" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="10415:11258" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="10530:11152" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="10861:10959" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="10968:11061" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="11160:11254" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="11261:12217" ph="/* can throw a SocketException, InvalidOperationException or System.IO.IOException, ... */" />
+                <marker date="1588540724832" expanded="true" signature="12240:12370" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="12463:12621" ph="{...}" />
+                <marker date="1588540724832" expanded="true" signature="12498:12618" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -554,7 +550,7 @@
       <workItem from="1587543120246" duration="4332000" />
       <workItem from="1588316860416" duration="21767000" />
       <workItem from="1588443412966" duration="5776000" />
-      <workItem from="1588520285508" duration="6377000" />
+      <workItem from="1588520285508" duration="10406000" />
     </task>
     <task id="LOCAL-00001" summary="Implemented parts of the StructureBuilder">
       <created>1585853897813</created>
@@ -745,13 +741,20 @@
       <option name="project" value="LOCAL" />
       <updated>1588446381657</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="Fixed a bug that the program would freeze if the server suddenly stops responding (e.g. because it crashed)">
+      <created>1588530648570</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1588530648570</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="130104000" />
+    <option name="totallyTimeSpent" value="134133000" />
   </component>
-  <component name="TodoView">
+  <component name="TodoView" selected-index="4">
     <todo-panel id="selected-file">
       <is-autoscroll-to-source value="true" />
     </todo-panel>
@@ -764,7 +767,7 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1905016" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1905016" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Capture Tool" order="3" />
@@ -776,7 +779,7 @@
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info active="true" anchor="bottom" id="TODO" order="6" visible="true" weight="0.32899022" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info anchor="bottom" id="Android Profiler" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Docker" order="9" show_stripe_button="false" />
@@ -804,8 +807,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="true" />
   <component name="UnityUnitTestConfiguration" currentTestLauncher="NUnit" />
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="The structure can now be loaded from python and the bounding box will be shown." />
-    <MESSAGE value="The structure now gets shown in the structure creator. Bugs remain." />
     <MESSAGE value="The structure size and amount of frames now gets send from Python to Unity when sending the structure." />
     <MESSAGE value="The cellbox now gets drawn correctly for orthorhombic structures." />
     <MESSAGE value="The cell borders are now spheres. This way,the vertices look better. The midpoint of the structure should now be calculated correctly." />
@@ -829,7 +830,9 @@
     <MESSAGE value="Fixed a bug that the potentials dropdown would show the wrong potentials, because it did not update and just showed all potentials until it set the current potential." />
     <MESSAGE value="When some structures can't run because of a yet unknown error, there will now be an error message" />
     <MESSAGE value="Fixed a bug that the program would crash when trying to load an element that is not in the LocalElementData File" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed a bug that the program would crash when trying to load an element that is not in the LocalElementData File" />
+    <MESSAGE value="Fixed a bug that the program would freeze if the server suddenly stops responding (e.g. because it crashed)" />
+    <MESSAGE value="Fixed a bug that the program would load endlessly when trying to load somethin asynchronous. Receiving a large file from python now seems to be asynchronous." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed a bug that the program would load endlessly when trying to load somethin asynchronous. Receiving a large file from python now seems to be asynchronous." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1832,79 +1835,79 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Assets/Scripts/Input/TCPClient.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="356">
-          <caret line="299" column="47" selection-start-line="299" selection-start-column="47" selection-end-line="299" selection-end-column="47" />
+        <state relative-caret-position="68">
+          <caret line="370" column="24" lean-forward="true" selection-start-line="370" selection-start-column="24" selection-end-line="370" selection-end-column="24" />
           <folding>
-            <marker date="1588530550226" expanded="false" signature="6:241" ph="..." />
-            <marker date="1588530550226" expanded="true" signature="281:12425" ph="{...}" />
-            <marker date="1588530550226" expanded="false" signature="1423:1841" ph="Monobehaviour Callbacks" />
-            <marker date="1588530550226" expanded="true" signature="1477:1498" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="1522:1726" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="1623:1723" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="1761:1828" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="1872:1913" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="1916:5269" ph="ConnectToServer" />
-            <marker date="1588530550226" expanded="true" signature="2060:2180" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="2293:2619" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="2299:2457" ph="/* The vibration does not get triggered on the Quest, but it should work on the Vive ... */" />
-            <marker date="1588530550226" expanded="true" signature="2662:3451" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="2738:2868" ph="/* if no new host is specified, try to load the one we have been connected to before ... */" />
-            <marker date="1588530550226" expanded="true" signature="2888:2912" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="3176:3317" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="3328:3448" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="3488:4367" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="3632:4152" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="3718:3928" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="3959:4100" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="4174:4274" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="4402:4746" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="4515:4644" ph="/* load the content of the start path (which is defined in the Python script) ... */" />
-            <marker date="1588530550226" expanded="true" signature="4779:4982" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="5017:5256" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="5350:5469" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="5383:5432" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="5439:5466" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="5527:6004" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="5610:5713" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="5749:5771" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="6062:6338" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="6341:6621" ph="/// Listens on the connection to the Python server if input arrived. Will block if shouldReturn is set to false. ... " />
-            <marker date="1588530550226" expanded="true" signature="6737:9256" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="6743:6923" ph="/* Message protocol: len_of_message;messagelen_of_next_message;next_message ... */" />
-            <marker date="1588530550226" expanded="true" signature="6953:7305" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="6964:7017" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="7053:7301" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="7307:7426" ph="/* stream.ReadTimeout = 1000; ... */" />
-            <marker date="1588530550226" expanded="true" signature="7458:8107" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="7498:7542" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="7550:7593" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="7851:7872" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="7946:8044" ph="/* todo: some performance tests should be done ... */" />
-            <marker date="1588530550226" expanded="true" signature="8071:8103" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="8302:8534" ph="/* Receive data until at least the whole message has been received. Additional data will be bufferred ... */" />
-            <marker date="1588530550226" expanded="true" signature="8569:9058" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="8608:8772" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="8849:8893" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="8901:8944" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="9005:9030" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="9109:9231" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="9259:12230" ph="SendMessage" />
-            <marker date="1588530550226" expanded="true" signature="9359:9550" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="9478:9504" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="9587:9721" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="9622:9687" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="9725:9813" ph="/// Send message to server using socket connection. &#9; ... " />
-            <marker date="1588530550226" expanded="true" signature="9910:12217" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="9976:10210" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="10217:11060" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="10332:10954" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="10663:10761" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="10770:10863" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="10962:11056" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="11063:12019" ph="/* can throw a SocketException, InvalidOperationException or System.IO.IOException, ... */" />
-            <marker date="1588530550226" expanded="true" signature="12042:12172" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="12265:12423" ph="{...}" />
-            <marker date="1588530550226" expanded="true" signature="12300:12420" ph="{...}" />
+            <marker date="1588540724832" expanded="false" signature="6:241" ph="..." />
+            <marker date="1588540724832" expanded="true" signature="281:12623" ph="{...}" />
+            <marker date="1588540724832" expanded="false" signature="1523:1941" ph="Monobehaviour Callbacks" />
+            <marker date="1588540724832" expanded="true" signature="1577:1598" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="1622:1826" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="1723:1823" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="1861:1928" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="1972:2013" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="2016:5369" ph="ConnectToServer" />
+            <marker date="1588540724832" expanded="true" signature="2160:2280" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="2393:2719" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="2399:2557" ph="/* The vibration does not get triggered on the Quest, but it should work on the Vive ... */" />
+            <marker date="1588540724832" expanded="true" signature="2762:3551" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="2838:2968" ph="/* if no new host is specified, try to load the one we have been connected to before ... */" />
+            <marker date="1588540724832" expanded="true" signature="2988:3012" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="3276:3417" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="3428:3548" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="3588:4467" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="3732:4252" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="3818:4028" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="4059:4200" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="4274:4374" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="4502:4846" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="4615:4744" ph="/* load the content of the start path (which is defined in the Python script) ... */" />
+            <marker date="1588540724832" expanded="true" signature="4879:5082" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="5117:5356" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="5450:5569" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="5483:5532" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="5539:5566" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="5627:6104" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="5710:5813" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="5849:5871" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="6162:6438" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="6441:6721" ph="/// Listens on the connection to the Python server if input arrived. Will block if shouldReturn is set to false. ... " />
+            <marker date="1588540724832" expanded="true" signature="6843:9454" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="6849:7029" ph="/* Message protocol: len_of_message;messagelen_of_next_message;next_message ... */" />
+            <marker date="1588540724832" expanded="true" signature="7059:7411" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="7070:7123" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="7159:7407" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="7479:8451" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="7588:8202" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="7631:7678" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="7687:7733" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="7798:7877" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="8051:8075" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="8381:8422" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="8455:8687" ph="/* Receive data until at least the whole message has been received. Additional data will be bufferred ... */" />
+            <marker date="1588540724832" expanded="true" signature="8702:9241" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="8741:8905" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="8982:9026" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="9034:9077" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="9138:9213" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="9307:9429" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="9457:12428" ph="SendMessage" />
+            <marker date="1588540724832" expanded="true" signature="9557:9748" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="9676:9702" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="9785:9919" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="9820:9885" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="9923:10011" ph="/// Send message to server using socket connection. &#9; ... " />
+            <marker date="1588540724832" expanded="true" signature="10108:12415" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="10174:10408" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="10415:11258" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="10530:11152" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="10861:10959" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="10968:11061" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="11160:11254" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="11261:12217" ph="/* can throw a SocketException, InvalidOperationException or System.IO.IOException, ... */" />
+            <marker date="1588540724832" expanded="true" signature="12240:12370" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="12463:12621" ph="{...}" />
+            <marker date="1588540724832" expanded="true" signature="12498:12618" ph="{...}" />
           </folding>
         </state>
       </provider>
