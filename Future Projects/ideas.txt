@@ -178,8 +178,11 @@ Todo:
 ! 49.	TODO fix error that the server doesn't reset sometimes
   50.	DONE make a loading symbol
 ! 51. 	TODO allow to close error messages
-! 52	TODO show if the client is disconnected
-! 53. 	TODO automatically try to reconnect if the client is disconnected	
+  52.	TODO show if the client is disconnected
+  53. 	DONE automatically try to reconnect if the client is disconnected
+! 53.	TODO execute actions after the data has been send to python and just if the transmission was successfull (to prevent inconsistency)
+  54.	DONE deactivate the structure when sending with async
+! 55.	TODO dont allow any actions for the structure if it is deactivated (or maybe with the controllers)	
 
 Time needed for sending a Message sync to python: 0.05s
 

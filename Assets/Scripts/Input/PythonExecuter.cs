@@ -293,6 +293,8 @@ public class PythonExecuter : MonoBehaviour {
     {
         // show that the program is loading
         AnimatedText.Instances[TextInstances.LoadingText].Activate();
+        // deactivate the scene while loading
+        Utilities.DeactivateInteractables();
         
         string fullOrder = ProcessOrder(script, type, order);
         

@@ -237,6 +237,10 @@ public class TCPClient : MonoBehaviour
 		{
 			// all requested messages got loaded, so the loading text can be deactivated
 			AnimatedText.Instances[TextInstances.LoadingText].Deactivate();
+			if (readAsync)
+			{
+				Utilities.ActivateInteractables();
+			}
 		}
 		return returnedMsg;
 	}
