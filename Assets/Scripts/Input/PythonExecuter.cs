@@ -292,7 +292,7 @@ public class PythonExecuter : MonoBehaviour {
     public static void SendOrderAsync(PythonScript script, PythonCommandType type, string order)
     {
         // show that the program is loading
-        LoadingText.Inst.Activate();
+        AnimatedText.Instances[TextInstances.LoadingText].Activate();
         
         string fullOrder = ProcessOrder(script, type, order);
         

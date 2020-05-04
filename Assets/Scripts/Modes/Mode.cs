@@ -5,6 +5,7 @@ public struct Mode
 {
     // create the variables, which hold the data of the properties of an element
     public readonly Modes mode;
+    public readonly MenuController controller;
     public readonly bool playerCanMoveAtoms;
     public readonly bool playerCanResizeAtoms;
     public readonly bool showTemp;
@@ -18,11 +19,12 @@ public struct Mode
     //public readonly bool showPeriodicSystem;
     //public readonly bool showModes;
 
-    public Mode(Modes mode, bool playerCanMoveAtoms = false, bool playerCanResizeAtoms = false, bool showTemp = false,
+    public Mode(Modes mode, MenuController controller, bool playerCanMoveAtoms = false, bool playerCanResizeAtoms = false, bool showTemp = false,
         bool showRelaxation = false, bool showInfo = false, bool canDuplicate = false, bool showTrashcan = false,
         bool hideAtoms = false)
     {
         this.mode = mode;
+        this.controller = controller;
         this.playerCanMoveAtoms = playerCanMoveAtoms;  // switch to type handrole
         this.playerCanResizeAtoms = playerCanResizeAtoms;
         this.showTemp = showTemp;

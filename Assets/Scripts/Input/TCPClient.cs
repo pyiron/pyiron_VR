@@ -13,15 +13,11 @@ public class TCPClient : MonoBehaviour
 {
 	public static TCPClient Inst;
 	
-	private static TcpClient socketConnection;
+	public static TcpClient socketConnection;
 	private static NetworkStream stream;
 	private Thread clientReceiveThread;
 	
-	// needed for asynchronous (lag free) connecting to the server
-	public static Task connStatus;
-	// the time until the connection is declared as not existent
-	private static float connTimeOut = 2;
-	private float connTimer = connTimeOut;
+
 
 	// will be increased by 1 each time an order gets send. It functions as a unique id for each order send to Python
 	public static int taskNumIn = 0;
@@ -35,9 +31,6 @@ public class TCPClient : MonoBehaviour
 	private static Task<int> socketReadTask;
 	// the length of the msg that should be read next (0 if it is unknown)
 	private static int msgLen;
-
-	private string HOST;
-	public const int PORT = 65432;
 	
 	// the size of message-packets send from Python to Unity. Should be the same as in Python
 	private static int BLOCKSIZE = 1024;
@@ -74,136 +67,7 @@ public class TCPClient : MonoBehaviour
 		return socketConnection != null;
 	}
 
-	#region ConnectToServer
-
-	// called by the Input Field for the server address on the network panel
-	public void ConnectTo(InputField inputField)
-	{
-		// save the Ip adress
-		PlayerPrefs.SetString("ServerIp", inputField.text);
-		ConnectWithHost(inputField.text);
-	}
 	
-	// called by the Input Field for the server address on the network panel
-	public void ConnectTo(Text btnText)
-	{
-		// The vibration does not get triggered on the Quest, but it should work on the Vive
-		// If needed on the Quest, the function of the OVR Plugin could be used
-		ViveInput.TriggerHapticVibration(HandRole.LeftHand, 0.2f);
-		ViveInput.TriggerHapticVibration(HandRole.RightHand, 0.2f);
-		
-		ConnectWithHost(btnText.text);
-	}
-
-	public void ConnectWithHost(string host)
-	{
-		// show that the program is loading
-		LoadingText.Inst.Activate();
-
-		// if no new host is specified, try to load the one we have been connected to before 
-		// (needed for temporary internet outages)
-		if (host == null)
-		{
-			host = HOST;
-		}
-
-		// save the host
-		HOST = host;
-		
-		print("Trying to connect to " + HOST);
-		
-		// after connecting to a server or while trying to connect to one, connecting to another one is not possible
-		if (socketConnection != null || connStatus != null) return;
-		
-		try
-		{
-			socketConnection = new TcpClient();
-			connStatus = socketConnection.ConnectAsync(host, PORT);
-			StartCoroutine(TryToConnect());
-		}
-		catch
-		{
-			ConnectionError();
-			
-			// the loading is over, deactivate the loading text
-			LoadingText.Inst.Deactivate();
-		}
-	}
-
-	private IEnumerator TryToConnect()
-	{
-		// the time between each update if there has been an update to the connection status
-		float updateTime = 0.4f;
-		
-		while (connTimer > 0)
-		{
-			connTimer -= updateTime;
-			if (connStatus.IsFaulted || connStatus.IsCanceled)
-			{
-				// error
-				connTimer = connTimeOut;
-				print("Connection is Faulted: " + connStatus.IsFaulted);
-				print("Connection is Canceled: " + connStatus.IsCanceled);
-				ConnectionError();
-				break;
-			}
-			if (connStatus.IsCompleted)
-			{
-				// success
-				connTimer = connTimeOut;
-				print("Successfully connected to the server");
-				ConnectionSuccess();
-				break;
-			}
-			yield return new WaitForSeconds(updateTime);
-		}
-		if (connTimer <= 0)
-		{
-			// the server didn't respond in time
-			connTimer = connTimeOut;
-			ConnectionTimeout();
-		}
-		
-		// the loading is over, deactivate the loading text
-		LoadingText.Inst.Deactivate();
-	}
-
-	private void ConnectionSuccess()
-	{
-		connStatus.Dispose();
-		connStatus = null;
-		
-		NetworkMenuController.Inst.keyboard.SetActive(false);
-		
-		// load the content of the start path (which is defined in the Python script)
-		// ExplorerMenuController.Inst.LoadPathContent();
-		
-		ModeController.inst.SetMode(Modes.Structure);
-
-		Boundingbox.Inst.gameObject.SetActive(true);
-	}
-
-	private void ConnectionError()
-	{
-		// connection failure
-		print("Failed to connect");
-		connStatus.Dispose();
-		connStatus = null;
-		socketConnection = null;
-		ErrorTextController.inst.ShowMsg("Couldn't connect to the server.");
-	}
-
-	private void ConnectionTimeout()
-	{
-		// connection failure caused by timeout
-		print("Failed to connect due to timeout");
-		connStatus = null;
-		socketConnection.Close();
-		socketConnection = null;
-		ErrorTextController.inst.ShowMsg("Couldn't connect to the server");
-	}
-
-	#endregion
 
 	// delete the beginning of a string
 	private static void RemoveString(int len)
@@ -372,7 +236,7 @@ public class TCPClient : MonoBehaviour
 		if (taskNumOut == taskNumIn)
 		{
 			// all requested messages got loaded, so the loading text can be deactivated
-			LoadingText.Inst.Deactivate();
+			AnimatedText.Instances[TextInstances.LoadingText].Deactivate();
 		}
 		return returnedMsg;
 	}
@@ -385,21 +249,11 @@ public class TCPClient : MonoBehaviour
 		print(msgRes);
 		if (msgRes.StartsWith("Error"))
 		{
+			PythonExecuter.incomingChanges += 1;
 			return msgRes;
 		}
 
 		return ListenForInput(readAsync:false);
-	}
-
-	private static void TryReconnect()
-	{
-		if (socketConnection != null)
-		{
-			socketConnection.Close();
-			socketConnection = null;
-		}
-
-		Inst.ConnectWithHost(null);
 	}
 	
 	/// <summary> 	
@@ -412,7 +266,7 @@ public class TCPClient : MonoBehaviour
 			string problem = "Socket currently not connected!";
 			Debug.LogWarning(problem + " socketConnection is " + socketConnection);
 			ErrorTextController.inst.ShowMsg(problem);
-			TryReconnect();
+			TCPClientConnector.TryReconnect();
 			return "Error: " + problem;
 		}
 
@@ -471,8 +325,8 @@ public class TCPClient : MonoBehaviour
 		catch (Exception ex)
 		{
 			Debug.LogWarning(ex);
-			ErrorTextController.inst.ShowMsg(ex.ToString());
-			TryReconnect();
+			ErrorTextController.inst.ShowMsg("The Action could not be Executed. Please try again");
+			TCPClientConnector.TryReconnect();
 			return "Error: " + ex;
 		}
 		return "async";

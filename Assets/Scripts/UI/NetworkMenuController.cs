@@ -15,7 +15,7 @@ public class NetworkMenuController : MenuController {
 
     private void Start()
     {
-        portText.text = "Port: " + TCPClient.PORT;
+        portText.text = "Port: " + TCPClientConnector.PORT;
         serverAddressField = gameObject.GetComponentInChildren<InputField>();
         
         // set the Input field to the last entered value
@@ -24,7 +24,7 @@ public class NetworkMenuController : MenuController {
 
     private void Update()
     {
-        if (TCPClient.connStatus == null)
+        if (TCPClientConnector.connStatus == null)
         {
             base.Activate();
         }

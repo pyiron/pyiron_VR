@@ -32,12 +32,6 @@ public class StructureMenuController : MenuController
         elementButton.interactable = true;
     }
 
-    private void Start()
-    {
-        // start with Fe
-        //UpdateElementButton("Fe");
-    }
-
 //    public void SetElementDropdown(string newElement)
 //    {
 //        bool foundValue = false;

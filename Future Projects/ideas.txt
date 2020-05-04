@@ -174,15 +174,17 @@ Todo:
 ! 45.	TODO make an Error log
   46.	DONE Email lesen wie pyiron mit wsl installiert werden kann
   47.	DONE fix error that the wrong potentials get shown
-  48.	DONE make error messages prettier/better
+! 48.	TODO make error messages prettier/better (make a panel with an ok button)
 ! 49.	TODO fix error that the server doesn't reset sometimes
   50.	DONE make a loading symbol
-! 51. 	TODO allow to close error messages	
+! 51. 	TODO allow to close error messages
+! 52	TODO show if the client is disconnected
+! 53. 	TODO automatically try to reconnect if the client is disconnected	
 
 Time needed for sending a Message sync to python: 0.05s
 
 
-10.4.2020:
+10.4.2020: (DONE)
 Leave Structure Creator for later
 Remember if a single atom has been moved
 	if yes: delete the old job when going into Calculate mode

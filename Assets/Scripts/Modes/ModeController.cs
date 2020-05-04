@@ -12,37 +12,40 @@ public class ModeController : MonoBehaviour
     public static ModeController inst;
 
     [Header("Modes")]
-    // get the textmesh from the 3D Text which shows the current mode
-    //public TextMesh CurrentModeText;
-    public static Mode currentMode = new Mode(Modes.None);
-    
-    // remember the new mode which should be set with the main thread
-    internal Modes newMode = Modes.None;
-
     // the dictionary which defines what properties each mode has
     // attention: the trashcan will just be shown if m_playerCanMoveAtoms is true, even if m_showTrashcan is true
     // attention: the mode will just be accessible, if m_playerCanMoveAtoms, m_showInfo or m_canDuplicate is true
-    internal static List<Mode> modes = new List<Mode>
-    {
-        new Mode(mode:Modes.Network, hideAtoms: true),
-        new Mode(mode:Modes.Explorer, playerCanResizeAtoms:true),
-        new Mode(mode:Modes.Calculate, playerCanResizeAtoms:true, showTemp:true,
-            showTrashcan:true),
-        //new Mode(mode:Modes.Minimize, playerCanMoveAtoms:true, playerCanResizeAtoms:true, showRelaxation:true,
-        //    showTrashcan:true),
-        //new Mode(mode:Modes.Animate),
-        new Mode(mode:Modes.Structure, playerCanMoveAtoms:true, playerCanResizeAtoms:true),
-    };
+    internal static List<Mode> modes;
+    
+    // get the textmesh from the 3D Text which shows the current mode
+    //public TextMesh CurrentModeText;
+    public static Mode currentMode;
+    
+    // remember the new mode which should be set with the main thread
+    internal Modes newMode;
+
+    
 
     private void Awake()
     {
         inst = this;
-        currentMode = modes[0];
     }
 
     private void Start()
     {
-        SetMode(modes[(int)currentMode.mode].mode);
+        modes = new List<Mode>
+        {
+            new Mode(mode:Modes.Network, NetworkMenuController.Inst, hideAtoms: true),
+            new Mode(mode:Modes.Explorer, ExplorerMenuController.Inst, playerCanResizeAtoms:true),
+            new Mode(mode:Modes.Calculate, SimulationMenuController.Inst, playerCanResizeAtoms:true, showTemp:true,
+                showTrashcan:true),
+            //new Mode(mode:Modes.Minimize, playerCanMoveAtoms:true, playerCanResizeAtoms:true, showRelaxation:true,
+            //    showTrashcan:true),
+            //new Mode(mode:Modes.Animate),
+            new Mode(mode:Modes.Structure, StructureMenuController.Inst, playerCanMoveAtoms:true, playerCanResizeAtoms:true),
+        };
+        
+        SetMode(Modes.Network);
         UpdateScene();
     }
 
