@@ -70,4 +70,18 @@ public static class Utilities
 
         return "False";
     }
+    
+    public static void ActivateInteractables()
+    {
+        // activate all interactable elements in the scene
+        ModeController.currentMode.controller.Activate();
+        Structure.Inst.Activate();
+    }
+
+    public static void DeactivateInteractables()
+    {
+        // deactivate all interactable elements in the scene
+        ModeController.currentMode.controller.Deactivate();
+        Structure.Inst.Deactivate();
+    }
 }

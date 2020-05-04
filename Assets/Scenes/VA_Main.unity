@@ -27395,7 +27395,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 455}
+  m_AnchoredPosition: {x: 0, y: 361}
   m_SizeDelta: {x: 1200, y: 350}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &747535035
@@ -30765,7 +30765,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 260}
   m_SizeDelta: {x: 280, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &847415063
@@ -76005,6 +76005,7 @@ MonoBehaviour:
   borderPrefab: {fileID: 1006184987572452, guid: 061d5d2957eb1c242a295aa9f27050b3,
     type: 3}
   mid: {x: 0, y: 0, z: 0}
+  baseColor: {r: 0, g: 1, b: 0.25490198, a: 0}
 --- !u!1 &2100889876
 GameObject:
   m_ObjectHideFlags: 0

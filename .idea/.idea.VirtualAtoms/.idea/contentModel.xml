@@ -416,6 +416,7 @@
             <e p="PythonExecuter.cs" t="Include" />
             <e p="Symbol.cs" t="Include" />
             <e p="TCPClient.cs" t="Include" />
+            <e p="TCPClientConnector.cs" t="Include" />
           </e>
           <e p="Modes" t="Include">
             <e p="Mode.cs" t="Include" />
@@ -427,15 +428,17 @@
           <e p="SizeManager.cs" t="Include" />
           <e p="Structure" t="Include">
             <e p="AnimationController.cs" t="Include" />
-            <e p="AtomID.cs" t="Include" />
-            <e p="AtomInfos.cs" t="Include" />
             <e p="Boundingbox.cs" t="Include" />
             <e p="CellboxCollider.cs" t="Include" />
             <e p="Element.cs" t="Include" />
-            <e p="ImportStructure.cs" t="Include" />
             <e p="LocalElementData.cs" t="Include" />
+            <e p="Outdated" t="Include">
+              <e p="AtomID.cs" t="Include" />
+              <e p="AtomInfos.cs" t="Include" />
+              <e p="ImportStructure.cs" t="Include" />
+              <e p="StructureDataOld.cs" t="Include" />
+            </e>
             <e p="Structure.cs" t="Include" />
-            <e p="StructureDataOld.cs" t="Include" />
             <e p="StructureLoader.cs" t="Include" />
             <e p="StructureResizer.cs" t="Include" />
           </e>
@@ -448,6 +451,7 @@
             <e p="TrashCan.cs" t="Include" />
           </e>
           <e p="UI" t="Include">
+            <e p="AnimatedText.cs" t="Include" />
             <e p="AnimationMenuController.cs" t="Include" />
             <e p="CalculateMenu" t="Include">
               <e p="ActionPanelController.cs" t="Include" />
@@ -464,7 +468,6 @@
               <e p="PathButton.cs" t="Include" />
             </e>
             <e p="IButton.cs" t="Include" />
-            <e p="LoadingText.cs" t="Include" />
             <e p="ModeMenuController.cs" t="Include" />
             <e p="NetworkMenuController.cs" t="Include" />
             <e p="Outdated" t="Include">

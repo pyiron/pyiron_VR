@@ -57,7 +57,6 @@ public class TCPClientConnector : MonoBehaviour
 		// save the host
 		HOST = host;
 		
-		
 		Connect(false);
 	}
 
@@ -90,9 +89,10 @@ public class TCPClientConnector : MonoBehaviour
 	{
 		AnimatedText reconnectText = AnimatedText.Instances[TextInstances.ReconnectingText];
 		reconnectText.transform.SetParent(ModeController.currentMode.controller.transform);
-		reconnectText.transform.localPosition = Vector3.zero;
+		reconnectText.transform.localPosition = Vector3.up * 260;
 		reconnectText.Activate();
-		ModeController.currentMode.controller.Deactivate();
+		
+		Utilities.DeactivateInteractables();
 		
 		if (TCPClient.socketConnection != null)
 		{
@@ -151,7 +151,9 @@ public class TCPClientConnector : MonoBehaviour
 		if (isReconnectAttempt)
 		{
 			AnimatedText.Instances[TextInstances.ReconnectingText].Deactivate();
-			ModeController.currentMode.controller.Activate();
+			
+			// activate all interactable elements in the scene
+			Utilities.ActivateInteractables();
 		}
 		else
 		{
@@ -178,8 +180,8 @@ public class TCPClientConnector : MonoBehaviour
 		
 		if (isReconnectAttempt)
 		{
-			// try again
-			TryReconnect();
+			// try to connect again
+			Connect(true);
 		}
 		else
 		{
@@ -198,8 +200,8 @@ public class TCPClientConnector : MonoBehaviour
 		
 		if (isReconnectAttempt)
 		{
-			// try again
-			TryReconnect();
+			// try to connect again
+			Connect(true);
 		}
 		else
 		{

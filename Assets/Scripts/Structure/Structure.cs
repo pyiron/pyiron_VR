@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 /// <summary>
@@ -14,10 +15,40 @@ public class Structure : MonoBehaviour
     // references to all currently instanciated atoms
     private List<GameObject> atoms = new List<GameObject>();
 
+    private bool isActive = true;
+
 
     private void Awake()
     {
         Inst = this;
+    }
+
+    public void Activate()
+    {
+        isActive = true;
+        // set the color of the box to grey
+        Boundingbox.Inst.SetColor(Boundingbox.Inst.baseColor);
+        // make the atoms again opaque
+        foreach (GameObject atom in atoms)
+        {
+            Renderer atomRenderer = atom.GetComponent<Renderer>();
+            Color atomColor = atomRenderer.material.color;
+//            atomColor.a = 1f;
+            atomRenderer.material.color = atomColor * 2;
+        }
+    }
+
+    public void Deactivate()
+    {
+        isActive = false;
+        Boundingbox.Inst.SetColor(Color.gray);
+        foreach (GameObject atom in atoms)
+        {
+            Renderer atomRenderer = atom.GetComponent<Renderer>();
+            Color atomColor = atomRenderer.material.color;
+//            atomColor.a = 0.7f;
+            atomRenderer.material.color = atomColor / 2;
+        }
     }
 
     /// <summary>
@@ -99,6 +130,11 @@ public class Structure : MonoBehaviour
             {
                 // set the atom color to the color the element of the atom has
                 atoms[i].GetComponent<Renderer>().material.color = LocalElementData.GetColour(elements[i]);
+//                Light haloLight = atoms[i].GetComponent<Light>();
+//                haloLight.color = LocalElementData.GetColour(elements[i]);
+//                haloLight.range = ProgramSettings.size * LocalElementData.GetSize(elements[i]);
+//                Behaviour halo = (Behaviour)atoms[i].GetComponent("Halo");
+//                halo..color = LocalElementData.GetColour(elements[i]);
 
                 // set the atoms size to the size this type of atom has 
                 atoms[i].transform.localScale = Vector3.one * LocalElementData.GetSize(elements[i]);

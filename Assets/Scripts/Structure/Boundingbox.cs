@@ -12,6 +12,8 @@ public class Boundingbox : MonoBehaviour
 
     public Vector3 mid;
 
+    public Color baseColor;
+
     private void Awake()
     {
         Inst = this;
@@ -22,6 +24,7 @@ public class Boundingbox : MonoBehaviour
             _borders[i].transform.parent = transform;
             _borders[i].transform.localScale = Vector3.one * ProgramSettings.cellboxWidth;
         }
+        SetColor(baseColor);
     }
 
     private void Start()
@@ -86,5 +89,11 @@ public class Boundingbox : MonoBehaviour
         HourglassActivator.Inst.transform.GetChild(0).localScale = Vector3.one;
     }
 
-    
+    public void SetColor(Color newColor)
+    {
+        foreach (GameObject border in _borders)
+        {
+            border.GetComponent<Renderer>().material.color = newColor;
+        }
+    }
 }
