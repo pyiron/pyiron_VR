@@ -3,9 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="8cfb1e49-c2a3-4bd3-89b8-e91eb354f53b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.VirtualAtoms/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.VirtualAtoms/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Input/PythonExecuter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Input/PythonExecuter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Input/TCPClient.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Input/TCPClient.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Future Projects/ideas.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Future Projects/ideas.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -18,7 +15,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Assets/Scripts/Input/TCPClient.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
+            <state relative-caret-position="-22">
               <caret line="242" column="13" selection-start-line="242" selection-start-column="13" selection-end-line="242" selection-end-column="13" />
               <folding>
                 <marker date="1588590751216" expanded="true" signature="6:241" ph="..." />
@@ -516,10 +513,10 @@
     </ignored-facets>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="1936" />
-    <option name="height" value="1056" />
+    <option name="x" value="-581" />
+    <option name="y" value="1065" />
+    <option name="width" value="3233" />
+    <option name="height" value="1833" />
   </component>
   <component name="ProjectView">
     <navigator currentView="UnityExplorer" proportions="" version="1">
@@ -654,7 +651,7 @@
       <workItem from="1587543120246" duration="4332000" />
       <workItem from="1588316860416" duration="21767000" />
       <workItem from="1588443412966" duration="5776000" />
-      <workItem from="1588520285508" duration="25584000" />
+      <workItem from="1588520285508" duration="26244000" />
     </task>
     <task id="LOCAL-00001" summary="Implemented parts of the StructureBuilder">
       <created>1585853897813</created>
@@ -873,11 +870,18 @@
       <option name="project" value="LOCAL" />
       <updated>1588589909382</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="The structure now looks deactivated while the program asynchronously sends a message">
+      <created>1588594287191</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1588594287191</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="149311000" />
+    <option name="totallyTimeSpent" value="149971000" />
   </component>
   <component name="TodoView" selected-index="4">
     <todo-panel id="selected-file">
@@ -889,10 +893,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-572" y="1074" width="1293" height="693" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1905016" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2895377" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Capture Tool" order="3" />
@@ -904,7 +908,7 @@
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" visible="true" weight="0.32899022" />
+      <window_info anchor="bottom" id="TODO" order="6" visible="true" weight="0.54010695" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info anchor="bottom" id="Android Profiler" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Docker" order="9" show_stripe_button="false" />
@@ -932,7 +936,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="true" />
   <component name="UnityUnitTestConfiguration" currentTestLauncher="NUnit" />
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="The cell borders are now spheres. This way,the vertices look better. The midpoint of the structure should now be calculated correctly." />
     <MESSAGE value="When choosing a job in the explorer, the structure will be shown (not yet as an animation). The scale of the structure in Structure mode and Explorer mode can now be changed." />
     <MESSAGE value="The cellbox now has a collider that exactly contains the cellbox, even if the cellbox is not cubic." />
     <MESSAGE value="Fixed a bug that the cellbox would be shown wrong after moving the structure. The Job panel now loads more data from pyiron. Code cleanup." />
@@ -957,7 +960,8 @@
     <MESSAGE value="Fixed a bug that the program would load endlessly when trying to load somethin asynchronous. Receiving a large file from python now seems to be asynchronous." />
     <MESSAGE value="The Program can now automatically reconnect after loosing connection to the server." />
     <MESSAGE value="The structure now looks deactivated while the program has no connection to the server" />
-    <option name="LAST_COMMIT_MESSAGE" value="The structure now looks deactivated while the program has no connection to the server" />
+    <MESSAGE value="The structure now looks deactivated while the program asynchronously sends a message" />
+    <option name="LAST_COMMIT_MESSAGE" value="The structure now looks deactivated while the program asynchronously sends a message" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -2053,7 +2057,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Assets/Scripts/Input/TCPClient.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
+        <state relative-caret-position="-22">
           <caret line="242" column="13" selection-start-line="242" selection-start-column="13" selection-end-line="242" selection-end-column="13" />
           <folding>
             <marker date="1588590751216" expanded="true" signature="6:241" ph="..." />
