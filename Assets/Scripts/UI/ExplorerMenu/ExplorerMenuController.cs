@@ -38,7 +38,7 @@ public class ExplorerMenuController : MenuController {
         }
     }
 
-    private GameObject InstantiateNewBtn(GameObject Pref, GameObject parent, string txt, Color col)
+    private GameObject InstantiateNewBtn(GameObject Pref, GameObject parent, string txt, Color col, bool interactable=true)
     {
         GameObject newButton = Instantiate(Pref, parent.transform, true);
         newButton.transform.localPosition = Vector3.zero;
@@ -46,6 +46,7 @@ public class ExplorerMenuController : MenuController {
         newButton.transform.localScale = Vector3.one;
         newButton.GetComponentInChildren<Text>().text = txt;
         newButton.GetComponent<Image>().color = col;
+        newButton.GetComponent<Button>().interactable = interactable;
         return newButton;
     }
 
@@ -77,8 +78,11 @@ public class ExplorerMenuController : MenuController {
     {
         foreach (string opt in folderData.nodes)
         {
-            GameObject btn = InstantiateNewBtn(OptionPrefab, OptionFolderJobs, opt, Color.cyan);
+            // spawn the new button. If the job is already loaded, show the button as not interactable
+            GameObject btn = InstantiateNewBtn(OptionPrefab, OptionFolderJobs, opt, Color.cyan,
+                interactable:opt!=SimulationMenuController.jobName);
             btn.GetComponent<OptionButton>().isJob = true;
+            
         }
     }
     

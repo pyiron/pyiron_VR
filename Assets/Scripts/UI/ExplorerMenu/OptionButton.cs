@@ -20,6 +20,7 @@ public class OptionButton : MonoBehaviour, IButton
         SimulationMenuController.jobName = jobName;
         if (SimulationMenuController.Inst.IsStructureShifted())
         {
+            // TODO: this looks like faulty code
             SimulationMenuController.jobName = SimulationMenuController.jobName;
         }
 
@@ -38,9 +39,14 @@ public class OptionButton : MonoBehaviour, IButton
         ExplorerMenuController.Inst.Activate();
     }
 
+    public string GetOptionText()
+    {
+        return GetComponentInChildren<Text>().text;
+    }
+
     public void WhenClickDown()
     {
-        string job_name = GetComponentInChildren<Text>().text;
+        string job_name = GetOptionText();
         if (isJob)
         {
             StartCoroutine(HandleLoad(job_name));
