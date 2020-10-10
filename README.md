@@ -97,3 +97,7 @@ In Temperature and Minimize Mode, Atoms and structures can be created using the 
 
 ### General Errors
 *  If the VR application shows an error, look at the output of the server to see more details about the error
+
+### Server Errors
+* If the server crashed and does not terminate, it can be usually stooped using ctrl + c.
+* In some cases, this is not possible. If the server is running remote with ssh on a linux system (e.g. the HPC cluster), it can be stopped by opening a second ssh connection. Calling "ps -u <username>" shows all your processes. There should be one python process, which is the one executing the server. Read out the PID of this process and terminate it, using " kill -9 <PID>".
