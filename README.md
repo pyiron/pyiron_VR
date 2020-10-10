@@ -22,8 +22,7 @@ It is possible to run the server on the HPC cluster. In this section I present h
 * For connect, a VPN conncection with AnyConnect is needed. Using AnyConnect, connect to the server vpn.mpcdf.mpg.de. Type in your Username and Password for your Account on the HPC cluster in Garching. 
 * After connecting, open a command prompt. Connect to the cluster using ssh with the command 
 ```
-ssh -L 8000:localhost:30000 <username>@cmti001.bc.rzg.mpg.de
-```
+ssh -L 8000:localhost:30000 <username>@cmti001.bc.rzg.mpg.de```
 and enter your password.
 * You should now have a connection to the mpg cluster. You can now install the server on it. I think the newest version of pyiron is already installed, but I am not entirely sure.
 
@@ -120,4 +119,4 @@ In Temperature and Minimize Mode, Atoms and structures can be created using the 
 
 ### Server Errors
 * If the server crashed and does not terminate, it can be usually stooped using ctrl + c.
-* In some cases, this is not possible. If the server is running remote with ssh on a linux system (e.g. the HPC cluster), it can be stopped by opening a second ssh connection. Calling "ps -u <username>" shows all your processes. There should be one python process, which is the one executing the server. Read out the PID of this process and terminate it, using " kill -9 <PID>".
+* In some cases, this is not possible. If the server is running remote with ssh on a linux system (e.g. the HPC cluster), it can be stopped by opening a second ssh connection. Calling "ps -u <username>" shows all your processes. There should be one python process, which is the one executing the server. Read out the PID of this process and terminate it, using ```kill -9 <PID>```.
