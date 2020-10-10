@@ -7,8 +7,11 @@ using Button = UnityEngine.UI.Button;
 
 public class OptionButton : MonoBehaviour, IButton
 {
-    public bool isJob;
+    // the reference to the button component
+    //public Button button;
     
+    public bool isJob;
+
     public static IEnumerator HandleLoad(string jobName)
     {
         // send the order to load the structure
@@ -20,7 +23,7 @@ public class OptionButton : MonoBehaviour, IButton
         SimulationMenuController.jobName = jobName;
         if (SimulationMenuController.Inst.IsStructureShifted())
         {
-            // TODO: this looks like faulty code
+            // TODO: this looks like faulty or incomplete code
             SimulationMenuController.jobName = SimulationMenuController.jobName;
         }
 
@@ -49,6 +52,9 @@ public class OptionButton : MonoBehaviour, IButton
         string job_name = GetOptionText();
         if (isJob)
         {
+            // reactivate the current job button
+            ExplorerMenuController.Inst.DeactivateJobButton(job_name);
+                
             StartCoroutine(HandleLoad(job_name));
             ExplorerMenuController.Inst.Deactivate();
         }

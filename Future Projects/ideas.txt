@@ -183,6 +183,7 @@ Todo:
 ! 53.	TODO execute actions after the data has been send to python and just if the transmission was successfull (to prevent inconsistency)
   54.	DONE deactivate the structure visually when sending with async
 ! 55.	TODO dont allow any actions for the structure if it is deactivated (or maybe with the controllers)	
+! 56. 	TODO add function Init and attribute Button to the IButton Interface
 
 Time needed for sending a Message sync to python: 0.05s
 

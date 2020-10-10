@@ -38,6 +38,15 @@ public class ExplorerMenuController : MenuController {
         }
     }
 
+    public void DeactivateJobButton(string jobName)
+    {
+        foreach (OptionButton btn in OptionFolderJobs.GetComponentsInChildren<OptionButton>())
+        {
+            // TODO replace GetComponent button by an attribute of OptionButton that contains the reference
+            btn.GetComponent<Button>().interactable = btn.GetOptionText() != jobName;
+        }
+    }
+
     private GameObject InstantiateNewBtn(GameObject Pref, GameObject parent, string txt, Color col, bool interactable=true)
     {
         GameObject newButton = Instantiate(Pref, parent.transform, true);
