@@ -184,6 +184,9 @@ Todo:
   54.	DONE deactivate the structure visually when sending with async
 ! 55.	TODO dont allow any actions for the structure if it is deactivated (or maybe with the controllers)	
 ! 56. 	TODO add function Init and attribute Button to the IButton Interface
+  57.	DONE increase loading time when receiving async
+! 58.	TODO use string builder for better performance when receiving
+! 59.	TODO allow to change blocksPerFrame in the application
 
 Time needed for sending a Message sync to python: 0.05s
 

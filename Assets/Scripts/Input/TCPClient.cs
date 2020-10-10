@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using HTC.UnityPlugin.Vive;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Text;
 
 public class TCPClient : MonoBehaviour
 {
@@ -16,8 +17,10 @@ public class TCPClient : MonoBehaviour
 	public static TcpClient socketConnection;
 	private static NetworkStream stream;
 	private Thread clientReceiveThread;
-	
 
+	[Tooltip("How many blocks should be read in one frame when reading asynchronous? " +
+	         "Higher blocks_per_frame means shorter loading times, but less fps while loading")]
+	public int blocksPerFrame = 2;
 
 	// will be increased by 1 each time an order gets send. It functions as a unique id for each order send to Python
 	public static int taskNumIn = 0;
@@ -33,7 +36,7 @@ public class TCPClient : MonoBehaviour
 	private static int msgLen;
 	
 	// the size of message-packets send from Python to Unity. Should be the same as in Python
-	private static int BLOCKSIZE = 1024;
+	private static int BLOCKSIZE = 4096;
 	// buffer all incoming data. Needed to deal with the TCP stream
 	private static String recBuffer = "";
 
@@ -164,12 +167,10 @@ public class TCPClient : MonoBehaviour
 					newMsg = GetMsgSync(stream);
 				}
 
-
-
 				// check if the server disconnected
 				if (newMsg == "")
 				{
-					print("Getting no response from the server");
+					print("Currently getting no response from the server");
 					return "";
 				}
 
@@ -196,12 +197,26 @@ public class TCPClient : MonoBehaviour
 			
 			returnedMsg = "";
 		}
+		
+		print("msgLen: " + msgLen);
+		int count = Inst.blocksPerFrame;
 
 		// Receive data until at least the whole message has been received. Additional data will be bufferred
 		// Warning: If the message is really long and the connection really slow this loop could lead to a temporary
 		// screen freeze.
 		while (true)
+		//for (int i = 0; i < 100000; i++)	
 		{
+			if (readAsync)
+			{
+				count--;
+				if (count < 0)
+				{
+					return "";
+				}
+			}
+			//readAsync = false;
+			
 			if (recBuffer.Length >= msgLen)
 			{
 				// the whole message arrived
@@ -212,21 +227,22 @@ public class TCPClient : MonoBehaviour
 
 			// try to read input from the stream
 			string newMsg;
-			if (readAsync)
+			/*if (readAsync)
 			{
 				newMsg = GetMsgAsync(stream);
 			}
 			else
-			{
+			{*/
 				newMsg = GetMsgSync(stream);
-			}
+			//}
 
 			// check if the server disconnected
-			if (newMsg == "")
+			/*if (newMsg == "")
 			{
 				print("Getting no response from the server");
 				return "";
-			}
+			}*/
+			
 			recBuffer += newMsg;
 		}
 
