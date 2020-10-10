@@ -115,6 +115,6 @@ In Temperature and Minimize Mode, Atoms and structures can be created using the 
 *  If the VR application shows an error, look at the output of the server to see more details about the error
 
 ### Server Errors
-* Depending on the network the server is in, sometimes the error "OSError: [Errno 98] Address already in use" occurs. This happens when starting the server quickly after closing it the last time. Waiting, usually for a few seconds, resolves this error.
+* Depending on the network the server is in, sometimes the error "OSError: [Errno 98] Address already in use" occurs. This happens when starting the server quickly after closing it the last time. Usually waiting for a few seconds resolves this error. If not, check that the last process is not running anymore, and if it is, kill it (See point 3).
 * If the server crashed and does not terminate, it can be usually stooped using ctrl + c or ctrl + z.
 * In some cases, this is not possible. If the server is running remote with ssh on a linux system (e.g. the HPC cluster), it can be stopped by opening a second ssh connection. Calling `ps -u <username>` shows all your processes. There should be one python process, which is the one executing the server. Read out the PID of this process and terminate it, using `kill -9 <PID>`.
