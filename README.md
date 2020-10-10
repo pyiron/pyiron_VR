@@ -20,29 +20,26 @@ The server runs on windows and linux, but the preferred OS for pyiron is linux. 
 
 It is possible to run the server on the HPC cluster. In this section I present how I connect to the cluster. Note, that this can change, and look at the official documentation if any errors occur or to look for the download of AnyConnect. 
 * For connect, a VPN conncection with AnyConnect is needed. Using AnyConnect, connect to the server vpn.mpcdf.mpg.de. Type in your Username and Password for your Account on the HPC cluster in Garching. 
-* After connecting, open a command prompt. Connect to the cluster using ssh with the command 
-```
-ssh -L 8000:localhost:30000 <username>@cmti001.bc.rzg.mpg.de```
-and enter your password.
+* After connecting, open a command prompt. Connect to the cluster using ssh with the command `ssh -L 8000:localhost:30000 <username>@cmti001.bc.rzg.mpg.de` and enter your password.
 * You should now have a connection to the mpg cluster. You can now install the server on it. I think the newest version of pyiron is already installed, but I am not entirely sure.
 
 ### Installation of the server
 *  Clone the server repository https://github.com/pyiron/pyiron_VR_server
 *  To get the newest version, go to the project on the command line and type in 
-```
+`
 git fetch
 git checkout master
-git pull`
-```
-*  Go to ```~\vrplugin``` on the command line
+git pull
+`
+*  Go to `~\vrplugin` on the command line
 
 ### Create the sample structures
 *  Type in the command line
-    ```python FolderInitializer.py```
+    `python FolderInitializer.py`
 
 ### Run the server
 *  Type in the command line
-    ```python Manager.py```
+    `python Manager.py`
     or
 *  Execute the ServerStarter.bat application
 *  This should print out the IP Adress on which the server is running
@@ -120,4 +117,4 @@ In Temperature and Minimize Mode, Atoms and structures can be created using the 
 ### Server Errors
 * Depending on the network the server is in, sometimes the error "OSError: [Errno 98] Address already in use" occurs. This happens when starting the server quickly after closing it the last time. Waiting, usually for a few seconds, resolves this error.
 * If the server crashed and does not terminate, it can be usually stooped using ctrl + c or ctrl + z.
-* In some cases, this is not possible. If the server is running remote with ssh on a linux system (e.g. the HPC cluster), it can be stopped by opening a second ssh connection. Calling "ps -u <username>" shows all your processes. There should be one python process, which is the one executing the server. Read out the PID of this process and terminate it, using ```kill -9 <PID>```.
+* In some cases, this is not possible. If the server is running remote with ssh on a linux system (e.g. the HPC cluster), it can be stopped by opening a second ssh connection. Calling `ps -u <username>` shows all your processes. There should be one python process, which is the one executing the server. Read out the PID of this process and terminate it, using `kill -9 <PID>`.
