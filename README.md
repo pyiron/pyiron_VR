@@ -1,15 +1,35 @@
 # Virtual Atoms
 
-This is a project which goal is to present atom structures in 3D with the HTC Vive and can be debugged with the Oculus Quest.
+This is a project which goal is to visualize atom structures in 3D using VR. Furthermore, interactions with the structure are possible as well, and further interactions will be implemented in the future. The application is designed for the HTC Vive and can be run and debugged with the Oculus Quest.
 
 The project uses Pyiron to create and manage the structures and Unity to show the structures in Virtual Reality and receive the input from the user.
 
-This is the repository for the Unity program. The repository for the server is https://gitlab.mpcdf.mpg.de/wuseling/virtualatomsserver.
+This is the repository for the Unity program. The repository for the server is https://github.com/pyiron/pyiron_VR_server.
+
+Previous versions of the server and the Unity application can be found on Gitlab:
+* Server: https://gitlab.mpcdf.mpg.de/wuseling/virtualatomsserver.
+* Application: https://gitlab.mpcdf.mpg.de/wuseling/virtualatoms
+
+## Requirements
+### Server
+
+The server runs on windows and linux, but the preferred OS for pyiron is linux. MacOS was not yet tested. It does not any special hardware specs. However, to execute the server, a working version of pyiron needs to be installed. For the installation, see https://pyiron.readthedocs.io/en/latest/source/installation.html. It is possible to execute the server on a HPC, such as the one in Garching. However, the computer running the Unity application needs to be connected to VPN, which is not possible when using the Oculus Quest standalone. Therefore, this is just possible if using Oculus Link or the HTC Vive.
 
 ## Installation
+### (Optional) Accessing the HPC cluster
+
+It is possible to run the server on the HPC cluster. In this section I present how I connect to the cluster. Note, that this can change, and look at the official documentation if any errors occur or to look for the download of AnyConnect. 
+* For connect, a VPN conncection with AnyConnect is needed. Using AnyConnect, connect to the server vpn.mpcdf.mpg.de. Type in your Username and Password for your Account on the HPC cluster in Garching. 
+* After connecting, open a command prompt. Connect to the cluster using ssh with the command 
+```
+ssh -L 8000:localhost:30000 <username>@cmti001.bc.rzg.mpg.de
+```
+and enter your password.
+* You should now have a connection to the mpg cluster. You can now install the server on it. I think the newest version of pyiron is already installed, but I am not entirely sure.
+
 ### Installation of the server
-*  Clone the server repository https://gitlab.mpcdf.mpg.de/wuseling/virtualatomsserver
-*  Go to the project on the command line and type in 
+*  Clone the server repository https://github.com/pyiron/pyiron_VR_server
+*  To get the newest version, go to the project on the command line and type in 
 ```
 git fetch
 git checkout master
