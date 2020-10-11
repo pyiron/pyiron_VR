@@ -10,7 +10,8 @@ At first the program was updated to cope with the newest pyiron version. Therefo
 The main focus was to establish a good working connection between the Pyiron code that should be executed and the Unity Program. Therefore a TCP Connection has been set up. This connection is message based, allowing it to always function, even with a slow connection or a connection with low bandwith. Performance improvements have been done. The error handling of errors occuring in the python program has been improved.
 
 
-1.10 - 31.10.2019: The main goal was to make the connection between Python and Unity as simple as possible. Therefore different methods have been tested: 
+1.11 - 30.11.2019:
+The main goal was to make the connection between Python and Unity as simple as possible. Therefore different methods have been tested: 
  - synchronous connection: simple code, but the program freezes during the loading time. Had to be coded, which took ~2h
  - using a new Thread for the connection: the response of a request doesn't arrive at the main thread, so it has to be stored and then accessed from the main thread in order to get handled. This makes the code hard to understand
  - using sendAsync and readAsync: good for an asynchronous connection, but it is still hard to keep the code simple. Therefore two methods have been tested:
@@ -19,7 +20,7 @@ The main focus was to establish a good working connection between the Pyiron cod
 
 The end result is that sending a message synchronous is possible, but also sending a message asynchronous with sendAsync and a Coroutine. This has to be tested a bit further and with the new connection the data transfer can be improved, allowing to simplify the python code and some Unity code.
 
-1.11 - 30.11.2019: 
+1.12 - 31.12.2019:
 The communication between the Unity and Python programs got when in Explorer Mode got simplified. To achieve this
  - the new synchronous way of sending has been used
  - json got used for sending objects
@@ -34,10 +35,6 @@ All together it took ~3h to implement the code, while researching Unitys JsonUti
 
 After that I tested the new system and tried to optimize it. I cleaned up the code, e.g. by removing all old, now unnecessary code. Finally I documented the code for exchanging messages between Python and Unity in both the Python scripts and the C# scripts of Unity. This took me ~2h.
 
-1.12 - 31.12.2019:
-Added an Input Field to choose the server while in VR. Previously it was just possible to connect to predetermined IP Adresses which could just be changed in the Unity Editor. The IP Address will be remembered the next time the program gets started. ~1h 
-Added an Installation Guide and an Usage Guide to the Readme on https://gitlab.mpcdf.mpg.de/wuseling/VirtualAtoms/tree/VA-Branch/. ~1h
-Restructured big parts of the program, including new menu hierarchies, a new Simulation Menu, new visuals, and a lot of code cleanup. ~3h + 5h in the next month
 
 
 

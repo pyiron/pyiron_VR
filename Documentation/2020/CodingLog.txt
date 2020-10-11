@@ -3,22 +3,51 @@ by Philip Neugebauer, 1.8.2018 - 30.9.2018
 All progress is also represented by the commits on GitLab with some more details.
 
 1.1 - 31.1.2020:
-Continued to restructure big parts of the program, including new menu hierarchies, a new Simulation Menu, new visuals, and a lot of code cleanup.
+Added an Input Field to choose the server while in VR. Previously it was just possible to connect to predetermined IP Adresses which could just be changed in the Unity Editor. The IP Address will be remembered the next time the program gets started. ~1h 
+Added an Installation Guide and an Usage Guide to the Readme on https://gitlab.mpcdf.mpg.de/wuseling/VirtualAtoms/tree/VA-Branch/. ~1h
+Restructured big parts of the program, including new menu hierarchies, a new Simulation Menu, new visuals, and a lot of code cleanup. ~3h + 5h in the next month
 
 1.2. - 29.2.2020:
+Continued to restructure big parts of the program, including new menu hierarchies, a new Simulation Menu, new visuals, and a lot of code cleanup.
+
+1.3. - 31.3.2020:
 Restructured the menu. A calculation menu has been implemented, in which settings concerning the calculation ob a job can be determined. 
 Code cleanup and refactoring in the Python and Unity Project.
 For a better workflow, I implemented a script that mocks the Input needed to load a sample structure when pressing x.
 
-1.3. - 31.3.2020:
+1.4.2020 - 30.4.2020
 Improved the calculation menu and started to develop the new Structure Panel, which has new options. The Explorer menu has been adjusted to the new style and the path display has been improved. The Canvas can now be attached to the controller by pressing the Grip button of any controller.
 Code cleanup and refactoring in the Python and Unity Project.
+Compilation Time got decreased by moving external plugins into a "Plugin" Folder, that won't recompile each time
 
+1.5.2020 - 31.5.2020
+Improved the Structure Builder (the structure can again be visualized, the cell borders adjust to the shape of the structure)
+Improved the Calculation Panel (automatically load settings of the current job or from pyiron, progressbar now works with the new system)
+Code cleanup and refactoring
 
-10.10.2020
+1.6.2020 - 31.6.2020
+When no job is currently loaded, a default job will now be created
+Improved the Calculation menu: The animation/job can be deleted, more efficient data transfer between python and Unity, better handling of the Animation menu, jobs with the same name can now be overwritten
+Bug fixes, Code cleanup
+
+1.7.2020 - 30.7.2020
+Added more Documentation
+The element of the structure can now be chosen using the periodic table
+Bug fixes
+
+1.8.2020 - 31.8.2020
+Handling of internet outages: instead of crashing or even freezing, the application now shows a loading animation and tries to reconnect with the server every few seconds
+The structure looks deactivated while loading or reconnecting
+The MPIE Logo gets shown when loading the application
+
+1.9.2020 - 30.9.2020
 Updated and extended Documentation in the Readme ~1h
 Greatly increased receiving efficiency when receiving large messages asynchronously ~3.5h
-minor changes (see commit hstory) ~0.5h
+minor changes (see commit history) ~0.5h
+
+1.10.2020 - 31.10.2020:
+TBD
+
 
 
 
