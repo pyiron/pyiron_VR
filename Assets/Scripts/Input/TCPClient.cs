@@ -39,7 +39,6 @@ public class TCPClient : MonoBehaviour
 	// the size of message-packets send from Python to Unity. Should be the same as in Python
 	private static int BLOCKSIZE = 4096;
 	// buffer all incoming data. Needed to deal with the TCP stream
-	//private static String recBuffer = "";
 	private static StringBuilder recBuffer = new StringBuilder();
 
 	#region Monobehaviour Callbacks
@@ -77,17 +76,9 @@ public class TCPClient : MonoBehaviour
 	// delete the beginning of a string
 	private static void RemoveString(int len)
 	{
-		/*if (recBuffer.Length > len)
-		{
-			recBuffer = recBuffer.Substring(len);
-		}
-		else
-		{
-			recBuffer = "";
-		}*/
 		if (recBuffer.Length > len)
 		{
-			string cutOff = recBuffer.ToString().Substring(len);
+			string cutOff = recBuffer.ToString(len, recBuffer.Length - len);
 			recBuffer.Clear();
 			recBuffer.Append(cutOff);
 		}
@@ -186,10 +177,8 @@ public class TCPClient : MonoBehaviour
 					return "";
 				}
 
-				//recBuffer += newMsg;
 				recBuffer.Append(newMsg);
 				// before the semicolon the length of the following message gets send, after it the message
-				//if ((headerLen = recBuffer.IndexOf(';')) != -1)
 				if ((headerLen = recBuffer.ToString().IndexOf(';')) != -1)
 				{
 					break;
@@ -199,8 +188,7 @@ public class TCPClient : MonoBehaviour
 				// todo: some performance tests should be done
 			}
 
-			//String header = recBuffer.Substring(0, headerLen);
-			string header = recBuffer.ToString().Substring(0, headerLen);
+			string header = recBuffer.ToString(0, headerLen);
 			PythonExecuter.incomingChanges += 1;
 			RemoveString(headerLen + 1);
 			msgLen = int.Parse(header);
@@ -234,7 +222,6 @@ public class TCPClient : MonoBehaviour
 			if (recBuffer.Length >= msgLen)
 			{
 				// the whole message arrived
-				// = recBuffer.Substring(0, msgLen);// - returnedMsg.Length);
 				returnedMsg = recBuffer.ToString(0, msgLen);
 				RemoveString(returnedMsg.Length);
 				break;
@@ -258,7 +245,6 @@ public class TCPClient : MonoBehaviour
 				return "";
 			}*/
 			
-			//recBuffer += newMsg;
 			recBuffer.Append(newMsg);
 		}
 
