@@ -13,7 +13,7 @@ Previous versions of the server and the Unity application can be found on Gitlab
 ## Requirements
 ### Server
 
-The server runs on windows and linux, but the preferred OS for pyiron is linux. MacOS was not yet tested. It does not any special hardware specs. However, to execute the server, a working version of pyiron needs to be installed. For the installation, see https://pyiron.readthedocs.io/en/latest/source/installation.html. It is possible to execute the server on a HPC, such as the one in Garching. However, the computer running the Unity application needs to be connected to VPN, which is not possible when using the Oculus Quest standalone. Therefore, this is just possible if using Oculus Link or the HTC Vive.
+The server runs on windows and linux, but the preferred OS for pyiron is linux. MacOS was not yet tested. It does not any special hardware specs. However, to execute the server, a working version of pyiron needs to be installed. For the installation, see https://pyiron.readthedocs.io/en/latest/source/installation.html. It is possible and suggested to execute the server on the High Performance Cluster in Garching (Account needed). For this, the computer running the Unity application needs to be connected to VPN (see https://www.mpcdf.mpg.de/services/campus/vpn for installation on non-VR headsets or the description below for the Oculus Quest).
 
 ## Installation
 ### (Optional) Accessing the HPC cluster
@@ -50,10 +50,22 @@ git pull
 *  Start the Quest and complete the room setup
 *  Activate Developer Mode in the Quest, if not already done
 *  On the PC, SideQuest should now show the Quest as connected
-*  In the Rider in the Bottom-Left Corner click My Apps
-*  On the top should be a big Banner "Installed Apps\nDrag and drop your APK/OBB files over this message to install!!!"
 *  Download the [latest Oculus Quest Build](Builds/QuestBuild.apk)
-*  Drag the file over the banner on the Top of SideQuest
+*  To install the application on the Quest, drag the .apk file into SideQUest. A pop-up "Drag file(s) here" will appear. Release the file over this popup. Alternatively, SideQuest has an option to install apks in the top-right taskbar when connected to the Quest, which can be used instead.
+
+### (optional) Install VPN on the Oculus Quest
+*  Make sure SideQuest is installed on the PC (or install it e.g. via https://sidequestvr.com/#/download)
+*  Start SideQuest on the computer
+*  Start the Quest and complete the room setup
+*  On the PC, SideQuest should now show the Quest as connected
+*  Download the AnyConnect .apk, e.g. from https://play.google.com/store/apps/details?id=com.cisco.anyconnect.vpn.android.avf
+*  To install the application on the Quest, drag the .apk file into SideQUest. A pop-up "Drag file(s) here" will appear. Release the file over this popup. Alternatively, SideQuest has an option to install apks in the top-right taskbar when connected to the Quest, which can be used instead.
+*  Wait until the apk has been installed
+
+### (optional) Start VPN on the Oculus Quest (required each time after the Quest has been shut down)
+*  Put on the Oculus Quest and go to the Home Menu
+*  Go to Navigate->Library->Unknown Sources->com.???.AnyConnect
+*  In the application, enter the server name (vpn.mpcdf.mpg.de) and connect with your account for the mpg cluster
 
 ### To start the Quest Program
 *  Put on the Oculus Quest and go to the Home Menu
