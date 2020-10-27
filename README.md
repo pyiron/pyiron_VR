@@ -115,6 +115,8 @@ In Temperature and Minimize Mode, a Trashcan will appear when grabbing an atom. 
 -- Currently in Alpha, bugs can and will occur --
 In Temperature and Minimize Mode, Atoms and structures can be created using the UI.
 
+### Stop the Server
+With the current configuration, the server stays active forever and can accept multiple clients after each other. It can be stopped by entering anything in the command line. By doing so, it will stop after the current client disconnects. 
 
 ## Troubleshooting
 ### Connection errors
