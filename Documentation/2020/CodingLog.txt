@@ -46,7 +46,11 @@ Greatly increased receiving efficiency when receiving large messages asynchronou
 minor changes (see commit history) ~0.5h
 
 1.10.2020 - 31.10.2020:
-TBD
+- Updated the Documentation
+- It is possible to see which job is currently active in the explorer
+- the current job can be deleted in the explorer
+- The server can now be stopped by entering something in the command line
+- Code Cleanup
 
 
 
