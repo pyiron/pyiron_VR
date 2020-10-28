@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using HTC.UnityPlugin.Vive;
+using Networking;
 
 // TODO: I think it would be a good idea if teh was no conversion from HandRole to int.
 

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Networking;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class NetworkMenuController : MenuController {
@@ -24,7 +25,7 @@ public class NetworkMenuController : MenuController {
 
     private void Update()
     {
-        if (TCPClientConnector.connStatus == null)
+        if (TCPClientConnector.ConnectionStatus == null)
         {
             base.Activate();
         }

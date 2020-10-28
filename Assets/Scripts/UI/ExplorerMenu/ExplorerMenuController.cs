@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using Networking;
 
 public class ExplorerMenuController : MenuController {
     // reference to the deployed scripts

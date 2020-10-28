@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Networking;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -95,13 +96,13 @@ public class SimulationMenuController : MenuController
         PythonExecuter.SendOrderAsync(receivingScript, PythonCommandType.eval_l, order);
 
         // remember the id of the request to wait for the right response id
-        int taskNumIn = TCPClient.taskNumIn;
+        int taskNumIn = TCPClient.TaskNumIn;
 
         // wait until the response to the send message has arrived
-        yield return new WaitUntil(() => taskNumIn == TCPClient.taskNumOut);
+        yield return new WaitUntil(() => taskNumIn == TCPClient.TaskNumOut);
 
         // get the response
-        string result = TCPClient.returnedMsg;
+        string result = TCPClient.ReturnedMsg;
 
         // handle the response
         Activate();
