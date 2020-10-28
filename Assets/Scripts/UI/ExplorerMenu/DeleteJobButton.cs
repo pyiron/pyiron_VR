@@ -33,8 +33,9 @@ public class DeleteJobButton : MonoBehaviour, IButton
         else
         {
             string job_name = options.GetOptionText();
-            StartCoroutine(OptionButton.HandleLoad(job_name));
+            //StartCoroutine(OptionButton.HandleLoad(job_name));
             ExplorerMenuController.Inst.Deactivate();
+            OptionButton.LoadJob(job_name);
         }
         
     }

@@ -36,7 +36,8 @@ public class DebugShortcuts : MonoBehaviour
             
             if (counter == 3)
             {
-                StartCoroutine(OptionButton.HandleLoad("ham_lammps_md"));
+                //StartCoroutine(OptionButton.HandleLoad("ham_lammps_md"));
+                OptionButton.LoadJob("ham_lammps_md");
             }
 
             if (counter == 4)

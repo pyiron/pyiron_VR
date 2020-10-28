@@ -92,8 +92,8 @@ public class SimulationMenuController : MenuController
     private IEnumerator HandleLammpsLoad(string order, PythonScript receivingScript)
     {
         // send the order to execute lammps
-        //PythonExecutor.SendOrderAsync(PythonScript.Executor, PythonCommandType.eval, order);
-        PythonExecuter.SendOrderAsync(receivingScript, PythonCommandType.eval_l, order);
+        ////PythonExecutor.SendOrderAsync(PythonScript.Executor, PythonCommandType.eval, order);
+        //PythonExecuter.SendOrderAsync(receivingScript, PythonCommandType.eval_l, order);
 
         // remember the id of the request to wait for the right response id
         int taskNumIn = TCPClient.TaskNumIn;
@@ -104,17 +104,22 @@ public class SimulationMenuController : MenuController
         // get the response
         string result = TCPClient.ReturnedMsg;
 
-        // handle the response
-        Activate();
-        
-        ActionPanelController.Inst.UpdateButtons(true);
-
-        StructureLoader.LoadAnimation(result);
+        OnJobdataReceived(result);
 
         // AnimationController.frame = 0;
         // PythonExecuter.HandlePythonMsg(result);
         // AnimationMenuController.Inst.SetState(true);
         //ModeController.inst.SetMode(Modes.Animate);
+    }
+
+    private void OnJobdataReceived(string data)
+    {
+        // handle the response
+        Activate();
+        
+        ActionPanelController.Inst.UpdateButtons(true);
+
+        StructureLoader.LoadAnimation(data);
     }
 
     public void CalculateNewJob()
@@ -152,9 +157,10 @@ public class SimulationMenuController : MenuController
         Deactivate();
 
         // load the new structure in another coroutine
-        StartCoroutine(HandleLammpsLoad(order, PythonScript.executor));
+        //StartCoroutine(HandleLammpsLoad(order, PythonScript.executor));
+        PythonExecuter.SendOrderAsync(PythonScript.executor, PythonCommandType.eval_l, order, OnJobdataReceived);
 
-        print("Wait begun");
+        print("Job calculation startet");
         //lammpsIsMd = ModeData.currentMode.showTemp;
     }
 
