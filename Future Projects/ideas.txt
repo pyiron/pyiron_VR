@@ -192,6 +192,7 @@ Todo:
 ! 62.	TODO make loading modes asynchronous
   63.	DONE document how to connect to vpn using the Oculus Quest
 ! 64.	LATER use Scriptable Objects instead of Singletons
+! 65.	TODO use Incoke instead of Coroutines for SendAsync
 
 
 Time needed for sending a Message sync to python: 0.05s = 50ms

@@ -18,7 +18,7 @@ public class InputManager : MonoBehaviour
 
     void Update()
     {
-        if (!PythonExecuter.IsLoading())
+        if (TCPClient.TaskNumOut == TCPClient.TaskNumIn)
         {
             foreach (HandRole handRole in System.Enum.GetValues(typeof(HandRole)))
                 CheckViveController(handRole);
