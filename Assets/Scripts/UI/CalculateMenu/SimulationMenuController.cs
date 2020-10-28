@@ -52,21 +52,30 @@ public class SimulationMenuController : MenuController
                 }
                 else
                 {
-                    string job = PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.eval_l, 
+                    /*string job = PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.eval_l, 
                         "load_job(" + PythonScript.unityManager + ".project['"+ jobName + "'])");
-                    StructureLoader.LoadAnimation(job);
-                    // Load the information of the old job. The structure should have been set in Explorer already
-                    // PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.exec_l, order);
-                    UpdatePanels();
+                    OnJobLoaded(job);*/
+                    PythonExecuter.SendOrderAsync(PythonScript.executor, PythonCommandType.eval_l,
+                        "load_job(" + PythonScript.unityManager + ".project['" + jobName + "'])", OnJobLoaded);
                 }
             }
             else
             {
                 // create a new job, then load the information from it
-                PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.exec_l, "load_job(None)");
-                UpdatePanels();
+                PythonExecuter.SendOrderAsync(PythonScript.executor, PythonCommandType.exec_l, "load_job(None)",
+                    s => UpdatePanels());
+                //PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.exec_l, "load_job(None)");
+                //UpdatePanels();
             }
         }
+    }
+
+    private void OnJobLoaded(string job)
+    {
+        StructureLoader.LoadAnimation(job);
+        // Load the information of the old job. The structure should have been set in Explorer already
+        // PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.exec_l, order);
+        UpdatePanels();
     }
     
     /*public void SetNIonicSteps(Dropdown dropdown)

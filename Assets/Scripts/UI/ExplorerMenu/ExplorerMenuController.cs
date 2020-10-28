@@ -153,9 +153,10 @@ public class ExplorerMenuController : MenuController {
 
     public FolderData LoadFolderData()
     {
-        return JsonUtility.FromJson<FolderData>(
-            PythonExecuter.SendOrderSync(PythonScript.unityManager, PythonCommandType.eval_l,
-                "project.list_all()"));
+        string data = PythonExecuter.SendOrderSync(PythonScript.unityManager, PythonCommandType.eval_l,
+            "project.list_all()");
+        print(data);
+        return JsonUtility.FromJson<FolderData>(data);
     }
 
     public void LoadPathContent(string jobName="", bool isAbsPath=false)
@@ -188,8 +189,11 @@ public class ExplorerMenuController : MenuController {
         ShowNewOptions(folderData);
     }
 
-    public void DeleteJob(string jobName)
+    public void DeleteJob()
     {
+        //PythonExecuter.SendOrderSync(PythonScript.executor,
+        //    PythonCommandType.exec_l, "reset_job('" + SimulationMenuController.jobName + "')");
+        
         PythonExecuter.SendOrderSync(PythonScript.executor,
             PythonCommandType.exec_l, "reset_job('" + SimulationMenuController.jobName + "')");
         

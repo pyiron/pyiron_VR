@@ -20,7 +20,9 @@ public class DeleteJobButton : MonoBehaviour, IButton
     {
         //AnimationController.Inst.DeleteAnimation();
 
-        ExplorerMenuController.Inst.DeleteJob(SimulationMenuController.jobName);
+        ExplorerMenuController.Inst.DeleteJob();
+        
+        // Problem: it loads the path first, because the job gets deleted async. If everything is async, this should be ok
         
         ExplorerMenuController.Inst.LoadPathContent();
 

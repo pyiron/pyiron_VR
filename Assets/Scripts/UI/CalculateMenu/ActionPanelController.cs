@@ -42,6 +42,6 @@ public class ActionPanelController : MonoBehaviour
             AnimationController.Inst.DeleteAnimation();
         }
 
-        ExplorerMenuController.Inst.DeleteJob(SimulationMenuController.jobName);
+        ExplorerMenuController.Inst.DeleteJob();
     }
 }

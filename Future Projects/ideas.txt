@@ -189,10 +189,11 @@ Todo:
 ! 59.	TODO allow to change blocksPerFrame in the application
 ! 60. 	TODO show expected loading time by using number of atoms * frames
 ! 61. 	TODO Test out good values for blocksPerFrame
-! 62.	TODO make loading modes asynchronous
+  62.	DONE make loading jobs asynchronous
   63.	DONE document how to connect to vpn using the Oculus Quest
 ! 64.	LATER use Scriptable Objects instead of Singletons
 ! 65.	TODO use Incoke instead of Coroutines for SendAsync
+! 66.	TODO make most or all python calls async
 
 
 Time needed for sending a Message sync to python: 0.05s = 50ms
