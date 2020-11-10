@@ -154,9 +154,9 @@ Todo:
   27. 	DONE Create a new job if no old job has been loaded
   28. 	DONE Delete the data of the last job when pressing the delete button
   29. 	DONE Set the structure to the one corresponding to the current frame when switching from the calculator to structure creator
-- 30. 	LATER Add a Delete button in the Explorer to delete Folders or jobs
--    a	LATER Show which job is currently active
--    b	LATER Decide what to show when the job has been deleted to avoid a crash
+  30. 	DONE Add a Delete button in the Explorer to delete jobs
+     a	DONE Show which job is currently active
+     b	DONE Decide what to show when the job has been deleted to avoid a crash
 ! 31. 	TODO Optimize calls to python
   32. 	DONE Always send all settings in one file to Unity
   33.	DONE Send all settings after resetting/deleting the structure
@@ -194,6 +194,8 @@ Todo:
 ! 64.	LATER use Scriptable Objects instead of Singletons
 ! 65.	TODO use Incoke instead of Coroutines for SendAsync
 ! 66.	TODO make most or all python calls async
+- 67.	ASK  Add a Delete button in the Explorer to delete Folders
+! 68.	TODO Allow to move structure using joystick
 
 
 Time needed for sending a Message sync to python: 0.05s = 50ms
