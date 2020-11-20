@@ -1,4 +1,5 @@
-﻿using Networking;
+﻿using HTC.UnityPlugin.Vive;
+using Networking;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -44,12 +45,26 @@ public class NetworkMenuController : MenuController {
             base.Deactivate();
         }
     }
+    
+    /// <summary>
+    /// Try to connect to the server with the IP address of the text of this button.
+    /// </summary>
+    /// <param name="btnText">The button that got pressed.</param>
+    public void ConnectToBtnText(Text btnText)
+    {
+        // The vibration does not get triggered on the Quest, but it should work on the Vive
+        // If needed on the Quest, the function of the OVR Plugin could be used
+        ViveInput.TriggerHapticVibration(HandRole.LeftHand, 0.2f);
+        ViveInput.TriggerHapticVibration(HandRole.RightHand, 0.2f);
+		
+        TCPClientConnector.Inst.ConnectWithHost(btnText.text);
+    }
 
     /// <summary>
     /// Activate a keyboard in VR.
     /// The keyboard allows to Input a costume server IP.
     /// </summary>
-    /// <param name="toggle">The toggle that decides whether the keyboard should be active or inactive</param>
+    /// <param name="toggle">The toggle that decides whether the keyboard should be active or inactive.</param>
     public void OnKeyboardToggle(Toggle toggle)
     {
         keyboard.SetActive(toggle.isOn);

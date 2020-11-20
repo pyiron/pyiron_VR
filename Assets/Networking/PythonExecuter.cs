@@ -11,7 +11,7 @@ namespace Networking
     public class PythonExecuter : MonoBehaviour {
         #region Attributes
 
-        internal static PythonExecuter inst;
+        internal static PythonExecuter Inst;
 
         [Header("Scene")]
         // the script of the controller printer
@@ -33,7 +33,7 @@ namespace Networking
 
         private void Awake()
         {
-            inst = this;
+            Inst = this;
         
             // allow float.Parse to parse floats seperated by . correctly
             ci.NumberFormat.CurrencyDecimalSeparator = ".";
@@ -201,7 +201,7 @@ namespace Networking
             }
             else if (splittedData[0] == "")
             {
-                Debug.LogWarning("Unknown Data: " + inp);
+                Debug.LogWarning("Unknown Data: " + inp + ". Closing the server");
                 TCPClient.CloseServer();
             }
             else

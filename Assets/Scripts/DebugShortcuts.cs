@@ -9,11 +9,10 @@ using UnityEngine.UI;
 /// </summary>
 public class DebugShortcuts : MonoBehaviour
 {
-    public InputField serverIpField;
+    [SerializeField] private InputField serverIpField;
     
     private int counter;
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown("x"))

@@ -18,32 +18,17 @@ namespace Networking
 		public static Task ConnectionStatus;
 		// the time until the connection is declared as not existent
 		private static float connTimeOut = 2;
-		private float ConnectionTimer = connTimeOut;
+		private float _connectionTimer = connTimeOut;
 
 		private void Awake()
 		{
 			Inst = this;
 		}
 
-		// called by the Input Field for the server address on the network panel
-		public void ConnectTo(InputField inputField)
-		{
-			// save the Ip adress
-			PlayerPrefs.SetString("ServerIp", inputField.text);
-			ConnectWithHost(inputField.text);
-		}
-	
-		// called by the Input Field for the server address on the network panel
-		public void ConnectTo(Text btnText)
-		{
-			// The vibration does not get triggered on the Quest, but it should work on the Vive
-			// If needed on the Quest, the function of the OVR Plugin could be used
-			ViveInput.TriggerHapticVibration(HandRole.LeftHand, 0.2f);
-			ViveInput.TriggerHapticVibration(HandRole.RightHand, 0.2f);
-		
-			ConnectWithHost(btnText.text);
-		}
-
+		/// <summary>
+		/// Try to connect to a host server with the given IP
+		/// </summary>
+		/// <param name="host">The IP of the host server.</param>
 		public void ConnectWithHost(string host)
 		{
 
@@ -85,6 +70,9 @@ namespace Networking
 			}
 		}
 	
+		/// <summary>
+		/// Should be called when the connection breaks to try to establish a new connection.
+		/// </summary>
 		public static void TryReconnect()
 		{
 			AnimatedText reconnectText = AnimatedText.Instances[TextInstances.ReconnectingText];
@@ -108,13 +96,13 @@ namespace Networking
 			// the time between each update if there has been an update to the connection status
 			float updateTime = 0.4f;
 		
-			while (ConnectionTimer > 0)
+			while (_connectionTimer > 0)
 			{
-				ConnectionTimer -= updateTime;
+				_connectionTimer -= updateTime;
 				if (ConnectionStatus.IsFaulted || ConnectionStatus.IsCanceled)
 				{
 					// error
-					ConnectionTimer = connTimeOut;
+					_connectionTimer = connTimeOut;
 					print("Connection is Faulted: " + ConnectionStatus.IsFaulted);
 					print("Connection is Canceled: " + ConnectionStatus.IsCanceled);
 					ConnectionError(isReconnectAttempt);
@@ -123,17 +111,17 @@ namespace Networking
 				if (ConnectionStatus.IsCompleted)
 				{
 					// success
-					ConnectionTimer = connTimeOut;
+					_connectionTimer = connTimeOut;
 					print("Successfully connected to the server");
 					ConnectionSuccess(isReconnectAttempt);
 					break;
 				}
 				yield return new WaitForSeconds(updateTime);
 			}
-			if (ConnectionTimer <= 0)
+			if (_connectionTimer <= 0)
 			{
 				// the server didn't respond in time
-				ConnectionTimer = connTimeOut;
+				_connectionTimer = connTimeOut;
 				ConnectionTimeout(isReconnectAttempt);
 			}
 		
@@ -142,7 +130,11 @@ namespace Networking
 		}
 	
 		#region ConnectionOutcome
-
+		/// <summary>
+		/// Handles Connection Success by discarding the connection status and calling functions that should be
+		/// executed after the connection has been established.
+		/// </summary>
+		/// <param name="isReconnectAttempt">Decides which elements should be called and updated.</param>
 		private void ConnectionSuccess(bool isReconnectAttempt)
 		{
 			ConnectionStatus.Dispose();
