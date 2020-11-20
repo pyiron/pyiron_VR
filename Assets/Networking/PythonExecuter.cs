@@ -232,16 +232,9 @@ namespace Networking
             if (script != PythonScript.None && (type == PythonCommandType.exec || type == PythonCommandType.eval))
                 typeData += " " + AnimationController.frame;
             string fullOrder = script + " " + typeData + " " + order;
-            print(fullOrder);
             // show that the Unity program has send the Python program an order
             //outgoingChanges += 1;
-            return fullOrder;
-        }
-    
-        public static string SendOrderSync(PythonScript script, PythonCommandType type, string order, bool handleInput=true)
-        {
-            // todo: simplify method and eliminate duplicate code at similar methods
-            string fullOrder = ProcessOrder(script, type, order);
+            
             if (type == PythonCommandType.exec_l || type == PythonCommandType.eval_l)
             {
                 if (script == PythonScript.None)
@@ -253,10 +246,16 @@ namespace Networking
                     fullOrder = script + "." + order;
                 }
             }
-            else
-            {
-                type = (type != PythonCommandType.exec ? PythonCommandType.eval : PythonCommandType.exec);
-            }
+            
+            print(fullOrder);
+            
+            return fullOrder;
+        }
+    
+        public static string SendOrderSync(PythonScript script, PythonCommandType type, string order, bool handleInput=true)
+        {
+            // todo: simplify method and eliminate duplicate code at similar methods
+            string fullOrder = ProcessOrder(script, type, order);
 
             string response = TCPClient.SendMsgToPythonSync(type, fullOrder);
             if (handleInput && !response.StartsWith("Error"))
@@ -276,23 +275,6 @@ namespace Networking
             Utilities.DeactivateInteractables();
         
             string fullOrder = ProcessOrder(script, type, order);
-        
-            // send the order via TCP 
-            if (type == PythonCommandType.exec_l || type == PythonCommandType.eval_l)
-            {
-                if (script == PythonScript.None)
-                {
-                    fullOrder = order;
-                }
-                else
-                {
-                    fullOrder = script + "." + order;
-                }
-            }
-            else
-            {
-                type = (type != PythonCommandType.exec ? PythonCommandType.eval : PythonCommandType.exec);
-            }
 
             // send the message using TCP
             TCPClient.SendMsgToPython(type, fullOrder, callback:onReceiveCallback);
