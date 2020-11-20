@@ -31,7 +31,6 @@ namespace Networking
 		/// <param name="host">The IP of the host server.</param>
 		public void ConnectWithHost(string host)
 		{
-
 			// if no new host is specified, try to load the one we have been connected to before 
 			// (needed for temporary internet outages)
 			if (host == null)

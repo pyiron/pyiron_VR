@@ -9,21 +9,33 @@ namespace Networking
 {
     public class TCPClient : MonoBehaviour
     {
-        public static TCPClient Inst;
+        private static TCPClient Inst;
     
+        /// <summary>
+        /// The current connection. Needed to send and receive messages. Established by the TCPClientConnector.
+        /// </summary>
         public static TcpClient SocketConnection;
         private static NetworkStream _stream;
         //private Thread clientReceiveThread;
 
         [Tooltip("How many blocks should be read in one frame when reading asynchronous? " +
                  "Higher blocks_per_frame means shorter loading times, but less fps while loading")]
-        public int blocksPerFrame = 2;
+        [SerializeField] private int blocksPerFrame = 2;
 
-        // will be increased by 1 each time an order gets send. It functions as a unique id for each order send to Python
+        /// <summary>
+        /// Shows how many messages have been received. If TaskNumOut > TaskNumIn, then the client is still
+        /// waiting for a response from the server. It functions as a unique id for each message received from Python.
+        /// </summary>
         public static int TaskNumIn;
+        /// <summary>
+        /// Shows how many messages have been send. If TaskNumOut > TaskNumIn, then the client is still
+        /// waiting for a response from the server. It functions as a unique id for each order send to Python.
+        /// </summary>
         public static int TaskNumOut;
 
-        // the List of functions and scripts the Update function should return received messages to
+        /// <summary>
+        /// The last message received by the server.
+        /// </summary>
         public static string ReturnedMsg;
 
         //public static StringBuilder ReceivedMsg;
@@ -86,12 +98,8 @@ namespace Networking
 
         #endregion
 
-        /*public static bool IsReady()
-    {
-        return SocketConnection != null;
-    }*/
-
         #region ReceiveMessages
+        
         // delete the beginning of a string
         private static void RemoveString(int len)
         {
@@ -298,6 +306,13 @@ namespace Networking
 
         #region SendMessages
 
+        /// <summary>
+        /// Send the message to the python script and execute it there.
+        /// </summary>
+        /// <param name="exType">Eval: the message expects a return value.
+        /// Exec: the message expects no return value.</param>
+        /// <param name="msg">The message that should be send.</param>
+        /// <returns></returns>
         public static string SendMsgToPythonSync(PythonCommandType exType, string msg)
         {
             string msgRes = SendMsgToPython(exType, msg, sendAsync: false);
@@ -312,7 +327,7 @@ namespace Networking
         }
 
         /// <summary> 	
-        /// Send message to server using socket connection. 	
+        /// Send a message to server using socket connection. 	
         /// </summary> 	
         public static string SendMsgToPython(PythonCommandType exType, string msg, bool sendAsync = true, Action<string> callback=null)
         {

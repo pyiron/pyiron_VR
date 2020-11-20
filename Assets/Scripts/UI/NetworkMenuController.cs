@@ -11,6 +11,8 @@ public class NetworkMenuController : MenuController {
     [SerializeField] private Text serverAddressField;
     [SerializeField] private Text serverAddressPlaceholder;
 
+    private const string ServerIPKey = "ServerIp";
+
     private void Awake()
     {
         Inst = this;
@@ -21,7 +23,7 @@ public class NetworkMenuController : MenuController {
         portText.text = "Port: " + TCPClientConnector.PORT;
         
         // set the Input field to the last entered value
-        serverAddressField.text = PlayerPrefs.GetString("ServerIp", "");
+        serverAddressField.text = PlayerPrefs.GetString(ServerIPKey, "");
         UpdatePlaceholder();
     }
 
@@ -52,6 +54,9 @@ public class NetworkMenuController : MenuController {
     /// <param name="btnText">The button that got pressed.</param>
     public void ConnectToBtnText(Text btnText)
     {
+        // save the Ip adress
+        PlayerPrefs.SetString(ServerIPKey, btnText.text);
+        
         // The vibration does not get triggered on the Quest, but it should work on the Vive
         // If needed on the Quest, the function of the OVR Plugin could be used
         ViveInput.TriggerHapticVibration(HandRole.LeftHand, 0.2f);
