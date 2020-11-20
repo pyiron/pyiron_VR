@@ -4,18 +4,6 @@ using UnityEngine;
 
 public class DeleteJobButton : MonoBehaviour, IButton
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void WhenClickDown()
     {
         //AnimationController.Inst.DeleteAnimation();

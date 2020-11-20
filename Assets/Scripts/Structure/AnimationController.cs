@@ -47,7 +47,7 @@ public class AnimationController : MonoBehaviour
     public void DeleteAnimation()
     {
         PythonExecuter.SendOrderSync(PythonScript.structure, PythonCommandType.exec_l,
-            "structure = " + PythonScript.executor + ".job.get_structure(" + AnimationController.frame + ")");
+            PythonCmd.SetStructureToCurrentFrame());
         
         positionData = null;
         run_anim = false;
@@ -56,7 +56,6 @@ public class AnimationController : MonoBehaviour
         AnimationMenuController.Inst.SetState(false);
     }
 
-    // Update is called once per frame
     void Update () {
         if (run_anim)
         {

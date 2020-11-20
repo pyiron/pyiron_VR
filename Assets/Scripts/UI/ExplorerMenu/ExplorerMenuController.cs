@@ -154,7 +154,7 @@ public class ExplorerMenuController : MenuController {
     public FolderData LoadFolderData()
     {
         string data = PythonExecuter.SendOrderSync(PythonScript.unityManager, PythonCommandType.eval_l,
-            "project.list_all()");
+            PythonCmd.GetFolderData);
         print(data);
         return JsonUtility.FromJson<FolderData>(data);
     }
@@ -170,17 +170,17 @@ public class ExplorerMenuController : MenuController {
             if (isAbsPath)
             {
                 PythonExecuter.SendOrderSync(PythonScript.unityManager,
-                    PythonCommandType.exec_l, "project = Project('" + jobName + "')", handleInput: false);
+                    PythonCommandType.exec_l, PythonCmd.OpenAbsPath(jobName), handleInput: false);
             }
             else
             {
                 PythonExecuter.SendOrderSync(PythonScript.unityManager,
-                    PythonCommandType.exec_l, "project = " + PythonScript.unityManager + ".project['" + jobName + "']", handleInput: false);
+                    PythonCommandType.exec_l, PythonCmd.OpenRelPath(jobName), handleInput: false);
             }
         }
         
         currPath = PythonExecuter.SendOrderSync(PythonScript.unityManager,
-            PythonCommandType.eval_l, "project.path[:-1]");
+            PythonCommandType.eval_l, PythonCmd.GetPath);
         PathHasChanged();
             
         // get the jobs and groups 
@@ -195,7 +195,7 @@ public class ExplorerMenuController : MenuController {
         //    PythonCommandType.exec_l, "reset_job('" + SimulationMenuController.jobName + "')");
         
         PythonExecuter.SendOrderSync(PythonScript.executor,
-            PythonCommandType.exec_l, "reset_job('" + SimulationMenuController.jobName + "')");
+            PythonCommandType.exec_l, PythonCmd.ResetCurrentJob());
         
         // PythonExecuter.SendOrderSync(PythonScript.unityManager,
         //     PythonCommandType.exec_l, "project['" + jobName + "'].remove()");

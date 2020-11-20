@@ -19,7 +19,12 @@ public abstract class MenuController : MonoBehaviour
         // activates all UI elements which got deactivated by Deactive()
         foreach (Selectable selectable in _activeSelectables)
         {
-            selectable.interactable = true;
+            // the selectable could have been destroyed while the panel was inactive
+            if (selectable != null)
+            {
+                // activate the UI element again
+                selectable.interactable = true;
+            }
         }
         _activeSelectables.Clear();
     }

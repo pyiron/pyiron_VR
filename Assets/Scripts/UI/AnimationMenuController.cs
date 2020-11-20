@@ -60,8 +60,7 @@ public class AnimationMenuController : MenuController {
     {
         // Send an update to Pyiron what the current frame is
         PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.exec_l,
-            "job.structure = unity_manager.Executor.job.get_structure("
-            + AnimationController.frame + ")");
+            PythonCmd.SetJobStructureToCurrentFrame());
             //"unity_manager.Executor.frame = " + AnimationController.frame);
         ModeController.inst.SetMode(Modes.Calculate);
     }

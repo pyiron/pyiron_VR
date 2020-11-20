@@ -10,7 +10,7 @@ using UnityEngine.UI;
 /// </summary>
 public class StructureCreatorMenuController : MenuController
 {
-    internal static StructureCreatorMenuController inst;
+    /*internal static StructureCreatorMenuController inst;
     public Button CreateBtn;
     public GameObject AtomAmountPref;
     public GameObject AddElementSign;
@@ -78,17 +78,17 @@ public class StructureCreatorMenuController : MenuController
         
         
         
-        /*string elementData = "";
-        foreach (GameObject go in elements)
-        {
-            foreach (Text txt in go.GetComponentsInChildren<Text>())
-                if (txt.name.Contains("Symbol"))
-                    elementData += txt.text;
-            Destroy(go);
-        }
-        ImportStructure.newImport = true;
-        PythonExecuter.SendOrder(PythonScript.Executor, PythonCommandType.eval, 
-            "self.create_new_struc('" + elementData + "', True)");*/
+        // string elementData = "";
+        // foreach (GameObject go in elements)
+        // {
+        //     foreach (Text txt in go.GetComponentsInChildren<Text>())
+        //         if (txt.name.Contains("Symbol"))
+        //             elementData += txt.text;
+        //     Destroy(go);
+        // }
+        // ImportStructure.newImport = true;
+        // PythonExecuter.SendOrder(PythonScript.Executor, PythonCommandType.eval, 
+        //     "self.create_new_struc('" + elementData + "', True)");
     }
 
     public void OnButtonClicked(Button btn)
@@ -118,5 +118,5 @@ public class StructureCreatorMenuController : MenuController
             Text txt = btn.transform.parent.GetComponent<Text>();
             txt.text = "" + int.Parse(txt.text) / 8;
         }
-    }
+    }*/
 }

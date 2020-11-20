@@ -97,7 +97,8 @@ public class StructureMenuController : MenuController
         {
             // Load the data TODO: make async, in case the server has a bug or outage
             string order = "get_data()";
-            string structure = PythonExecuter.SendOrderSync(PythonScript.structure, PythonCommandType.eval_l, order);
+            string structure = PythonExecuter.SendOrderSync(PythonScript.structure, PythonCommandType.eval_l, 
+                PythonCmd.GetData);
             
             // visualize the structure
             LoadStructure(structure);
@@ -124,8 +125,7 @@ public class StructureMenuController : MenuController
 //        string element = "'" + elementDropdown.options[elementDropdown.value].text + "'";
         string element = "'" + elementButton.GetComponentInChildren<Text>().text + "'";
 
-        UpdateStructure("create(" + element + ", " + repeat + ", " + Utilities.ToggleToPythonBool(cubicToggle) + ", " + 
-                        Utilities.ToggleToPythonBool(orthorombicToggle) + ")");
+        UpdateStructure(PythonCmd.CreateStructure(element,  repeat, cubicToggle, orthorombicToggle));
     }
 
     /// <summary>
@@ -134,7 +134,7 @@ public class StructureMenuController : MenuController
     public void OnRepeatChange()
     {
         string repeat = repeatDropdown.options[repeatDropdown.value].text;
-        UpdateStructure("structure.repeat([" + repeat + ", " + repeat + ", " + repeat + "])");
+        UpdateStructure(PythonCmd.RepeatStructure(repeat));
     }
 }
 

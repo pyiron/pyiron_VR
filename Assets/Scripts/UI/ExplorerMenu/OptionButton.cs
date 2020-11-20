@@ -25,7 +25,7 @@ public class OptionButton : MonoBehaviour, IButton
         }
         
         PythonExecuter.SendOrderAsync(PythonScript.executor, PythonCommandType.eval_l, 
-            "load_job(" + PythonScript.unityManager + ".project['" + jobName + "'])", OnStructureDataReceived);
+            PythonCmd.LoadJob(jobName), OnStructureDataReceived);
     }
 
     public static IEnumerator HandleLoad(string jobName)

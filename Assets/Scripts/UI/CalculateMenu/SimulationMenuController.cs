@@ -20,8 +20,8 @@ public class SimulationMenuController : MenuController
 
     private void UpdatePanels()
     {
-        string order = "format_job_settings()";
-        string data = PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.eval_l, order);
+        //string order = "format_job_settings()";
+        string data = PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.eval_l, PythonCmd.FormatJobSettings);
         JobData jobData = JsonUtility.FromJson<JobData>(data);
         
         JobSettingsController.Inst.OnModeStart(jobData);
@@ -56,13 +56,13 @@ public class SimulationMenuController : MenuController
                         "load_job(" + PythonScript.unityManager + ".project['"+ jobName + "'])");
                     OnJobLoaded(job);*/
                     PythonExecuter.SendOrderAsync(PythonScript.executor, PythonCommandType.eval_l,
-                        "load_job(" + PythonScript.unityManager + ".project['" + jobName + "'])", OnJobLoaded);
+                        PythonCmd.LoadJob(jobName), OnJobLoaded);
                 }
             }
             else
             {
                 // create a new job, then load the information from it
-                PythonExecuter.SendOrderAsync(PythonScript.executor, PythonCommandType.exec_l, "load_job(None)",
+                PythonExecuter.SendOrderAsync(PythonScript.executor, PythonCommandType.exec_l, PythonCmd.LoadNoneJob,
                     s => UpdatePanels());
                 //PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.exec_l, "load_job(None)");
                 //UpdatePanels();
@@ -133,10 +133,6 @@ public class SimulationMenuController : MenuController
 
     public void CalculateNewJob()
     {
-        // update the temperture
-        //PythonExecuter.SendOrderSync(PythonScript.None, PythonCommandType.exec_l,
-        //    "unity_manager.Executor.temperature = " + Thermometer.temperature);
-        //string calculation = ModeData.currentMode.showTemp ? "md" : "minimize";
         string calculation = SimulationModeManager.CurrMode.ToString().ToLower();
         string order;
         JobData jobData = JobSettingsController.Inst.GetData();
@@ -166,11 +162,9 @@ public class SimulationMenuController : MenuController
         Deactivate();
 
         // load the new structure in another coroutine
-        //StartCoroutine(HandleLammpsLoad(order, PythonScript.executor));
-        PythonExecuter.SendOrderAsync(PythonScript.executor, PythonCommandType.eval_l, order, OnJobdataReceived);
+        PythonExecuter.SendOrderAsync(PythonScript.executor, PythonCommandType.eval_l, PythonCmd.SendRaw(order), OnJobdataReceived);
 
         print("Job calculation startet");
-        //lammpsIsMd = ModeData.currentMode.showTemp;
     }
 
     public bool IsStructureShifted()

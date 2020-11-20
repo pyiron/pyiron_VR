@@ -55,6 +55,8 @@ minor changes (see commit history) ~0.5h
 1.11.2020 - 30.11.2020
 - The function to send messages asynchronous to python now takes an Action as an argument, that it will call when the data arrives
 - Switched some Send calls from synchronous to asynchronous, to have less freezes
+- Improved the server ip input system for usage in a VR headset
+- Code cleanup, refactoring and adding comments
 
 
 

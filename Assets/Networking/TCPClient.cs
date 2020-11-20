@@ -331,7 +331,6 @@ namespace Networking
         /// </summary> 	
         public static string SendMsgToPython(PythonCommandType exType, string msg, bool sendAsync = true, Action<string> callback=null)
         {
-            print(SocketConnection + " or " + !SocketConnection.Connected);
             if (SocketConnection == null || !SocketConnection.Connected)
             {
                 string problem = "Socket currently not connected!";
