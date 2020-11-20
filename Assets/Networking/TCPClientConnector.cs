@@ -169,12 +169,17 @@ namespace Networking
 			}
 		}
 
+		/// <summary>
+		/// Handles Connection Errors by closing the connection.
+		/// </summary>
+		/// <param name="isReconnectAttempt">If set to true, another connection attempt will be started</param>
 		private void ConnectionError(bool isReconnectAttempt)
 		{
 			// connection failure
 			print("Failed to connect");
-		
-			ConnectionStatus.Dispose();
+
+			ConnectionStatus?.Dispose();
+
 			ConnectionStatus = null;
 			TCPClient.SocketConnection = null;
 		
@@ -189,6 +194,10 @@ namespace Networking
 			}
 		}
 
+		/// <summary>
+		/// Handles Connection Timeouts by closing the connection.
+		/// </summary>
+		/// <param name="isReconnectAttempt">If set to true, another connection attempt will be started</param>
 		private void ConnectionTimeout(bool isReconnectAttempt)
 		{
 			// connection failure caused by timeout

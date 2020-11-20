@@ -5,9 +5,10 @@ using UnityEngine.UI;
 public class NetworkMenuController : MenuController {
     public static NetworkMenuController Inst;
 
-    public Text portText;
+    [SerializeField] private Text portText;
     public GameObject keyboard;
-    private InputField serverAddressField;
+    [SerializeField] private Text serverAddressField;
+    [SerializeField] private Text serverAddressPlaceholder;
 
     private void Awake()
     {
@@ -17,10 +18,19 @@ public class NetworkMenuController : MenuController {
     private void Start()
     {
         portText.text = "Port: " + TCPClientConnector.PORT;
-        serverAddressField = gameObject.GetComponentInChildren<InputField>();
         
         // set the Input field to the last entered value
         serverAddressField.text = PlayerPrefs.GetString("ServerIp", "");
+        UpdatePlaceholder();
+    }
+
+    
+    /// <summary>
+    /// Show the placeholder if and only if the text field is empty
+    /// </summary>
+    private void UpdatePlaceholder()
+    {
+        serverAddressPlaceholder.gameObject.SetActive(serverAddressField.text == "");
     }
 
     private void Update()
@@ -35,14 +45,20 @@ public class NetworkMenuController : MenuController {
         }
     }
 
-    // Activate a keyboard in VR
-    // The keyboard allows to Input a costume server IP
+    /// <summary>
+    /// Activate a keyboard in VR.
+    /// The keyboard allows to Input a costume server IP.
+    /// </summary>
+    /// <param name="toggle">The toggle that decides whether the keyboard should be active or inactive</param>
     public void OnKeyboardToggle(Toggle toggle)
     {
         keyboard.SetActive(toggle.isOn);
     }
 
-    // receive Input from the keyboard and set the IP Address accordingly
+    /// <summary>
+    /// Receive Input from the keyboard and set the IP Address accordingly.
+    /// </summary>
+    /// <param name="key">The Button of the key that got pressed</param>
     public void OnKeyboardPressDown(Button key)
     {
         Text keyText = key.GetComponentInChildren<Text>();
@@ -55,9 +71,11 @@ public class NetworkMenuController : MenuController {
             serverAddressField.text = 
                 serverAddressField.text.Substring(0, serverAddressField.text.Length - 1);
         }
-        else
+        else if (keyText.text != "Del")
         {
             serverAddressField.text += keyText.text;
         }
+        
+        UpdatePlaceholder();
     }
 }
