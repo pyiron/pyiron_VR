@@ -56,7 +56,12 @@ minor changes (see commit history) ~0.5h
 - The function to send messages asynchronous to python now takes an Action as an argument, that it will call when the data arrives
 - Switched some Send calls from synchronous to asynchronous, to have less freezes
 - Improved the server ip input system for usage in a VR headset
+- Added a new class that stores all commands that can get send to Python
 - Code cleanup, refactoring and adding comments
+
+1.11.2020 - 31.12.2020:
+TODO: Remove old Python code from "eval" and "exec"
+TODO: Test if needed and if not needed remove parsing of non-json messages from Python
 
 
 
