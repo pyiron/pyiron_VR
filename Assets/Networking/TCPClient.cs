@@ -313,13 +313,12 @@ namespace Networking
         /// Exec: the message expects no return value.</param>
         /// <param name="msg">The message that should be send.</param>
         /// <returns></returns>
-        public static string SendMsgToPythonSync(PythonCommandType exType, string msg)
+        public static string SendMsgToPythonSync(bool hasReturnValue, string msg)
         {
-            string msgRes = SendMsgToPython(exType, msg, sendAsync: false);
+            string msgRes = SendMsgToPython(hasReturnValue, msg, sendAsync: false);
             print(msgRes);
             if (msgRes.StartsWith("Error"))
             {
-                //PythonExecuter.incomingChanges += 1;
                 return msgRes;
             }
 
@@ -329,7 +328,7 @@ namespace Networking
         /// <summary> 	
         /// Send a message to server using socket connection. 	
         /// </summary> 	
-        public static string SendMsgToPython(PythonCommandType exType, string msg, bool sendAsync = true, Action<string> callback=null)
+        public static string SendMsgToPython(bool hasReturnValue, string msg, bool sendAsync = true, Action<string> callback=null)
         {
             if (SocketConnection == null || !SocketConnection.Connected)
             {
@@ -346,7 +345,8 @@ namespace Networking
                 stream.WriteTimeout = 1000;
                 if (stream.CanWrite)
                 {
-                    string clientMessage = exType + ":" + msg;
+                    string execOrEval = hasReturnValue ? "eval" : "exec";
+                    string clientMessage = execOrEval + ":" + msg;
                     clientMessage = clientMessage.Length + ";" + clientMessage;
                     // Convert string message to byte array.                 
                     byte[] clientMessageAsByteArray = Encoding.ASCII.GetBytes(clientMessage);
@@ -411,7 +411,7 @@ namespace Networking
         {
             if (SocketConnection != null)
             {
-                string rec = SendMsgToPython(PythonCommandType.exec, "end server");
+                string rec = SendMsgToPython(false, "end server");
                 print("Closed the server: " + rec);
             }
         }

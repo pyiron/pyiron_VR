@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 
 namespace Networking
 {
@@ -36,14 +33,14 @@ namespace Networking
         /// Warning: this method might result in a screen freeze.
         /// </summary>
         /// <param name="script">The python script that should execute the command.</param>
-        /// <param name="type">Defines whether the command has a return value (=eval) or not</param>
+        /// <param name="hasReturnValue">Defines whether the command should be executed in Python using exec (=false) or eval</param>
         /// <param name="order">The command that should be executed.</param>
         /// <returns></returns>
-        public static string SendOrderSync(PythonScript script, PythonCommandType type, string order)//, bool handleInput=true)
+        public static string SendOrderSync(PythonScript script, bool hasReturnValue, string order)//, bool handleInput=true)
         {
             string fullOrder = ProcessOrder(script, order);
 
-            return TCPClient.SendMsgToPythonSync(type, fullOrder);
+            return TCPClient.SendMsgToPythonSync(hasReturnValue, fullOrder);
         }
 
         /// <summary>
@@ -51,11 +48,11 @@ namespace Networking
         /// PythonCmd so that it is possible to see which Python calls are used.\n
         /// </summary>
         /// <param name="script">The python script that should execute the command.</param>
-        /// <param name="type">Defines whether the command has a return value (=eval) or not</param>
+        /// <param name="hasReturnValue">Defines whether the command should be executed in Python using exec (=false) or eval</param>
         /// <param name="order">The command that should be executed.</param>
         /// <param name="onReceiveCallback">The method that will be called when the response from Python arrives.</param>
         /// <returns></returns>
-        public static void SendOrderAsync(PythonScript script, PythonCommandType type, string order, 
+        public static void SendOrderAsync(PythonScript script, bool hasReturnValue, string order, 
             Action<string> onReceiveCallback)
         {
             // show that the program is loading
@@ -66,17 +63,12 @@ namespace Networking
             string fullOrder = ProcessOrder(script, order);
 
             // send the message using TCP
-            TCPClient.SendMsgToPython(type, fullOrder, callback:onReceiveCallback);
+            TCPClient.SendMsgToPython(hasReturnValue, fullOrder, callback:onReceiveCallback);
         }
     }
 
     public enum PythonScript
     {
         None, unityManager, executor, structure
-    }
-
-    public enum PythonCommandType
-    {
-        exec, eval
     }
 }
