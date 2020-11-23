@@ -77,6 +77,6 @@ namespace Networking
 
     public enum PythonCommandType
     {
-        exec_l, eval_l
+        exec, eval
     }
 }
