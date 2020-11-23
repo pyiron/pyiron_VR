@@ -60,6 +60,11 @@ minor changes (see commit history) ~0.5h
 - Code cleanup, refactoring and adding comments
 
 1.11.2020 - 31.12.2020:
+Removed more than 350 lines of old code that is not in use anymore in the Python scripts ~ 2h
+Minor changes in the Python code
+Removed old Unity code that is not in use anymore ~15min
+Small Refactoring
+
 TODO: Remove old Python code from "eval" and "exec"
 TODO: Test if needed and if not needed remove parsing of non-json messages from Python
 

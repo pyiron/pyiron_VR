@@ -97,7 +97,7 @@ public class StructureMenuController : MenuController
         {
             // Load the data TODO: make async, in case the server has a bug or outage
             string order = "get_data()";
-            string structure = PythonExecuter.SendOrderSync(PythonScript.structure, PythonCommandType.eval_l, 
+            string structure = PythonExecutor.SendOrderSync(PythonScript.structure, PythonCommandType.eval_l, 
                 PythonCmd.GetData);
             
             // visualize the structure
@@ -107,7 +107,7 @@ public class StructureMenuController : MenuController
 
     private void UpdateStructure(string order)
     {
-        string structure = PythonExecuter.SendOrderSync(PythonScript.structure, PythonCommandType.eval_l, order);
+        string structure = PythonExecutor.SendOrderSync(PythonScript.structure, PythonCommandType.eval_l, order);
         LoadStructure(structure);
     }
 

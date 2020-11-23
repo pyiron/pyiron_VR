@@ -21036,7 +21036,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1fdf39289b10bb42b1dec43770683e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  printer: {fileID: 0}
 --- !u!114 &575738907
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35866,7 +35865,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cbce73b841cb1f419d43b6c29b9dc8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serverIpField: {fileID: 0}
+  serverAddressField: {fileID: 136987562}
 --- !u!114 &974657955
 MonoBehaviour:
   m_ObjectHideFlags: 0

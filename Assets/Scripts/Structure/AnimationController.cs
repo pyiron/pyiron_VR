@@ -46,7 +46,7 @@ public class AnimationController : MonoBehaviour
 
     public void DeleteAnimation()
     {
-        PythonExecuter.SendOrderSync(PythonScript.structure, PythonCommandType.exec_l,
+        PythonExecutor.SendOrderSync(PythonScript.structure, PythonCommandType.exec_l,
             PythonCmd.SetStructureToCurrentFrame());
         
         positionData = null;

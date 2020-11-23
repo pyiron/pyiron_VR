@@ -153,7 +153,7 @@ public class ExplorerMenuController : MenuController {
 
     public FolderData LoadFolderData()
     {
-        string data = PythonExecuter.SendOrderSync(PythonScript.unityManager, PythonCommandType.eval_l,
+        string data = PythonExecutor.SendOrderSync(PythonScript.unityManager, PythonCommandType.eval_l,
             PythonCmd.GetFolderData);
         print(data);
         return JsonUtility.FromJson<FolderData>(data);
@@ -169,17 +169,17 @@ public class ExplorerMenuController : MenuController {
         {
             if (isAbsPath)
             {
-                PythonExecuter.SendOrderSync(PythonScript.unityManager,
-                    PythonCommandType.exec_l, PythonCmd.OpenAbsPath(jobName), handleInput: false);
+                PythonExecutor.SendOrderSync(PythonScript.unityManager,
+                    PythonCommandType.exec_l, PythonCmd.OpenAbsPath(jobName));
             }
             else
             {
-                PythonExecuter.SendOrderSync(PythonScript.unityManager,
-                    PythonCommandType.exec_l, PythonCmd.OpenRelPath(jobName), handleInput: false);
+                PythonExecutor.SendOrderSync(PythonScript.unityManager,
+                    PythonCommandType.exec_l, PythonCmd.OpenRelPath(jobName));
             }
         }
         
-        currPath = PythonExecuter.SendOrderSync(PythonScript.unityManager,
+        currPath = PythonExecutor.SendOrderSync(PythonScript.unityManager,
             PythonCommandType.eval_l, PythonCmd.GetPath);
         PathHasChanged();
             
@@ -194,7 +194,7 @@ public class ExplorerMenuController : MenuController {
         //PythonExecuter.SendOrderSync(PythonScript.executor,
         //    PythonCommandType.exec_l, "reset_job('" + SimulationMenuController.jobName + "')");
         
-        PythonExecuter.SendOrderSync(PythonScript.executor,
+        PythonExecutor.SendOrderSync(PythonScript.executor,
             PythonCommandType.exec_l, PythonCmd.ResetCurrentJob());
         
         // PythonExecuter.SendOrderSync(PythonScript.unityManager,

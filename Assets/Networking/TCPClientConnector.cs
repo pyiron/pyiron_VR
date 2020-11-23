@@ -33,14 +33,12 @@ namespace Networking
 		{
 			// if no new host is specified, try to load the one we have been connected to before 
 			// (needed for temporary internet outages)
-			if (host == null)
+			if (host != null)
 			{
-				host = _host;
+				// save the host
+				_host = host;
 			}
 
-			// save the host
-			_host = host;
-		
 			Connect(false);
 		}
 

@@ -9,7 +9,7 @@ using UnityEngine.UI;
 /// </summary>
 public class DebugShortcuts : MonoBehaviour
 {
-    [SerializeField] private InputField serverIpField;
+    [SerializeField] private Text serverAddressField;
     
     private int counter;
 
@@ -19,7 +19,7 @@ public class DebugShortcuts : MonoBehaviour
         {
             if (counter == 0)
             {
-                TCPClientConnector.Inst.ConnectWithHost(serverIpField.text);
+                TCPClientConnector.Inst.ConnectWithHost(serverAddressField.text);
             }
 
             if (counter == 1)
@@ -27,7 +27,7 @@ public class DebugShortcuts : MonoBehaviour
                 ModeController.inst.SetMode(Modes.Explorer.ToString());
             }
 
-            if (counter == 2)
+            if (counter == 2) // outdated
             {
                 ExplorerMenuController.Inst.LoadPathContent(
                     "Examples");
