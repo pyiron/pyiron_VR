@@ -411,7 +411,7 @@ namespace Networking
         {
             if (SocketConnection != null)
             {
-                string rec = SendMsgToPython(PythonCommandType.exec_l, "end server");
+                string rec = SendMsgToPython(PythonCommandType.exec, "end server");
                 print("Closed the server: " + rec);
             }
         }

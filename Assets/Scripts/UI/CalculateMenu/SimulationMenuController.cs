@@ -21,7 +21,7 @@ public class SimulationMenuController : MenuController
     private void UpdatePanels()
     {
         //string order = "format_job_settings()";
-        string data = PythonExecutor.SendOrderSync(PythonScript.executor, PythonCommandType.eval_l, PythonCmd.FormatJobSettings);
+        string data = PythonExecutor.SendOrderSync(PythonScript.executor, PythonCommandType.eval, PythonCmd.FormatJobSettings);
         JobData jobData = JsonUtility.FromJson<JobData>(data);
         
         JobSettingsController.Inst.OnModeStart(jobData);
@@ -55,14 +55,14 @@ public class SimulationMenuController : MenuController
                     /*string job = PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.eval_l, 
                         "load_job(" + PythonScript.unityManager + ".project['"+ jobName + "'])");
                     OnJobLoaded(job);*/
-                    PythonExecutor.SendOrderAsync(PythonScript.executor, PythonCommandType.eval_l,
+                    PythonExecutor.SendOrderAsync(PythonScript.executor, PythonCommandType.eval,
                         PythonCmd.LoadJob(jobName), OnJobLoaded);
                 }
             }
             else
             {
                 // create a new job, then load the information from it
-                PythonExecutor.SendOrderAsync(PythonScript.executor, PythonCommandType.exec_l, PythonCmd.LoadNoneJob,
+                PythonExecutor.SendOrderAsync(PythonScript.executor, PythonCommandType.exec, PythonCmd.LoadNoneJob,
                     s => UpdatePanels());
                 //PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.exec_l, "load_job(None)");
                 //UpdatePanels();
@@ -162,7 +162,7 @@ public class SimulationMenuController : MenuController
         Deactivate();
 
         // load the new structure in another coroutine
-        PythonExecutor.SendOrderAsync(PythonScript.executor, PythonCommandType.eval_l, PythonCmd.SendRaw(order), OnJobdataReceived);
+        PythonExecutor.SendOrderAsync(PythonScript.executor, PythonCommandType.eval, PythonCmd.SendRaw(order), OnJobdataReceived);
 
         print("Job calculation startet");
     }

@@ -66,7 +66,7 @@ public class Structure : MonoBehaviour
         int id = atoms.IndexOf(movedAtom);
         string order = "structure.positions[" + id + "] = " + Utilities.Vec3ToArrayString(movedAtom.transform.localPosition);
         //string order = "print(Structure.Structure.structure.positions[" + id + "])";
-        PythonExecutor.SendOrderSync(PythonScript.structure, PythonCommandType.exec_l, order);
+        PythonExecutor.SendOrderSync(PythonScript.structure, PythonCommandType.exec, order);
         //PythonExecuter.SendOrderSync(PythonScript.None, PythonCommandType.exec_l, order);
 
         if (!SimulationMenuController.Inst.IsStructureShifted())

@@ -153,7 +153,7 @@ public class ExplorerMenuController : MenuController {
 
     public FolderData LoadFolderData()
     {
-        string data = PythonExecutor.SendOrderSync(PythonScript.unityManager, PythonCommandType.eval_l,
+        string data = PythonExecutor.SendOrderSync(PythonScript.unityManager, PythonCommandType.eval,
             PythonCmd.GetFolderData);
         print(data);
         return JsonUtility.FromJson<FolderData>(data);
@@ -170,17 +170,17 @@ public class ExplorerMenuController : MenuController {
             if (isAbsPath)
             {
                 PythonExecutor.SendOrderSync(PythonScript.unityManager,
-                    PythonCommandType.exec_l, PythonCmd.OpenAbsPath(jobName));
+                    PythonCommandType.exec, PythonCmd.OpenAbsPath(jobName));
             }
             else
             {
                 PythonExecutor.SendOrderSync(PythonScript.unityManager,
-                    PythonCommandType.exec_l, PythonCmd.OpenRelPath(jobName));
+                    PythonCommandType.exec, PythonCmd.OpenRelPath(jobName));
             }
         }
         
         currPath = PythonExecutor.SendOrderSync(PythonScript.unityManager,
-            PythonCommandType.eval_l, PythonCmd.GetPath);
+            PythonCommandType.eval, PythonCmd.GetPath);
         PathHasChanged();
             
         // get the jobs and groups 
@@ -195,7 +195,7 @@ public class ExplorerMenuController : MenuController {
         //    PythonCommandType.exec_l, "reset_job('" + SimulationMenuController.jobName + "')");
         
         PythonExecutor.SendOrderSync(PythonScript.executor,
-            PythonCommandType.exec_l, PythonCmd.ResetCurrentJob());
+            PythonCommandType.exec, PythonCmd.ResetCurrentJob());
         
         // PythonExecuter.SendOrderSync(PythonScript.unityManager,
         //     PythonCommandType.exec_l, "project['" + jobName + "'].remove()");
