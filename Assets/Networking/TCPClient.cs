@@ -315,7 +315,6 @@ namespace Networking
         public static string SendMsgToPythonSync(bool hasReturnValue, string msg)
         {
             string msgRes = SendMsgToPython(hasReturnValue, msg, sendAsync: false);
-            print(msgRes);
             if (msgRes.StartsWith("Error"))
             {
                 return msgRes;
@@ -363,8 +362,6 @@ namespace Networking
                     }
 
                     TaskNumIn++;
-
-                    Debug.Log(Time.time + ": Client sent his message " + msg);
                 }
                 else
                 {

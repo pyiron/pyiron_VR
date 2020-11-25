@@ -21,7 +21,6 @@ public class AnimatedText : MonoBehaviour
         //Inst = this;
         // save every instance accessable by it's representative enum
         _textInstance = (TextInstances)System.Enum.Parse(typeof(TextInstances), gameObject.name);
-        print(_textInstance);
         Instances.Add(_textInstance, this);
         
         text = GetComponent<Text>();

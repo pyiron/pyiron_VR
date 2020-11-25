@@ -45,12 +45,19 @@ public class TrashCan : MonoBehaviour
         }
         else
         {
-            if (atomToCanDist < gameObject.transform.localScale.x * 5)  // / Settings.size
+            if (atomToCanDist < gameObject.transform.localScale.x * 5)
+            {
+                // / Settings.size
                 if ((topToCan - Vector3.up * topToCan.y).magnitude < gameObject.transform.localScale.x * 2.5)
+                {
                     MoveTopAway();
-                else;
+                }
+            }
             else
+            {
                 MoveTopToCan(topToCan);
+            }
+
             // show that the atom is currently not in the can
             atomInCan = false;
         }

@@ -153,10 +153,13 @@ public class LaserGrabber : MonoBehaviour
         {
             // test if the other controller is ready for a resize
             if (otherLg.readyForResize)
+            {
                 // init the resize, because now are both controllers ready
                 if (ctrlMaskName == "AtomLayer")
+                {
                     InitResize();
-                else;
+                }
+            }
             // if an object is colliding with the controller, it should be attached
             else if (collidingObject)
             {
@@ -473,9 +476,12 @@ public class LaserGrabber : MonoBehaviour
                 }
                 // show that the controller is ready to resize the structure, if it is the AtomLayer controller
                 else if (ModeController.currentMode.playerCanResizeAtoms)
+                {
                     if (ctrlMaskName == "AtomLayer")
+                    {
                         readyForResize = true;
-                    else;
+                    }
+                }
                 // deactivate the laser and show, detach the attached object if there is an object attached to the controller 
                 else
                 {
