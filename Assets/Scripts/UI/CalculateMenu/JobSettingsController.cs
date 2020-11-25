@@ -53,7 +53,7 @@ public class JobSettingsController : MonoBehaviour
         jobNameField.text = SimulationMenuController.jobName;
         
         // set calculation type (md, minimize or static)
-        SimulationModeManager.Inst.SetMode(jobData.calc_mode);
+        SimulationModeManager.Inst.SetMode(jobData.calc_type);
         
         // load all currently available jobs from pyiron
 //        order = "job.list_potentials()";
@@ -73,17 +73,10 @@ public class JobSettingsController : MonoBehaviour
 
     public void GetData(ref JobData data)
     {
-        // string calculationType = SimulationModeManager.CurrMode.ToString().ToLower();
-        // string jobType = "'" + Utilities.GetStringValue(jobTypeDropdown) + "'";
-        // string jobName = "'" + jobNameField.text + "'";
-        // string potential = "'" + Utilities.GetStringValue(potentialDropdown) + "'";
-        //
-        // return new JobData(calcMode:calculationType, jobType:jobType, jobName:jobName, currentPotential:potential);
-        
-        data.calc_mode = SimulationModeManager.CurrMode.ToString().ToLower();
-        data.job_type = "'" + Utilities.GetStringValue(jobTypeDropdown) + "'";
-        data.job_name = "'" + jobNameField.text + "'";
-        data.currentPotential = "'" + Utilities.GetStringValue(potentialDropdown) + "'";
+        data.calc_type = SimulationModeManager.CurrMode.ToString().ToLower();
+        data.job_type = Utilities.GetStringValue(jobTypeDropdown);
+        data.job_name = jobNameField.text;
+        data.currentPotential = Utilities.GetStringValue(potentialDropdown);
     }
 }
 

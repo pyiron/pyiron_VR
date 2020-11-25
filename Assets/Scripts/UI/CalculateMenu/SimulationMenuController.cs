@@ -110,45 +110,20 @@ public class SimulationMenuController : MenuController
 
     public void CalculateNewJob()
     {
-        string calculation = SimulationModeManager.CurrMode.ToString().ToLower();
         JobData jobData = new JobData();
-        jobData.calc_type = calculation;
         JobSettingsController.Inst.GetData(ref jobData);
-        if (calculation == "md")
+        if (jobData.calc_type == "md")
         {
             MdMenuController.Inst.GetData(ref jobData);
-            // order = "calculate_" + calculation + "(" +
-            //         data.temperature + ", " +
-            //         data.n_ionic_steps + ", " +
-            //         data.n_print + ", " +
-            //         jobData.job_type + ", " +
-            //         jobData.job_name + ", " +
-            //         jobData.currentPotential + ")";
         }
         else
         {
             MinimizeMenuController.Inst.GetData(ref jobData);
-            // order = "calculate_" + calculation + "(" +
-            //         data.f_eps + ", " +
-            //         data.max_iterations + ", " +
-            //         data.n_print + ", " +
-            //         jobData.job_type + ", " +
-            //         jobData.job_name + ", " +
-            //         jobData.currentPotential + ")";
         }
 
         Deactivate();
 
         string order = PythonCmd.CalculateJob(jobData);
-
-        // if (calculation == "md")
-        // {
-        //     order = PythonCmd.Calculate_MD(calculation, data, jobData);
-        // }
-        // else
-        // {
-        //     order = PythonCmd.Calculate_Minimize(calculation, data, jobData);
-        // }
 
         // load the new structure in another coroutine
         PythonExecutor.SendOrderAsync(true, order, OnJobdataReceived);
@@ -166,8 +141,8 @@ public class SimulationMenuController : MenuController
 public struct JobData
 {
     // data for all calculation modes
-    // decides which Panel should be open
-    public string calc_mode;
+    // is and should the job be calculated using minimize or md (or static, not implemented)
+    public string calc_type;
     // is the job Lammps or Vasp?
     public string job_type;
     // the name under which the current job is saved
@@ -176,9 +151,6 @@ public struct JobData
     public string currentPotential;
     // all potentials that can be used for the current structure
     public string[] potentials;
-    
-    // should the job be calculated using minimize or md
-    public string calc_type;
     
     // data for md and minimize
     public string n_print;
