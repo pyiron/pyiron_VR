@@ -24,7 +24,7 @@ public class OptionButton : MonoBehaviour, IButton
             SimulationMenuController.jobName = SimulationMenuController.jobName;
         }
         
-        PythonExecutor.SendOrderAsync(PythonScript.executor, true, 
+        PythonExecutor.SendOrderAsync(true, 
             PythonCmd.LoadJob(jobName), OnStructureDataReceived);
     }
 

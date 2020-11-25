@@ -40,12 +40,15 @@ public class MinimizeMenuController : MenuController
         }
     }
 
-    public JobData GetData()
+    public void GetData(ref JobData data)
     {
-        string f_eps = Utilities.GetStringValue(forceConvDropdown);
-        string max_iterations = Utilities.GetStringValue(maxIterationsDropdown);
-        string n_print = Utilities.GetStringValue(nPrintDropdown);
-        return new JobData(fEps:f_eps, maxIterations:max_iterations, nPrint:n_print);
+        // string f_eps = Utilities.GetStringValue(forceConvDropdown);
+        // string max_iterations = Utilities.GetStringValue(maxIterationsDropdown);
+        // string n_print = Utilities.GetStringValue(nPrintDropdown);
+        // return new JobData(fEps:f_eps, maxIterations:max_iterations, nPrint:n_print);
+        data.f_eps = Utilities.GetStringValue(forceConvDropdown);
+        data.max_iterations = Utilities.GetStringValue(maxIterationsDropdown);
+        data.n_print = Utilities.GetStringValue(nPrintDropdown);
     }
 }
 

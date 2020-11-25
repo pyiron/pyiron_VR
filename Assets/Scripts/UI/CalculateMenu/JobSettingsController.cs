@@ -71,14 +71,19 @@ public class JobSettingsController : MonoBehaviour
 //        jobNameField.text = jobName;
     }
 
-    public JobData GetData()
+    public void GetData(ref JobData data)
     {
-        string calculationType = SimulationModeManager.CurrMode.ToString().ToLower();
-        string jobType = "'" + Utilities.GetStringValue(jobTypeDropdown) + "'";
-        string jobName = "'" + jobNameField.text + "'";
-        string potential = "'" + Utilities.GetStringValue(potentialDropdown) + "'";
-      
-        return new JobData(calcMode:calculationType, jobType:jobType, jobName:jobName, currentPotential:potential);
+        // string calculationType = SimulationModeManager.CurrMode.ToString().ToLower();
+        // string jobType = "'" + Utilities.GetStringValue(jobTypeDropdown) + "'";
+        // string jobName = "'" + jobNameField.text + "'";
+        // string potential = "'" + Utilities.GetStringValue(potentialDropdown) + "'";
+        //
+        // return new JobData(calcMode:calculationType, jobType:jobType, jobName:jobName, currentPotential:potential);
+        
+        data.calc_mode = SimulationModeManager.CurrMode.ToString().ToLower();
+        data.job_type = "'" + Utilities.GetStringValue(jobTypeDropdown) + "'";
+        data.job_name = "'" + jobNameField.text + "'";
+        data.currentPotential = "'" + Utilities.GetStringValue(potentialDropdown) + "'";
     }
 }
 

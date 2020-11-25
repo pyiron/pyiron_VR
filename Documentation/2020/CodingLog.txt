@@ -65,8 +65,7 @@ Minor changes in the Python code
 Removed old Unity code that is not in use anymore ~15min
 Small Refactoring
 
-TODO: Remove old Python code from "eval" and "exec"
-TODO: Test if needed and if not needed remove parsing of non-json messages from Python
+TODO: Remove Unity manager, decide on a script that should contain project, maybe remove Manager.py
 
 
 

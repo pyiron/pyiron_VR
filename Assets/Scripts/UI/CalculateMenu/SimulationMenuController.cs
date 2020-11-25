@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Networking;
@@ -21,7 +22,7 @@ public class SimulationMenuController : MenuController
     private void UpdatePanels()
     {
         //string order = "format_job_settings()";
-        string data = PythonExecutor.SendOrderSync(PythonScript.executor, true, PythonCmd.FormatJobSettings);
+        string data = PythonExecutor.SendOrderSync(true, PythonCmd.FormatJobSettings);
         JobData jobData = JsonUtility.FromJson<JobData>(data);
         
         JobSettingsController.Inst.OnModeStart(jobData);
@@ -55,14 +56,14 @@ public class SimulationMenuController : MenuController
                     /*string job = PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.eval_l, 
                         "load_job(" + PythonScript.unityManager + ".project['"+ jobName + "'])");
                     OnJobLoaded(job);*/
-                    PythonExecutor.SendOrderAsync(PythonScript.executor, true,
+                    PythonExecutor.SendOrderAsync(true,
                         PythonCmd.LoadJob(jobName), OnJobLoaded);
                 }
             }
             else
             {
                 // create a new job, then load the information from it
-                PythonExecutor.SendOrderAsync(PythonScript.executor, false, PythonCmd.LoadNoneJob,
+                PythonExecutor.SendOrderAsync(false, PythonCmd.LoadNoneJob,
                     s => UpdatePanels());
                 //PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.exec_l, "load_job(None)");
                 //UpdatePanels();
@@ -97,30 +98,6 @@ public class SimulationMenuController : MenuController
         return folderData.nodes.Contains(jobName);
     }
 
-    // TODO: Deactivate and activate UI Elements
-    private IEnumerator HandleLammpsLoad(string order, PythonScript receivingScript)
-    {
-        // send the order to execute lammps
-        ////PythonExecutor.SendOrderAsync(PythonScript.Executor, PythonCommandType.eval, order);
-        //PythonExecuter.SendOrderAsync(receivingScript, PythonCommandType.eval_l, order);
-
-        // remember the id of the request to wait for the right response id
-        int taskNumIn = TCPClient.TaskNumIn;
-
-        // wait until the response to the send message has arrived
-        yield return new WaitUntil(() => taskNumIn == TCPClient.TaskNumOut);
-
-        // get the response
-        string result = TCPClient.ReturnedMsg;
-
-        OnJobdataReceived(result);
-
-        // AnimationController.frame = 0;
-        // PythonExecuter.HandlePythonMsg(result);
-        // AnimationMenuController.Inst.SetState(true);
-        //ModeController.inst.SetMode(Modes.Animate);
-    }
-
     private void OnJobdataReceived(string data)
     {
         // handle the response
@@ -134,37 +111,49 @@ public class SimulationMenuController : MenuController
     public void CalculateNewJob()
     {
         string calculation = SimulationModeManager.CurrMode.ToString().ToLower();
-        string order;
-        JobData jobData = JobSettingsController.Inst.GetData();
+        JobData jobData = new JobData();
+        jobData.calc_type = calculation;
+        JobSettingsController.Inst.GetData(ref jobData);
         if (calculation == "md")
         {
-            JobData data = MdMenuController.Inst.GetData();
-            order = "calculate_" + calculation + "(" +
-                    data.temperature + ", " +
-                    data.n_ionic_steps + ", " +
-                    data.n_print + ", " +
-                    jobData.job_type + ", " +
-                    jobData.job_name + ", " +
-                    jobData.currentPotential + ")";
+            MdMenuController.Inst.GetData(ref jobData);
+            // order = "calculate_" + calculation + "(" +
+            //         data.temperature + ", " +
+            //         data.n_ionic_steps + ", " +
+            //         data.n_print + ", " +
+            //         jobData.job_type + ", " +
+            //         jobData.job_name + ", " +
+            //         jobData.currentPotential + ")";
         }
         else
         {
-            JobData data = MinimizeMenuController.Inst.GetData();
-            order = "calculate_" + calculation + "(" +
-                    data.f_eps + ", " +
-                    data.max_iterations + ", " +
-                    data.n_print + ", " +
-                    jobData.job_type + ", " +
-                    jobData.job_name + ", " +
-                    jobData.currentPotential + ")";
+            MinimizeMenuController.Inst.GetData(ref jobData);
+            // order = "calculate_" + calculation + "(" +
+            //         data.f_eps + ", " +
+            //         data.max_iterations + ", " +
+            //         data.n_print + ", " +
+            //         jobData.job_type + ", " +
+            //         jobData.job_name + ", " +
+            //         jobData.currentPotential + ")";
         }
 
         Deactivate();
 
-        // load the new structure in another coroutine
-        PythonExecutor.SendOrderAsync(PythonScript.executor, true, PythonCmd.SendRaw(order), OnJobdataReceived);
+        string order = PythonCmd.CalculateJob(jobData);
 
-        print("Job calculation startet");
+        // if (calculation == "md")
+        // {
+        //     order = PythonCmd.Calculate_MD(calculation, data, jobData);
+        // }
+        // else
+        // {
+        //     order = PythonCmd.Calculate_Minimize(calculation, data, jobData);
+        // }
+
+        // load the new structure in another coroutine
+        PythonExecutor.SendOrderAsync(true, order, OnJobdataReceived);
+
+        print("Job calculation started");
     }
 
     public bool IsStructureShifted()
@@ -173,14 +162,23 @@ public class SimulationMenuController : MenuController
     }
 }
 
+[Serializable]
 public struct JobData
 {
     // data for all calculation modes
+    // decides which Panel should be open
     public string calc_mode;
+    // is the job Lammps or Vasp?
     public string job_type;
+    // the name under which the current job is saved
     public string job_name;
+    // the potential that is or should currently be used
     public string currentPotential;
+    // all potentials that can be used for the current structure
     public string[] potentials;
+    
+    // should the job be calculated using minimize or md
+    public string calc_type;
     
     // data for md and minimize
     public string n_print;
@@ -193,33 +191,34 @@ public struct JobData
     public string f_eps;
     public string max_iterations;
 
-    private void SetAllToNull()
-    {
-        this.calc_mode = null;
-        job_type = null;
-        job_name = null;
-        this.currentPotential = null;
-        this.potentials = null;
-        n_print = null;
-        temperature = 0;
-        n_ionic_steps = null;
-        f_eps = null;
-        max_iterations = null;
-    }
-
-    public JobData(string calcMode=null, string jobType=null, string jobName=null, string currentPotential=null,
-        string[] potentials=null, string nPrint=null, int temperature=0, string nIonicSteps=null, string fEps=null,
-        string maxIterations=null)
-    {
-        calc_mode = calcMode;
-        job_type = jobType;
-        job_name = jobName;
-        this.currentPotential = currentPotential;
-        this.potentials = potentials;
-        n_print = nPrint;
-        this.temperature = temperature;
-        n_ionic_steps = nIonicSteps;
-        f_eps = fEps;
-        max_iterations = maxIterations;
-    }
+    // private void SetAllToNull()
+    // {
+    //     this.calc_mode = null;
+    //     job_type = null;
+    //     job_name = null;
+    //     this.currentPotential = null;
+    //     this.potentials = null;
+    //     n_print = null;
+    //     temperature = 0;
+    //     n_ionic_steps = null;
+    //     f_eps = null;
+    //     max_iterations = null;
+    // }
+    //
+    // public JobData(string calcMode=null, string jobType=null, string jobName=null, string currentPotential=null,
+    //     string[] potentials=null, string nPrint=null, int temperature=0, string nIonicSteps=null, string fEps=null,
+    //     string maxIterations=null, string calcType=null)
+    // {
+    //     calc_mode = calcMode;
+    //     job_type = jobType;
+    //     job_name = jobName;
+    //     this.currentPotential = currentPotential;
+    //     this.potentials = potentials;
+    //     n_print = nPrint;
+    //     this.temperature = temperature;
+    //     n_ionic_steps = nIonicSteps;
+    //     f_eps = fEps;
+    //     max_iterations = maxIterations;
+    //     calc_type = calcType;
+    // }
 }

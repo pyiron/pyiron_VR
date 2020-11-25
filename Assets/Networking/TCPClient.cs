@@ -309,8 +309,7 @@ namespace Networking
         /// <summary>
         /// Send the message to the python script and execute it there.
         /// </summary>
-        /// <param name="exType">Eval: the message expects a return value.
-        /// Exec: the message expects no return value.</param>
+        /// <param name="hasReturnValue">Does executing the message return a value?</param>
         /// <param name="msg">The message that should be send.</param>
         /// <returns></returns>
         public static string SendMsgToPythonSync(bool hasReturnValue, string msg)
@@ -330,6 +329,8 @@ namespace Networking
         /// </summary> 	
         public static string SendMsgToPython(bool hasReturnValue, string msg, bool sendAsync = true, Action<string> callback=null)
         {
+            print("Sending: " + msg);
+            
             if (SocketConnection == null || !SocketConnection.Connected)
             {
                 string problem = "Socket currently not connected!";

@@ -29,12 +29,15 @@ public class MdMenuController : MenuController {
         Utilities.SetDropdownValue(nPrintDropdown, jobData.n_print);
     }
 
-    public JobData GetData()
+    public void GetData(ref JobData data)
     {
-        int temp = Thermometer.temperature;
-        string n_ionic_steps = Utilities.GetStringValue(nIonicStepsDropdown);
-        string n_print = Utilities.GetStringValue(nPrintDropdown);
-        return new JobData(temperature:temp, nIonicSteps:n_ionic_steps, nPrint:n_print);
+        // int temp = Thermometer.temperature;
+        // string n_ionic_steps = Utilities.GetStringValue(nIonicStepsDropdown);
+        // string n_print = Utilities.GetStringValue(nPrintDropdown);
+        // return new JobData(temperature:temp, nIonicSteps:n_ionic_steps, nPrint:n_print);
+        data.temperature = Thermometer.temperature;
+        data.n_ionic_steps = Utilities.GetStringValue(nIonicStepsDropdown);
+        data.n_print = Utilities.GetStringValue(nPrintDropdown);
     }
 }
 
