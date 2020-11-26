@@ -63,7 +63,7 @@ minor changes (see commit history) ~0.5h
 Removed more than 350 lines of old code that is not in use anymore in the Python scripts ~ 2h
 Minor changes in the Python code
 Removed old Unity code that is not in use anymore ~15min
-Code Refactoring in Unity and Python ~ 2 1/2h
+Code Refactoring in Unity and Python ~ 2 3/4h
 
 TODO: Remove Unity manager, decide on a script that should contain project, maybe remove Manager.py
 
