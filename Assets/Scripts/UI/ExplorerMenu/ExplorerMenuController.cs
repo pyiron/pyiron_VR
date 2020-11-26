@@ -13,6 +13,9 @@ public class ExplorerMenuController : MenuController {
     public GameObject OptionFolderJobs;
     public GameObject PathPrefab;
     public GameObject PathFolder;
+
+    [Tooltip("Determines how many parts of the Path should be shown")]
+    [SerializeField] private int numShownPathNodes = 3;
     
     internal static string currPath;
 
@@ -115,17 +118,17 @@ public class ExplorerMenuController : MenuController {
         string[] splittedPath = currPath.Split('/');
         for (int i = 0; i < splittedPath.Length; i++)
         {
-            // just last 4 entries get shown
-            if (i + 4 >= splittedPath.Length)
+            // just last numShownPathNodes entries get shown
+            if (i + numShownPathNodes >= splittedPath.Length)
             {
                 GameObject newButton = InstantiateNewBtn(PathPrefab, PathFolder, splittedPath[i], Color.white);
                 newButton.GetComponent<PathButton>().id = i;
             } 
-            else if (i == 0)
+            /*else if (i == 0 && splittedPath.Length > numShownPathNodes)
             {
                 GameObject newButton = InstantiateNewBtn(PathPrefab, PathFolder, "...", Color.white);
                 newButton.GetComponent<Button>().enabled = false;
-            }
+            }*/
         }
     }
 
