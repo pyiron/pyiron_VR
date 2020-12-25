@@ -10,7 +10,7 @@ using UnityEngine.UI;
 //Modified by Kristian Helle Jespersen
 //June 2011
  
-[ExecuteInEditMode]
+/*[ExecuteInEditMode]
 public class ReplaceGameObjects : MonoBehaviour
 {
     public bool copyValues = true;
@@ -75,5 +75,5 @@ public class ReplaceGameObjects : MonoBehaviour
         }
  
     }
-}
+}*/
 

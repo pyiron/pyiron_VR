@@ -180,14 +180,14 @@ public class LaserGrabber : MonoBehaviour
         if (!ModeController.currentMode.playerCanMoveAtoms)
         {
             SendRaycast();
-            if (ModeController.currentMode.showInfo)
-                ShowInfo();
+            //if (ModeController.currentMode.showInfo)
+            //    ShowInfo();
         }
         else
             InfoText.gameObject.SetActive(false);
     }
 
-    private void ShowInfo()
+    /*private void ShowInfo()
     {
         if (laser.activeSelf || collidingObject)
         {
@@ -209,13 +209,13 @@ public class LaserGrabber : MonoBehaviour
                     
                     // include the following code to show the forces the atoms are experiencing
                     // test if the forces are known
-                    /*if (!float.IsNaN(PythonExecuter.allForces[atomId][0]))
-                    {
-                        // show the force of the atom in each direction
-                        infoText += "\nForce:";
-                        for (int i = 0; i < 3; i++)
-                            InfoText.text += " " + PythonExecuter.allForces[atomId][i];
-                    }*/
+                    //if (!float.IsNaN(PythonExecuter.allForces[atomId][0]))
+                    //{
+                    //    // show the force of the atom in each direction
+                    //    infoText += "\nForce:";
+                    //    for (int i = 0; i < 3; i++)
+                    //        InfoText.text += " " + PythonExecuter.allForces[atomId][i];
+                    //}
                     InfoText.text = infoText;
                 }
             }
@@ -234,7 +234,7 @@ public class LaserGrabber : MonoBehaviour
         }
         else
             InfoText.gameObject.SetActive(false);
-    }
+    }*/
 
     public void HairTriggerUp()
     {

@@ -1,0 +1,16 @@
+When loading and rendering many atoms, loading times will be long and the frame rate low. To combat this, I tried different methods to increase performance. It is to note, that currently,the application should be running with good performance on the Quest standalone, as well as connected to a powerful PC.
+
+Networking:
+Large structure with many frames can have huge sizes of a few MB. Therefore the Bandwidth of the server and the client have to be looked at when trying to optimize. As the transmission rate is still lower than the bandwidth the local networks allow for, optimization should be still able to improve loading times. 
+Previous optimizations:
+-Use string builders: Concatinating each message from the blocks in which it gets send can take a long time. To reduce this time, string builders are used. It might be possible to reduce this time even further.
+-Read in multiple blocks per frame: It is possible to choose how many frames should be read per frame. Increasing this number lowers the loading time, but decreases the fps while loading, so it should be set to a value taking both effects into aspect.
+
+Rendering:
+Having more than 1000 Atoms in the scene brings huge rendering costs, even for powerful PCs. Using the Quest standalone drastically reduces the number of atoms that can be shown with high fps. Therefore looking for a solution to reduce rendering costs might allow to perform simulations with more atoms.
+Observations:
+- Rendering seems to consume a lot of time for many atoms. However, there might be other factors that lead to low fps when having many atoms as well.
+- As atoms are presented by spheres, they have a lot of triangles and vertices. Exchanging the model with a model with less polygons and vertices reduces this number drastically. This can help to reach the Performance Targets posed by Oculus. However, it seems to have no influence on the performance, presumably because the bottleneck migth be somewhere else.
+- Lightning of the atoms seems to have little influence on the performance.
+- Scripts and physics seem to have little impact on the performance
+- Reducing the Quality settings highly increased performance. I didn't notice any differences how the current scene looks (except for texture resolution, which should be therefore kept at full resolution).

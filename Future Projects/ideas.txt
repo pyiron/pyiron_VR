@@ -146,7 +146,7 @@ Todo:
   20. 	DONE Set delete button onHover color
 ! 21. 	TODO just allow to move single atoms in Structure Creator
   22. 	DONE show AnimationMenu when it should be active 
-! 23. 	TODO Remove old code that has been replaced
+  23. 	DONE Remove old code that has been replaced
   24.	DONE Keep the jobName correct to see if the job has been shifted or not
   24	DONE Check if there exists an job with the same jobName 
   25. 	DONE Remove the job with the same name if it ends with _shifted
@@ -157,7 +157,7 @@ Todo:
   30. 	DONE Add a Delete button in the Explorer to delete jobs
      a	DONE Show which job is currently active
      b	DONE Decide what to show when the job has been deleted to avoid a crash
-! 31. 	TODO Optimize calls to python
++ 31. 	TODO Optimize calls to python
   32. 	DONE Always send all settings in one file to Unity
   33.	DONE Send all settings after resetting/deleting the structure
   34.	DONE Dont crash if job has no output
@@ -175,7 +175,7 @@ Todo:
   46.	DONE Email lesen wie pyiron mit wsl installiert werden kann
   47.	DONE fix error that the wrong potentials get shown
 ! 48.	TODO make error messages prettier/better (make a panel with an ok button)
-! 49.	TODO fix error that the server doesn't reset sometimes
+? 49.	FIXED? fix error that the server doesn't reset sometimes
   50.	DONE make a loading symbol
 ! 51. 	TODO allow to close error messages
   52.	TODO instantly show if the client is disconnected
@@ -191,11 +191,14 @@ Todo:
 ! 61. 	TODO Test out good values for blocksPerFrame
   62.	DONE make loading jobs asynchronous
   63.	DONE document how to connect to vpn using the Oculus Quest
-! 64.	LATER use Scriptable Objects instead of Singletons
-! 65.	TODO use Incoke instead of Coroutines for SendAsync
+- 64.	LATER use Scriptable Objects instead of Singletons
+! 65.	TODO use Invoke instead of Coroutines for SendAsync
 ! 66.	TODO make most or all python calls async
 - 67.	ASK  Add a Delete button in the Explorer to delete Folders
 ! 68.	TODO Allow to move structure using joystick
+! 69.	TODO Fix garbage bin
+! 70. 	TODO Stream animations instead of sending them all at once
++ 71.	TODO Increase performance
 
 
 Time needed for sending a Message sync to python: 0.05s = 50ms

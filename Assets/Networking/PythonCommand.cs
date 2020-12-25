@@ -59,7 +59,12 @@ namespace Networking
         {
             return PythonScript.executor + ".calculate(" + JsonUtility.ToJson(jobData) + ")";
         }
-        
+
+        public static string SetPosition(int id, GameObject movedAtom)
+        {
+            return PythonScript.structure + ".structure.positions[" + id + "] = " + Utilities.Vec3ToArrayString(movedAtom.transform.localPosition);
+        }
+
         // public static string Calculate_MD(string calculation, JobData data, JobData jobData)
         // {
         //     return PythonScript.executor + ".calculate_" + calculation + "(" +
@@ -81,9 +86,9 @@ namespace Networking
         //            jobData.job_name + ", " +
         //            jobData.currentPotential + ")";
         // }
-        
-        
-        
+
+
+
         // /// <summary>
         // /// Although this function does nothing, it makes it easier to identify commands send to python, as most IDEs
         // /// can show which functions are calling a function.

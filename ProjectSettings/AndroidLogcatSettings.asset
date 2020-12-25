@@ -1,0 +1,113 @@
+{
+    "m_SelectedDeviceId": "1PASH9B9VK9474",
+    "m_SelectedPackage": {
+        "deviceId": "",
+        "name": "",
+        "processId": 0,
+        "exited": false
+    },
+    "m_SelectedPriority": 0,
+    "m_KnownPackagesForSerialization": [
+        {
+            "deviceId": "0939503a0805",
+            "name": "com.google.android.googlequicksearchbox:search",
+            "processId": 11101,
+            "exited": false
+        },
+        {
+            "deviceId": "1PASH9B9VK9474",
+            "name": "com.oculus.vrshell",
+            "processId": 2465,
+            "exited": true
+        },
+        {
+            "deviceId": "1PASH9B9VK9474",
+            "name": "com.MPIE.VirtualAtoms",
+            "processId": 3016,
+            "exited": true
+        },
+        {
+            "deviceId": "1PASH9B9VK9474",
+            "name": "com.oculus.vrshell",
+            "processId": 1766,
+            "exited": true
+        },
+        {
+            "deviceId": "1PASH9B9VK9474",
+            "name": "com.oculus.vrshell",
+            "processId": 1781,
+            "exited": false
+        },
+        {
+            "deviceId": "1PASH9B9VK9474",
+            "name": "com.oculus.xrstreamingclient",
+            "processId": 3067,
+            "exited": true
+        },
+        {
+            "deviceId": "1PASH9B9VK9474",
+            "name": "com.android.packageinstaller",
+            "processId": 3129,
+            "exited": false
+        },
+        {
+            "deviceId": "1PASH9B9VK9474",
+            "name": "com.oculus.xrstreamingclient",
+            "processId": 5751,
+            "exited": true
+        }
+    ],
+    "m_Tags": {
+        "m_Entries": [
+            {
+                "m_Name": "Filter by all listed tags",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "No Filter",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "Tag Control...",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "Unity",
+                "m_Selected": true
+            },
+            {
+                "m_Name": "CRASH",
+                "m_Selected": false
+            }
+        ]
+    },
+    "m_MemoryViewerState": {
+        "MemoryWindowHeight": 255.0,
+        "MemoryWindowWidth": 170.0,
+        "MemoryTypeEnabled": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+        ],
+        "MemoryGroup": 1,
+        "Behavior": 1
+    },
+    "m_Filter": "",
+    "m_FilterIsRegularExpression": false,
+    "m_SymbolPaths": []
+}

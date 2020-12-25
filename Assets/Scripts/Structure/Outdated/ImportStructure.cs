@@ -156,7 +156,7 @@ public class ImportStructure : MonoBehaviour {
         if (newImport || StructureDataOld.waitForDestroyedAtom)
         {
             // give the atom an ID
-            currentAtom.GetComponent<AtomID>().ID = atom.id;
+            currentAtom.name = atom.id.ToString();
             if (StructureDataOld.waitForDestroyedAtom)
                 StructureDataOld.atomInfos[atom.id] = new AtomInfos(atom.id, atom.type, currentAtom.transform);
             else

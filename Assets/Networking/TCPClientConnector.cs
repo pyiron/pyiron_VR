@@ -17,7 +17,7 @@ namespace Networking
 		// needed for asynchronous (lag free) connecting to the server
 		public static Task ConnectionStatus;
 		// the time until the connection is declared as not existent
-		private static float connTimeOut = 2;
+		private static float connTimeOut = 3;
 		private float _connectionTimer = connTimeOut;
 
 		private void Awake()
