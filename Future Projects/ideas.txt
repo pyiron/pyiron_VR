@@ -183,7 +183,7 @@ Todo:
 ! 53.	TODO execute actions after the data has been send to python and just if the transmission was successfull (to prevent inconsistency)
   54.	DONE deactivate the structure visually when sending with async
 ! 55.	TODO dont allow any actions for the structure if it is deactivated (or maybe with the controllers)	
-! 56. 	TODO add function Init and attribute Button to the IButton Interface
+! 56. 	TODO maybe add function Init and attribute Button to the IButton Interface
   57.	DONE increase loading time when receiving async
   58.	DONE use string builder for better performance when receiving
 ! 59.	TODO allow to change blocksPerFrame in the application
@@ -198,7 +198,8 @@ Todo:
 ! 68.	TODO Allow to move structure using joystick
 ! 69.	TODO Fix garbage bin
 ! 70. 	TODO Stream animations instead of sending them all at once
-+ 71.	TODO Increase performance
+  71.	DONE (for now) Increase performance
+! 72. 	TODO scrollbar for jobs in explorer
 
 
 Time needed for sending a Message sync to python: 0.05s = 50ms
