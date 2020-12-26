@@ -199,7 +199,9 @@ Todo:
 ! 69.	TODO Fix garbage bin
 ! 70. 	TODO Stream animations instead of sending them all at once
   71.	DONE (for now) Increase performance
-! 72. 	TODO scrollbar for jobs in explorer
+  72. 	DONE scrollbar for jobs in explorer
+? 73.	LOW PRIO fix bug when server closes after timeout
+  74.	DONE scrollbar for folders in explorer
 
 
 Time needed for sending a Message sync to python: 0.05s = 50ms
