@@ -1,5 +1,5 @@
 Workprogress on Virtual Atoms
-by Philip Neugebauer, 1.8.2018 - 30.9.2018
+by Philip Neugebauer, 1.1 - 31.12.2020
 All progress is also represented by the commits on GitLab with some more details.
 
 1.1 - 31.1.2020:
