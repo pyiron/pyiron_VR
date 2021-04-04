@@ -24,7 +24,8 @@ public class ModeController : MonoBehaviour
     // remember the new mode which should be set with the main thread
     internal Modes newMode;
 
-    
+    // the reference to the structure object
+    [SerializeField] private GameObject atomStructure;
 
     private void Awake()
     {
@@ -84,10 +85,8 @@ public class ModeController : MonoBehaviour
             // activate the thermometer when changing into temperature mode, else deactivate it
             Thermometer.Inst.gameObject.SetActive(modes[(int)currentMode.mode].showTemp);
 
-        // if (modes[(int)currentMode.mode].showInfo)
-            // OrdersToPython.RequestAllForces();
         // deactivate the structure if it shouldn't be shown, else activate it
-        StructureDataOld.Inst.gameObject.SetActive(!modes[(int)currentMode.mode].hideAtoms);
+        atomStructure.SetActive(!modes[(int)currentMode.mode].hideAtoms);
 
         if (currentMode.mode == Modes.Explorer)
         {
