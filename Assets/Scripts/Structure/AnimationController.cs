@@ -20,6 +20,11 @@ public class AnimationController : MonoBehaviour
 
 //    private bool waitFrame;
 
+    // a timer, which counts when the program should go a frame forward or backwards, when keeping the one frame forward button pressed
+    //private float _moveOneFrameTimer = -1;
+    // the time until the program should go a frame forward or backwards, when keeping the "one frame forward button" pressed
+    //private readonly float timeUntilMoveOneFrame = 0.5f;
+
     private void Awake()
     {
         Inst = this;
@@ -30,7 +35,7 @@ public class AnimationController : MonoBehaviour
         return positionData != null;
     }
 
-    private static void Show()
+    private static void UpdateStructure()
     {
         Structure.Inst.UpdateStructure(positionData[frame]);
     }
@@ -65,7 +70,7 @@ public class AnimationController : MonoBehaviour
             }
             else
             {
-                Show();
+                UpdateStructure();
 //            if (!waitFrame)
 //            {
 //                Show();
@@ -178,9 +183,88 @@ public class AnimationController : MonoBehaviour
     {
         frame = 0;
         if (!run_anim)
-            Show();
+            UpdateStructure();
 //            ImportStructure.Inst.LoadStructure();
     }
+    
+    // ----- Control Animation with touchpad / joystick -----
+    
+    /*public void WhileTouchpadPressDown(Vector2 touchPos)
+    {
+        if (_moveOneFrameTimer >= 0)
+        {
+            _moveOneFrameTimer += Time.deltaTime;
+            if (_moveOneFrameTimer >= timeUntilMoveOneFrame)
+            {
+                if (touchPos.x > 0)
+                    AnimationController.move_one_frame(true);
+                else
+                    AnimationController.move_one_frame(false);
+                _moveOneFrameTimer = 0;
+            }
+        }
+    }
+
+    public void TouchpadPressUp()
+    {
+        _moveOneFrameTimer = -1;
+    }
+
+    public void TouchpadPressDown(Vector2 touchPos)
+    {
+        // look if an animation should be started or stopped
+        if (ModeController.currentMode.showTemp || ModeController.currentMode.showRelaxation)
+            // check that the player isn't currently trying to change the length of the laser
+            if (!laser.activeSelf)
+                ControllAnimation(touchPos);
+    }
+    
+    private void ControllAnimation(Vector2 touchPos)
+    {
+        if (touchPos.x > 0.5)
+            if (AnimationController.run_anim)
+                AnimationController.ChangeAnimSpeed(1);
+            else
+            {
+                //LoadNewLammps();
+
+                // go one frame forward
+                AnimationController.move_one_frame(true);
+                // show that the user pressed the button to go one step forward
+                _moveOneFrameTimer = 0;
+            }
+        else if (touchPos.x < -0.5)
+            if (AnimationController.run_anim)
+            {
+                // send Python the order to play the animation faster. if it isn't already at it's fastest speed
+                if (AnimationController.animSpeed > 0)
+                    AnimationController.animSpeed -= 1;
+            }
+            else
+            {
+                //LoadNewLammps();
+
+                // go one frame back
+                AnimationController.move_one_frame(false);
+                _moveOneFrameTimer = 0;
+            }
+        else if (AnimationController.run_anim)
+            AnimationController.RunAnim(false);
+        else
+        {
+            //LoadNewLammps();
+
+            // tell Python to start sending the dataframes from the current ham_lammps
+            AnimationController.RunAnim(true);
+        }
+
+        // TODO: update the symbols on on all active controllers
+        //gameObject.GetComponent<ControllerSymbols>().SetSymbol();
+        //if (otherLg.gameObject.activeSelf)
+        //    controllerSymbols[(int) otherLg.ctrlLayer].SetSymbol();
+    }*/
+    
+    // ----- Utility ----- (should be in another script)
 
     private static int Mod(int a, int b)
     {

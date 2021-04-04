@@ -65,15 +65,19 @@ public class InputManager : MonoBehaviour
 
         if (ViveInput.GetPressDown(handRole, ControllerButton.Pad))
         {
-            LaserGrabber.instances[(int)handRole].TouchpadPressDown(touchPos);
+            // LaserGrabber.instances[(int)handRole].TouchpadPressDown(touchPos);
             Thermometer.Inst.TouchpadPressDown(touchPos);
         }
 
         if (ViveInput.GetPress(handRole, ControllerButton.Pad))
-            LaserGrabber.instances[(int)handRole].WhileTouchpadPressDown(touchPos);
+        {
+            //LaserGrabber.instances[(int) handRole].WhileTouchpadPressDown(touchPos);
+        }
 
         if (ViveInput.GetPressUp(handRole, ControllerButton.Pad))
-            LaserGrabber.instances[(int)handRole].TouchpadPressUp();
+        {
+            //LaserGrabber.instances[(int) handRole].TouchpadPressUp();
+        }
     }
 
     private void CheckGripButton(HandRole handRole)
