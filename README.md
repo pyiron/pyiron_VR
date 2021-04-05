@@ -50,21 +50,23 @@ git pull
 *  Start the Quest and complete the room setup
 *  Activate Developer Mode in the Quest, if not already done
 *  On the PC, SideQuest should now show the Quest as connected
-*  Download the [latest Oculus Quest Build](Builds/QuestBuild.apk)
+*  Download the latest Oculus Quest Build from https://github.com/pyiron/pyiron_VR/releases
 *  To install the application on the Quest, drag the .apk file into SideQUest. A pop-up "Drag file(s) here" will appear. Release the file over this popup. Alternatively, SideQuest has an option to install apks in the top-right taskbar when connected to the Quest, which can be used instead.
 
-### (optional) Install VPN on the Oculus Quest
+### (optional) To use the App standalone on the Quest, install Cisco VPN on the Oculus Quest
 *  Make sure SideQuest is installed on the PC (or install it e.g. via https://sidequestvr.com/#/download)
 *  Start SideQuest on the computer
 *  Start the Quest and complete the room setup
 *  On the PC, SideQuest should now show the Quest as connected
-*  Download the AnyConnect .apk, e.g. from https://play.google.com/store/apps/details?id=com.cisco.anyconnect.vpn.android.avf
-*  To install the application on the Quest, drag the .apk file into SideQUest. A pop-up "Drag file(s) here" will appear. Release the file over this popup. Alternatively, SideQuest has an option to install apks in the top-right taskbar when connected to the Quest, which can be used instead.
+*  Download the AnyConnect .apk from https://drive.google.com/drive/folders/1ssaAd_-_FneZdc8ahlevrGQ29oyljcRt?usp=sharing. *
+*  To install the application on the Quest, drag the .apk file into SideQuest. A pop-up "Drag file(s) here" will appear. Release the file over this popup. Alternatively, SideQuest has an option to install apks in the top-right taskbar when connected to the Quest, which can be used instead.
 *  Wait until the apk has been installed
 
-### (optional) Start VPN on the Oculus Quest (required each time after the Quest has been shut down)
+ * You can try installing it from https://play.google.com/store/apps/details?id=com.cisco.anyconnect.vpn.android.avf, but I did not manage to install it directly on the Quest. To get the apk I uploaded, I downloaded the app from the PlayStore to my phone and read out the apk file.
+
+### (optional) To use the App standalone on the Quest, start VPN on the Oculus Quest (required each time after the Quest has been shut down or was inactive for some time)
 *  Put on the Oculus Quest and go to the Home Menu
-*  Go to Navigate->Library->Unknown Sources->com.???.AnyConnect
+*  Go to Navigate->Library->Unknown Sources->com.Cisco.AnyConnect
 *  In the application, enter the server name (vpn.mpcdf.mpg.de) and connect with your account for the mpg cluster
 
 ### To start the Quest Program
