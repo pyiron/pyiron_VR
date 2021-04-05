@@ -38,6 +38,8 @@ public class LaserGrabber : MonoBehaviour
     public GameObject laser;
     // the length of the laser
     private float _laserLength;
+    // the distance between the controller and the attached object
+    private float _distToAttachedObject;
     // the max distance when the laser still detects an object to attach
     private static int laserMaxDistance = 100;
 
@@ -91,12 +93,13 @@ public class LaserGrabber : MonoBehaviour
 
         // get the transform of the boundingbox
         foreach (Transform tr in AtomStructure.GetComponentsInChildren<Transform>())
-            if (tr.name == "Boundingbox(Clone)")
+            if (tr.name == "Boundingbox(Clone)") // TODO: returns null
                 boundingbox = tr;
 
         textSize = textSize / ProgramSettings.textResolution * 10;
-        InfoText.transform.localScale = Vector3.one * textSize;
-        InfoText.fontSize = (int)ProgramSettings.textResolution;
+        // Todo: if info is introduced again, it should not be handled in this script
+        //InfoText.transform.localScale = Vector3.one * textSize;
+        //InfoText.fontSize = (int)ProgramSettings.textResolution;
 
         // deactivate the trashcan
         TrashCan.inst.SetState(false);
@@ -113,7 +116,7 @@ public class LaserGrabber : MonoBehaviour
 
     void Update()
     {
-        if (ModeController.currentMode.playerCanMoveAtoms)
+        if (ModeController.currentMode.playerCanMoveAtoms || ctrlMaskName == "BoundingboxLayer")
         {
             // move the grabbed object
             if (attachedObject)
@@ -143,7 +146,7 @@ public class LaserGrabber : MonoBehaviour
     public void HairTriggerDown()
     {
         // if the controller gets pressed, it should try to attach an object to it
-        if (ModeController.currentMode.playerCanMoveAtoms)
+        if (ModeController.currentMode.playerCanMoveAtoms || ctrlMaskName == "BoundingboxLayer")
         {
             // test if the other controller is ready for a resize
             if (otherLg.readyForResize)
@@ -174,66 +177,15 @@ public class LaserGrabber : MonoBehaviour
         if (!ModeController.currentMode.playerCanMoveAtoms)
         {
             SendRaycast();
-            //if (ModeController.currentMode.showInfo)
-            //    ShowInfo();
         }
         else
             InfoText.gameObject.SetActive(false);
     }
 
-    /*private void ShowInfo()
-    {
-        if (laser.activeSelf || collidingObject)
-        {
-            // set the Info text to active and edit it 
-            InfoText.gameObject.SetActive(true);
-            // let the InfoText always look in the direction of the player
-            ProgramSettings.Face_Player(InfoText.gameObject);
-            //InfoText.transform.eulerAngles = new Vector3(0, HeadTransform.eulerAngles.y, 0);
-            if (ctrlMaskName.Contains("AtomLayer"))
-            {
-                if (attachedObject != null)
-                {
-                    int atomId = attachedObject.GetComponent<AtomID>().ID;
-                    InfoText.transform.position = attachedObject.transform.position // + Vector3.up * 0.1f
-                            + Vector3.up * attachedObject.transform.localScale[0] / 2 * ProgramSettings.size;
-                    string atomSymbol = StructureDataOld.atomInfos[atomId].m_type;
-                    string infoText = atomSymbol;
-                    //infoText += "\nFull Name: " + LocalElementData.m_localElementDict[atomSymbol].m_fullName;
-                    
-                    // include the following code to show the forces the atoms are experiencing
-                    // test if the forces are known
-                    //if (!float.IsNaN(PythonExecuter.allForces[atomId][0]))
-                    //{
-                    //    // show the force of the atom in each direction
-                    //    infoText += "\nForce:";
-                    //    for (int i = 0; i < 3; i++)
-                    //        InfoText.text += " " + PythonExecuter.allForces[atomId][i];
-                    //}
-                    InfoText.text = infoText;
-                }
-            }
-            else
-            {
-                // set the info text to the top of the boundingbox
-                InfoText.transform.position = boundingbox.transform.position + Vector3.up * 0.1f
-                    + Vector3.up * boundingbox.transform.localScale[0] / 2 * ProgramSettings.size;
-                InfoText.text = StructureDataOld.structureName;
-                InfoText.text += "\nAtoms: "
-                        + StructureDataOld.atomInfos.Count;
-                // InfoText.text += "\nForce: " + PythonExecuter.structureForce;
-                //might be needed so that the text will stand above the boundingbox
-                //InfoText.GetComponent<TextMesh>().text += "\n";
-            }
-        }
-        else
-            InfoText.gameObject.SetActive(false);
-    }*/
-
     public void HairTriggerUp()
     {
         // check that the move mode is currently active
-        if (ModeController.currentMode.playerCanMoveAtoms)
+        if (ModeController.currentMode.playerCanMoveAtoms || ctrlMaskName == "BoundingboxLayer")
         {
             // set the state of the controller to not ready for resizeStructure
             readyForResize = false;
@@ -250,12 +202,6 @@ public class LaserGrabber : MonoBehaviour
                 {
                     // tell Python the new position
                     Structure.Inst.OnAtomPositionChanged(attachedObject);
-                    
-//                    OrdersToPython.SetNewPosition(StructureDataOld.atomInfos[attachedObject.GetComponent<AtomID>().ID]);
-                    // check the new extension of the structure
-//                    StructureDataOld.Inst.SearchMaxAndMin();
-                    // set the boundingbox so that it encloses the structure
-//                    StructureDataOld.Inst.UpdateBoundingbox();
                 }
                 
                 if (ModeController.currentMode.showTrashcan)
@@ -264,7 +210,6 @@ public class LaserGrabber : MonoBehaviour
                     {
                         // check that there are atoms left, which would cause pyiron to fail
                         // so it can't build a ham_lammps function)
-                        //if (TrashCan.inst.atomInCan && StructureDataOld.atomInfos.Count >= 1)
                         if (TrashCan.inst.atomInCan && Structure.Inst.AtomAmount() >= 1)
                         {
                             Structure.Inst.OnAtomDeleted(attachedObject);
@@ -295,7 +240,7 @@ public class LaserGrabber : MonoBehaviour
     // show that the laser is currently active and it's possible in the current move to move atoms, and that the laser doesn't point on the thermometer
     private bool ScaleAbleLaser()
     {
-        return (ModeController.currentMode.playerCanMoveAtoms && laser.activeSelf && !Thermometer.laserOnThermometer);
+        return ((ModeController.currentMode.playerCanMoveAtoms || ctrlMaskName == "BoundingboxLayer") && laser.activeSelf && !Thermometer.laserOnThermometer);
     }
 
     public void TouchpadTouchDown(Vector2 touchPos)
@@ -313,15 +258,18 @@ public class LaserGrabber : MonoBehaviour
             // scale the laser
             currentTouch = touchPos;
             float modification;
-            if (Application.platform == RuntimePlatform.Android)
+            if (InputManager.DeviceHasJoystick)
             {
                 modification = currentTouch.y * Time.deltaTime;
+                // print(currentTouch.y); joystick pos not working on quest at the moment
+                _laserLength += modification;
+                ScaleLaser();
             }
             else
             {
                 modification = currentTouch.y - startTouchPoint.y;
+                ScaleLaser(modification);
             }
-            ScaleLaser(modification);
 
             // set the max distance the laser should have to exist and not grab the object
             float minLaserLength;
@@ -332,7 +280,8 @@ public class LaserGrabber : MonoBehaviour
                 minLaserLength = attachedObject.transform.localScale.x * ProgramSettings.size / 2;
 
             // if the laser length is changed to a value less than the minimum distance, the attached object is going to be grabbed
-            if (_laserLength + modification < minLaserLength)
+            //if (_laserLength + modification < minLaserLength)
+            if (_laserLength < minLaserLength)
             {
                 AttachObject(attachedObject);
                 laser.SetActive(false);
@@ -370,7 +319,7 @@ public class LaserGrabber : MonoBehaviour
         // check that there isn't an object in range to grab
         if (true) //(collidingObject == null)
         {
-            if (!attachedObject || !ModeController.currentMode.playerCanMoveAtoms)
+            if (!attachedObject)// || !ModeController.currentMode.playerCanMoveAtoms)
                 // send out a raycast to detect if there is an object in front of the laser 
                 if (Physics.Raycast(transform.position, transform.forward, out var hit, laserMaxDistance, ctrlMask))
                 {
@@ -381,7 +330,7 @@ public class LaserGrabber : MonoBehaviour
                         ShowLaser(hit);
 
                         if (!Thermometer.laserOnThermometer)
-                            if (ModeController.currentMode.playerCanMoveAtoms)
+                            if (ModeController.currentMode.playerCanMoveAtoms || ctrlMaskName == "BoundingboxLayer")
                                 AttachObject(hitObject);
                             else
                                 attachedObject = hitObject;
@@ -406,11 +355,8 @@ public class LaserGrabber : MonoBehaviour
 
     private void MoveGrabbedObject()
     {
-        // the location before the object gets moved
-        Vector3 oldPos;
         // the location after the object got moved
         Vector3 newPos;
-        oldPos = attachedObject.transform.position;
         if (laser.activeSelf)
         {
             if (ctrlMaskName == "BoundingboxLayer")
@@ -433,15 +379,6 @@ public class LaserGrabber : MonoBehaviour
         }
         // set the position of the attached object to the new position it should have
         attachedObject.transform.position = newPos;
-//        if (ctrlMaskName == "AtomLayer")
-//        {
-//            // update the data how the atom has been moved by the player 
-////            StructureDataOld.atomCtrlPos[attachedObject.GetComponent<AtomID>().ID] += newPos - oldPos;
-//        }
-//        else if (ctrlMaskName == "BoundingboxLayer")
-//            // update the data how the structure has been moved by the player 
-//            StructureDataOld.Inst.structureCtrlPos += newPos - oldPos;
-//            // SD.structureCtrlTrans.position += newPos - oldPos;
     }
 
     // set the colliding object as the collidingObject, if it fulfills these conditions
@@ -457,8 +394,8 @@ public class LaserGrabber : MonoBehaviour
             // set the colliding object
             collidingObject = col.gameObject;
             // disable the laser if the controller is colliding when the player can't move the atoms 
-            // (because the lasr already disables itself in this mode)
-            if (!ModeController.currentMode.playerCanMoveAtoms)
+            // (because the laser already disables itself in this mode)
+            if (!ModeController.currentMode.playerCanMoveAtoms || ctrlMaskName == "BoundingboxLayer")
                 laser.SetActive(false);
         }
     }

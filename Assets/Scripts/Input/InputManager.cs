@@ -16,6 +16,8 @@ public class InputManager : MonoBehaviour
     // the pointers which contain the laser. Needed to dis/enable the laser.
     public GameObject[] pointers;
 
+    public static bool DeviceHasJoystick = true;
+
     void Update()
     {
         if (TCPClient.TaskNumOut == TCPClient.TaskNumIn)
@@ -53,14 +55,15 @@ public class InputManager : MonoBehaviour
 
     private void CheckTouchpad(HandRole handRole)
     {
-        Vector2 touchPos = ViveInput.GetPadTouchAxis(handRole);
-        if (ViveInput.GetPressDown(handRole, ControllerButton.PadTouch))
+        //Vector2 touchPos = ViveInput.GetPadAxis(handRole);
+        Vector2 touchPos = ViveInput.GetPadPressVector(handRole);
+        if (ViveInput.GetPressDown(handRole, ControllerButton.Pad))
             LaserGrabber.instances[(int)handRole].TouchpadTouchDown(touchPos);
 
-        if (ViveInput.GetPress(handRole, ControllerButton.PadTouch))
+        if (ViveInput.GetPress(handRole, ControllerButton.Pad))
             LaserGrabber.instances[(int)handRole].WhileTouchpadTouchDown(touchPos);
 
-        if (ViveInput.GetPressUp(handRole, ControllerButton.PadTouch))
+        if (ViveInput.GetPressUp(handRole, ControllerButton.Pad))
             LaserGrabber.instances[(int)handRole].TouchpadTouchUp();
 
         if (ViveInput.GetPressDown(handRole, ControllerButton.Pad))
