@@ -5,11 +5,18 @@ namespace Networking
 {
     public static class PythonCmd
     {
+        private static readonly string Project = PythonScript.unityManager + ".project";
+        
         public static readonly string GetPath = PythonScript.unityManager + ".project.path[:-1]";
         public static readonly string GetFolderData = PythonScript.unityManager + ".project.list_all()";
         public static readonly string LoadNoneJob = PythonScript.executor + ".load_job(None)";
         public static readonly string GetStructureData = PythonScript.structure + ".get_data()";
         public static readonly string FormatJobSettings = PythonScript.executor + ".format_job_settings()";
+        public static readonly string GetJobSizes = 
+            //"[(" + Project + "[n + '/output/generic/positions']) for n in " + Project + ".list_all()['nodes']]";
+            //"[len(" + Project + "[n + '/output/generic/positions']) for n in " + Project + ".list_all()['nodes']]";
+            //"[n + '/output/generic/positions'] for n in " + Project + ".list_all()['nodes']]";
+            PythonScript.unityManager + ".GetJobSizes()";
 
         public static string OpenAbsPath(string jobName)
         {

@@ -14,6 +14,8 @@ public class ExplorerMenuController : MenuController {
     public GameObject PathPrefab;
     public GameObject PathFolder;
 
+    public Gradient jobSizeGradient;
+
     [Tooltip("Determines how many parts of the Path should be shown")]
     [SerializeField] private int numShownPathNodes = 3;
     
@@ -87,22 +89,33 @@ public class ExplorerMenuController : MenuController {
         InstantiateNewBtn(OptionPrefab, OptionFolder, "..", Color.yellow);
     }
     
-    public void ShowNewJobs(FolderData folderData)
+    public void ShowNewJobs(FolderData folderData, int[] jobSizes)
     {
-        foreach (string opt in folderData.nodes)
+        for (int i = 0; i < folderData.nodes.Count; i++)
+        //foreach (string opt in folderData.nodes)
         {
+            string opt = folderData.nodes[i];
             // spawn the new button. If the job is already loaded, show the button as not interactable
             GameObject btn = InstantiateNewBtn(OptionPrefab, OptionFolderJobs, opt, Color.cyan,
                 interactable:opt!=SimulationMenuController.jobName);
             btn.GetComponent<OptionButton>().isJob = true;
             
+            if (jobSizes != null && i < jobSizes.Length)
+            {
+                // color the button according to the expected loading time
+                btn.GetComponent<Image>().color = jobSizeGradient.Evaluate(jobSizes[i] / 10000000f);
+            }
+            else
+            {
+                Debug.LogWarning("Invalid job sizes: " + jobSizes);
+            }
         }
     }
     
-    public void ShowNewOptions(FolderData folderData)
+    public void ShowNewOptions(FolderData folderData, int[] jobSizes)
     {
         ShowNewFolders(folderData);
-        ShowNewJobs(folderData);
+        ShowNewJobs(folderData, jobSizes);
     }
 
     public void PathHasChanged(string newPath = "")
@@ -162,6 +175,14 @@ public class ExplorerMenuController : MenuController {
         return JsonUtility.FromJson<FolderData>(data);
     }
 
+    public int[] LoadJobSizes()
+    {
+        string data = PythonExecutor.SendOrderSync(true,
+            PythonCmd.GetJobSizes);
+        print("JobSizes: " + data);
+        return JsonUtility.FromJson<JobSizes>(data).jobSizes;
+    }
+
     public void LoadPathContent(string jobName="", bool isAbsPath=false)
     {
         DeleteOptions();
@@ -185,8 +206,14 @@ public class ExplorerMenuController : MenuController {
             
         // get the jobs and groups 
         FolderData folderData = LoadFolderData();
+        int[] jobSizes = null;
+        if (folderData.nodes.Count > 0)
+        {
+            // load the sizes of the jobs
+            jobSizes = LoadJobSizes();
+        }
 
-        ShowNewOptions(folderData);
+        ShowNewOptions(folderData, jobSizes);
     }
 
     public void DeleteJob()
@@ -212,6 +239,13 @@ public class FolderData
     public List<string> groups;
     public List<string> nodes;
     public List<string> files;
+}
+
+// needed because JsonUtilities don't support unwrapped arrays
+[Serializable]
+public class JobSizes
+{
+    public int[] jobSizes;
 }
 
 public enum OptionType
