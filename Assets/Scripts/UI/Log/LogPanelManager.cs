@@ -16,11 +16,14 @@ namespace UI.Log
         private void Awake()
         {
             LogManager.RegisterListener(this);
+            gameObject.SetActive(false);
         }
 
         public override void OnNewLogEntry(string msg, LogManager.ErrorSeverity severity)
         {
-            GameObject newEntry;
+            if (severity == LogManager.ErrorSeverity.Status) return;
+            
+                GameObject newEntry;
             // if the log is full, delete the oldest log entry
             if (_logEntries.Count >= maxLogNum)
             {

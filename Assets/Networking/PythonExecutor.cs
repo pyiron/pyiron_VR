@@ -1,4 +1,5 @@
 ﻿using System;
+using UI.Log;
 using UnityEngine;
 
 namespace Networking
@@ -30,7 +31,8 @@ namespace Networking
         public static void SendOrderAsync(bool hasReturnValue, string order, Action<string> onReceiveCallback)
         {
             // show that the program is loading
-            AnimatedText.Instances[TextInstances.LoadingText].Activate();
+            LogManager.ReceiveLogMsg(LogManager.LoadingMsg, LogManager.ErrorSeverity.Status);
+            //AnimatedText.Instances[TextInstances.LoadingText].Activate();
             // deactivate the scene while loading
             Utilities.DeactivateInteractables();
 

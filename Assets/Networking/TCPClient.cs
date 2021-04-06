@@ -185,7 +185,7 @@ namespace Networking
                 catch (InvalidOperationException e)
                 {
                     Debug.LogError(e.Message + "\n" + e.StackTrace);
-                    LogManager.ReceiveLogMsg("Couldn't read the TCP stream. Check that you are still connected to" +
+                    LogManager.ReceiveLogMsg("Couldn't read the TCP stream. Please check that you are still connected to" +
                                              " the internet!");
 
                     return "";
@@ -294,7 +294,8 @@ namespace Networking
             if (TaskNumOut == TaskNumIn)
             {
                 // all requested messages got loaded, so the loading text can be deactivated
-                AnimatedText.Instances[TextInstances.LoadingText].Deactivate();
+                LogManager.ReceiveLogMsg("", LogManager.ErrorSeverity.Status);
+                //AnimatedText.Instances[TextInstances.LoadingText].Deactivate();
                 if (readAsync)
                 {
                     Utilities.ActivateInteractables();

@@ -20,6 +20,7 @@ namespace UI.Log
         void Start()
         {
             textObject = GetComponent<Text>();
+            textObject.text = "";
             shrinkTimer = activeTime;
         }
 
@@ -44,8 +45,9 @@ namespace UI.Log
 
         public override void OnNewLogEntry(string msg, LogManager.ErrorSeverity severity)
         {
-        
-            textObject.text = msg;
+            if (severity == LogManager.ErrorSeverity.Status) return;
+
+                textObject.text = msg;
             textObject.color = LogManager.colorCodes[severity];
         
             transform.localScale = Vector3.one;

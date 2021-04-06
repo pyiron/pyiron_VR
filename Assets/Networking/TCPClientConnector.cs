@@ -48,7 +48,8 @@ namespace Networking
 			print("Trying to connect to " + _host);
 		
 			// show that the program is loading
-			AnimatedText.Instances[TextInstances.LoadingText].Activate();
+			LogManager.ReceiveLogMsg(LogManager.LoadingMsg, LogManager.ErrorSeverity.Status);
+			//AnimatedText.Instances[TextInstances.LoadingText].Activate();
 		
 			// after connecting to a server or while trying to connect to one, connecting to another one is not possible
 			if (TCPClient.SocketConnection != null || ConnectionStatus != null) return;
@@ -64,7 +65,8 @@ namespace Networking
 				ConnectionError(isReconnectAttempt);
 			
 				// the loading is over, deactivate the loading text
-				AnimatedText.Instances[TextInstances.LoadingText].Deactivate();
+				LogManager.ReceiveLogMsg("", LogManager.ErrorSeverity.Status);
+				//AnimatedText.Instances[TextInstances.LoadingText].Deactivate();
 			}
 		}
 	
@@ -76,7 +78,8 @@ namespace Networking
 			AnimatedText reconnectText = AnimatedText.Instances[TextInstances.ReconnectingText];
 			reconnectText.transform.SetParent(ModeController.currentMode.controller.transform);
 			reconnectText.transform.localPosition = Vector3.up * 260;
-			reconnectText.Activate();
+			LogManager.ReceiveLogMsg(LogManager.ReconnectMsg, LogManager.ErrorSeverity.Status);
+			//reconnectText.Activate();
 		
 			Utilities.DeactivateInteractables();
 		
@@ -124,7 +127,8 @@ namespace Networking
 			}
 		
 			// the loading is over, deactivate the loading text
-			AnimatedText.Instances[TextInstances.LoadingText].Deactivate();
+			LogManager.ReceiveLogMsg("", LogManager.ErrorSeverity.Status);
+			//AnimatedText.Instances[TextInstances.LoadingText].Deactivate();
 		}
 	
 		#region ConnectionOutcome
@@ -140,7 +144,8 @@ namespace Networking
 
 			if (isReconnectAttempt)
 			{
-				AnimatedText.Instances[TextInstances.ReconnectingText].Deactivate();
+				LogManager.ReceiveLogMsg("", LogManager.ErrorSeverity.Status);
+				//AnimatedText.Instances[TextInstances.ReconnectingText].Deactivate();
 			
 				// activate all interactable elements in the scene
 				Utilities.ActivateInteractables();
@@ -180,7 +185,7 @@ namespace Networking
 			}
 			else
 			{
-				LogManager.ReceiveLogMsg("Couldn't connect to the server.");
+				LogManager.ReceiveLogMsg("Couldn't connect to server " + _host + ".");
 				//ErrorTextController.inst.ShowMsg("Couldn't connect to the server.");
 			}
 		}
@@ -205,7 +210,7 @@ namespace Networking
 			}
 			else
 			{
-				LogManager.ReceiveLogMsg("Couldn't connect to server " + _host);
+				LogManager.ReceiveLogMsg("Couldn't connect to server " + _host + " due to timeout.");
 			}
 		}
 		#endregion
