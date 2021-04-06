@@ -21,6 +21,8 @@ public class ExplorerMenuController : MenuController {
     
     internal static string currPath;
 
+    private FolderData folderData;
+
     public static Dictionary<OptionType, List<string>> options = new Dictionary<OptionType, List<string>>();
 
     private void Awake()
@@ -175,12 +177,18 @@ public class ExplorerMenuController : MenuController {
         return JsonUtility.FromJson<FolderData>(data);
     }
 
-    public int[] LoadJobSizes()
+    public void LoadJobSizes()
     {
-        string data = PythonExecutor.SendOrderSync(true,
-            PythonCmd.GetJobSizes);
+        //string data = 
+        PythonExecutor.SendOrderAsync(true,
+            PythonCmd.GetJobSizes, OnJobSizesReceived);
+    }
+
+    public void OnJobSizesReceived(string data)
+    {
         print("JobSizes: " + data);
-        return JsonUtility.FromJson<JobSizes>(data).jobSizes;
+        int[] jobSizes = JsonUtility.FromJson<JobSizes>(data).jobSizes;
+        ShowNewOptions(folderData, jobSizes);
     }
 
     public void LoadPathContent(string jobName="", bool isAbsPath=false)
@@ -205,15 +213,17 @@ public class ExplorerMenuController : MenuController {
         PathHasChanged();
             
         // get the jobs and groups 
-        FolderData folderData = LoadFolderData();
-        int[] jobSizes = null;
+        folderData = LoadFolderData();
         if (folderData.nodes.Count > 0)
         {
             // load the sizes of the jobs
-            jobSizes = LoadJobSizes();
+            PythonExecutor.SendOrderAsync(true,
+                PythonCmd.GetJobSizes, OnJobSizesReceived);
         }
-
-        ShowNewOptions(folderData, jobSizes);
+        else
+        {
+            ShowNewOptions(folderData, null);
+        }
     }
 
     public void DeleteJob()
