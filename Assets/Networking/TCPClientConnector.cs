@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using HTC.UnityPlugin.Vive;
+using UI.Log;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -179,7 +180,8 @@ namespace Networking
 			}
 			else
 			{
-				ErrorTextController.inst.ShowMsg("Couldn't connect to the server.");
+				LogManager.ReceiveLogMsg("Couldn't connect to the server.");
+				//ErrorTextController.inst.ShowMsg("Couldn't connect to the server.");
 			}
 		}
 
@@ -203,7 +205,7 @@ namespace Networking
 			}
 			else
 			{
-				ErrorTextController.inst.ShowMsg("Couldn't connect to the server");
+				LogManager.ReceiveLogMsg("Couldn't connect to server " + _host);
 			}
 		}
 		#endregion

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using UI.Log;
 using UnityEngine;
 
 public class StructureLoader
@@ -22,7 +23,7 @@ public class StructureLoader
     {
         if (data.StartsWith("error:", true, CultureInfo.CurrentCulture))
         {
-            ErrorTextController.inst.ShowMsg(data);
+            LogManager.ReceiveLogMsg(data);
             return;
         }
         

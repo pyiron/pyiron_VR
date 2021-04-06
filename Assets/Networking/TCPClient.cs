@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using UI.Log;
 using UnityEngine;
 
 namespace Networking
@@ -184,8 +185,8 @@ namespace Networking
                 catch (InvalidOperationException e)
                 {
                     Debug.LogError(e.Message + "\n" + e.StackTrace);
-                    ErrorTextController.inst.ShowMsg("Couldn't read the TCP stream. Check that you are still connected to" +
-                                                     " the internet!");
+                    LogManager.ReceiveLogMsg("Couldn't read the TCP stream. Check that you are still connected to" +
+                                             " the internet!");
 
                     return "";
                 }
@@ -334,7 +335,7 @@ namespace Networking
             {
                 string problem = "Socket currently not connected!";
                 Debug.LogWarning(problem + " socketConnection is " + SocketConnection);
-                ErrorTextController.inst.ShowMsg(problem);
+                LogManager.ReceiveLogMsg(problem);
                 TCPClientConnector.TryReconnect();
                 return "Error: " + problem;
             }
@@ -394,7 +395,7 @@ namespace Networking
             catch (Exception ex)
             {
                 Debug.LogWarning(ex);
-                ErrorTextController.inst.ShowMsg("The Action could not be Executed. Please try again");
+                LogManager.ReceiveLogMsg("The Action could not be Executed. Please try again");
                 TCPClientConnector.TryReconnect();
                 return "Error: " + ex;
             }
