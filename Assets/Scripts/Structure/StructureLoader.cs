@@ -23,7 +23,7 @@ public class StructureLoader
     {
         if (data.StartsWith("error:", true, CultureInfo.CurrentCulture))
         {
-            LogManager.ReceiveLogMsg(data);
+            LogPublisher.ReceiveLogMsg(data);
             return;
         }
         

@@ -48,7 +48,7 @@ namespace Networking
 			print("Trying to connect to " + _host);
 		
 			// show that the program is loading
-			LogManager.ReceiveLogMsg(LogManager.LoadingMsg, LogManager.ErrorSeverity.Status);
+			LogPublisher.ReceiveLogMsg(LogPublisher.LoadingMsg, LogPublisher.ErrorSeverity.Status);
 			//AnimatedText.Instances[TextInstances.LoadingText].Activate();
 		
 			// after connecting to a server or while trying to connect to one, connecting to another one is not possible
@@ -65,7 +65,7 @@ namespace Networking
 				ConnectionError(isReconnectAttempt);
 			
 				// the loading is over, deactivate the loading text
-				LogManager.ReceiveLogMsg("", LogManager.ErrorSeverity.Status);
+				LogPublisher.ReceiveLogMsg("", LogPublisher.ErrorSeverity.Status);
 				//AnimatedText.Instances[TextInstances.LoadingText].Deactivate();
 			}
 		}
@@ -78,7 +78,7 @@ namespace Networking
 			AnimatedText reconnectText = AnimatedText.Instances[TextInstances.ReconnectingText];
 			reconnectText.transform.SetParent(ModeController.currentMode.controller.transform);
 			reconnectText.transform.localPosition = Vector3.up * 260;
-			LogManager.ReceiveLogMsg(LogManager.ReconnectMsg, LogManager.ErrorSeverity.Status);
+			LogPublisher.ReceiveLogMsg(LogPublisher.ReconnectMsg, LogPublisher.ErrorSeverity.Status);
 			//reconnectText.Activate();
 		
 			Utilities.DeactivateInteractables();
@@ -127,7 +127,7 @@ namespace Networking
 			}
 		
 			// the loading is over, deactivate the loading text
-			LogManager.ReceiveLogMsg("", LogManager.ErrorSeverity.Status);
+			LogPublisher.ReceiveLogMsg("", LogPublisher.ErrorSeverity.Status);
 			//AnimatedText.Instances[TextInstances.LoadingText].Deactivate();
 		}
 	
@@ -144,7 +144,7 @@ namespace Networking
 
 			if (isReconnectAttempt)
 			{
-				LogManager.ReceiveLogMsg("", LogManager.ErrorSeverity.Status);
+				LogPublisher.ReceiveLogMsg("", LogPublisher.ErrorSeverity.Status);
 				//AnimatedText.Instances[TextInstances.ReconnectingText].Deactivate();
 			
 				// activate all interactable elements in the scene
@@ -185,7 +185,7 @@ namespace Networking
 			}
 			else
 			{
-				LogManager.ReceiveLogMsg("Couldn't connect to server " + _host + ".");
+				LogPublisher.ReceiveLogMsg("Couldn't connect to server " + _host + ".");
 				//ErrorTextController.inst.ShowMsg("Couldn't connect to the server.");
 			}
 		}
@@ -210,7 +210,7 @@ namespace Networking
 			}
 			else
 			{
-				LogManager.ReceiveLogMsg("Couldn't connect to server " + _host + " due to timeout.");
+				LogPublisher.ReceiveLogMsg("Couldn't connect to server " + _host + " due to timeout.");
 			}
 		}
 		#endregion

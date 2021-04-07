@@ -23,7 +23,10 @@ public class FPSDisplay : MonoBehaviour
     {
         float msec = deltaTime * 1000.0f;
         float fps = 1.0f / deltaTime;
-        string text = string.Format("{0:0.0} ms ({1:0.} fps)", msec, fps);
+        // show fps and time between renders
+        //string text = string.Format("{0:0.0} ms ({1:0.} fps)", msec, fps);
+        // only show fps
+        string text = $"{fps:0.} fps";
         
         if (textDisplay != null)
         {

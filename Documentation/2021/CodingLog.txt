@@ -30,6 +30,7 @@ The new design included:
 - Implemented a Publisher-Subscriber pattern for the logs
 - Improved existing loading and reconnecting methods and integrated them into the new pattern
 - Added "dismiss" and "Open Log" options for the displayed messages
+- Code Documentaion and cleanup
 
 1.5.2020 - 31.5.2020
 

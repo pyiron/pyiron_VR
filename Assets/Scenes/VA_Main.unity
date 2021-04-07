@@ -11488,7 +11488,7 @@ PrefabInstance:
     - target: {fileID: 8381724049134401809, guid: 8457ed876ce7c47469ddcac60745f7e9,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000009536743
+      value: -0.000017166138
       objectReference: {fileID: 0}
     - target: {fileID: 8381724049477885744, guid: 8457ed876ce7c47469ddcac60745f7e9,
         type: 3}
@@ -18378,6 +18378,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FPSDisplay
+      objectReference: {fileID: 0}
+    - target: {fileID: 8024662782278295914, guid: 9b42379edf50ff248b5a4d5904faeb59,
+        type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 8024662782323506798, guid: 9b42379edf50ff248b5a4d5904faeb59,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9b42379edf50ff248b5a4d5904faeb59, type: 3}
@@ -28585,7 +28595,7 @@ MonoBehaviour:
     m_BestFit: 1
     m_MinSize: 3
     m_MaxSize: 30
-    m_Alignment: 7
+    m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0

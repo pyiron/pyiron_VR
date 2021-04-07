@@ -185,7 +185,7 @@ namespace Networking
                 catch (InvalidOperationException e)
                 {
                     Debug.LogError(e.Message + "\n" + e.StackTrace);
-                    LogManager.ReceiveLogMsg("Couldn't read the TCP stream. Please check that you are still connected to" +
+                    LogPublisher.ReceiveLogMsg("Couldn't read the TCP stream. Please check that you are still connected to" +
                                              " the internet!");
 
                     return "";
@@ -294,7 +294,7 @@ namespace Networking
             if (TaskNumOut == TaskNumIn)
             {
                 // all requested messages got loaded, so the loading text can be deactivated
-                LogManager.ReceiveLogMsg("", LogManager.ErrorSeverity.Status);
+                LogPublisher.ReceiveLogMsg("", LogPublisher.ErrorSeverity.Status);
                 //AnimatedText.Instances[TextInstances.LoadingText].Deactivate();
                 if (readAsync)
                 {
@@ -336,7 +336,7 @@ namespace Networking
             {
                 string problem = "Socket currently not connected!";
                 Debug.LogWarning(problem + " socketConnection is " + SocketConnection);
-                LogManager.ReceiveLogMsg(problem);
+                LogPublisher.ReceiveLogMsg(problem);
                 TCPClientConnector.TryReconnect();
                 return "Error: " + problem;
             }
@@ -396,7 +396,7 @@ namespace Networking
             catch (Exception ex)
             {
                 Debug.LogWarning(ex);
-                LogManager.ReceiveLogMsg("The Action could not be Executed. Please try again");
+                LogPublisher.ReceiveLogMsg("The Action could not be Executed. Please try again");
                 TCPClientConnector.TryReconnect();
                 return "Error: " + ex;
             }

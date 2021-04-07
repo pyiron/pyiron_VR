@@ -171,13 +171,13 @@ Todo:
   42.	DONE Update documentation and batch file
 - 43.	LATER moving atoms can cause an OutOfBounds Error
 ? 44.	FIXED? fix bug that no animations can be created
-! 45.	TODO make an Error log
+  45.	DONE make an Error log
   46.	DONE Email lesen wie pyiron mit wsl installiert werden kann
   47.	DONE fix error that the wrong potentials get shown
-! 48.	TODO make error messages prettier/better (make a panel with an ok button)
+  48.	DONE make error messages prettier/better (make a panel with an ok button)
 ? 49.	FIXED? fix error that the server doesn't reset sometimes
   50.	DONE make a loading symbol
-! 51. 	TODO allow to close error messages
+  51. 	DONE allow to close error messages
   52.	TODO instantly show if the client is disconnected
   53. 	DONE automatically try to reconnect if the client is disconnected
 ! 53.	TODO execute actions after the data has been send to python and just if the transmission was successfull (to prevent inconsistency)
@@ -202,6 +202,7 @@ Todo:
   72. 	DONE scrollbar for jobs in explorer
 ? 73.	LOW PRIO fix bug when server closes after timeout
   74.	DONE scrollbar for folders in explorer
+! 75.	TODO put fps and error msg directly under/above the main panel, instead of in the middle or adjust the main panels
 
 
 Time needed for sending a Message sync to python: 0.05s = 50ms

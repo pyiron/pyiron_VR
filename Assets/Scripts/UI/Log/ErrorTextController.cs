@@ -4,7 +4,7 @@ using UnityEngine.UI;
 namespace UI.Log
 {
     // Component of MainVACanvas/Panel/MessageDisplay
-    public class ErrorTextController : LogListener
+    public class ErrorTextController : LogSubscriber
     {
         // the reference to the attached Text Object
         [SerializeField] private Text messageDisplay;
@@ -14,7 +14,9 @@ namespace UI.Log
         private void Awake()
         {
             // Subscribe to error, warning and info messages
-            LogManager.RegisterSubscriber(this);
+            LogPublisher.ErrorSeverity[] subscribedTypes = 
+                {LogPublisher.ErrorSeverity.Info, LogPublisher.ErrorSeverity.Warning, LogPublisher.ErrorSeverity.Error};
+            LogPublisher.RegisterSubscriber(this, subscribedTypes);
             
             // initialize this object
             gameObject.SetActive(false);
@@ -44,14 +46,14 @@ namespace UI.Log
         }
 
         // Update the text when receiving a new message
-        public override void OnNewLogEntry(string msg, LogManager.ErrorSeverity severity)
+        public override void OnNewLogEntry(string msg, LogPublisher.ErrorSeverity severity)
         {
             // ignore status messages
-            if (severity == LogManager.ErrorSeverity.Status) return;
+            //if (severity == LogPublisher.ErrorSeverity.Status) return;
 
             gameObject.SetActive(true);
             messageDisplay.text = msg;
-            messageDisplay.color = LogManager.colorCodes[severity];
+            messageDisplay.color = LogPublisher.colorCodes[severity];
         
             transform.localScale = Vector3.one;
             shrinkTimer = activeTime;

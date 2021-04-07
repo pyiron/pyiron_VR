@@ -1,11 +1,15 @@
 using System.Collections.Generic;
+using System.Linq;
+using UnityEditor.VersionControl;
 using UnityEngine;
 
 namespace UI.Log
 {
-    public class LogManager : MonoBehaviour
+    public class LogPublisher : MonoBehaviour
     {
-        private static List<LogListener> _listeners = new List<LogListener>();
+        //private static List<LogSubscriber> _listeners = new List<LogSubscriber>();
+        private static Dictionary<LogSubscriber, ErrorSeverity[]> _listeners =
+            new Dictionary<LogSubscriber, ErrorSeverity[]>();
 
         public static Dictionary<ErrorSeverity, Color> colorCodes = new Dictionary<ErrorSeverity, Color>()
         {
@@ -19,13 +23,14 @@ namespace UI.Log
         public static readonly string ReconnectMsg = "Disconnected!\nTrying to reconnect";
     
         /// <summary>
-        /// Adds a subscriber to the list of subscribers
+        /// Adds a subscriber to the list of subscribers.
         /// </summary>
-        /// <param name="listener"></param>
-        public static void RegisterSubscriber(LogListener listener)
+        /// <param name="subscriber"></param>
+        /// <param name="msgTypes">The message types to which the subscriber is subscribed.</param>
+        public static void RegisterSubscriber(LogSubscriber subscriber, ErrorSeverity[] msgTypes)
         {
-            _listeners.Add(listener);
-            print(listener.name + " registered.");
+            _listeners.Add(subscriber, msgTypes);
+            print(subscriber.name + " registered.");
         }
 
         /// <summary>
@@ -35,10 +40,13 @@ namespace UI.Log
         /// <param name="severity">The type of the message.</param>
         public static void ReceiveLogMsg(string msg, ErrorSeverity severity=ErrorSeverity.Error)
         {
-            // notify all listeners
+            // notify all listeners that are listening to this type
             foreach (var listener in _listeners)
             {
-                listener.OnNewLogEntry(msg, severity);
+                if (listener.Value.Contains(severity))
+                {
+                    listener.Key.OnNewLogEntry(msg, severity);
+                }
             }
         }
     

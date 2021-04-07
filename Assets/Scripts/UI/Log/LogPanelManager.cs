@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace UI.Log
 {
-    public class LogPanelManager : LogListener
+    public class LogPanelManager : LogSubscriber
     {
         private Queue<GameObject> _logEntries = new Queue<GameObject>();
 
@@ -15,8 +15,10 @@ namespace UI.Log
     
         private void Awake()
         {
-            // Subscribe to the message publisher
-            LogManager.RegisterSubscriber(this);
+            // Subscribe to error, warning and info messages
+            LogPublisher.ErrorSeverity[] subscribedTypes = 
+                {LogPublisher.ErrorSeverity.Info, LogPublisher.ErrorSeverity.Warning, LogPublisher.ErrorSeverity.Error};
+            LogPublisher.RegisterSubscriber(this, subscribedTypes);
             
             gameObject.SetActive(false);
         }
@@ -26,9 +28,9 @@ namespace UI.Log
         /// </summary>
         /// <param name="msg">The message that should be added to the log.</param>
         /// <param name="severity">The type of the message.</param>
-        public override void OnNewLogEntry(string msg, LogManager.ErrorSeverity severity)
+        public override void OnNewLogEntry(string msg, LogPublisher.ErrorSeverity severity)
         {
-            if (severity == LogManager.ErrorSeverity.Status) return;
+            //if (severity == LogPublisher.ErrorSeverity.Status) return;
             
             GameObject newEntry;
             if (_logEntries.Count >= maxLogNum)
@@ -48,7 +50,7 @@ namespace UI.Log
             // set the text to the new message
             Text entryText = newEntry.GetComponentInChildren<Text>();
             entryText.text = msg;
-            entryText.color = LogManager.colorCodes[severity];
+            entryText.color = LogPublisher.colorCodes[severity];
         
             _logEntries.Enqueue(newEntry);
         }

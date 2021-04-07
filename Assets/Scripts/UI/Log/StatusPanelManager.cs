@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace UI.Log
 {
-    public class StatusPanelManager : LogListener
+    public class StatusPanelManager : LogSubscriber
     {
         [SerializeField] private Text text;
         
@@ -17,8 +17,10 @@ namespace UI.Log
 
         private void Awake()
         {
-            // Subscribe to the message publisher
-            LogManager.RegisterSubscriber(this);
+            // Subscribe to status messages of the log publisher
+            LogPublisher.ErrorSeverity[] subscribedTypes = 
+                {LogPublisher.ErrorSeverity.Status};
+            LogPublisher.RegisterSubscriber(this, subscribedTypes);
             
             gameObject.SetActive(false);
         }
@@ -66,10 +68,10 @@ namespace UI.Log
         /// </summary>
         /// <param name="msg">The message that should be displayed. If it is empty, this display gets deactivated.</param>
         /// <param name="severity">The type of the message.</param>
-        public override void OnNewLogEntry(string msg, LogManager.ErrorSeverity severity)
+        public override void OnNewLogEntry(string msg, LogPublisher.ErrorSeverity severity)
         {
-            if (severity == LogManager.ErrorSeverity.Status)
-            {
+            //if (severity == LogPublisher.ErrorSeverity.Status)
+            //{
                 if (msg == "")
                 {
                     // deactivate this gameObject
@@ -84,11 +86,11 @@ namespace UI.Log
                     _timer = _interval;
                     state = 0;
                 }
-            }
+            /*}
             else
             {
                 gameObject.SetActive(false);
-            }
+            }*/
         }
     }
 }
