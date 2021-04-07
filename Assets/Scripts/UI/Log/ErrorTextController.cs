@@ -7,26 +7,21 @@ namespace UI.Log
     public class ErrorTextController : LogListener
     {
         // the reference to the attached Text Object
-        private static Text textObject;
-        private static string errorMsg;
+        [SerializeField] private Text textObject;
         private static float shrinkTimer;
         private static int activeTime = 12;
 
         private void Awake()
         {
             LogManager.RegisterListener(this);
-        }
-
-        void Start()
-        {
-            textObject = GetComponent<Text>();
+            gameObject.SetActive(false);
             textObject.text = "";
             shrinkTimer = activeTime;
         }
 
         void Update()
         {
-            if (errorMsg != "")
+            if (textObject.text != "")
             {
                 if (shrinkTimer > 0)
                 {
@@ -38,6 +33,7 @@ namespace UI.Log
                     if (transform.localScale.x <= 0)
                     {
                         textObject.text = "";
+                        gameObject.SetActive(false);
                     }
                 }
             }
@@ -47,11 +43,18 @@ namespace UI.Log
         {
             if (severity == LogManager.ErrorSeverity.Status) return;
 
-                textObject.text = msg;
+            gameObject.SetActive(true);
+            textObject.text = msg;
+            print("text is " + textObject.text);
             textObject.color = LogManager.colorCodes[severity];
         
             transform.localScale = Vector3.one;
             shrinkTimer = activeTime;
+        }
+
+        public void Close()
+        {
+            shrinkTimer = 0;
         }
     }
 }

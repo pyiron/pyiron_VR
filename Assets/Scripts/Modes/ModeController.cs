@@ -79,7 +79,8 @@ public class ModeController : MonoBehaviour
 
     // (de)activate objects in the scene, as well as the menu
     private void UpdateScene() { 
-        ModeText.Inst.OnModeChange();
+        // I don't think a text declaring the current mode is necessary
+        // ModeText.Inst.OnModeChange();
 
         if (Thermometer.temperature != -1)
             // activate the thermometer when changing into temperature mode, else deactivate it

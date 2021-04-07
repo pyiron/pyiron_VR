@@ -144,7 +144,7 @@ Todo:
   18. 	DONE Fix Thermometer
   19. 	DONEcheck in dict if it contains the key, if not: leave empty. Check in Unity if it is empty
   20. 	DONE Set delete button onHover color
-! 21. 	TODO just allow to move single atoms in Structure Creator
+  21. 	DONE just allow to move single atoms in Structure Creator
   22. 	DONE show AnimationMenu when it should be active 
   23. 	DONE Remove old code that has been replaced
   24.	DONE Keep the jobName correct to see if the job has been shifted or not
@@ -183,11 +183,11 @@ Todo:
 ! 53.	TODO execute actions after the data has been send to python and just if the transmission was successfull (to prevent inconsistency)
   54.	DONE deactivate the structure visually when sending with async
 ! 55.	TODO dont allow any actions for the structure if it is deactivated (or maybe with the controllers)	
-! 56. 	TODO maybe add function Init and attribute Button to the IButton Interface
+? 56. 	TODO maybe add function Init and attribute Button to the IButton Interface
   57.	DONE increase loading time when receiving async
   58.	DONE use string builder for better performance when receiving
 ! 59.	TODO allow to change blocksPerFrame in the application
-! 60. 	TODO show expected loading time by using number of atoms * frames
+  60. 	DONE show expected loading time by using number of atoms * frames
 ! 61. 	TODO Test out good values for blocksPerFrame
   62.	DONE make loading jobs asynchronous
   63.	DONE document how to connect to vpn using the Oculus Quest
@@ -226,3 +226,5 @@ knows whether to delete or load the old job
 In structure mode:
 	Make a dropdown (move, select, ...)
 in Structure-select mode: a = ctrl, b = shift, grip-a = copy, grip-b = paste, trigger=left mouse
+
+len(pr["job_name/output/generic/positions])
