@@ -27,9 +27,9 @@ The new design included:
 
 1.4.2020 - 30.4.2020
 - Implemented a new log Panel
-- Implemented a pattern for the logs
+- Implemented a Publisher-Subscriber pattern for the logs
 - Improved existing loading and reconnecting methods and integrated them into the new pattern
-- 
+- Added "dismiss" and "Open Log" options for the displayed messages
 
 1.5.2020 - 31.5.2020
 

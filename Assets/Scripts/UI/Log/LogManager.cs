@@ -18,15 +18,23 @@ namespace UI.Log
         public static readonly string LoadingMsg = "Loading";
         public static readonly string ReconnectMsg = "Disconnected!\nTrying to reconnect";
     
-        public static void RegisterListener(LogListener listener)
+        /// <summary>
+        /// Adds a subscriber to the list of subscribers
+        /// </summary>
+        /// <param name="listener"></param>
+        public static void RegisterSubscriber(LogListener listener)
         {
             _listeners.Add(listener);
             print(listener.name + " registered.");
         }
 
+        /// <summary>
+        /// Receives a message and forwards it to all listening subscribers.
+        /// </summary>
+        /// <param name="msg">The message that should be forwarded.</param>
+        /// <param name="severity">The type of the message.</param>
         public static void ReceiveLogMsg(string msg, ErrorSeverity severity=ErrorSeverity.Error)
         {
-            print(msg + " with " + severity);
             // notify all listeners
             foreach (var listener in _listeners)
             {
@@ -34,6 +42,9 @@ namespace UI.Log
             }
         }
     
+        /// <summary>
+        /// Determines the type of a message
+        /// </summary>
         public enum ErrorSeverity
         {
             Info, Warning, Error, Status

@@ -11488,7 +11488,7 @@ PrefabInstance:
     - target: {fileID: 8381724049134401809, guid: 8457ed876ce7c47469ddcac60745f7e9,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.0000019073486
+      value: -0.000009536743
       objectReference: {fileID: 0}
     - target: {fileID: 8381724049477885744, guid: 8457ed876ce7c47469ddcac60745f7e9,
         type: 3}
@@ -13604,7 +13604,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf02319e14e2bd848851681509c05a70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textObject: {fileID: 747535036}
+  messageDisplay: {fileID: 747535036}
 --- !u!1 &359752917
 GameObject:
   m_ObjectHideFlags: 0
@@ -28580,11 +28580,11 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 32
+    m_FontSize: 30
     m_FontStyle: 0
     m_BestFit: 1
-    m_MinSize: 10
-    m_MaxSize: 32
+    m_MinSize: 3
+    m_MaxSize: 30
     m_Alignment: 7
     m_AlignByGeometry: 0
     m_RichText: 1
