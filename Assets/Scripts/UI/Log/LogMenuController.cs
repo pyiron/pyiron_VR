@@ -39,6 +39,7 @@ namespace UI.Log
                 GameObject oldestEntry = _logEntries.Dequeue();
                 // reuse the object for better performance
                 newEntry = oldestEntry;
+                newEntry.transform.SetAsLastSibling();
             }
             else
             {
