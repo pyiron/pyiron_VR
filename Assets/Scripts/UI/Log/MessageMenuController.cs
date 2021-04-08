@@ -4,7 +4,7 @@ using UnityEngine.UI;
 namespace UI.Log
 {
     // Component of MainVACanvas/Panel/MessageDisplay
-    public class ErrorTextController : LogSubscriber
+    public class MessageMenuController : MenuController, LogSubscriber
     {
         // the reference to the attached Text Object
         [SerializeField] private Text messageDisplay;
@@ -46,7 +46,7 @@ namespace UI.Log
         }
 
         // Update the text when receiving a new message
-        public override void OnNewLogEntry(string msg, LogPublisher.ErrorSeverity severity)
+        public void OnNewLogEntry(string msg, LogPublisher.ErrorSeverity severity)
         {
             // ignore status messages
             //if (severity == LogPublisher.ErrorSeverity.Status) return;
@@ -62,9 +62,17 @@ namespace UI.Log
         /// <summary>
         /// Closes the panel with a shrinking animation.
         /// </summary>
-        public void Close()
+        public override void SetState(bool active)
         {
-            shrinkTimer = 0;
+            print("Got called");
+            if (!active)
+            {
+                shrinkTimer = 0;
+            }
+            else
+            {
+                UpdatePanelPosition();
+            }
         }
     }
 }

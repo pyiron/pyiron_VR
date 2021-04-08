@@ -1,9 +1,9 @@
 {
-    "m_SelectedDeviceId": "0939503a0805",
+    "m_SelectedDeviceId": "1PASH9A1J19152",
     "m_SelectedPackage": {
-        "deviceId": "",
-        "name": "",
-        "processId": 0,
+        "deviceId": "1PASH9A1J19152",
+        "name": "aaa.MPIE.VirtualAtoms",
+        "processId": 9474,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -18,6 +18,42 @@
             "deviceId": "0939503a0805",
             "name": "com.skype.raider",
             "processId": 30152,
+            "exited": false
+        },
+        {
+            "deviceId": "1PASH9A1J19152",
+            "name": "aaa.MPIE.VirtualAtoms",
+            "processId": 4029,
+            "exited": true
+        },
+        {
+            "deviceId": "1PASH9A1J19152",
+            "name": "com.oculus.shellenv",
+            "processId": 2575,
+            "exited": false
+        },
+        {
+            "deviceId": "1PASH9A1J19152",
+            "name": "aaa.MPIE.VirtualAtoms",
+            "processId": 4686,
+            "exited": false
+        },
+        {
+            "deviceId": "1PASH9A1J19152",
+            "name": "aaa.MPIE.VirtualAtoms",
+            "processId": 8586,
+            "exited": false
+        },
+        {
+            "deviceId": "1PASH9A1J19152",
+            "name": "aaa.MPIE.VirtualAtoms",
+            "processId": 9152,
+            "exited": false
+        },
+        {
+            "deviceId": "1PASH9A1J19152",
+            "name": "aaa.MPIE.VirtualAtoms",
+            "processId": 9474,
             "exited": false
         }
     ],

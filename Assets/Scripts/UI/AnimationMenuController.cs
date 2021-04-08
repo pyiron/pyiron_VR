@@ -13,7 +13,7 @@ public class AnimationMenuController : MenuController {
     
     public Text speedText;
     
-    internal override void SetState(bool active)
+    public override void SetState(bool active)
     {
         base.SetState(active);
         ProgressBar.Inst.gameObject.SetActive(active);

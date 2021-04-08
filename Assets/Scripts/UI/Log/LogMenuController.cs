@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace UI.Log
 {
-    public class LogPanelManager : LogSubscriber
+    public class LogMenuController : MenuController, LogSubscriber
     {
         private Queue<GameObject> _logEntries = new Queue<GameObject>();
 
@@ -28,7 +28,7 @@ namespace UI.Log
         /// </summary>
         /// <param name="msg">The message that should be added to the log.</param>
         /// <param name="severity">The type of the message.</param>
-        public override void OnNewLogEntry(string msg, LogPublisher.ErrorSeverity severity)
+        public void OnNewLogEntry(string msg, LogPublisher.ErrorSeverity severity)
         {
             //if (severity == LogPublisher.ErrorSeverity.Status) return;
             

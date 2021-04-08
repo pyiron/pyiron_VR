@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace UI.Log
 {
-    public class StatusPanelManager : LogSubscriber
+    public class StatusPanelManager : MonoBehaviour, LogSubscriber
     {
         [SerializeField] private Text text;
         
@@ -68,7 +68,7 @@ namespace UI.Log
         /// </summary>
         /// <param name="msg">The message that should be displayed. If it is empty, this display gets deactivated.</param>
         /// <param name="severity">The type of the message.</param>
-        public override void OnNewLogEntry(string msg, LogPublisher.ErrorSeverity severity)
+        public void OnNewLogEntry(string msg, LogPublisher.ErrorSeverity severity)
         {
             //if (severity == LogPublisher.ErrorSeverity.Status)
             //{

@@ -7,7 +7,7 @@ public class NetworkMenuController : MenuController {
     public static NetworkMenuController Inst;
 
     [SerializeField] private Text portText;
-    public GameObject keyboard;
+    public MenuController keyboard;
     [SerializeField] private Text serverAddressField;
     [SerializeField] private Text serverAddressPlaceholder;
 
@@ -72,7 +72,14 @@ public class NetworkMenuController : MenuController {
     /// <param name="toggle">The toggle that decides whether the keyboard should be active or inactive.</param>
     public void OnKeyboardToggle(Toggle toggle)
     {
-        keyboard.SetActive(toggle.isOn);
+        keyboard.SetState(toggle.isOn);
+        
+        // The panels only update if a new panel is activated to save performance, so we have to manually call the
+        // update for this case
+        if (!toggle.isOn)
+        {
+            UpdatePanelPosition();
+        }
     }
 
     /// <summary>

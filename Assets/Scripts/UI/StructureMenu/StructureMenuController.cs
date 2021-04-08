@@ -27,7 +27,7 @@ public class StructureMenuController : MenuController
 //        JsonUtility.FromJson<StructureData>(JsonUtility.ToJson(sd));
     }
 
-    internal override void SetState(bool active)
+    public override void SetState(bool active)
     {
         base.SetState(active);
         elementButton.interactable = true;

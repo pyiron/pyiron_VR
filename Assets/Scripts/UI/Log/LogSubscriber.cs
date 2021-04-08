@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace UI.Log
 {
-    public abstract class LogSubscriber : MonoBehaviour
+    public interface LogSubscriber
     {
         /// <summary>
         /// Receives a message from the publisher.

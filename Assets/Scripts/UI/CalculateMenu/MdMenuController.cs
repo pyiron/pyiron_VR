@@ -10,7 +10,7 @@ public class MdMenuController : MenuController {
     public Dropdown nIonicStepsDropdown;
     public Dropdown nPrintDropdown;
 
-    internal override void SetState(bool active)
+    public override void SetState(bool active)
     {
         base.SetState(active);
         Thermometer.Inst.SetState(active);

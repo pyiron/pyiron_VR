@@ -153,7 +153,7 @@ namespace Networking
 			else
 			{
 
-				NetworkMenuController.Inst.keyboard.SetActive(false);
+				NetworkMenuController.Inst.keyboard.SetState(false);
 
 				// load the content of the start path (which is defined in the Python script)
 				// ExplorerMenuController.Inst.LoadPathContent();

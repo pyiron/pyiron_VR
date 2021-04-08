@@ -243,7 +243,7 @@ RectTransform:
   - {fileID: 2133768397}
   - {fileID: 1252058674}
   m_Father: {fileID: 296815201}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -5144,6 +5144,7 @@ GameObject:
   - component: {fileID: 140236561}
   - component: {fileID: 140236564}
   - component: {fileID: 140236563}
+  - component: {fileID: 140236562}
   m_Layer: 5
   m_Name: IpInputPanel
   m_TagString: Untagged
@@ -5165,13 +5166,25 @@ RectTransform:
   - {fileID: 1456730562}
   - {fileID: 1721165758}
   m_Father: {fileID: 296815201}
-  m_RootOrder: 8
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 2255, y: -180}
   m_SizeDelta: {x: 300, y: 360}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &140236562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140236560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7821dfcf279fbdf4488ea6f957851f35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &140236563
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11488,7 +11501,7 @@ PrefabInstance:
     - target: {fileID: 8381724049134401809, guid: 8457ed876ce7c47469ddcac60745f7e9,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000017166138
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8381724049477885744, guid: 8457ed876ce7c47469ddcac60745f7e9,
         type: 3}
@@ -11876,6 +11889,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 1852579392}
+  - {fileID: 1201828921}
   - {fileID: 3117906}
   - {fileID: 508766551}
   - {fileID: 608948296}
@@ -11885,8 +11900,6 @@ RectTransform:
   - {fileID: 855209903}
   - {fileID: 1740210605}
   - {fileID: 140236561}
-  - {fileID: 1201828921}
-  - {fileID: 1852579392}
   m_Father: {fileID: 1513968016}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -21777,9 +21790,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 357393509}
-        m_TargetAssemblyTypeName: UI.Log.ErrorTextController, Assembly-CSharp
-        m_MethodName: Close
-        m_Mode: 1
+        m_TargetAssemblyTypeName: UI.Log.MessageMenuController, Assembly-CSharp
+        m_MethodName: SetState
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -21788,9 +21801,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1201828917}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
+      - m_Target: {fileID: 1201828918}
+        m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
+        m_MethodName: SetState
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -21800,9 +21813,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 1852579391}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
+      - m_Target: {fileID: 1852579396}
+        m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
+        m_MethodName: SetState
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -22314,7 +22327,7 @@ RectTransform:
   - {fileID: 900185234}
   - {fileID: 945072709}
   m_Father: {fileID: 296815201}
-  m_RootOrder: 3
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -23658,7 +23671,7 @@ RectTransform:
   m_Children:
   - {fileID: 247870868}
   m_Father: {fileID: 296815201}
-  m_RootOrder: 2
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -28944,7 +28957,7 @@ PrefabInstance:
     - target: {fileID: 224039264914124414, guid: 9449a21b2da854a4bb45e61c2d977823,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 224039264914124414, guid: 9449a21b2da854a4bb45e61c2d977823,
         type: 3}
@@ -32421,7 +32434,7 @@ RectTransform:
   - {fileID: 1110738873}
   - {fileID: 1238341963}
   m_Father: {fileID: 296815201}
-  m_RootOrder: 6
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -42922,8 +42935,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -69.999985, y: 18.15}
-  m_SizeDelta: {x: -63.800034, y: 3.500001}
+  m_AnchoredPosition: {x: -71.70001, y: 18.15}
+  m_SizeDelta: {x: -65.400024, y: 3.500001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1140650270
 MonoBehaviour:
@@ -44936,7 +44949,7 @@ RectTransform:
   - {fileID: 336817284}
   - {fileID: 1688804898}
   m_Father: {fileID: 296815201}
-  m_RootOrder: 9
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -46416,7 +46429,7 @@ RectTransform:
   m_Children:
   - {fileID: 1856103000}
   m_Father: {fileID: 296815201}
-  m_RootOrder: 4
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -62466,9 +62479,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1201828917}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
+      - m_Target: {fileID: 1201828918}
+        m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
+        m_MethodName: SetState
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -62478,9 +62491,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1852579391}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
+      - m_Target: {fileID: 1852579396}
+        m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
+        m_MethodName: SetState
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -64113,7 +64126,7 @@ RectTransform:
   - {fileID: 461343078}
   - {fileID: 1446895051}
   m_Father: {fileID: 296815201}
-  m_RootOrder: 7
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -64133,7 +64146,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   portText: {fileID: 1446895052}
-  keyboard: {fileID: 140236560}
+  keyboard: {fileID: 140236562}
   serverAddressField: {fileID: 136987562}
   serverAddressPlaceholder: {fileID: 1619786567}
 --- !u!114 &1740210607
@@ -69071,6 +69084,7 @@ GameObject:
   - component: {fileID: 1852579395}
   - component: {fileID: 1852579394}
   - component: {fileID: 1852579393}
+  - component: {fileID: 1852579396}
   m_Layer: 5
   m_Name: ErrorLogCollapsed
   m_TagString: Untagged
@@ -69091,7 +69105,7 @@ RectTransform:
   m_Children:
   - {fileID: 1728740960}
   m_Father: {fileID: 296815201}
-  m_RootOrder: 10
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -69142,9 +69156,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1852579391}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
+      - m_Target: {fileID: 1852579396}
+        m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
+        m_MethodName: SetState
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -69154,9 +69168,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1201828917}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
+      - m_Target: {fileID: 1201828918}
+        m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
+        m_MethodName: SetState
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -69204,6 +69218,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1852579391}
   m_CullTransparentMesh: 0
+--- !u!114 &1852579396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1852579391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7821dfcf279fbdf4488ea6f957851f35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1853146264
 GameObject:
   m_ObjectHideFlags: 0
@@ -77298,9 +77324,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 357393509}
-        m_TargetAssemblyTypeName: UI.Log.ErrorTextController, Assembly-CSharp
-        m_MethodName: Close
-        m_Mode: 1
+        m_TargetAssemblyTypeName: UI.Log.MessageMenuController, Assembly-CSharp
+        m_MethodName: SetState
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -79433,7 +79459,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 2.5
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!223 &2108708277
 Canvas:
   m_ObjectHideFlags: 0
@@ -121623,7 +121649,7 @@ RectTransform:
   - {fileID: 692719024}
   - {fileID: 1093336881}
   m_Father: {fileID: 296815201}
-  m_RootOrder: 5
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

@@ -16,11 +16,11 @@ public class ModeController : MonoBehaviour
     // attention: the trashcan will just be shown if m_playerCanMoveAtoms is true, even if m_showTrashcan is true
     // attention: the mode will just be accessible, if m_playerCanMoveAtoms, m_showInfo or m_canDuplicate is true
     internal static List<Mode> modes;
-    
+
     // get the textmesh from the 3D Text which shows the current mode
     //public TextMesh CurrentModeText;
     public static Mode currentMode;
-    
+
     // remember the new mode which should be set with the main thread
     internal Modes newMode;
 
@@ -36,23 +36,25 @@ public class ModeController : MonoBehaviour
     {
         modes = new List<Mode>
         {
-            new Mode(mode:Modes.Network, NetworkMenuController.Inst, hideAtoms: true),
-            new Mode(mode:Modes.Explorer, ExplorerMenuController.Inst, playerCanResizeAtoms:true),
-            new Mode(mode:Modes.Calculate, SimulationMenuController.Inst, playerCanResizeAtoms:true, showTemp:true,
-                showTrashcan:true),
+            new Mode(mode: Modes.Network, NetworkMenuController.Inst, hideAtoms: true),
+            new Mode(mode: Modes.Explorer, ExplorerMenuController.Inst, playerCanResizeAtoms: true),
+            new Mode(mode: Modes.Calculate, SimulationMenuController.Inst, playerCanResizeAtoms: true, showTemp: true,
+                showTrashcan: true),
             //new Mode(mode:Modes.Minimize, playerCanMoveAtoms:true, playerCanResizeAtoms:true, showRelaxation:true,
             //    showTrashcan:true),
             //new Mode(mode:Modes.Animate),
-            new Mode(mode:Modes.Structure, StructureMenuController.Inst, playerCanMoveAtoms:true, playerCanResizeAtoms:true),
+            new Mode(mode: Modes.Structure, StructureMenuController.Inst, playerCanMoveAtoms: true,
+                playerCanResizeAtoms: true),
         };
-        
+
         SetMode(Modes.Network);
         UpdateScene();
     }
 
     void Update()
     {
-        if (newMode != Modes.None) { 
+        if (newMode != Modes.None)
+        {
             SetMode(newMode);
             newMode = Modes.None;
         }
@@ -60,7 +62,7 @@ public class ModeController : MonoBehaviour
 
     public void SetMode(string newMode)
     {
-        SetMode((Modes)Enum.Parse(typeof(Modes), newMode));
+        SetMode((Modes) Enum.Parse(typeof(Modes), newMode));
     }
 
     // change the mode. This includes updating scene, e.g. (de)activating the thermometer or UI
@@ -73,21 +75,22 @@ public class ModeController : MonoBehaviour
 //            AnimationController.RunAnim(true);
         }
 
-        currentMode = modes[(int)newMode];
+        currentMode = modes[(int) newMode];
         UpdateScene();
     }
 
     // (de)activate objects in the scene, as well as the menu
-    private void UpdateScene() { 
+    private void UpdateScene()
+    {
         // I don't think a text declaring the current mode is necessary
         // ModeText.Inst.OnModeChange();
 
         if (Thermometer.temperature != -1)
             // activate the thermometer when changing into temperature mode, else deactivate it
-            Thermometer.Inst.gameObject.SetActive(modes[(int)currentMode.mode].showTemp);
+            Thermometer.Inst.gameObject.SetActive(modes[(int) currentMode.mode].showTemp);
 
         // deactivate the structure if it shouldn't be shown, else activate it
-        atomStructure.SetActive(!modes[(int)currentMode.mode].hideAtoms);
+        atomStructure.SetActive(!modes[(int) currentMode.mode].hideAtoms);
 
         if (currentMode.mode == Modes.Explorer)
         {
@@ -100,12 +103,13 @@ public class ModeController : MonoBehaviour
             if (lg.gameObject.activeSelf)
             {
                 // activate the symbols of the controller, if changing into a mode which can play an animation, else deactivate them
-                if (modes[(int)currentMode.mode].showTemp || modes[(int)currentMode.mode].showRelaxation)
+                if (modes[(int) currentMode.mode].showTemp || modes[(int) currentMode.mode].showRelaxation)
                 {
                     LaserGrabber.controllerSymbols[(int) lg.ctrlLayer].Symbols.SetActive(true);
                     LaserGrabber.controllerSymbols[(int) lg.ctrlLayer].SetSymbol();
                 }
-                else {
+                else
+                {
                     GameObject symbols = LaserGrabber.controllerSymbols[(int) lg.ctrlLayer].Symbols;
                     if (symbols != null)
                         symbols.SetActive(false);
@@ -116,7 +120,7 @@ public class ModeController : MonoBehaviour
                 lg.laser.SetActive(false);
                 lg.readyForResize = false;
                 lg.InfoText.gameObject.SetActive(false);
-        }
+            }
     }
 
     // determine which panels and buttons should be activated/deactivated
@@ -128,8 +132,9 @@ public class ModeController : MonoBehaviour
         {
             ExplorerMenuController.Inst.OnModeStart();
         }
+
         MdMenuController.Inst.SetState(currentMode.showTemp &&
-                                                SimulationModeManager.CurrMode==SimModes.MD);
+                                       SimulationModeManager.CurrMode == SimModes.MD);
         //ModeMenuController.inst.SetState(currentMode.mode == Modes.Menu);
         //ModeMenuController.inst.OnModeChange();
         if (currentMode.mode == Modes.Calculate)
@@ -140,7 +145,7 @@ public class ModeController : MonoBehaviour
         bool modeCanHaveAnimation = currentMode.mode == Modes.Explorer || currentMode.mode == Modes.Calculate;
         AnimationController.Inst.enabled = modeCanHaveAnimation;
         if (!modeCanHaveAnimation)
-        {        
+        {
             AnimationMenuController.Inst.SetState(false);
         }
 
@@ -160,5 +165,7 @@ public class ModeController : MonoBehaviour
 
         PeriodicTable.Inst.SetState(false);
         // ModeBar.Inst.UpdateButtons(currentMode.mode.ToString());
+
+
     }
 }

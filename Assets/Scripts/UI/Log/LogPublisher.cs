@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.VersionControl;
 using UnityEngine;
 
 namespace UI.Log
@@ -30,7 +29,6 @@ namespace UI.Log
         public static void RegisterSubscriber(LogSubscriber subscriber, ErrorSeverity[] msgTypes)
         {
             _listeners.Add(subscriber, msgTypes);
-            print(subscriber.name + " registered.");
         }
 
         /// <summary>
