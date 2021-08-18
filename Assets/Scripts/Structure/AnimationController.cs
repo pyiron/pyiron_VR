@@ -18,6 +18,8 @@ public class AnimationController : MonoBehaviour
     private static float pauseDuration = 1;
     private static float pauseTimer;
 
+    private static bool halfSpeedFlag;
+
 //    private bool waitFrame;
 
     // a timer, which counts when the program should go a frame forward or backwards, when keeping the one frame forward button pressed
@@ -86,7 +88,7 @@ public class AnimationController : MonoBehaviour
         ProgressBar.Inst.UpdateBar();
     }
 
-    void Update () {
+    void FixedUpdate () {
         if (run_anim)
         {
             if (pauseTimer > 0)
@@ -95,7 +97,7 @@ public class AnimationController : MonoBehaviour
             }
             else
             {
-                UpdateStructure();
+                //UpdateStructure();
 //            if (!waitFrame)
 //            {
 //                Show();
@@ -112,7 +114,21 @@ public class AnimationController : MonoBehaviour
                 //    pauseTimer = pauseDuration;
                 //}
 
-                ChangeFrame(frame + 1, true);
+                int[] stepChanges = {-2, -1, -1, 1, 1, 2};
+                
+                if (animSpeed == 2 || animSpeed == 3)
+                {
+                    print(halfSpeedFlag);
+                    halfSpeedFlag = !halfSpeedFlag;
+                    if (halfSpeedFlag)
+                    {
+                        ChangeFrame(frame + stepChanges[animSpeed], true);
+                    }
+                }
+                else
+                {
+                    ChangeFrame(frame + stepChanges[animSpeed], true);
+                }
             }
         }
         
@@ -164,7 +180,12 @@ public class AnimationController : MonoBehaviour
 
     internal static void ChangeAnimSpeed(int change)
     {
-        Debug.LogWarning("Function not implemented at the moment");
+        //Debug.LogWarning("Function not implemented at the moment");
+        animSpeed += change;
+        // bound the speed to between 0 and 5
+        animSpeed = animSpeed < 0 ? 0 : animSpeed;
+        animSpeed = animSpeed > 5 ? 5 : animSpeed;
+
         // // send Python the order to play the animation faster. if it isn't already at it's fastest speed
         // if (change > 0)
         //     if (animSpeed + change <= 5)
