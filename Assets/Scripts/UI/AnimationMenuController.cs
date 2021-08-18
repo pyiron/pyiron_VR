@@ -43,6 +43,8 @@ public class AnimationMenuController : MenuController {
             AnimationController.move_one_frame(false);
         else if (btn_txt.text == "Reset animation")
             AnimationController.ResetAnimation();
+        else 
+            Debug.LogWarning("Unknown Button: " + btn_txt.text);
     }
 
     public void OnToggleChange(Toggle tog)

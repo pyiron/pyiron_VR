@@ -15,8 +15,8 @@ public class AnimationController : MonoBehaviour
 //    private static float next_time;
 
     [Tooltip("The time the animation waits before restarting the animation in seconds")]
-    public float pauseDuration = 1;
-    private float pauseTimer;
+    private static float pauseDuration = 1;
+    private static float pauseTimer;
 
 //    private bool waitFrame;
 
@@ -61,6 +61,31 @@ public class AnimationController : MonoBehaviour
         AnimationMenuController.Inst.SetState(false);
     }
 
+    private static void ChangeFrame(int newFrame, bool setPauseTimer = false)
+    {
+
+        frame = newFrame;
+        if (frame >= positionData.Length)
+        {
+            frame = 0;
+            if (setPauseTimer)
+            {
+                pauseTimer = pauseDuration;
+            }
+        }
+        else if (frame < 0)
+        {
+            frame = positionData.Length - 1;
+            if (setPauseTimer)
+            {
+                pauseTimer = pauseDuration;
+            }
+        }
+        
+        UpdateStructure();
+        ProgressBar.Inst.UpdateBar();
+    }
+
     void Update () {
         if (run_anim)
         {
@@ -78,14 +103,16 @@ public class AnimationController : MonoBehaviour
 //                return;
 //            }
 
-                ProgressBar.Inst.UpdateBar();
+                //ProgressBar.Inst.UpdateBar();
+                //
+                //frame += 1;
+                //if (frame >= positionData.Length)
+                //{
+                //    frame = 0;
+                //    pauseTimer = pauseDuration;
+                //}
 
-                frame += 1;
-                if (frame >= positionData.Length)
-                {
-                    frame = 0;
-                    pauseTimer = pauseDuration;
-                }
+                ChangeFrame(frame + 1, true);
             }
         }
         
@@ -156,7 +183,14 @@ public class AnimationController : MonoBehaviour
 /// </summary>
 /// <param name="forward"></param>
     public static void move_one_frame(bool forward=true) {
-    Debug.LogWarning("Function not implemented at the moment");
+    //Debug.LogWarning("Function not implemented at the moment");
+    
+    if (forward)
+        ChangeFrame(frame + 1);
+    else
+        //frame = (GetCurrFrameData().frames - (Mod(GetCurrFrameData().frames - frame, GetCurrFrameData().frames))) - 1;
+        ChangeFrame(frame - 1);
+    
 //         SimulationMenuController.jobLoaded = true;
 //         if (forward)
 //             frame = Mod((frame + 1), StructureDataOld.GetCurrFrameData().frames);

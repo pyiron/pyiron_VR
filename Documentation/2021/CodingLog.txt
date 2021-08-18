@@ -33,6 +33,9 @@ The new design included:
 - Code Documentaion and cleanup
 
 1.5.2020 - 31.5.2020
+- Added a filter function for the Publisher-Subscriber pattern for messages/logs
+- The main Panel now always stays in the middle
+- Fixed a bug that the order of the log entries was sometimes wrong
 
 
 1.6.2020 - 31.6.2020
