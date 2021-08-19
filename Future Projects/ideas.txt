@@ -203,12 +203,13 @@ Todo:
 ? 73.	LOW PRIO fix bug when server closes after timeout
   74.	DONE scrollbar for folders in explorer
 ! 75.	TODO put fps and error msg directly under/above the main panel, instead of in the middle or adjust the main panels
-! 76.	TODO Reimplement Step Forward
-! 77.	TODO Reimplement Speed Change
+  76.	DONE Reimplement Step Forward
+  77.	DONE Reimplement Speed Change
 ! 78. 	TODO 2 Project modes for view and edit
 ! 79. 	TODO Kurzanleitung der Controller Tasten 
 ! 80. 	TODO DELETE button entfernen für existierende Strukturen
 ! 81. 	TODO implement View mode: projekt ändern, bloß noch view modi erlauben 
+! 82.	TODO try to improve performance by rounding position values
 
 
 Time needed for sending a Message sync to python: 0.05s = 50ms

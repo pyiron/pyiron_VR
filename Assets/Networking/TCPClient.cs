@@ -71,8 +71,8 @@ namespace Networking
             if (TaskNumIn > TaskNumOut)
             {
                 // check if new data has arrived, without blocking
-                string input = ListenForInput(shouldReturn: true);
-                if (input != "")
+                ReturnedMessage input = ListenForInput(shouldReturn: true);
+                if (input.msg != "")
                 {
                     // a new message from python has arrived. Call the callback method
                     if (_callbacks.Count == 0)
@@ -84,7 +84,7 @@ namespace Networking
                         Action<string> callback = _callbacks.Dequeue();
                         if (callback != null)
                         {
-                            callback(input);
+                            callback(input.msg);
                         }
                     }
                 }
@@ -168,7 +168,7 @@ namespace Networking
         /// <param name="readAsync"></param>
         /// <param name="shouldReturn"></param>
         /// <returns></returns>
-        private static string
+        private static ReturnedMessage
             ListenForInput(bool readAsync = true, bool shouldReturn = false) // doesnt freeze if shouldReturn=true
         {
             // Message protocol: len_of_message;messagelen_of_next_message;next_message
@@ -188,7 +188,7 @@ namespace Networking
                     LogPublisher.ReceiveLogMsg("Couldn't read the TCP stream. Please check that you are still connected to" +
                                              " the internet!");
 
-                    return "";
+                    return new ReturnedMessage("");
                 }
             }
 
@@ -213,7 +213,7 @@ namespace Networking
                     if (newMsg == "")
                     {
                         print("Currently getting no response from the server");
-                        return "";
+                        return new ReturnedMessage("");
                     }
 
                     recBuffer.Append(newMsg);
@@ -223,7 +223,7 @@ namespace Networking
                         break;
                     }
 
-                    if (shouldReturn || !ProgramSettings.programIsRunning) return "";
+                    if (shouldReturn || !ProgramSettings.programIsRunning) return new ReturnedMessage("");
                     // todo: some performance tests should be done
                 }
 
@@ -234,7 +234,7 @@ namespace Networking
                 if (_msgLen == -1)
                 {
                     _msgLen = 0;
-                    return "";
+                    return new ReturnedMessage("");
                 }
 
                 ReturnedMsg = "";
@@ -252,7 +252,7 @@ namespace Networking
                 {
                     if (count <= 0)
                     {
-                        return "";
+                        return new ReturnedMessage("");
                     }
 
                     count--;
@@ -282,7 +282,7 @@ namespace Networking
                 if (newMsg == "")
                 {
                     print("Getting no response from the server");
-                    return "";
+                    return new ReturnedMessage("");
                 }
 
                 recBuffer.Append(newMsg);
@@ -302,7 +302,8 @@ namespace Networking
                 }
             }
 
-            return ReturnedMsg;
+            print("Ret " + ReturnedMsg);
+            return new ReturnedMessage(ReturnedMsg, true);
         }
         #endregion
 
@@ -322,7 +323,12 @@ namespace Networking
                 return msgRes;
             }
 
-            return ListenForInput(readAsync: false);
+            ReturnedMessage returnedMsg = ListenForInput(readAsync: false);
+            if (!returnedMsg.msgIsComplete)
+            {
+                return "";
+            }
+            return returnedMsg.msg;
         }
 
         /// <summary> 	
@@ -414,6 +420,24 @@ namespace Networking
                 string rec = SendMsgToPython(false, "end server");
                 print("Closed the server: " + rec);
             }
+        }
+    }
+
+    public struct ReturnedMessage
+    {
+        public string msg;
+        public bool msgIsComplete;
+        
+        public ReturnedMessage(string returnedMsg)
+        {
+            msg = returnedMsg;
+            msgIsComplete = false;
+        }
+
+        public ReturnedMessage(string returnedMsg, bool isComplete)
+        {
+            msg = returnedMsg;
+            msgIsComplete = isComplete;
         }
     }
 }

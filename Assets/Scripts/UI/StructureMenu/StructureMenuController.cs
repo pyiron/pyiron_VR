@@ -149,6 +149,6 @@ public class StructureData
     public string formula;
 
     public Vector3[] positions;
-
+    
     public Vector3[] cell;
 }
