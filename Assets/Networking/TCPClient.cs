@@ -56,7 +56,9 @@ namespace Networking
         // buffer all incoming data. Needed to deal with the TCP stream
         private static StringBuilder recBuffer = new StringBuilder();
 
-        private static Queue<Action<string>> _callbacks = new Queue<Action<string>>();
+        private static Queue<CallbackFunction> _callbacks = new Queue<CallbackFunction>();
+        
+        private static CallbackFunction currentCallback;
 
         #region Monobehaviour Callbacks
 
@@ -70,21 +72,31 @@ namespace Networking
             // after sending a message to Python, check if a response arrived
             if (TaskNumIn > TaskNumOut)
             {
-                // check if new data has arrived, without blocking
-                ReturnedMessage input = ListenForInput(shouldReturn: true);
-                if (input.msg != "")
+                if (currentCallback.callback == null)
                 {
                     // a new message from python has arrived. Call the callback method
                     if (_callbacks.Count == 0)
                     {
                         Debug.LogWarning("Empty callback queue. Message gets discarded.");
+                        return;
                     }
-                    else
+                       
+                    currentCallback = _callbacks.Dequeue();
+                }
+                
+                // check if new data has arrived, without blocking
+                ReturnedMessage input = ListenForInput(shouldReturn: true, returnIncompleteMsgs:currentCallback.callIfIncomplete);
+                if (input.msg != "")
+                {
+                    if (input.msgIsComplete || currentCallback.callIfIncomplete)
                     {
-                        Action<string> callback = _callbacks.Dequeue();
-                        if (callback != null)
+                        if (currentCallback.callback != null)
                         {
-                            callback(input.msg);
+                            currentCallback.callback(input);
+                            if (input.msgIsComplete)
+                            {
+                                currentCallback.callback = null;
+                            }
                         }
                     }
                 }
@@ -169,7 +181,7 @@ namespace Networking
         /// <param name="shouldReturn"></param>
         /// <returns></returns>
         private static ReturnedMessage
-            ListenForInput(bool readAsync = true, bool shouldReturn = false) // doesnt freeze if shouldReturn=true
+            ListenForInput(bool readAsync = true, bool shouldReturn = false, bool returnIncompleteMsgs=false) // doesnt freeze if shouldReturn=true
         {
             // Message protocol: len_of_message;messagelen_of_next_message;next_message
             // Example: 13;first message4;done
@@ -248,16 +260,6 @@ namespace Networking
             while (true)
                 //for (int i = 0; i < 100000; i++)	
             {
-                if (readAsync)
-                {
-                    if (count <= 0)
-                    {
-                        return new ReturnedMessage("");
-                    }
-
-                    count--;
-                }
-
                 // check if the complete message has been read
                 if (recBuffer.Length >= _msgLen)
                 {
@@ -265,6 +267,24 @@ namespace Networking
                     ReturnedMsg = recBuffer.ToString(0, _msgLen);
                     RemoveString(ReturnedMsg.Length);
                     break;
+                }
+                
+                // return from time to time
+                if (readAsync)
+                {
+                    if (count <= 0)
+                    {
+                        ReturnedMsg = recBuffer.ToString();
+                        if (returnIncompleteMsgs)
+                        {
+                            recBuffer.Clear();
+                            _msgLen -= ReturnedMsg.Length;
+                        }
+
+                        return new ReturnedMessage(ReturnedMsg);
+                    }
+
+                    count--;
                 }
 
                 // try to read input from the stream
@@ -334,7 +354,8 @@ namespace Networking
         /// <summary> 	
         /// Send a message to server using socket connection. 	
         /// </summary> 	
-        public static string SendMsgToPython(bool hasReturnValue, string msg, bool sendAsync = true, Action<string> callback=null)
+        public static string SendMsgToPython(bool hasReturnValue, string msg, bool sendAsync = true,
+            Action<ReturnedMessage> callback=null, bool returnIncompleteMsgs=false)
         {
             print("Sending: " + msg);
             
@@ -361,7 +382,7 @@ namespace Networking
                     // Write byte array to socketConnection stream.    
                     if (sendAsync)
                     {
-                        _callbacks.Enqueue(callback);
+                        _callbacks.Enqueue(new CallbackFunction(callback, returnIncompleteMsgs));
                         stream.WriteAsync(clientMessageAsByteArray, 0, clientMessageAsByteArray.Length);
                     }
                     else
@@ -438,6 +459,18 @@ namespace Networking
         {
             msg = returnedMsg;
             msgIsComplete = isComplete;
+        }
+    }
+
+    public struct CallbackFunction
+    {
+        public Action<ReturnedMessage> callback;
+        public bool callIfIncomplete;
+
+        public CallbackFunction(Action<ReturnedMessage> callback, bool callIfIncomplete)
+        {
+            this.callback = callback;
+            this.callIfIncomplete = callIfIncomplete;
         }
     }
 }

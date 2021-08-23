@@ -102,6 +102,9 @@ public class ExplorerMenuController : MenuController {
                 interactable:opt!=SimulationMenuController.jobName);
             btn.GetComponent<OptionButton>().isJob = true;
             
+            print(jobSizes);
+            print(jobSizes.Length);
+            
             if (jobSizes != null && i < jobSizes.Length)
             {
                 // color the button according to the expected loading time
@@ -184,10 +187,10 @@ public class ExplorerMenuController : MenuController {
             PythonCmd.GetJobSizes, OnJobSizesReceived);
     }
 
-    public void OnJobSizesReceived(string data)
+    public void OnJobSizesReceived(ReturnedMessage data)
     {
         print("JobSizes: " + data);
-        int[] jobSizes = JsonUtility.FromJson<JobSizes>(data).jobSizes;
+        int[] jobSizes = JsonUtility.FromJson<JobSizes>(data.msg).jobSizes;
         ShowNewOptions(folderData, jobSizes);
     }
 

@@ -20,7 +20,7 @@ public class AnimationController : MonoBehaviour
 
     private static bool halfSpeedFlag;
 
-//    private bool waitFrame;
+    //    private bool waitFrame;
 
     // a timer, which counts when the program should go a frame forward or backwards, when keeping the one frame forward button pressed
     //private float _moveOneFrameTimer = -1;
@@ -45,7 +45,12 @@ public class AnimationController : MonoBehaviour
     public void SetNewAnimation(Vector3[][] newData)
     {
         RunAnim(true);
-        frame = 0;
+        // TODO: think of a better solution how to set it to 0 on the first time a job is received!!
+        if (StructureLoader.isFirstDatapart)
+        {
+            frame = 0;
+        }
+
         positionData = newData;
         AnimationMenuController.Inst.SetState(true);
 //        Show();

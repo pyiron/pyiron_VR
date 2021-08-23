@@ -25,10 +25,10 @@ public class OptionButton : MonoBehaviour, IButton
         }
         
         PythonExecutor.SendOrderAsync(true, 
-            PythonCmd.LoadJob(jobName), OnStructureDataReceived);
+            PythonCmd.LoadJob(jobName), OnStructureDataReceived, returnIncompleteMsgs:true);
     }
 
-    public static IEnumerator HandleLoad(string jobName)
+    /*public static IEnumerator HandleLoad(string jobName)
     {
         // send the order to load the structure
         //PythonExecuter.SendOrderAsync(PythonScript.executor, PythonCommandType.eval_l, 
@@ -47,13 +47,16 @@ public class OptionButton : MonoBehaviour, IButton
         string result = TCPClient.ReturnedMsg;
 
         OnStructureDataReceived(result);
-    }
+    }*/
 
-    private static void OnStructureDataReceived(string data)
+    private static void OnStructureDataReceived(ReturnedMessage data)
     {
         StructureLoader.LoadAnimation(data);
-        
-        ExplorerMenuController.Inst.Activate();
+
+        if (data.msgIsComplete)
+        {
+            ExplorerMenuController.Inst.Activate();
+        }
     }
 
     public string GetOptionText()

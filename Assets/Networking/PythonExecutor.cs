@@ -28,7 +28,8 @@ namespace Networking
         /// <param name="order">The command that should be executed.</param>
         /// <param name="onReceiveCallback">The method that will be called when the response from Python arrives.</param>
         /// <returns></returns>
-        public static void SendOrderAsync(bool hasReturnValue, string order, Action<string> onReceiveCallback)
+        public static void SendOrderAsync(bool hasReturnValue, string order, Action<ReturnedMessage> onReceiveCallback,
+            bool returnIncompleteMsgs=false)
         {
             // show that the program is loading
             LogPublisher.ReceiveLogMsg(LogPublisher.LoadingMsg, LogPublisher.ErrorSeverity.Status);
@@ -37,7 +38,8 @@ namespace Networking
             Utilities.DeactivateInteractables();
 
             // send the message using TCP
-            TCPClient.SendMsgToPython(hasReturnValue, order, callback:onReceiveCallback);
+            TCPClient.SendMsgToPython(hasReturnValue, order, callback:onReceiveCallback,
+                returnIncompleteMsgs:returnIncompleteMsgs);
         }
     }
 

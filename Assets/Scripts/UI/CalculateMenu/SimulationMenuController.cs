@@ -71,12 +71,15 @@ public class SimulationMenuController : MenuController
         }
     }
 
-    private void OnJobLoaded(string job)
+    private void OnJobLoaded(ReturnedMessage job)
     {
         StructureLoader.LoadAnimation(job);
         // Load the information of the old job. The structure should have been set in Explorer already
         // PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.exec_l, order);
-        UpdatePanels();
+        if (job.msgIsComplete)
+        {
+            UpdatePanels();
+        }
     }
     
     /*public void SetNIonicSteps(Dropdown dropdown)
@@ -98,11 +101,14 @@ public class SimulationMenuController : MenuController
         return folderData.nodes.Contains(jobName);
     }
 
-    private void OnJobdataReceived(string data)
+    private void OnJobdataReceived(ReturnedMessage data)
     {
-        // handle the response
-        Activate();
-        
+        if (data.msgIsComplete)
+        {
+            // handle the response
+            Activate();
+        }
+
         ActionPanelController.Inst.UpdateButtons(true);
 
         StructureLoader.LoadAnimation(data);
@@ -126,7 +132,7 @@ public class SimulationMenuController : MenuController
         string order = PythonCmd.CalculateJob(jobData);
 
         // load the new structure in another coroutine
-        PythonExecutor.SendOrderAsync(true, order, OnJobdataReceived);
+        PythonExecutor.SendOrderAsync(true, order, OnJobdataReceived, returnIncompleteMsgs:true);
 
         print("Job calculation started");
     }
