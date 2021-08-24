@@ -53,10 +53,10 @@ public class OptionButton : MonoBehaviour, IButton
     {
         StructureLoader.LoadAnimation(data);
 
-        if (data.msgIsComplete)
-        {
-            ExplorerMenuController.Inst.Activate();
-        }
+        //if (data.msgIsComplete)
+        //{
+        ExplorerMenuController.Inst.Activate();
+        //}
     }
 
     public string GetOptionText()

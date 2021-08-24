@@ -41,6 +41,7 @@ The new design included:
 1.6.2020 - 31.6.2020
 - Reimplemented going one step forward/backward in the animation
 - Reimplemented changing the speed of the animation
+- Stream animations instead of sending them all at once
 
 1.7.2020 - 30.7.2020
 

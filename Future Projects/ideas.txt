@@ -197,7 +197,7 @@ Todo:
 - 67.	ASK  Add a Delete button in the Explorer to delete Folders
 ! 68.	TODO Allow to move structure using joystick
 ! 69.	TODO Fix garbage bin
-!! 70. 	TODO Stream animations instead of sending them all at once
+  70. 	DONE Stream animations instead of sending them all at once
   71.	DONE (for now) Increase performance
   72. 	DONE scrollbar for jobs in explorer
 ? 73.	LOW PRIO fix bug when server closes after timeout
@@ -210,6 +210,10 @@ Todo:
 ! 80. 	TODO DELETE button entfernen für existierende Strukturen
 ! 81. 	TODO implement View mode: projekt ändern, bloß noch view modi erlauben 
 ! 82.	TODO try to improve performance by rounding position values
+  83.	DONE handle case when the first datapart does not contain the first position of the atoms
+! 84. 	TODO fix color bug of atoms that came with streaming
+! 85. 	TODO don't show hourglass while presenting the still streaming animation
+! 86. 	TODO improve performance while streaming by reusing the old position data
 
 
 Time needed for sending a Message sync to python: 0.05s = 50ms

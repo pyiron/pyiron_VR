@@ -60,9 +60,22 @@ public class StructureLoader
         }
 
         string newStructureDataBuffer = "";
+        string msgBackup = structureDataBuffer + data.msg;
+        if (isFirstDatapart)
+        {
+            data.msg = structureDataBuffer + data.msg;
+            structureDataBuffer = "";
+        }
         if (!data.msgIsComplete)
         {
-            // TODO: Only part of the structure data has arrived yet. Cut off the last bit, so that a valid structure can be read out
+            if (isFirstDatapart && !data.msg.Contains("\"positions\": ["))
+            {
+                structureDataBuffer += data.msg;
+                // At least the data for one whole frame is needed, make sure this is true and handle case if it is not
+                return;
+            }
+            
+            // Only part of the structure data has arrived yet. Cut off the last bit, so that a valid structure can be read out
             int lastFullPosInd = data.msg.LastIndexOf('}');
             if (data.msg.Length > lastFullPosInd + 3)
             {
@@ -90,14 +103,18 @@ public class StructureLoader
         }
         structureDataBuffer = newStructureDataBuffer;
         
-        //Debug.Log("debug : " + data.msg);
+        Debug.Log("debug : " + data.msg);
 
         StructureData structureData = JsonUtility.FromJson<StructureData>(data.msg);
-        /*if (structureData.positions.Length < structureData.size)
+        
+        if (structureData.positions.Length < structureData.size)
         {
-            // TODO: At least the data for one whole frame is needed, make sure this is true and handle case if it is not
+
+            structureDataBuffer = msgBackup;
+            // At least the data for one whole frame is needed, make sure this is true and handle case if it is not
             return;
-        }*/
+        }
+        
         int structureSize = structureData.size == 0 ? Structure.Inst.AtomAmount() : structureData.size;
         Vector3[][] allPoses = GetFramePositions(structureData.positions, structureSize);
         if (isFirstDatapart)
