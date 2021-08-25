@@ -30,7 +30,7 @@ public class HourglassActivator : MonoBehaviour {
 	
 	void Update () {
         // check if the hourglass is deactivated while it should be activated or vice versa
-        if ((TCPClient.TaskNumOut != TCPClient.TaskNumIn) != Hourglass.inst.gameObject.activeSelf)
+        if (TCPClient.IsLoading() != Hourglass.inst.gameObject.activeSelf)
             // check if the hourglass just has to be deactivated or if the timer is already <= 0
             if (Hourglass.inst.gameObject.activeSelf || timer <= 0)
             {

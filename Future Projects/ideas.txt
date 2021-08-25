@@ -211,8 +211,8 @@ Todo:
 ! 81. 	TODO implement View mode: projekt ändern, bloß noch view modi erlauben 
 ! 82.	TODO try to improve performance by rounding position values
   83.	DONE handle case when the first datapart does not contain the first position of the atoms
-! 84. 	TODO fix color bug of atoms that came with streaming
-! 85. 	TODO don't show hourglass while presenting the still streaming animation
+  84. 	DONE fix color bug of atoms that came with streaming
+  85. 	DONE don't show hourglass while presenting the still streaming animation
   86. 	DONE improve performance while streaming by reusing the old position data
 ! 87. 	TODO improve performance while streaming by working more efficiently with the strings
 

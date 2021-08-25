@@ -68,6 +68,11 @@ namespace Networking
             Inst = this;
         }
 
+        public static bool IsLoading()
+        {
+            return TaskNumOut != TaskNumIn && StructureLoader.isFirstDatapart;
+        }
+
         private void Update()
         {
             // after sending a message to Python, check if a response arrived

@@ -149,6 +149,8 @@ public class StructureLoader
             Structure.Inst.UpdateStructure(allPoses[0], structureData.elements);
             Boundingbox.Inst.UpdateBoundingBox(structureData.cell);
             HourglassActivator.Inst.transform.localPosition = Boundingbox.Inst.mid;
+            // Deactivate the Loading Message
+            LogPublisher.ReceiveLogMsg("", LogPublisher.ErrorSeverity.Status);
         }
 
         AnimationController.Inst.SetNewAnimation(allPoses);

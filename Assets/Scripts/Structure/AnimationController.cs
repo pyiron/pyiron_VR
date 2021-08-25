@@ -122,7 +122,6 @@ public class AnimationController : MonoBehaviour
                 
                 if (animSpeed == 2 || animSpeed == 3)
                 {
-                    print(halfSpeedFlag);
                     halfSpeedFlag = !halfSpeedFlag;
                     if (halfSpeedFlag)
                     {
