@@ -145,6 +145,7 @@ public class StructureLoader
         Vector3[][] allPoses = GetFramePositions(structureData.positions, structureSize);
         if (isFirstDatapart)
         {
+            Structure.Inst.Activate();
             Structure.Inst.UpdateStructure(allPoses[0], structureData.elements);
             Boundingbox.Inst.UpdateBoundingBox(structureData.cell);
             HourglassActivator.Inst.transform.localPosition = Boundingbox.Inst.mid;

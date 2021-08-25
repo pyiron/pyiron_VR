@@ -26,6 +26,10 @@ public class Structure : MonoBehaviour
 
     public void Activate()
     {
+        if (isActive)
+        {
+            return;
+        }
         isActive = true;
         // set the color of the box to grey
         Boundingbox.Inst.SetColor(Boundingbox.Inst.baseColor);
