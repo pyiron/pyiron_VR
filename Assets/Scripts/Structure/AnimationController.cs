@@ -45,7 +45,6 @@ public class AnimationController : MonoBehaviour
     public void SetNewAnimation(Vector3[][] newData)
     {
         RunAnim(true);
-        // TODO: think of a better solution how to set it to 0 on the first time a job is received!!
         if (StructureLoader.isFirstDatapart)
         {
             frame = 0;
