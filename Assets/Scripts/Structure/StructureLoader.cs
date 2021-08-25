@@ -96,15 +96,11 @@ public class StructureLoader
             int lastFullPosInd = data.msg.LastIndexOf('}');
             if (dataMsg.Length > lastFullPosInd + 3)
             {
-                //newStructureDataBuffer = dataMsg.ToString(lastFullPosInd + 3, dataMsg.Length - (lastFullPosInd + 3));
-                newStructureDataBuffer = data.msg.Substring(lastFullPosInd + 3);
+                newStructureDataBuffer = dataMsg.ToString(lastFullPosInd + 3, dataMsg.Length - (lastFullPosInd + 3));
+                //newStructureDataBuffer = data.msg.Substring(lastFullPosInd + 3);
             }
 
-            //Debug.Log("0t " + (data.msg.Length - lastFullPosInd - 1));
-            //Debug.Log("1t " + (dataMsg.Length - lastFullPosInd - 1));
-            //Debug.Log("2t " + (lastFullPosInd + 1));
-            //Debug.Log("3t " + dataMsg.Length);
-            dataMsg.Remove(lastFullPosInd + 1, dataMsg.Length - lastFullPosInd - 1);
+            dataMsg.Remove(lastFullPosInd + 1, dataMsg.Length - (lastFullPosInd + 1));
             dataMsg.Append("]}");
             //data.msg = data.msg.Substring(0,  lastFullPosInd + 1) + "]}";
             //Debug.Log("Received incomplete msg :)");
@@ -129,7 +125,7 @@ public class StructureLoader
             //data.msg = "{\"positions\": [" + data.msg;
         }
 
-        structureDataBuffer = new StringBuilder(newStructureDataBuffer.ToString());
+        structureDataBuffer = new StringBuilder(newStructureDataBuffer);
         //structureDataBuffer = newStructureDataBuffer;
         
         //Debug.Log("debug : " + data.msg.Length);

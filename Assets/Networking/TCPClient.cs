@@ -22,6 +22,7 @@ namespace Networking
         [Tooltip("How many blocks should be read in one frame when reading asynchronous? " +
                  "Higher blocks_per_frame means shorter loading times, but less fps while loading")]
         [SerializeField] private int blocksPerFrame = 2;
+        //public static int blocksPerFrame = 5;
 
         /// <summary>
         /// Shows how many messages have been received. If TaskNumOut > TaskNumIn, then the client is still
@@ -51,7 +52,7 @@ namespace Networking
         private static int _msgLen;
 
         // the size of message-packets send from Python to Unity. Should be the same as in Python
-        private static int BLOCKSIZE = 4096;
+        public static int BLOCKSIZE = 4096;
 
         // buffer all incoming data. Needed to deal with the TCP stream
         private static StringBuilder recBuffer = new StringBuilder();
@@ -224,7 +225,7 @@ namespace Networking
                     // check if the server disconnected
                     if (newMsg == "")
                     {
-                        print("Currently getting no response from the server");
+                        //print("Currently getting no response from the server");
                         return new ReturnedMessage("");
                     }
 
@@ -253,6 +254,7 @@ namespace Networking
             }
 
             int count = Inst.blocksPerFrame;
+            //int count = blocksPerFrame;
 
             // Receive data until at least the whole message has been received. Additional data will be bufferred
             // Warning: If the message is really long and the connection really slow this loop could lead to a temporary
@@ -322,7 +324,7 @@ namespace Networking
                 }
             }
 
-            print("Ret " + ReturnedMsg);
+            //print("Ret " + ReturnedMsg);
             return new ReturnedMessage(ReturnedMsg, true);
         }
         #endregion

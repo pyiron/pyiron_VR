@@ -213,8 +213,8 @@ Todo:
   83.	DONE handle case when the first datapart does not contain the first position of the atoms
 ! 84. 	TODO fix color bug of atoms that came with streaming
 ! 85. 	TODO don't show hourglass while presenting the still streaming animation
-! 86. 	TODO improve performance while streaming by reusing the old position data
-
+  86. 	DONE improve performance while streaming by reusing the old position data
+! 87. 	TODO improve performance while streaming by working more efficiently with the strings
 
 Time needed for sending a Message sync to python: 0.05s = 50ms
 
