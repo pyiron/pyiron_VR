@@ -44,6 +44,10 @@ The new design included:
 - Stream animations instead of sending them all at once
 
 1.7.2020 - 30.7.2020
+- Improved streaming performance
+- Fix color bug of atoms that came with streaming
+- No loading symbols get shown while streaming a structure
+- Some more bug fixes for streaming
 
 
 1.8.2020 - 31.8.2020
