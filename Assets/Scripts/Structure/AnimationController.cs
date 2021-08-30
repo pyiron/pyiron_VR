@@ -43,9 +43,13 @@ public class AnimationController : MonoBehaviour
         Structure.Inst.UpdateStructure(positionData[frame]);
     }
 
-    public void SetNewAnimation(Vector3[][] newData)
+    public void SetNewAnimation(Vector3[][] newData, bool startAnim=true)
     {
-        RunAnim(true);
+        if (startAnim)
+        {
+            RunAnim(true);
+        }
+
         if (StructureLoader.isFirstDatapart)
         {
             frame = 0;

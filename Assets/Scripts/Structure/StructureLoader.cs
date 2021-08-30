@@ -139,7 +139,7 @@ public class StructureLoader
         structureDataBuffer = new StringBuilder(newStructureDataBuffer);
         //structureDataBuffer = newStructureDataBuffer;
         
-        Debug.Log("debug : " + dataMsg.ToString());
+        //Debug.Log("debug : " + dataMsg.ToString());
 
         StructureData structureData = JsonUtility.FromJson<StructureData>(dataMsg.ToString());
         //StructureData structureData = JsonUtility.FromJson<StructureData>(data.msg);
@@ -169,7 +169,7 @@ public class StructureLoader
             LogPublisher.ReceiveLogMsg("", LogPublisher.ErrorSeverity.Status);
         }
 
-        AnimationController.Inst.SetNewAnimation(allPoses);
+        AnimationController.Inst.SetNewAnimation(allPoses, isFirstDatapart);
         // signal if the next data that will be received is the first part of a new job
         isFirstDatapart = data.msgIsComplete;
         if (data.msgIsComplete)
