@@ -140,7 +140,12 @@ public class StructureLoader
             // At least the data for one whole frame is needed, make sure this is true and handle case if it is not
             return;
         }
-        
+
+        if (structureData.frames > 0)
+        {
+            AnimationController.frameCount = structureData.frames;
+        }
+
         int structureSize = structureData.size == 0 ? Structure.Inst.AtomAmount() : structureData.size;
         Vector3[][] allPoses = GetFramePositions(structureData.positions, structureSize);
         if (isFirstDatapart)

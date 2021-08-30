@@ -12,6 +12,7 @@ public class AnimationController : MonoBehaviour
     public static bool run_anim;
     public static int animSpeed = 4;
     public static int frame;
+    public static int frameCount;
 //    private static float next_time;
 
     [Tooltip("The time the animation waits before restarting the animation in seconds")]

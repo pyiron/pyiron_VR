@@ -41,11 +41,13 @@ public class ProgressBar : MonoBehaviour {
 
     public void UpdateBar()
     {
+        float progress = AnimationController.frameCount > 1 ? 1f * AnimationController.frame / (AnimationController.frameCount - 1) : 1;
         // update the progress of the ProgressBar
-        _anim.SetFloat(Progress,
-            1f * AnimationController.frame / (AnimationController.positionData.Length - 1f));
+        _anim.SetFloat(Progress, progress);
+            //1f * AnimationController.frame / (AnimationController.positionData.Length - 1f));
             
-        ProgressText.text = (AnimationController.frame + 1) + " / " + AnimationController.positionData.Length;
+        // ProgressText.text = (AnimationController.frame + 1) + " / " + AnimationController.positionData.Length;
+        ProgressText.text = (AnimationController.frame + 1) + " / " + AnimationController.frameCount;
             
         // if the text is activated while it should be deactivated deactivate it and vice versa
         if (AnimationController.run_anim != AnimationSpeedText.gameObject.activeSelf)

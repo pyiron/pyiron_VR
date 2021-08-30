@@ -18,7 +18,6 @@ public class Structure : MonoBehaviour
 
     private bool isActive = true;
 
-
     private void Awake()
     {
         Inst = this;
