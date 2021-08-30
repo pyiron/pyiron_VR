@@ -66,6 +66,17 @@ public class StructureLoader
             return;
         }
         
+        // a new task has been given, so the rest of the animation can be skipped
+        if (TCPClient.TaskNumIn > TCPClient.TaskNumOut + 1 || data.msgIsComplete && TCPClient.TaskNumIn > TCPClient.TaskNumOut)
+        {
+            if (data.msgIsComplete)
+            {
+                structureDataBuffer.Clear();
+                isFirstDatapart = true;
+            }
+            return;
+        }
+        
         StringBuilder dataMsg = new StringBuilder(data.msg);
         StringBuilder msgBackup = new StringBuilder(structureDataBuffer.ToString());
 
@@ -128,7 +139,7 @@ public class StructureLoader
         structureDataBuffer = new StringBuilder(newStructureDataBuffer);
         //structureDataBuffer = newStructureDataBuffer;
         
-        //Debug.Log("debug : " + data.msg.Length);
+        Debug.Log("debug : " + dataMsg.ToString());
 
         StructureData structureData = JsonUtility.FromJson<StructureData>(dataMsg.ToString());
         //StructureData structureData = JsonUtility.FromJson<StructureData>(data.msg);

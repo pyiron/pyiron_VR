@@ -12,12 +12,12 @@ The new design included:
 	- new positioning of UI elements
 	- other visual changes
 
-1.2. - 29.2.2020:
+1.2. - 29.2.2021:
 - Updated plugins
 - increased performance
 - to allow to present an infinite number of jobs and folders, the jobs panel and folders panel now have a scrollbar
 
-1.3. - 31.3.2020:
+1.3. - 31.3.2021:
 - Deleted the latest build from the Repo and added it as a Release
 - Updated the ReadMe
 - converted the official CiscoAnyconnect App to an apk so that it can be installed on the Quest
@@ -25,42 +25,41 @@ The new design included:
 - The app now reads out the job sizes for all jobs in the explorer asynchronously and colors the job buttons correspondingly
 - Code cleanup
 
-1.4.2020 - 30.4.2020
+1.4.2020 - 30.4.2021
 - Implemented a new log Panel
 - Implemented a Publisher-Subscriber pattern for the logs
 - Improved existing loading and reconnecting methods and integrated them into the new pattern
 - Added "dismiss" and "Open Log" options for the displayed messages
 - Code Documentaion and cleanup
 
-1.5.2020 - 31.5.2020
+1.5.2020 - 31.5.2021
 - Added a filter function for the Publisher-Subscriber pattern for messages/logs
 - The main Panel now always stays in the middle
 - Fixed a bug that the order of the log entries was sometimes wrong
 
 
-1.6.2020 - 31.6.2020
+1.6.2020 - 31.6.2021
 - Reimplemented going one step forward/backward in the animation
 - Reimplemented changing the speed of the animation
 - Stream animations instead of sending them all at once
 
-1.7.2020 - 30.7.2020
+1.7.2020 - 30.7.2021
 - Improved streaming performance
 - Fix color bug of atoms that came with streaming
 - No loading symbols get shown while streaming a structure
 - Some more bug fixes for streaming
 
+1.8.2020 - 31.8.2021
+- Interactions with the structure are now possible while streaming
 
-1.8.2020 - 31.8.2020
-
-
-1.9.2020 - 30.9.2020
-
-
-1.10.2020 - 31.10.2020:
+1.9.2020 - 30.9.2021
 
 
-1.11.2020 - 30.11.2020
+1.10.2020 - 31.10.2021:
 
 
-1.11.2020 - 31.12.2020:
+1.11.2020 - 30.11.2021
+
+
+1.11.2020 - 31.12.2021:
 
