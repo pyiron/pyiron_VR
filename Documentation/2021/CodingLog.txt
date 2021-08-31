@@ -53,6 +53,8 @@ The new design included:
 - Interactions with the structure are now possible while streaming
 - Streaming can now be cancelled to load a new structure instead
 - fixed bug that the animation couldnt be stopped while streaming
+- Show full frame count and loaded frames
+- Allow to change frame by slide bar
 
 1.9.2020 - 30.9.2021
 
