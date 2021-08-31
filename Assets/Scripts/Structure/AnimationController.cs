@@ -72,7 +72,7 @@ public class AnimationController : MonoBehaviour
         AnimationMenuController.Inst.SetState(false);
     }
 
-    private static void ChangeFrame(int newFrame, bool setPauseTimer = false)
+    public static void ChangeFrame(int newFrame, bool setPauseTimer = false)
     {
 
         frame = newFrame;

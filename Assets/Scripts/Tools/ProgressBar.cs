@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.UI;
 
 // Component of MyObjects/ProgressBar
 // Activates the Progressbar when the current frame and the amount of frames in the animation is known and updates the bar
@@ -10,12 +11,13 @@ public class ProgressBar : MonoBehaviour {
     public static ProgressBar Inst;
     
     // the reference to the animationController of the ProgressBar
-    private Animator _anim;
+    //private Animator _anim;
     // the reference to the TextMeshes of the ProgressBar
     private TextMesh[] _textMeshes;
 
     public TextMesh ProgressText;
     public TextMesh AnimationSpeedText;
+    [SerializeField] private Slider slider;
 
     private static readonly Dictionary<int, string> AnimationSpeedLabels = new Dictionary<int, string>()
     {
@@ -36,14 +38,15 @@ public class ProgressBar : MonoBehaviour {
 
     void Start () {
         // get the reference to the animationController of the ProgressBar
-        _anim = GetComponent<Animator>();
+        //_anim = GetComponent<Animator>();
     }
 
     public void UpdateBar()
     {
         float progress = AnimationController.frameCount > 1 ? 1f * AnimationController.frame / (AnimationController.frameCount - 1) : 1;
         // update the progress of the ProgressBar
-        _anim.SetFloat(Progress, progress);
+        slider.value = progress;
+        //_anim.SetFloat(Progress, progress);
             //1f * AnimationController.frame / (AnimationController.positionData.Length - 1f));
             
         // ProgressText.text = (AnimationController.frame + 1) + " / " + AnimationController.positionData.Length;
@@ -56,5 +59,21 @@ public class ProgressBar : MonoBehaviour {
         // update the text of how fast the anim speed is
         if (AnimationController.run_anim)
             AnimationSpeedText.text = AnimationSpeedLabels[AnimationController.animSpeed];
+    }
+    
+    public void OnSliderValueChanged(float newValue)
+    {
+        bool isBigChange = Mathf.Abs(slider.value * AnimationController.frameCount - AnimationController.frame) >= 1;
+        if (isBigChange && 
+            slider.value <= 1f * AnimationController.positionData.Length / AnimationController.frameCount)
+        {
+            AnimationController.ChangeFrame((int) (slider.value * (AnimationController.frameCount - 1)), false);
+            AnimationController.run_anim = false;
+        }
+        else if (isBigChange)
+        {
+            //slider.value = 1f * AnimationController.frame / AnimationController.frameCount;
+            AnimationController.run_anim = false;
+        }
     }
 }

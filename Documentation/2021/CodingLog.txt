@@ -51,6 +51,8 @@ The new design included:
 
 1.8.2020 - 31.8.2021
 - Interactions with the structure are now possible while streaming
+- Streaming can now be cancelled to load a new structure instead
+- fixed bug that the animation couldnt be stopped while streaming
 
 1.9.2020 - 30.9.2021
 
