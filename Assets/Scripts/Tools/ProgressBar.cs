@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
@@ -18,6 +19,7 @@ public class ProgressBar : MonoBehaviour {
     public TextMesh ProgressText;
     public TextMesh AnimationSpeedText;
     [SerializeField] private Slider slider;
+    [SerializeField] private Slider streamSlider;
 
     private static readonly Dictionary<int, string> AnimationSpeedLabels = new Dictionary<int, string>()
     {
@@ -39,6 +41,11 @@ public class ProgressBar : MonoBehaviour {
     void Start () {
         // get the reference to the animationController of the ProgressBar
         //_anim = GetComponent<Animator>();
+    }
+
+    private void Update()
+    {
+        streamSlider.value = 1f * AnimationController.positionData.Length / AnimationController.frameCount;
     }
 
     public void UpdateBar()
@@ -63,17 +70,18 @@ public class ProgressBar : MonoBehaviour {
     
     public void OnSliderValueChanged(float newValue)
     {
+        if (!UserUsesSlider.userUsesSlider) return;
         bool isBigChange = Mathf.Abs(slider.value * AnimationController.frameCount - AnimationController.frame) >= 1;
         if (isBigChange && 
             slider.value <= 1f * AnimationController.positionData.Length / AnimationController.frameCount)
         {
             AnimationController.ChangeFrame((int) (slider.value * (AnimationController.frameCount - 1)), false);
-            AnimationController.run_anim = false;
+            AnimationController.RunAnim(false);
         }
         else if (isBigChange)
         {
             //slider.value = 1f * AnimationController.frame / AnimationController.frameCount;
-            AnimationController.run_anim = false;
+            AnimationController.RunAnim(false);
         }
     }
 }
