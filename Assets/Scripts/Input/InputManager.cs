@@ -50,7 +50,9 @@ public class InputManager : MonoBehaviour
             LaserGrabber.instances[(int)handRole].WhileHairTriggerDown();
 
         if (ViveInput.GetPressUp(handRole, ControllerButton.Trigger))
-            LaserGrabber.instances[(int)handRole].HairTriggerUp();
+        {
+            LaserGrabber.instances[(int) handRole].HairTriggerUp();
+        }
     }
 
     private void CheckTouchpad(HandRole handRole)

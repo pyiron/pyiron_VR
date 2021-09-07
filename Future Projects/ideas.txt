@@ -216,7 +216,7 @@ Todo:
   86. 	DONE improve performance while streaming by reusing the old position data
 ! 87. 	TODO improve performance while streaming by working more efficiently with the strings
   88.	DONE Allow to stop loading
-! 89.	TODO Show full frame count and loaded frames
+  89.	DONE Show full frame count and loaded frames
   90. 	DONE Allow to change frame by slide bar
 
 Time needed for sending a Message sync to python: 0.05s = 50ms
