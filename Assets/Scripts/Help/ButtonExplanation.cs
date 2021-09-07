@@ -16,6 +16,11 @@ public class ButtonExplanation : MonoBehaviour
     [SerializeField] private GameObject explanationPanel;
 
     [SerializeField] private HandRole handRole;
+    
+    [SerializeField] private ReticlePoser reticle;
+
+    private GameObject lastHoveredObject;
+    private TooltipText lastHoveredObjectTooltip;
 
     private static Dictionary<ControllerButton, string> explanationsLeft = new Dictionary<ControllerButton, string>()
     {
@@ -83,6 +88,16 @@ public class ButtonExplanation : MonoBehaviour
             if (ViveInput.GetPress(handRole, ControllerButton.Trigger))
             {
                 SetButtonText(btn);
+            }
+        }
+
+        if (reticle.hitTarget != null && reticle.hitTarget != lastHoveredObject)
+        {
+            lastHoveredObjectTooltip = reticle.hitTarget.GetComponent<TooltipText>();
+            if (lastHoveredObjectTooltip != null)
+            {
+                SetText(lastHoveredObjectTooltip.text);
+                explanationPanel.SetActive(true);
             }
         }
     }
