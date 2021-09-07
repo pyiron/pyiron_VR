@@ -55,6 +55,7 @@ The new design included:
 - fixed bug that the animation couldnt be stopped while streaming
 - Show full frame count and loaded frames
 - Allow to change frame by slide bar
+- Short explanations of the controller buttons and tooltips for some UI elements
 
 1.9.2020 - 30.9.2021
 

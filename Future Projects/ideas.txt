@@ -206,7 +206,7 @@ Todo:
   76.	DONE Reimplement Step Forward
   77.	DONE Reimplement Speed Change
 ! 78. 	TODO 2 Project modes for view and edit
-! 79. 	TODO Kurzanleitung der Controller Tasten 
+  79. 	DONE Kurzanleitung der Controller Tasten 
 ! 80. 	TODO DELETE button entfernen für existierende Strukturen
 ! 81. 	TODO implement View mode: projekt ändern, bloß noch view modi erlauben 
 ! 82.	TODO try to improve performance by rounding position values

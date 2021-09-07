@@ -4822,7 +4822,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -11716,7 +11716,7 @@ PrefabInstance:
     - target: {fileID: 8381724049134401809, guid: 8457ed876ce7c47469ddcac60745f7e9,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.0000038146973
+      value: 0.0000038146973
       objectReference: {fileID: 0}
     - target: {fileID: 8381724049477885744, guid: 8457ed876ce7c47469ddcac60745f7e9,
         type: 3}
@@ -23217,6 +23217,7 @@ GameObject:
   - component: {fileID: 584349814}
   - component: {fileID: 584349813}
   - component: {fileID: 584349812}
+  - component: {fileID: 584349815}
   m_Layer: 5
   m_Name: HostInput
   m_TagString: Untagged
@@ -23339,6 +23340,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 584349810}
   m_CullTransparentMesh: 0
+--- !u!114 &584349815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 584349810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfe74bcda70086e4592bcd8df514ecae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: Read out the server address from the server output and enter it in the field
+    below
 --- !u!1 &584836103
 GameObject:
   m_ObjectHideFlags: 0
@@ -27569,6 +27584,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 712719429}
   m_CullTransparentMesh: 0
+--- !u!1 &713387300 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8111237964932150113, guid: 60513d73bff529d4990ef85ab4935428,
+    type: 3}
+  m_PrefabInstance: {fileID: 459631953}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &713387304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 713387300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfe74bcda70086e4592bcd8df514ecae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: Construct orthorhombic unit cell instead of primitive cell which is the default.
 --- !u!1 &715278657
 GameObject:
   m_ObjectHideFlags: 0
@@ -52331,6 +52365,7 @@ GameObject:
   - component: {fileID: 1416329835}
   - component: {fileID: 1416329834}
   - component: {fileID: 1416329833}
+  - component: {fileID: 1416329836}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -52451,6 +52486,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1416329831}
   m_CullTransparentMesh: 1
+--- !u!114 &1416329836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1416329831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfe74bcda70086e4592bcd8df514ecae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: Enable or disable button and tooltip information
 --- !u!1 &1417041502
 GameObject:
   m_ObjectHideFlags: 0
@@ -60911,7 +60959,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 0.5}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -71916,7 +71964,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 459631953}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1884997040
+--- !u!114 &1884997043
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
