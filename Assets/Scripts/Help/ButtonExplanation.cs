@@ -25,16 +25,16 @@ public class ButtonExplanation : MonoBehaviour
     private static Dictionary<ControllerButton, string> explanationsLeft = new Dictionary<ControllerButton, string>()
     {
         {ControllerButton.Grip, "Move the UI to the controller or to the back"},
-        {ControllerButton.Trigger, "Interact with the UI or the structure"},
         {ControllerButton.Pad, "Allows to move an object controlled by the laser to the front or distance"},
+        {ControllerButton.Trigger, "Interact with the UI or the structure"},
         {ControllerButton.Menu, "Toggle the laser"},
     };
     
     private static Dictionary<ControllerButton, string> explanationsRight = new Dictionary<ControllerButton, string>()
     {
         {ControllerButton.Grip, "Move the UI to the controller or to the back"},
-        {ControllerButton.Trigger, "Interact with the UI or the structure"},
         {ControllerButton.Pad, "Allows to move an object controlled by the laser to the front or distance"},
+        {ControllerButton.Trigger, "Interact with the UI or the structure"},
     };
 
     private Dictionary<ControllerButton, string> explanations;
@@ -52,6 +52,9 @@ public class ButtonExplanation : MonoBehaviour
     private void SetButtonText(ControllerButton btn)
     {
         // special case: give explanation for resize
+        print("btn == ControllerButton.Trigger" + (btn == ControllerButton.Trigger));
+        print("LaserGrabber.instances[0].attachedObject != null" + (LaserGrabber.instances[0].attachedObject != null));
+        print("LaserGrabber.instances[1].attachedObject != null" + (LaserGrabber.instances[1].attachedObject != null));
         if (btn == ControllerButton.Trigger && 
             (LaserGrabber.instances[0].attachedObject != null || LaserGrabber.instances[1].attachedObject != null))
         {
