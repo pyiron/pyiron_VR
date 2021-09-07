@@ -11716,7 +11716,7 @@ PrefabInstance:
     - target: {fileID: 8381724049134401809, guid: 8457ed876ce7c47469ddcac60745f7e9,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.0000076293945
+      value: -0.0000038146973
       objectReference: {fileID: 0}
     - target: {fileID: 8381724049477885744, guid: 8457ed876ce7c47469ddcac60745f7e9,
         type: 3}
@@ -18113,10 +18113,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1856103000}
     m_Modifications:
+    - target: {fileID: 1446101177854572337, guid: 60513d73bff529d4990ef85ab4935428,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -61
+      objectReference: {fileID: 0}
+    - target: {fileID: 1446101177854572337, guid: 60513d73bff529d4990ef85ab4935428,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 1446101177854572337, guid: 60513d73bff529d4990ef85ab4935428,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -83.5
+      objectReference: {fileID: 0}
     - target: {fileID: 1991078047025558677, guid: 60513d73bff529d4990ef85ab4935428,
         type: 3}
       propertyPath: m_Text
       value: 'Orthorombic:'
+      objectReference: {fileID: 0}
+    - target: {fileID: 4385639510820319016, guid: 60513d73bff529d4990ef85ab4935428,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5447130685918194336, guid: 60513d73bff529d4990ef85ab4935428,
         type: 3}
@@ -71890,6 +71910,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1878163209}
   m_CullTransparentMesh: 0
+--- !u!1 &1884997039 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1630878658624861625, guid: 60513d73bff529d4990ef85ab4935428,
+    type: 3}
+  m_PrefabInstance: {fileID: 459631953}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1884997040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1884997039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfe74bcda70086e4592bcd8df514ecae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: Construct orthorhombic unit cell instead of primitive cell which is the default.
 --- !u!1 &1889337712
 GameObject:
   m_ObjectHideFlags: 0
