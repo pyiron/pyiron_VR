@@ -19,13 +19,15 @@ public class ButtonExplanation : MonoBehaviour
 
     private static Dictionary<ControllerButton, string> explanationsLeft = new Dictionary<ControllerButton, string>()
     {
-        {ControllerButton.Menu, "Move the UI to the controller or to the back"},
+        {ControllerButton.Grip, "Move the UI to the controller or to the back"},
         {ControllerButton.Trigger, "Interact with the UI or the structure"},
         {ControllerButton.Pad, "Allows to move an object controlled by the laser to the front or distance"},
+        {ControllerButton.Menu, "Toggle the laser"},
     };
     
     private static Dictionary<ControllerButton, string> explanationsRight = new Dictionary<ControllerButton, string>()
     {
+        {ControllerButton.Grip, "Move the UI to the controller or to the back"},
         {ControllerButton.Trigger, "Interact with the UI or the structure"},
         {ControllerButton.Pad, "Allows to move an object controlled by the laser to the front or distance"},
     };
