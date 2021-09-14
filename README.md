@@ -134,3 +134,7 @@ With the current configuration, the server stays active forever and can accept m
 * Depending on the network the server is in, sometimes the error "OSError: [Errno 98] Address already in use" occurs. This happens when starting the server quickly after closing it the last time. Usually waiting for a few seconds resolves this error. If not, check that the last process is not running anymore, and if it is, kill it (See point 3).
 * If the server crashed and does not terminate, it can be usually stooped using ctrl + c. If not, it can be killed using ctrl + \.
 * In some cases, this is not possible. If the server is running remote with ssh on a linux system (e.g. the HPC cluster), it can be stopped by opening a second ssh connection. Calling `ps -u <username>` shows all your processes. There should be one python process, which is the one executing the server. Read out the PID of this process and terminate it, using `kill -9 <PID>`.
+
+## Tipps for development
+### Accessing jupyter notebook running on the cluster
+It can be convenient to program directly on the cluster. Using SSH, its easy to use a program such as vim directly on the shell. For bigger changes, I can recommend to start a jupyter notebook with `jupyter-notebook --no-browser` and remember the port it got opened on and then start a new SSH connection with the command `ssh -L 8080:localhost:<your_port> <username>@cmti001.bc.rzg.mpg.de`. You can then enter the link from the jupyter notebook in a browser or enter http://localhost:<your_port>/ and then enter the token on the page.
