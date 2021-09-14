@@ -209,7 +209,7 @@ Todo:
   79. 	DONE Kurzanleitung der Controller Tasten 
 ! 80. 	TODO DELETE button entfernen für existierende Strukturen
 ! 81. 	TODO implement View mode: projekt ändern, bloß noch view modi erlauben 
-! 82.	TODO try to improve performance by rounding position values
+  82.	CANCEL try to improve performance by rounding position values
   83.	DONE handle case when the first datapart does not contain the first position of the atoms
   84. 	DONE fix color bug of atoms that came with streaming
   85. 	DONE don't show hourglass while presenting the still streaming animation
@@ -218,6 +218,9 @@ Todo:
   88.	DONE Allow to stop loading
   89.	DONE Show full frame count and loaded frames
   90. 	DONE Allow to change frame by slide bar
+  91. 	DONE Send message length always in first 4 byte
+! 92. 	TODO Only read the current message in, not always a full block
+! 93. 	TODO Send structure data as binary data after sending the json
 
 Time needed for sending a Message sync to python: 0.05s = 50ms
 

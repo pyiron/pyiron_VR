@@ -58,6 +58,7 @@ The new design included:
 - Short explanations of the controller buttons and tooltips for some UI elements
 
 1.9.2020 - 30.9.2021
+- TCP Message length gets now always send in the first x (set to 4) bytes
 
 
 1.10.2020 - 31.10.2021:

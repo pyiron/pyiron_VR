@@ -53,9 +53,17 @@ namespace Networking
 
         // the size of message-packets send from Python to Unity. Should be the same as in Python
         public static int BLOCKSIZE = 4096;
+        
+        // the amount of bytes that get used to send how long the following message is
+        public static int MSG_LEN_BYTES = 4;
 
-        // buffer all incoming data. Needed to deal with the TCP stream
+        // buffer incoming string data. Needed to deal with the TCP stream
         private static StringBuilder recBuffer = new StringBuilder();
+        
+        // buffer incoming byte data. Needed to deal with the TCP stream
+        private static byte[] byteBuffer;
+        // counts until which value the byteBuffer is filled
+        private static int byteCount;
 
         private static Queue<CallbackFunction> _callbacks = new Queue<CallbackFunction>();
         
@@ -133,6 +141,42 @@ namespace Networking
                 recBuffer.Clear();
             }
         }
+        
+        private static byte[] GetByteMsgAsync(NetworkStream stream, int remainingLen)
+        {
+            // Read incoming stream into byte array. 
+            if (_socketReadTask == null)
+            {
+                _block = new Byte[BLOCKSIZE + 1];
+                _socketReadTask = stream.ReadAsync(_block, 0, BLOCKSIZE);
+            }
+
+            if (!_socketReadTask.IsCompleted)
+            {
+                return null;
+            }
+
+            int len;
+            try
+            {
+                len = _socketReadTask.Result;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
+            _socketReadTask.Dispose();
+            _socketReadTask = null;
+            
+            Array.Resize(ref _block, len);
+            return _block;
+
+            // Convert byte array to string message. 
+            //if (len == 0) return "";
+            //_block[len] = 0;
+            //return Encoding.ASCII.GetString(_block, 0, len);
+        }
 
         private static string GetMsgAsync(NetworkStream stream)
         {
@@ -166,12 +210,25 @@ namespace Networking
             _block[len] = 0;
             return Encoding.ASCII.GetString(_block, 0, len);
         }
-
-        private static string GetMsgSync(NetworkStream stream)
+        
+        private static byte[] GetByteMsgSync(NetworkStream stream, int remainingLen)
         {
-            _block = new Byte[BLOCKSIZE + 1];
+            int length = Math.Min(remainingLen, BLOCKSIZE);
+            _block = new Byte[length];
             // Read incoming stream into byte array. 
-            int len = stream.Read(_block, 0, BLOCKSIZE);
+            int len = stream.Read(_block, 0, length);
+
+            //byte[] newBlock = new Byte[len];
+            Array.Resize(ref _block, len);
+            return _block;
+        }
+
+        private static string GetMsgSync(NetworkStream stream, int remainingLen)
+        {
+            int length = Math.Min(remainingLen, BLOCKSIZE);
+            _block = new Byte[length + 1];
+            // Read incoming stream into byte array. 
+            int len = stream.Read(_block, 0, length);
 
             // Convert byte array to string message. 
             if (len == 0) return "";
@@ -213,30 +270,43 @@ namespace Networking
 //		stream.ReadTimeout = 1000;
             if (_msgLen == 0)
             {
+                if (byteBuffer == null || byteBuffer.Length != MSG_LEN_BYTES)
+                {
+                    byteBuffer = new byte[MSG_LEN_BYTES];
+                    byteCount = 0;
+                }
+                
                 // get the length of the message that will be send from the python program afterwards
-                int headerLen;
+                //int headerLen;
                 while (true)
                 {
-                    string newMsg;
+                    byte[] receivedBytes;
+                    //string newMsg;
                     if (readAsync)
                     {
-                        newMsg = GetMsgAsync(_stream);
+                        receivedBytes = GetByteMsgAsync(_stream, MSG_LEN_BYTES - byteCount);
+                        //newMsg = GetMsgAsync(_stream);
                     }
                     else
                     {
-                        newMsg = GetMsgSync(_stream);
+                        //newMsg = GetMsgSync(_stream, MSG_LEN_BYTES);
+                        receivedBytes = GetByteMsgSync(_stream, MSG_LEN_BYTES - byteCount);
                     }
 
                     // check if the server disconnected
-                    if (newMsg == "")
+                    if (receivedBytes == null || receivedBytes.Length == 0)
+                    //if (newMsg == "")
                     {
                         //print("Currently getting no response from the server");
                         return new ReturnedMessage("");
                     }
 
-                    recBuffer.Append(newMsg);
+                    Array.Copy(receivedBytes, byteCount, byteBuffer, 0, byteBuffer.Length);
+                    byteCount += receivedBytes.Length;
+                    //recBuffer.Append(newMsg);
                     // before the semicolon the length of the following message gets send, after it the message
-                    if ((headerLen = recBuffer.ToString().IndexOf(';')) != -1)
+                    if (receivedBytes.Length == MSG_LEN_BYTES)
+                    //if ((headerLen = recBuffer.ToString().IndexOf(';')) != -1)
                     {
                         break;
                     }
@@ -245,10 +315,21 @@ namespace Networking
                     // todo: some performance tests should be done
                 }
 
-                string header = recBuffer.ToString(0, headerLen);
-                //PythonExecuter.incomingChanges += 1;
-                RemoveString(headerLen + 1);
-                _msgLen = int.Parse(header);
+                //string header = recBuffer.ToString(0, headerLen);
+                //RemoveString(headerLen + 1);
+                //_msgLen = int.Parse(header);
+                
+                // bytes are always send in little Endian
+                if (!BitConverter.IsLittleEndian)
+                {
+                    Array.Reverse(byteBuffer);
+                }
+
+                _msgLen = BitConverter.ToInt32(byteBuffer, 0);
+                
+                byteBuffer = null;
+                byteCount = 0;
+                
                 if (_msgLen == -1)
                 {
                     _msgLen = 0;
@@ -272,6 +353,7 @@ namespace Networking
                 {
                     // the whole message arrived
                     ReturnedMsg = recBuffer.ToString(0, _msgLen);
+                    print("Removing chars: " + recBuffer.Length + " - " + ReturnedMsg.Length);
                     RemoveString(ReturnedMsg.Length);
                     break;
                 }
@@ -302,7 +384,7 @@ namespace Networking
             }
             else
             {*/
-                newMsg = GetMsgSync(_stream);
+                newMsg = GetMsgSync(_stream, _msgLen - recBuffer.Length);
                 //}
 
                 // check if the server disconnected
@@ -455,17 +537,27 @@ namespace Networking
     {
         public string msg;
         public bool msgIsComplete;
+        public byte[] structureData;
         
         public ReturnedMessage(string returnedMsg)
         {
             msg = returnedMsg;
             msgIsComplete = false;
+            structureData = null;
         }
 
         public ReturnedMessage(string returnedMsg, bool isComplete)
         {
             msg = returnedMsg;
             msgIsComplete = isComplete;
+            structureData = null;
+        }
+        
+        public ReturnedMessage(string returnedMsg, bool isComplete, byte[] structureData)
+        {
+            msg = returnedMsg;
+            msgIsComplete = isComplete;
+            this.structureData = structureData;
         }
     }
 

@@ -88,7 +88,7 @@ PlayerSettings:
   resizableWindow: 1
   useMacAppStoreValidation: 0
   macAppStoreCategory: public.app-category.games
-  gpuSkinning: 1
+  gpuSkinning: 0
   xboxPIXTextureCapture: 0
   xboxEnableAvatar: 0
   xboxEnableKinect: 0
@@ -132,7 +132,7 @@ PlayerSettings:
     Others: 1
   bundleVersion: 1.0
   preloadedAssets:
-  - {fileID: 11400000, guid: 849128b3af3167a4b9b62803224493b9, type: 2}
+  - {fileID: 11400000, guid: cc5393cd3cd7a294b826a406fa80d04a, type: 2}
   - {fileID: 3805553745306462125, guid: a13aa0f4853f5504482722e733119df6, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -159,7 +159,7 @@ PlayerSettings:
     tvOS: 0
   overrideDefaultApplicationIdentifier: 1
   AndroidBundleVersionCode: 1
-  AndroidMinSdkVersion: 23
+  AndroidMinSdkVersion: 25
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 0
   aotOptions: 
@@ -234,7 +234,7 @@ PlayerSettings:
   clonedFromGUID: 00000000000000000000000000000000
   templatePackageId: 
   templateDefaultScene: 
-  useCustomMainManifest: 0
+  useCustomMainManifest: 1
   useCustomLauncherManifest: 0
   useCustomMainGradleTemplate: 0
   useCustomLauncherGradleManifest: 0
@@ -406,7 +406,7 @@ PlayerSettings:
   - m_BuildTarget: LuminSupport
     m_GraphicsJobs: 0
   - m_BuildTarget: AndroidPlayer
-    m_GraphicsJobs: 0
+    m_GraphicsJobs: 1
   - m_BuildTarget: WebGLSupport
     m_GraphicsJobs: 0
   m_BuildTargetGraphicsJobMode:
@@ -683,7 +683,7 @@ PlayerSettings:
   webGLDecompressionFallback: 0
   scriptingDefineSymbols:
     1: VIU_XR_GENERAL_SETTINGS;VIU_XR_PACKAGE_METADATA_STORE;VIU_PLUGIN;VIU_OCULUSVR_DESKTOP_SUPPORT;VIU_SIUMULATOR_SUPPORT;VIU_OCULUSVR;VIU_OCULUSVR_1_37_0_OR_NEWER;VIU_OCULUSVR_16_0_OR_NEWER;VIU_OCULUSVR_19_0_OR_NEWER
-    7: VIU_OCULUSVR;VIU_PLUGIN;VIU_OCULUSVR_1_37_0_OR_NEWER;VIU_XR_GENERAL_SETTINGS;VIU_XR_PACKAGE_METADATA_STORE;VIU_OCULUSVR_ANDROID_SUPPORT;VIU_OCULUSVR_16_0_OR_NEWER;VIU_OCULUSVR_19_0_OR_NEWER;VIU_SIUMULATOR_SUPPORT
+    7: VIU_OCULUSVR;VIU_PLUGIN;VIU_OCULUSVR_1_37_0_OR_NEWER;VIU_XR_GENERAL_SETTINGS;VIU_XR_PACKAGE_METADATA_STORE;VIU_OCULUSVR_16_0_OR_NEWER;VIU_OCULUSVR_19_0_OR_NEWER;VIU_SIUMULATOR_SUPPORT;VIU_WAVEVR_SUPPORT
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend: {}

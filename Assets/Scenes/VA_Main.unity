@@ -7750,7 +7750,7 @@ MonoBehaviour:
     m_roleValueInt: 0
   m_origin: {fileID: 0}
   m_deviceIndex: 0
-  m_overrideModel: 23
+  m_overrideModel: 0
   m_overrideShader: {fileID: 0}
 --- !u!1 &205628672
 GameObject:
@@ -11716,7 +11716,7 @@ PrefabInstance:
     - target: {fileID: 8381724049134401809, guid: 8457ed876ce7c47469ddcac60745f7e9,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0000038146973
+      value: -0.0000038146973
       objectReference: {fileID: 0}
     - target: {fileID: 8381724049477885744, guid: 8457ed876ce7c47469ddcac60745f7e9,
         type: 3}
@@ -25865,7 +25865,7 @@ MonoBehaviour:
     m_roleValueInt: 0
   m_origin: {fileID: 0}
   m_deviceIndex: 0
-  m_overrideModel: 24
+  m_overrideModel: 0
   m_overrideShader: {fileID: 0}
 --- !u!1 &656159425
 GameObject:
