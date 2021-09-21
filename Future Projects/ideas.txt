@@ -219,8 +219,9 @@ Todo:
   89.	DONE Show full frame count and loaded frames
   90. 	DONE Allow to change frame by slide bar
   91. 	DONE Send message length always in first 4 byte
-! 92. 	TODO Only read the current message in, not always a full block
-! 93. 	TODO Send structure data as binary data after sending the json
+  92. 	DONE Only read the current message in, not always a full block
+  93. 	DONE Send structure data as binary data after sending the json
+! 94. 	TODO Receive binary structure data async
 
 Time needed for sending a Message sync to python: 0.05s = 50ms
 

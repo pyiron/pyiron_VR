@@ -87,7 +87,6 @@ public class ButtonExplanation : MonoBehaviour
         
         foreach (ControllerButton btn in explanations.Keys)
         {
-            print(ControllerButton.Trigger);
             if (ViveInput.GetPress(handRole, ControllerButton.Trigger))
             {
                 SetButtonText(btn);

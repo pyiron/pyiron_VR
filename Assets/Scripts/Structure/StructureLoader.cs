@@ -57,6 +57,28 @@ public class StructureLoader
 
         return all_frames;*/
     }
+
+    public static void LoadAnimation(StructureData structureData)
+    {
+        if (structureData.frames > 0)
+        {
+            AnimationController.frameCount = structureData.frames;
+        }
+
+        int structureSize = structureData.size == 0 ? Structure.Inst.AtomAmount() : structureData.size;
+        Vector3[][] allPoses = GetFramePositions(structureData.positions, structureSize);
+        if (isFirstDatapart)
+        {
+            Structure.Inst.Activate();
+            Structure.Inst.UpdateStructure(allPoses[0], structureData.elements);
+            Boundingbox.Inst.UpdateBoundingBox(structureData.cell);
+            HourglassActivator.Inst.transform.localPosition = Boundingbox.Inst.mid;
+            // Deactivate the Loading Message
+            LogPublisher.ReceiveLogMsg("", LogPublisher.ErrorSeverity.Status);
+        }
+
+        AnimationController.Inst.SetNewAnimation(allPoses, isFirstDatapart);
+    }
     
     public static void LoadAnimation(ReturnedMessage data)
     {

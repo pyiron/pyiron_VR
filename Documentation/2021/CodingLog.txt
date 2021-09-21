@@ -59,6 +59,7 @@ The new design included:
 
 1.9.2020 - 30.9.2021
 - TCP Message length gets now always send in the first x (set to 4) bytes
+- Structure data now gets send as byte data instead of a json string (but sync) for better performance
 
 
 1.10.2020 - 31.10.2021:
