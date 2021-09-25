@@ -60,7 +60,9 @@ The new design included:
 1.9.2020 - 30.9.2021
 - TCP Message length gets now always send in the first x (set to 4) bytes
 - Structure data now gets send as byte data instead of a json string (but sync) for better performance
-
+- Receive binary structure data without freeze
+- Measured the improvements by using byte data instead of json strings: ~1/6th of the bandwidth is needed (or 1/4th if compared to float32 strings)
+- Greatly improved the speed with which a structure can be send without a freeze
 
 1.10.2020 - 31.10.2021:
 

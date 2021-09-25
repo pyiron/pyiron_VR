@@ -102,8 +102,8 @@ public class ExplorerMenuController : MenuController {
                 interactable:opt!=SimulationMenuController.jobName);
             btn.GetComponent<OptionButton>().isJob = true;
             
-            print(jobSizes);
-            print(jobSizes.Length);
+            // print(jobSizes);
+            // print(jobSizes.Length);
             
             if (jobSizes != null && i < jobSizes.Length)
             {

@@ -63,7 +63,7 @@ public class OptionButton : MonoBehaviour, IButton
         if (structureData.positions != null)
         {
             print("structureData.positions != null");
-            StructureLoader.LoadAnimation(data);
+            //StructureLoader.LoadAnimation(data);
         }
         else if (!TCPClient.returnBytes)
         {
@@ -114,15 +114,15 @@ public class OptionButton : MonoBehaviour, IButton
 
     private static void OnStructureByteDataReceived(ReturnedMessage data)
     {
-        /*if (!data.msgIsComplete)
+        if (!data.msgIsComplete)
         {
             return;
-        }*/
+        }
         print("structureData.positions is " + data.structureData.Length);
         // num_atoms * num_frames * 3 * size(float)
         //byte[] byteData = TCPClient.GetByteData(structureData.size * structureData.frames * 12);
         byte[] byteData = data.structureData;
-        print("System is little Endian: " + BitConverter.IsLittleEndian);
+        //print("System is little Endian: " + BitConverter.IsLittleEndian);
         if (!BitConverter.IsLittleEndian) // TODO: might be wrong and not work on BigEndianSystems
         {
             Array.Reverse(byteData);
@@ -130,7 +130,7 @@ public class OptionButton : MonoBehaviour, IButton
         // BitConverter.
         var floatData = new float[byteData.Length / 4];
         var vec3Data = new Vector3[byteData.Length / 4 / 3];
-        Buffer.BlockCopy(byteData, 0, floatData, 0, byteData.Length);
+        Buffer.BlockCopy(byteData, 0, floatData, 0, data.byteCount);
         for (int i = 0; i < vec3Data.Length; i++)
         {
             vec3Data[i] = new Vector3(floatData[i * 3], floatData[i * 3 + 1], floatData[i * 3 + 2]);
@@ -138,7 +138,7 @@ public class OptionButton : MonoBehaviour, IButton
         //Buffer.BlockCopy(byteData, 0, vec3Data, 0, vec3Data.Length);
 
         structureData.positions = vec3Data;
-        print(structureData.positions.Length);
+        //print(structureData.positions.Length);
         StructureLoader.LoadAnimation(structureData);
     }
 

@@ -221,7 +221,11 @@ Todo:
   91. 	DONE Send message length always in first 4 byte
   92. 	DONE Only read the current message in, not always a full block
   93. 	DONE Send structure data as binary data after sending the json
-! 94. 	TODO Receive binary structure data async
+  94. 	DONE Receive binary structure data without freeze
+! 95. 	TODO Receive binary structure data as a stream
+  96. 	DONE Measured the improvements by using byte data instead of json strings: ~1/6th of the bandwidth is needed (or 1/4th if compared to float32 strings)
+! 97. 	TODO fix Bug of structure FE (only 1 atom and maybe frame)
+  98. 	DONE receive data async in time of receiving it sync
 
 Time needed for sending a Message sync to python: 0.05s = 50ms
 

@@ -119,11 +119,11 @@ namespace Networking
             }
             else if (returnBytes)
             {
-                ReturnedMessage input = ListenForByteInput(shouldReturn: true, returnIncompleteMsgs:currentCallback.callIfIncomplete);
+                ReturnedMessage input = ListenForByteInput(shouldReturn: true, returnIncompleteMsgs:currentCallback.callIfIncomplete, readAsync:true);
                 
                 if (input.msgIsComplete || (currentCallback.callIfIncomplete && input.structureData != null && input.structureData.Length != 0))
                 {
-                    print("Callback " + currentCallback.callback.Method.Name + input.structureData.Length);
+                    print("Completed download");
                     currentCallback.callback(input);
                     if (input.msgIsComplete)
                     {
@@ -159,8 +159,60 @@ namespace Networking
                 recBuffer.Clear();
             }
         }
+
+        private static async Task<int> GetByteMsgAsyncAwait(NetworkStream stream, byte[] buffer, int offset, int remainingLen)
+        {
+            int length = Math.Min(remainingLen, BLOCKSIZE);
+            
+            // Read incoming stream into byte array. 
+            return await stream.ReadAsync(buffer, offset, length);
+        }
         
-        private static byte[] GetByteMsgAsync(NetworkStream stream, int remainingLen)
+        private static int GetByteMsgAsync(NetworkStream stream, byte[] buffer, int offset, int remainingLen)
+        {
+            //int length = Math.Min(remainingLen, BLOCKSIZE);
+            int length = remainingLen;
+            // Read incoming stream into byte array. 
+            if (_socketReadTask == null)
+            {
+                //_block = new Byte[length];
+                _socketReadTask = stream.ReadAsync(buffer, offset, length);
+                //_socketReadTask = GetByteMsgAsyncAwait(stream, buffer, offset, remainingLen);
+            }
+
+            if (!_socketReadTask.IsCompleted)
+            {
+                //print("Result is " + _socketReadTask.Result);
+                return 0;
+            }
+
+            int len;
+            try
+            {
+                len = _socketReadTask.Result;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return 0;
+            }
+            _socketReadTask.Dispose();
+            _socketReadTask = null;
+
+            /*if (_block.Length != len)
+            {
+                print("Resizing " + _block.Length + " to " + len);
+                Array.Resize(ref _block, len);
+            }
+            else
+            {
+                print("Keeping " + _block.Length);
+            }*/
+
+            return len;
+        }
+        
+        /*private static byte[] GetByteMsgAsync(NetworkStream stream, int remainingLen)
         {
             int length = Math.Min(remainingLen, BLOCKSIZE);
             // Read incoming stream into byte array. 
@@ -187,15 +239,24 @@ namespace Networking
             }
             _socketReadTask.Dispose();
             _socketReadTask = null;
-            
-            Array.Resize(ref _block, len);
+
+            if (_block.Length != len)
+            {
+                print("Resizing " + _block.Length + " to " + len);
+                Array.Resize(ref _block, len);
+            }
+            else
+            {
+                print("Keeping " + _block.Length);
+            }
+
             return _block;
 
             // Convert byte array to string message. 
             //if (len == 0) return "";
             //_block[len] = 0;
             //return Encoding.ASCII.GetString(_block, 0, len);
-        }
+        }*/
 
         private static string GetMsgAsync(NetworkStream stream, int remainingLen)
         {
@@ -262,6 +323,19 @@ namespace Networking
             return data;
         }
         
+        private static int GetByteMsgSync(NetworkStream stream, byte[] buffer, int offset, int remainingLen)
+        {
+            int length = Math.Min(remainingLen, BLOCKSIZE);
+            //int length = remainingLen;
+            //_block = new Byte[length];
+            // Read incoming stream into byte array. 
+            int len = stream.Read(buffer, offset, length);
+
+            //byte[] newBlock = new Byte[len];
+            //Array.Resize(ref _block, len);
+            return len;
+        }
+        
         private static byte[] GetByteMsgSync(NetworkStream stream, int remainingLen)
         {
             int length = Math.Min(remainingLen, BLOCKSIZE);
@@ -323,7 +397,8 @@ namespace Networking
                 {
                     if (count <= 0)
                     {
-                        ReturnedMessage retUncomplete = new ReturnedMessage("", false, byteBuffer);
+                        //print("Bytecount " + byteCount);
+                        ReturnedMessage retUncomplete = new ReturnedMessage("", false, byteBuffer, byteCount);
 
                         //ReturnedMsg = recBuffer.ToString();
                         if (returnIncompleteMsgs)
@@ -340,34 +415,38 @@ namespace Networking
                 }
 
                 // try to read input from the stream
-                byte[] newMsg;
-                if (readAsync)
+                //byte[] newMsg;
+                int lenNewBytes = 0;
+                if (true)//readAsync)
                 {
-                    newMsg = GetByteMsgAsync(_stream, _msgLen - byteCount);
+                    lenNewBytes = GetByteMsgAsync(_stream, byteBuffer, byteCount, _msgLen - byteCount);
+                    //newMsg = GetByteMsgAsync(_stream, _msgLen - byteCount);
                 }
                 else
                 {
-                    newMsg = GetByteMsgSync(_stream, _msgLen - byteCount);
+                    lenNewBytes = GetByteMsgSync(_stream, byteBuffer, byteCount, _msgLen - byteCount);
+                    //newMsg = GetByteMsgSync(_stream, _msgLen - byteCount);
                 }
+
+                byteCount += lenNewBytes;
 
                 // check if the server disconnected
-                if (newMsg == null || newMsg.Length == 0)
+                /*if (lenNewBytes == 0)
+                //if (newMsg == null || newMsg.Length == 0)
                 {
-                    print("Getting no response from the server");
+                    //print("Getting no response from the server");
                     return new ReturnedMessage("");
-                }
+                }*/
 
-                Array.Copy(newMsg, 0, byteBuffer, byteCount, newMsg.Length);
-                byteCount += newMsg.Length;
+                //Array.Copy(newMsg, 0, byteBuffer, byteCount, newMsg.Length);
+                //byteCount += newMsg.Length;
                 //recBuffer.Append(newMsg);
             }
 
             _msgLen = 0;
             byteCount = 0;
             ReturnedMessage ret = new ReturnedMessage("", true, byteBuffer);
-            print("BEFORE " + ret.structureData.Length);
             byteBuffer = null;
-            print("AFTER " + ret.structureData.Length);
             //recBuffer.Clear();
 
             return ret;
@@ -418,31 +497,38 @@ namespace Networking
                 while (true)
                 {
                     byte[] receivedBytes;
+                    int lenNewBytes = 0;
                     //string newMsg;
                     if (readAsync)
                     {
-                        receivedBytes = GetByteMsgAsync(_stream, MSG_LEN_BYTES - byteCount);
+                        lenNewBytes = GetByteMsgAsync(_stream, byteBuffer, byteCount, MSG_LEN_BYTES - byteCount);
+                        //receivedBytes = GetByteMsgAsync(_stream, MSG_LEN_BYTES - byteCount);
                         //newMsg = GetMsgAsync(_stream);
                     }
                     else
                     {
                         //newMsg = GetMsgSync(_stream, MSG_LEN_BYTES);
-                        receivedBytes = GetByteMsgSync(_stream, MSG_LEN_BYTES - byteCount);
+                        //receivedBytes = GetByteMsgSync(_stream, MSG_LEN_BYTES - byteCount);
+                        lenNewBytes = GetByteMsgSync(_stream, byteBuffer, byteCount, MSG_LEN_BYTES - byteCount);
                     }
 
+                    byteCount += lenNewBytes;
+
                     // check if the server disconnected
-                    if (receivedBytes == null || receivedBytes.Length == 0)
+                    //if (receivedBytes == null || receivedBytes.Length == 0)
+                    if (lenNewBytes == 0)
                     //if (newMsg == "")
                     {
                         //print("Currently getting no response from the server");
                         return new ReturnedMessage("");
                     }
 
-                    Array.Copy(receivedBytes, 0, byteBuffer, byteCount, receivedBytes.Length);
-                    byteCount += receivedBytes.Length;
+                    //Array.Copy(receivedBytes, 0, byteBuffer, byteCount, receivedBytes.Length);
+                    //byteCount += receivedBytes.Length;
                     //recBuffer.Append(newMsg);
                     // before the semicolon the length of the following message gets send, after it the message
-                    if (receivedBytes.Length == MSG_LEN_BYTES)
+                    //if (receivedBytes.Length == MSG_LEN_BYTES)
+                    if (lenNewBytes == MSG_LEN_BYTES)
                     //if ((headerLen = recBuffer.ToString().IndexOf(';')) != -1)
                     {
                         break;
@@ -540,6 +626,7 @@ namespace Networking
 
             _msgLen = 0;
             recBuffer.Clear();
+            print("Finished TASK!");
 
             TaskNumOut += 1;
             if (TaskNumOut == TaskNumIn)
@@ -680,12 +767,14 @@ namespace Networking
         public string msg;
         public bool msgIsComplete;
         public byte[] structureData;
+        public int byteCount;
         
         public ReturnedMessage(string returnedMsg)
         {
             msg = returnedMsg;
             msgIsComplete = false;
             structureData = null;
+            byteCount = 0;
         }
 
         public ReturnedMessage(string returnedMsg, bool isComplete)
@@ -693,6 +782,7 @@ namespace Networking
             msg = returnedMsg;
             msgIsComplete = isComplete;
             structureData = null;
+            byteCount = 0;
         }
         
         public ReturnedMessage(string returnedMsg, bool isComplete, byte[] structureData)
@@ -700,6 +790,15 @@ namespace Networking
             msg = returnedMsg;
             msgIsComplete = isComplete;
             this.structureData = structureData;
+            byteCount = structureData.Length;
+        }
+        
+        public ReturnedMessage(string returnedMsg, bool isComplete, byte[] structureData, int byteCount)
+        {
+            msg = returnedMsg;
+            msgIsComplete = isComplete;
+            this.structureData = structureData;
+            this.byteCount = byteCount;
         }
     }
 

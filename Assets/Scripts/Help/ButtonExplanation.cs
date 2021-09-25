@@ -52,9 +52,9 @@ public class ButtonExplanation : MonoBehaviour
     private void SetButtonText(ControllerButton btn)
     {
         // special case: give explanation for resize
-        print("btn == ControllerButton.Trigger" + (btn == ControllerButton.Trigger));
-        print("LaserGrabber.instances[0].attachedObject != null" + (LaserGrabber.instances[0].attachedObject != null));
-        print("LaserGrabber.instances[1].attachedObject != null" + (LaserGrabber.instances[1].attachedObject != null));
+        //print("btn == ControllerButton.Trigger" + (btn == ControllerButton.Trigger));
+        //print("LaserGrabber.instances[0].attachedObject != null" + (LaserGrabber.instances[0].attachedObject != null));
+        //print("LaserGrabber.instances[1].attachedObject != null" + (LaserGrabber.instances[1].attachedObject != null));
         if (btn == ControllerButton.Trigger && 
             (LaserGrabber.instances[0].attachedObject != null || LaserGrabber.instances[1].attachedObject != null))
         {
