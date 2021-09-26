@@ -27,7 +27,7 @@ public class OptionButton : MonoBehaviour, IButton
         }
         
         PythonExecutor.SendOrderAsync(true, 
-            PythonCmd.LoadJob(jobName), OnStructureDataReceived, returnIncompleteMsgs:false);
+            PythonCmd.LoadJob(jobName), OnExplorerStructureDataReceived, returnIncompleteMsgs:false);
     }
 
     /*public static IEnumerator HandleLoad(string jobName)
@@ -51,13 +51,14 @@ public class OptionButton : MonoBehaviour, IButton
         OnStructureDataReceived(result);
     }*/
 
-    private static void OnStructureDataReceived(ReturnedMessage data)
+    public static void OnExplorerStructureDataReceived(ReturnedMessage data)
     {
-        // TODO: really bad hack, pls fix
-        /*if (!data.msgIsComplete)
-        {
-            return;
-        }*/
+        OnStructureDataReceived(data);
+        ExplorerMenuController.Inst.Activate();
+    }
+
+    public static void OnStructureDataReceived(ReturnedMessage data)
+    {
         structureData = JsonUtility.FromJson<StructureData>(data.msg);
         // first case should theoretically not occur anymore
         if (structureData.positions != null)
@@ -108,7 +109,14 @@ public class OptionButton : MonoBehaviour, IButton
 
         //if (data.msgIsComplete)
         //{
-        ExplorerMenuController.Inst.Activate();
+        /*if (ModeController.currentMode.mode == Modes.Explorer)
+        {
+            ExplorerMenuController.Inst.Activate();
+        }
+        else if (ModeController.currentMode.mode == Modes.Calculate)
+        {
+            SimulationMenuController.UpdatePanels();
+        }*/
         //}
     }
 
@@ -128,6 +136,8 @@ public class OptionButton : MonoBehaviour, IButton
             Array.Reverse(byteData);
         }
         // BitConverter.
+        int newLoadedPoses = data.byteCount / 3 - structureData.loadedFrames;
+        structureData.loadedFrames = data.byteCount / 3;
         var floatData = new float[byteData.Length / 4];
         var vec3Data = new Vector3[byteData.Length / 4 / 3];
         Buffer.BlockCopy(byteData, 0, floatData, 0, data.byteCount);

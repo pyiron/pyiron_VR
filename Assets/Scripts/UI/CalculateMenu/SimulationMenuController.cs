@@ -19,11 +19,16 @@ public class SimulationMenuController : MenuController
         Inst = this;
     }
 
-    private void UpdatePanels()
+    public static void UpdatePanels()
     {
         //string order = "format_job_settings()";
-        string data = PythonExecutor.SendOrderSync(true, PythonCmd.FormatJobSettings);
-        JobData jobData = JsonUtility.FromJson<JobData>(data);
+        //string data = PythonExecutor.SendOrderSync(true, PythonCmd.FormatJobSettings);
+        PythonExecutor.SendOrderAsync(true, PythonCmd.FormatJobSettings, OnPanelUpdate);
+    }
+
+    public static void OnPanelUpdate(ReturnedMessage msg)
+    {
+        JobData jobData = JsonUtility.FromJson<JobData>(msg.msg);
         
         JobSettingsController.Inst.OnModeStart(jobData);
         MdMenuController.Inst.OnModeStart(jobData);
@@ -56,6 +61,7 @@ public class SimulationMenuController : MenuController
                     /*string job = PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.eval_l, 
                         "load_job(" + PythonScript.unityManager + ".project['"+ jobName + "'])");
                     OnJobLoaded(job);*/
+                    
                     PythonExecutor.SendOrderAsync(true,
                         PythonCmd.LoadJob(jobName), OnJobLoaded);
                 }
@@ -73,7 +79,9 @@ public class SimulationMenuController : MenuController
 
     private void OnJobLoaded(ReturnedMessage job)
     {
-        StructureLoader.LoadAnimation(job);
+        OptionButton.OnStructureDataReceived(job);
+        //StructureLoader.LoadAnimation(job);
+        
         // Load the information of the old job. The structure should have been set in Explorer already
         // PythonExecuter.SendOrderSync(PythonScript.executor, PythonCommandType.exec_l, order);
         if (job.msgIsComplete)
@@ -103,6 +111,8 @@ public class SimulationMenuController : MenuController
 
     private void OnJobdataReceived(ReturnedMessage data)
     {
+        OptionButton.OnStructureDataReceived(data);
+        
         if (data.msgIsComplete)
         {
             // handle the response
@@ -111,7 +121,7 @@ public class SimulationMenuController : MenuController
 
         ActionPanelController.Inst.UpdateButtons(true);
 
-        StructureLoader.LoadAnimation(data);
+        // StructureLoader.LoadAnimation(data);
     }
 
     public void CalculateNewJob()

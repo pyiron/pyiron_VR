@@ -152,4 +152,6 @@ public class StructureData
     //public int positions;
     
     public Vector3[] cell;
+
+    public int loadedFrames;
 }

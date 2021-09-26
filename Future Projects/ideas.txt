@@ -224,8 +224,10 @@ Todo:
   94. 	DONE Receive binary structure data without freeze
 ! 95. 	TODO Receive binary structure data as a stream
   96. 	DONE Measured the improvements by using byte data instead of json strings: ~1/6th of the bandwidth is needed (or 1/4th if compared to float32 strings)
-! 97. 	TODO fix Bug of structure FE (only 1 atom and maybe frame)
+  97. 	DONE fix Bug of structure FE (only 1 atom and maybe frame)
   98. 	DONE receive data async in time of receiving it sync
+! 99.	TODO fix bug that structures loaded via explorer are not aligned with cell box
+? 100	ASK allow to run multiple instances of the server and client (on different ports)
 
 Time needed for sending a Message sync to python: 0.05s = 50ms
 
