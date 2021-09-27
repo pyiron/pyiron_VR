@@ -63,6 +63,7 @@ The new design included:
 - Receive binary structure data without freeze
 - Measured the improvements by using byte data instead of json strings: ~1/6th of the bandwidth is needed (or 1/4th if compared to float32 strings)
 - Greatly improved the speed with which a structure can be send without a freeze
+- Fixed some bugs
 
 1.10.2020 - 31.10.2021:
 

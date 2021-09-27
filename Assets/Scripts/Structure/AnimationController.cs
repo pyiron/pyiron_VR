@@ -62,9 +62,12 @@ public class AnimationController : MonoBehaviour
 
     public void DeleteAnimation()
     {
-        PythonExecutor.SendOrderSync(false,
-            PythonCmd.SetStructureToCurrentFrame());
-        
+        PythonExecutor.SendOrderAsync(false,
+            PythonCmd.SetStructureToCurrentFrame(), OnAnimationDeleted);
+    }
+
+    private void OnAnimationDeleted(ReturnedMessage msg)
+    {
         positionData = null;
         run_anim = false;
         frame = 0;
