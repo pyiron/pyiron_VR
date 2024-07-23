@@ -15,13 +15,19 @@ MonoBehaviour:
   preferedStereoRenderingPath: 1
   useDoubleWidth: 0
   useRenderMask: 1
-  useAdaptiveQuality: 1
+  enableTimeWarpStabilizedMode: 2
+  adaptiveQualityMode: 2
   AQ_SendQualityEvent: 1
-  AQ_AutoFoveation: 0
+  AQ_AutoFoveation: 1
   useAQDynamicResolution: 0
   DR_DefaultIndex: 0
   DR_TextSize: 20
-  DR_ResolutionScaleList: []
+  DR_ResolutionScaleList:
+  - 1
+  - 0.9
+  - 0.8
+  - 0.7
+  - 0.6
   foveationMode: 2
   leftClearVisionFOV: 38
   rightClearVisionFOV: 38
@@ -33,3 +39,6 @@ MonoBehaviour:
   debugLogFlagForNative: 1048335
   debugLogFlagForUnity: 1048335
   overrideLogFlagForNative: 0
+  amcMode: 0
+  amcModeConfirm: 0
+  displayGamutPreferences: 000000000100000002000000
