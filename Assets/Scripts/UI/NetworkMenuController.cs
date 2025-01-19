@@ -1,4 +1,5 @@
-﻿using HTC.UnityPlugin.Vive;
+﻿using System;
+using HTC.UnityPlugin.Vive;
 using Networking;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,6 +13,9 @@ public class NetworkMenuController : MenuController {
     [SerializeField] private Text serverAddressPlaceholder;
 
     private const string ServerIPKey = "ServerIp";
+    private const string ServerPortKey = "ServerPort";
+    private bool keyboardon = false;
+    private bool portkeyboard = false;
 
     private void Awake()
     {
@@ -20,10 +24,10 @@ public class NetworkMenuController : MenuController {
 
     private void Start()
     {
-        portText.text = "Port: " + TCPClientConnector.PORT;
         
         // set the Input field to the last entered value
         serverAddressField.text = PlayerPrefs.GetString(ServerIPKey, "");
+        portText.text = PlayerPrefs.GetString(ServerPortKey, "" + TCPClientConnector.Inst.PORT);
         UpdatePlaceholder();
     }
 
@@ -36,6 +40,7 @@ public class NetworkMenuController : MenuController {
         serverAddressPlaceholder.gameObject.SetActive(serverAddressField.text == "");
     }
 
+   
     private void Update()
     {
         if (TCPClientConnector.ConnectionStatus == null)
@@ -47,6 +52,12 @@ public class NetworkMenuController : MenuController {
             base.Deactivate();
         }
     }
+
+    public void SetServerAdress(Text server_address)
+    {
+        serverAddressField.text = server_address.text;
+        UpdatePlaceholder();
+    }
     
     /// <summary>
     /// Try to connect to the server with the IP address of the text of this button.
@@ -56,7 +67,10 @@ public class NetworkMenuController : MenuController {
     {
         // save the Ip adress
         PlayerPrefs.SetString(ServerIPKey, btnText.text);
-        
+        PlayerPrefs.SetString(ServerPortKey, portText.text);
+        TCPClientConnector.Inst.UpdatePort(portText.text);
+
+
         // The vibration does not get triggered on the Quest, but it should work on the Vive
         // If needed on the Quest, the function of the OVR Plugin could be used
         ViveInput.TriggerHapticVibration(HandRole.LeftHand, 0.2f);
@@ -70,17 +84,33 @@ public class NetworkMenuController : MenuController {
     /// The keyboard allows to Input a costume server IP.
     /// </summary>
     /// <param name="toggle">The toggle that decides whether the keyboard should be active or inactive.</param>
-    public void OnKeyboardToggle(Toggle toggle)
+    public void OnKeyboardToggle()
     {
-        keyboard.SetState(toggle.isOn);
-        
+
         // The panels only update if a new panel is activated to save performance, so we have to manually call the
         // update for this case
-        if (!toggle.isOn)
-        {
-            UpdatePanelPosition();
-        }
+        ToggleKeyboard();
+        portkeyboard = false;
     }
+
+    public void OnConnectToggle(Toggle toggle)
+    {
+        ConnectToBtnText(serverAddressField);
+    }
+
+    public void ToggleKeyboard() 
+    {
+        keyboardon = !keyboardon ;
+
+        keyboard.SetState(keyboardon);
+        UpdatePanelPosition() ;
+    }
+
+    public void OnKeyboardButton()
+    {
+        ToggleKeyboard();
+        portkeyboard = true;
+     }
 
     /// <summary>
     /// Receive Input from the keyboard and set the IP Address accordingly.
@@ -91,16 +121,36 @@ public class NetworkMenuController : MenuController {
         Text keyText = key.GetComponentInChildren<Text>();
         if (keyText.text == "Clear")
         {
-            serverAddressField.text = "";
-        } else if (keyText.text == "Del" && serverAddressField.text != "")
+            if (portkeyboard)
+            {
+                portText.text = "";
+            }
+            else
+            {
+                serverAddressField.text = "";
+            }
+        } else if (keyText.text == "Del")
         {
             // remove the last char
-            serverAddressField.text = 
-                serverAddressField.text.Substring(0, serverAddressField.text.Length - 1);
+            if (portkeyboard && portText.text != "")
+            {
+                portText.text =
+                    portText.text.Substring(0, portText.text.Length - 1);
+            }
+            else if (!portkeyboard  && serverAddressField.text != ""){
+                serverAddressField.text =
+                    serverAddressField.text.Substring(0, serverAddressField.text.Length - 1);
+            }
         }
         else if (keyText.text != "Del")
         {
-            serverAddressField.text += keyText.text;
+            if (portkeyboard) {
+                portText.text += keyText.text;
+            }
+            else
+            {
+                serverAddressField.text += keyText.text;
+            }
         }
         
         UpdatePlaceholder();

@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using HTC.UnityPlugin.Vive;
+using OVR.OpenVR;
 using UI.Log;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,7 +14,8 @@ namespace Networking
 		public static TCPClientConnector Inst;
     
 		private string _host;
-		public const int PORT = 65432;
+		public int PORT = 65432;
+		private int _port;
     
 		// needed for asynchronous (lag free) connecting to the server
 		public static Task ConnectionStatus;
@@ -38,14 +40,29 @@ namespace Networking
 			{
 				// save the host
 				_host = host;
+				_port = PORT;
 			}
 
 			Connect(false);
 		}
 
+		public void UpdatePort(string port)
+		{
+            bool success = int.TryParse(port, out int i);
+            if (success)
+			{
+				PORT = i;
+			}
+			else
+			{ 
+				PORT = 65432; 
+			}
+
+		}
+
 		private void Connect(bool isReconnectAttempt)
 		{
-			print("Trying to connect to " + _host);
+			print("Trying to connect to " + _host + "on port " + _port.ToString());
 		
 			// show that the program is loading
 			LogPublisher.ReceiveLogMsg(LogPublisher.LoadingMsg, LogPublisher.ErrorSeverity.Status);

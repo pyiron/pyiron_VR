@@ -1,9 +1,9 @@
 {
-    "m_SelectedDeviceId": "FA1842R00502",
+    "m_SelectedDeviceId": "FA1822R00180",
     "m_SelectedPackage": {
-        "deviceId": "FA1842R00502",
+        "deviceId": "FA1822R00180",
         "name": "aaa.MPIE.VirtualAtoms",
-        "processId": 10386,
+        "processId": 8193,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -96,6 +96,12 @@
             "deviceId": "FA1842R00502",
             "name": "aaa.MPIE.VirtualAtoms",
             "processId": 10386,
+            "exited": false
+        },
+        {
+            "deviceId": "FA1822R00180",
+            "name": "aaa.MPIE.VirtualAtoms",
+            "processId": 8193,
             "exited": false
         }
     ],

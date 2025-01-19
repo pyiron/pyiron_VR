@@ -6,7 +6,7 @@ public class LocalElementData {
 
     // symbol -> CAS number, name, ordinal number
     public static readonly Dictionary<string, Element> m_localElementDict = new Dictionary<string, Element> {
-        {  "H", new Element( "1333-74-0",      "Hydrogen",   1,   1f, new Color(255 / 255f, 255 / 255f, 255 / 255f)) },
+        {  "H", new Element( "1333-74-0",      "Hydrogen",   1,  0.9f, new Color(255 / 255f, 255 / 255f, 255 / 255f)) },
         { "He", new Element( "7440-59-7",        "Helium",   2, 1.5f, new Color(217 / 255f, 255 / 255f, 255 / 255f)) },
         { "Li", new Element( "7439-93-2",       "Lithium",   3, 1.5f, new Color(204 / 255f, 128 / 255f, 255 / 255f)) },
         { "Be", new Element( "7440-41-7",     "Beryllium",   4, 1.5f, new Color(194 / 255f, 255 / 255f,   0 / 255f)) },
@@ -17,8 +17,8 @@ public class LocalElementData {
         {  "F", new Element( "7782-41-4",      "Fluorine",   9, 1.5f, new Color(144 / 255f, 224 / 255f,  80 / 255f)) },
         { "Ne", new Element( "7440-01-9",          "Neon",  10, 1.5f, new Color(179 / 255f, 227 / 255f, 245 / 255f)) },
         { "Na", new Element( "7440-23-5",        "Sodium",  11, 1.5f, new Color(171 / 255f,  92 / 255f, 242 / 255f)) },
-        { "Mg", new Element( "7439-95-4",     "Magnesium",  12, 1.5f, new Color(138 / 255f, 255 / 255f,   0 / 255f)) },
-        { "Al", new Element( "7429-90-5",      "Aluminum",  13, 1.5f, new Color(191 / 255f, 166 / 255f, 166 / 255f)) },
+        { "Mg", new Element( "7439-95-4",     "Magnesium",  12,   3f, new Color(138 / 255f, 255 / 255f,   0 / 255f)) },
+        { "Al", new Element( "7429-90-5",      "Aluminum",  13,   3f, new Color(191 / 255f, 166 / 255f, 166 / 255f)) },
         { "Si", new Element( "7440-21-3",       "Silicon",  14, 1.5f, new Color(240 / 255f, 200 / 255f, 160 / 255f)) },
         {  "P", new Element( "7723-14-0",    "Phosphorus",  15, 1.5f, new Color(255 / 255f, 128 / 255f,   0 / 255f)) },
         {  "S", new Element( "7704-34-9",        "Sulfur",  16, 1.5f, new Color(255 / 255f, 255 / 255f,  48 / 255f)) },
@@ -31,10 +31,10 @@ public class LocalElementData {
         {  "V", new Element( "7440-62-2",      "Vanadium",  23, 1.5f, new Color(166 / 255f, 166 / 255f, 171 / 255f)) },
         { "Cr", new Element( "7440-47-3",      "Chromium",  24, 1.5f, new Color(138 / 255f, 153 / 255f, 199 / 255f)) },
         { "Mn", new Element( "7439-96-5",     "Manganese",  25, 1.5f, new Color(156 / 255f, 122 / 255f, 199 / 255f)) },
-        { "Fe", new Element( "7439-89-6",          "Iron",  26, 1.5f, new Color(224 / 255f, 102 / 255f,  51 / 255f)) },
+        { "Fe", new Element( "7439-89-6",          "Iron",  26,   3f, new Color(224 / 255f, 102 / 255f,  51 / 255f)) },
         { "Co", new Element( "7440-48-4",        "Cobalt",  27, 1.5f, new Color(240 / 255f, 144 / 255f, 160 / 255f)) },
-        { "Ni", new Element( "7440-02-0",        "Nickel",  28, 1.5f, new Color( 80 / 255f, 208 / 255f,  80 / 255f)) },
-        { "Cu", new Element( "7440-50-8",        "Copper",  29, 1.5f, new Color(200 / 255f, 128 / 255f,  51 / 255f)) },
+        { "Ni", new Element( "7440-02-0",        "Nickel",  28,   3f, new Color( 80 / 255f, 208 / 255f,  80 / 255f)) },
+        { "Cu", new Element( "7440-50-8",        "Copper",  29,   3f, new Color(200 / 255f, 128 / 255f,  51 / 255f)) },
         { "Zn", new Element( "7440-66-6",          "Zinc",  30, 1.5f, new Color(125 / 255f, 128 / 255f, 176 / 255f)) },
         { "Ga", new Element( "7440-55-3",       "Gallium",  31, 1.5f, new Color(194 / 255f, 143 / 255f, 143 / 255f)) },
         { "Ge", new Element( "7440-56-4",     "Germanium",  32, 1.5f, new Color(102 / 255f, 143 / 255f, 143 / 255f)) },
@@ -52,7 +52,7 @@ public class LocalElementData {
         { "Ru", new Element( "7440-18-8",     "Ruthenium",  44, 1.5f, new Color( 36 / 255f, 143 / 255f, 143 / 255f)) },
         { "Rh", new Element( "7440-16-6",       "Rhodium",  45, 1.5f, new Color( 10 / 255f, 125 / 255f, 140 / 255f)) },
         { "Pd", new Element( "7440-05-3",     "Palladium",  46, 1.5f, new Color(  0 / 255f, 105 / 255f, 133 / 255f)) },
-        { "Ag", new Element( "7440-22-4",        "Silver",  47, 1.5f, new Color(192 / 255f, 192 / 255f, 192 / 255f)) },
+        { "Ag", new Element( "7440-22-4",        "Silver",  47,   3f, new Color(192 / 255f, 192 / 255f, 192 / 255f)) },
         { "Cd", new Element( "7440-43-9",       "Cadmium",  48, 1.5f, new Color(255 / 255f, 217 / 255f, 143 / 255f)) },
         { "In", new Element( "7440-74-6",        "Indium",  49, 1.5f, new Color(166 / 255f, 117 / 255f, 115 / 255f)) },
         { "Sn", new Element( "7440-31-5",           "Tin",  50, 1.5f, new Color(102 / 255f, 128 / 255f, 128 / 255f)) },
@@ -84,7 +84,7 @@ public class LocalElementData {
         { "Os", new Element( "7440-04-2",        "Osmium",  76, 1.5f, new Color( 38 / 255f, 102 / 255f, 150 / 255f)) },
         { "Ir", new Element( "7439-88-5",       "Iridium",  77, 1.5f, new Color( 23 / 255f,  84 / 255f, 135 / 255f)) },
         { "Pt", new Element( "7440-06-4",      "Platinum",  78, 1.5f, new Color(208 / 255f, 208 / 255f, 224 / 255f)) },
-        { "Au", new Element( "7440-57-5",          "Gold",  79, 1.5f, new Color(255 / 255f, 209 / 255f,  35 / 255f)) },
+        { "Au", new Element( "7440-57-5",          "Gold",  79,   3f, new Color(255 / 255f, 209 / 255f,  35 / 255f)) },
         { "Hg", new Element( "7439-97-6",       "Mercury",  80, 1.5f, new Color(184 / 255f, 184 / 255f, 208 / 255f)) },
         { "Tl", new Element( "7440-28-0",      "Thallium",  81, 1.5f, new Color(166 / 255f,  84 / 255f,  77 / 255f)) },
         { "Pb", new Element( "7439-92-1",          "Lead",  82, 1.5f, new Color( 87 / 255f,  89 / 255f,  97 / 255f)) },
@@ -142,10 +142,10 @@ public class LocalElementData {
         return -1;
     }
 
-    public static float GetSize(string shortName) {
+    public static float GetSize(string shortName, float factor=1f) {
         if (m_localElementDict.ContainsKey(shortName))
         {
-            return m_localElementDict[shortName].m_size;
+            return m_localElementDict[shortName].m_size * factor;
         }
         return 1f;
     }
