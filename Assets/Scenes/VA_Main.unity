@@ -2982,7 +2982,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Laptop:'
+  m_Text: 'cmpc09:'
 --- !u!222 &70912289
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -52320,7 +52320,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 192.168.0.195
+  m_Text: 172.22.2.9
 --- !u!222 &1406320827
 CanvasRenderer:
   m_ObjectHideFlags: 0
