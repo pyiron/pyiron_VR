@@ -8,7 +8,7 @@ public class LocalElementData {
     public static readonly Dictionary<string, Element> m_localElementDict = new Dictionary<string, Element> {
         {  "H", new Element( "1333-74-0",      "Hydrogen",   1,  0.9f, new Color(255 / 255f, 255 / 255f, 255 / 255f)) },
         { "He", new Element( "7440-59-7",        "Helium",   2, 1.5f, new Color(217 / 255f, 255 / 255f, 255 / 255f)) },
-        { "Li", new Element( "7439-93-2",       "Lithium",   3, 1.5f, new Color(204 / 255f, 128 / 255f, 255 / 255f)) },
+        { "Li", new Element( "7439-93-2",       "Lithium",   3,   3f, new Color(204 / 255f, 128 / 255f, 255 / 255f)) },
         { "Be", new Element( "7440-41-7",     "Beryllium",   4, 1.5f, new Color(194 / 255f, 255 / 255f,   0 / 255f)) },
         {  "B", new Element( "7440-42-8",         "Boron",   5, 1.5f, new Color(255 / 255f, 181 / 255f, 181 / 255f)) },
         {  "C", new Element( "7440-44-0",        "Carbon",   6,   1f, new Color(144 / 255f, 144 / 255f, 144 / 255f)) },
