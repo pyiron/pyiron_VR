@@ -76,6 +76,7 @@ public class NetworkMenuController : MenuController {
         ViveInput.TriggerHapticVibration(HandRole.LeftHand, 0.2f);
         ViveInput.TriggerHapticVibration(HandRole.RightHand, 0.2f);
 		
+
         TCPClientConnector.Inst.ConnectWithHost(btnText.text);
     }
 

@@ -464,7 +464,8 @@ public class LaserGrabber : MonoBehaviour
             //and the object should be at the same distance before and after the start of the grab
             _laserLength = (attachedObject.transform.position - transform.position).magnitude;
             // spawn the trashcan
-            TrashCan.inst.ActivateCan();
+            // Deactivate for release: Not working as expected on the Focus3 right now
+            // TrashCan.inst.ActivateCan();
 
             // deactivate the animation
             AnimationController.RunAnim(false);
