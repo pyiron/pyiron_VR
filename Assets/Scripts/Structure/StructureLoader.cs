@@ -187,15 +187,16 @@ public class StructureLoader
             Structure.Inst.UpdateStructure(allPoses[0], structureData.elements);
             Boundingbox.Inst.UpdateBoundingBox(structureData.cell);
             HourglassActivator.Inst.transform.localPosition = Boundingbox.Inst.mid;
-            // Deactivate the Loading Message
-            LogPublisher.ReceiveLogMsg("", LogPublisher.ErrorSeverity.Status);
+
         }
 
         AnimationController.Inst.SetNewAnimation(allPoses, isFirstDatapart);
         // signal if the next data that will be received is the first part of a new job
         isFirstDatapart = data.msgIsComplete;
         if (data.msgIsComplete)
-        {
+        {            
+            // Deactivate the Loading Message
+            LogPublisher.ReceiveLogMsg("", LogPublisher.ErrorSeverity.Status);
             //structureDataBuffer = "";
             structureDataBuffer.Clear();
         }
