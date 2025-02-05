@@ -10,7 +10,7 @@ public class ButtonExplanation : MonoBehaviour
 {
     private static Dictionary<HandRole, ButtonExplanation> instances = new Dictionary<HandRole, ButtonExplanation>();
 
-    public static bool helpIsActive = true;
+    public static bool helpIsActive = false;
     
     [SerializeField] private Text explanationText;
     [SerializeField] private GameObject explanationPanel;

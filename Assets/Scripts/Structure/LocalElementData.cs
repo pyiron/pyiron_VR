@@ -6,7 +6,7 @@ public class LocalElementData {
 
     // symbol -> CAS number, name, ordinal number
     public static readonly Dictionary<string, Element> m_localElementDict = new Dictionary<string, Element> {
-        {  "H", new Element( "1333-74-0",      "Hydrogen",   1,  0.9f, new Color(255 / 255f, 255 / 255f, 255 / 255f)) },
+        {  "H", new Element( "1333-74-0",      "Hydrogen",   1, 0.9f, new Color(255 / 255f, 255 / 255f, 255 / 255f)) },
         { "He", new Element( "7440-59-7",        "Helium",   2, 1.5f, new Color(217 / 255f, 255 / 255f, 255 / 255f)) },
         { "Li", new Element( "7439-93-2",       "Lithium",   3,   3f, new Color(204 / 255f, 128 / 255f, 255 / 255f)) },
         { "Be", new Element( "7440-41-7",     "Beryllium",   4, 1.5f, new Color(194 / 255f, 255 / 255f,   0 / 255f)) },
@@ -15,7 +15,7 @@ public class LocalElementData {
         {  "N", new Element( "7727-37-9",      "Nitrogen",   7, 1.5f, new Color( 48 / 255f,  80 / 255f, 248 / 255f)) },
         {  "O", new Element( "7782-44-7",        "Oxygen",   8, 1.5f, new Color(255 / 255f,  13 / 255f,  13 / 255f)) },
         {  "F", new Element( "7782-41-4",      "Fluorine",   9, 1.5f, new Color(144 / 255f, 224 / 255f,  80 / 255f)) },
-        { "Ne", new Element( "7440-01-9",          "Neon",  10, 1.5f, new Color(179 / 255f, 227 / 255f, 245 / 255f)) },
+        { "Ne", new Element( "7440-01-9",          "Neon",  10, 0.9f, new Color(179 / 255f, 227 / 255f, 245 / 255f)) },
         { "Na", new Element( "7440-23-5",        "Sodium",  11, 1.5f, new Color(171 / 255f,  92 / 255f, 242 / 255f)) },
         { "Mg", new Element( "7439-95-4",     "Magnesium",  12,   3f, new Color(138 / 255f, 255 / 255f,   0 / 255f)) },
         { "Al", new Element( "7429-90-5",      "Aluminum",  13,   3f, new Color(191 / 255f, 166 / 255f, 166 / 255f)) },
